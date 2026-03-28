@@ -1,0 +1,3 @@
+Model: Anthropic Claude Opus 4.6
+Site: 03 — Brutalist Style Ecommerce Page
+Source: https://app.superdesign.dev/library/brutalist-style-ecommerce-page
