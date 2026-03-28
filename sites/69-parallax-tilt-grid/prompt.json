@@ -1,0 +1,44 @@
+{
+  "id": "31d5413b-3ae2-48d8-88da-5497d96aea3c",
+  "createdAt": "2026-01-02T05:30:17.762Z",
+  "updatedAt": "2026-03-28T06:09:16.623Z",
+  "deletedAt": null,
+  "title": "\"Parallax Tilt\" Grid",
+  "slug": "parallax-tilt-grid",
+  "description": "A 3-column image grid with independent scroll speeds and 3D tilt effects on scroll.",
+  "teamId": "7d97ebb3-363d-49d3-a029-fa9a23815e3f",
+  "creatorId": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+  "prompt": "The \"Parallax Tilt\" Grid \n\nMakes a standard 3-column grid feel alive.\n\n\"In a 3-column image grid, apply independent scroll speeds to each column (e.g., left: 1.2x, center: 1.0x, right: 1.4x). Additionally, add a scroll-linked 3D tilt where the images lean forward as they enter from the bottom and lean back as they exit the top.\"",
+  "images": [],
+  "tags": [
+    "animation",
+    "scroll animation",
+    "landing page"
+  ],
+  "previewUrl": "https://component-474584e9-8b8e-458f-8518-d9468bdf2210.preview.superdesign.dev/?projectId=fa9a0ca3-9361-4934-8488-4a95ea016408",
+  "thumbnail": {
+    "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/preview-artifacts/prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/994571bb-624b-4062-bc21-412008b2a561.mp4",
+    "type": "video",
+    "storagePath": "prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/994571bb-624b-4062-bc21-412008b2a561.mp4"
+  },
+  "previewDevice": null,
+  "previewShowFrame": false,
+  "isPublic": true,
+  "previewViewCount": 1884,
+  "detailViewCount": 340,
+  "copyCount": 38,
+  "tryCount": 2,
+  "creator": {
+    "id": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+    "name": "Zhou Jason",
+    "email": "jason.zhou.design@gmail.com",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI6-P1KTFqMDsQTtfdDZAggOdMieNKQEuMwOGmTCNPC5ZrU=s96-c"
+  },
+  "stats": {
+    "previewViewCount": 1884,
+    "detailViewCount": 340,
+    "copyCount": 38,
+    "tryCount": 2,
+    "remixCount": 40
+  }
+}

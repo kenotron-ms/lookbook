@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAW//MATERIAL — Luxury Streetwear</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,900;1,700&family=Barlow:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #111111;
+  --surface: #191919;
+  --white: #F0EDE8;
+  --orange: #C8531A;
+  --neon: #B8FF00;
+  --gray: #555;
+  --mid: #888;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.65;
+}
+
+/* ── REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  background: var(--bg);
+  border-bottom: 1px solid #222;
+}
+
+.nav-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.nav-logo .slash { color: var(--orange); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--mid);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--white); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-tag {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--neon);
+  font-weight: 700;
+  border: 1px solid var(--neon);
+  padding: 6px 14px;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  padding-top: 80px;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.hero-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 40px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.hero-h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(100px, 15vw, 240px);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.hero-h1 .ghost {
+  color: transparent;
+  -webkit-text-stroke: 1px #333;
+}
+
+.hero-h1 .accent { color: var(--orange); }
+
+.hero-bottom {
+  padding: 40px 40px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  border-top: 1px solid #222;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-bottom-item {}
+
+.hero-bottom-label {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 8px;
+}
+
+.hero-bottom-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hero-desc-col {
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero-desc-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--mid);
+  max-width: 320px;
+  margin-bottom: 20px;
+}
+
+.btn-raw {
+  background: var(--white);
+  color: var(--bg);
+  padding: 14px 32px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: 'Barlow Condensed', sans-serif;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+
+.btn-raw:hover { background: var(--neon); }
+
+/* ── SECTION DIVIDER ── */
+.divider {
+  height: 1px;
+  background: #222;
+}
+
+/* ── TICKER ── */
+.ticker {
+  overflow: hidden;
+  padding: 16px 0;
+  border-bottom: 1px solid #222;
+}
+
+.ticker-track {
+  display: flex;
+  white-space: nowrap;
+  animation: scroll 22s linear infinite;
+}
+
+.ticker-item {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0 32px;
+  color: var(--mid);
+  flex-shrink: 0;
+}
+
+.ticker-item .t-orange { color: var(--orange); }
+.ticker-item .t-neon { color: var(--neon); }
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── PRODUCTS ── */
+.products {
+  padding: 80px 40px;
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+}
+
+.products-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(56px, 7vw, 100px);
+  font-weight: 900;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.products-meta {
+  text-align: right;
+  font-size: 11px;
+  color: var(--gray);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.product-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 2px;
+}
+
+.product-featured {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.product-featured .p-visual {
+  aspect-ratio: 4/5;
+  background: linear-gradient(160deg, #C8531A 0%, #1a1a1a 50%, #B8FF00 100%);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+
+.product-featured:hover .p-visual { transform: scale(1.03); }
+
+.product-featured .p-tag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--neon);
+  color: var(--bg);
+  padding: 6px 12px;
+}
+
+.product-featured .p-info {
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.p-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.p-type {
+  font-size: 11px;
+  color: var(--gray);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.p-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--neon);
+}
+
+.product-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.product-mini {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.product-mini .m-visual {
+  height: 100%;
+  min-height: 240px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+
+.product-mini:hover .m-visual { transform: scale(1.05); }
+
+.m-bg-1 { background: linear-gradient(145deg, #1a1a1a, #333, #C8531A); }
+.m-bg-2 { background: linear-gradient(225deg, #0d0d0d, #C8531A 80%, #B8FF00); }
+.m-bg-3 { background: linear-gradient(45deg, #222, #444, #0d0d0d); }
+.m-bg-4 { background: linear-gradient(315deg, #1a1a1a, #C8531A, #555); }
+
+.product-mini .m-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+}
+
+.m-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+
+.m-price {
+  font-size: 13px;
+  color: var(--neon);
+  font-weight: 600;
+}
+
+/* ── STATEMENT BAND ── */
+.statement {
+  padding: 80px 40px;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+}
+
+.statement-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.statement-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--orange);
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.statement-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(40px, 5vw, 80px);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  max-width: 1100px;
+}
+
+.statement-text .ghost {
+  color: transparent;
+  -webkit-text-stroke: 1px #444;
+}
+
+.statement-text .neon { color: var(--neon); }
+
+.statement-foot {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.statement-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--mid);
+  max-width: 420px;
+}
+
+.statement-stats {
+  display: flex;
+  gap: 60px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--orange);
+}
+
+.stat-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-top: 4px;
+}
+
+/* ── FEATURES GRID ── */
+.features {
+  padding: 80px 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: #222;
+}
+
+.feature-cell {
+  background: var(--bg);
+  padding: 48px 32px;
+  transition: background 0.3s;
+}
+
+.feature-cell:hover { background: var(--surface); }
+
+.feature-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  color: #222;
+  margin-bottom: 24px;
+}
+
+.feature-icon {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.feature-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.feature-title .orange { color: var(--orange); }
+
+.feature-desc {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--mid);
+}
+
+/* ── TESTIMONIALS ── */
+.testimonials {
+  padding: 80px 40px;
+  border-top: 1px solid #222;
+}
+
+.testimonials-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+}
+
+.testimonials-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(48px, 6vw, 90px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: #222;
+}
+
+.testimonial-block {
+  background: var(--surface);
+  padding: 40px 32px;
+}
+
+.t-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--orange);
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.t-quote {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--mid);
+  margin-bottom: 32px;
+  font-style: italic;
+}
+
+.t-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.t-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--orange);
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  color: white;
+  flex-shrink: 0;
+}
+
+.t-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.t-role {
+  font-size: 10px;
+  color: var(--gray);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── CTA ── */
+.cta {
+  padding: 120px 40px;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.cta-bg-text {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 200px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px #222;
+  white-space: nowrap;
+  z-index: 0;
+  user-select: none;
+}
+
+.cta-content { position: relative; z-index: 1; }
+
+.cta-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--neon);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.cta-headline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(60px, 7vw, 110px);
+  font-weight: 900;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+}
+
+.cta-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--mid);
+  max-width: 400px;
+  margin-bottom: 40px;
+}
+
+.cta-form {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cta-form input {
+  background: var(--bg);
+  border: 1px solid #333;
+  color: var(--white);
+  padding: 16px 20px;
+  font-size: 13px;
+  font-family: 'Barlow', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.cta-form input::placeholder { color: var(--gray); }
+
+.cta-form input:focus { border-color: var(--orange); }
+
+.cta-form button {
+  background: var(--orange);
+  color: white;
+  border: none;
+  padding: 18px 32px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-family: 'Barlow Condensed', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cta-form button:hover { background: var(--neon); color: var(--bg); }
+
+.cta-note {
+  font-size: 10px;
+  color: var(--gray);
+  letter-spacing: 0.1em;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg);
+  border-top: 1px solid #222;
+  padding: 60px 40px 32px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid #222;
+}
+
+.footer-brand-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+}
+
+.footer-brand-name .slash { color: var(--orange); }
+
+.footer-brand-desc {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--gray);
+  max-width: 260px;
+  margin-bottom: 24px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-social-link {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-decoration: none;
+  border: 1px solid #333;
+  padding: 8px 14px;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.footer-social-link:hover { border-color: var(--orange); color: var(--orange); }
+
+.footer-col-title {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { font-size: 13px; color: #555; text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: var(--white); }
+
+.footer-bottom {
+  margin-top: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 10px;
+  color: #444;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.footer-links a {
+  font-size: 10px;
+  color: #444;
+  text-decoration: none;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-left: 20px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--white); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">RAW<span class="slash">//</span>MATERIAL</a>
+  <ul class="nav-links">
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Lookbook</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Stockists</a></li>
+  </ul>
+  <div class="nav-right">
+    <span class="nav-tag">SS25 Drop Live</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-main">
+    <div class="hero-label reveal">SS25 / Raw Campaign / Volume III</div>
+    <h1 class="hero-h1 reveal reveal-delay-1">
+      RAW<span class="ghost">//</span><br>
+      <span class="ghost">MATER</span><span class="accent">IAL</span>
+    </h1>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-bottom-item reveal">
+      <div class="hero-bottom-label">Drop Status</div>
+      <div class="hero-bottom-value" style="color:var(--neon)">Live Now</div>
+    </div>
+    <div class="hero-bottom-item reveal reveal-delay-1">
+      <div class="hero-bottom-label">Pieces Available</div>
+      <div class="hero-bottom-value">28 Styles</div>
+    </div>
+    <div class="hero-desc-col reveal reveal-delay-2">
+      <p class="hero-desc-text">Industrial construction. Radical silhouettes. Materials sourced from the margins and refined to the limit. This is not fashion — this is architecture for the body.</p>
+      <a href="#" class="btn-raw">Shop the Drop →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">RAW<span class="t-orange">//</span>MATERIAL</span>
+    <span class="ticker-item">SS25 DROP <span class="t-neon">●</span></span>
+    <span class="ticker-item">LUXURY STREETWEAR</span>
+    <span class="ticker-item">MADE IN PORTUGAL <span class="t-orange">■</span></span>
+    <span class="ticker-item">LIMITED EDITION <span class="t-neon">◆</span></span>
+    <span class="ticker-item">RAW<span class="t-orange">//</span>MATERIAL</span>
+    <span class="ticker-item">SS25 DROP <span class="t-neon">●</span></span>
+    <span class="ticker-item">LUXURY STREETWEAR</span>
+    <span class="ticker-item">MADE IN PORTUGAL <span class="t-orange">■</span></span>
+    <span class="ticker-item">LIMITED EDITION <span class="t-neon">◆</span></span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products">
+  <div class="products-header reveal">
+    <h2 class="products-title">NEW<br>DROPS</h2>
+    <div class="products-meta">
+      Spring / Summer 2025<br>
+      28 Limited Pieces
+    </div>
+  </div>
+  <div class="product-row">
+    <div class="product-featured reveal">
+      <div class="p-visual">
+        <div class="p-tag">Hero Piece</div>
+      </div>
+      <div class="p-info">
+        <div>
+          <div class="p-name">Obsidian Trench Coat</div>
+          <div class="p-type">Waxed Cotton / Oversized</div>
+        </div>
+        <div class="p-price">$685</div>
+      </div>
+    </div>
+    <div class="product-col">
+      <div class="product-mini reveal">
+        <div class="m-visual m-bg-1">
+          <div class="m-info">
+            <div class="m-name">Utility Vest</div>
+            <div class="m-price">$320</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-mini reveal reveal-delay-1">
+        <div class="m-visual m-bg-2">
+          <div class="m-info">
+            <div class="m-name">Cargo Trousers</div>
+            <div class="m-price">$295</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="product-col">
+      <div class="product-mini reveal reveal-delay-1">
+        <div class="m-visual m-bg-3">
+          <div class="m-info">
+            <div class="m-name">Destroy Tee</div>
+            <div class="m-price">$165</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-mini reveal reveal-delay-2">
+        <div class="m-visual m-bg-4">
+          <div class="m-info">
+            <div class="m-name">Arc Hoodie</div>
+            <div class="m-price">$380</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<section class="statement">
+  <div class="statement-inner reveal">
+    <div class="statement-label">Raw Manifesto</div>
+    <div class="statement-text">
+      WE BUILD FOR THE<br>
+      <span class="ghost">BODY</span> THAT <span class="neon">REFUSES</span><br>
+      TO FIT THE MOULD
+    </div>
+    <div class="statement-foot">
+      <p class="statement-desc">Raw//Material was founded on the belief that luxury and brutalism are not opposites — they are the same impulse. We make clothes for people who understand that.</p>
+      <div class="statement-stats">
+        <div class="stat">
+          <div class="stat-num">6</div>
+          <div class="stat-label">Seasons</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">14</div>
+          <div class="stat-label">Countries</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Traceable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES GRID -->
+<section class="features">
+  <div class="feature-cell reveal">
+    <div class="feature-num">01</div>
+    <div class="feature-title">PREMIUM<br><span class="orange">MATERIALS</span></div>
+    <p class="feature-desc">Every fabric sourced from certified mills in Japan, Italy, and Portugal. Heavyweight cottons, waxed canvas, Japanese selvedge.</p>
+  </div>
+  <div class="feature-cell reveal reveal-delay-1">
+    <div class="feature-num">02</div>
+    <div class="feature-title">RADICAL<br><span class="orange">CUTS</span></div>
+    <p class="feature-desc">Silhouettes that defy the season. Oversized, asymmetric, and engineered — not styled. No compromises on form.</p>
+  </div>
+  <div class="feature-cell reveal reveal-delay-2">
+    <div class="feature-num">03</div>
+    <div class="feature-title">LIMITED<br><span class="orange">RUNS</span></div>
+    <p class="feature-desc">Maximum 80 units per design. Once gone, gone. We don't restock, rerun, or compromise the scarcity of our craft.</p>
+  </div>
+  <div class="feature-cell reveal reveal-delay-3">
+    <div class="feature-num">04</div>
+    <div class="feature-title">CHAIN OF<br><span class="orange">CUSTODY</span></div>
+    <p class="feature-desc">Full transparency from fiber to finished garment. Every piece ships with a traceability certificate and production provenance.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-header reveal">
+    <h2 class="testimonials-title">WORN BY<br>THE BOLD</h2>
+    <a href="#" class="btn-raw">All Reviews →</a>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-block reveal">
+      <div class="t-num">01</div>
+      <p class="t-quote">"The Obsidian Trench arrived and I immediately understood what 'luxury brutalism' actually means. The weight, the drape, the silence of the seams. Nothing else comes close."</p>
+      <div class="t-author">
+        <div class="t-avatar">YO</div>
+        <div>
+          <div class="t-name">Yuki Okomura</div>
+          <div class="t-role">Architect — Tokyo</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-block reveal reveal-delay-1">
+      <div class="t-num">02</div>
+      <p class="t-quote">"I've been buying limited streetwear for a decade. Raw//Material operates on a different frequency entirely. The Destroy Tee alone is worth every cent."</p>
+      <div class="t-author">
+        <div class="t-avatar">CR</div>
+        <div>
+          <div class="t-name">Caleb R.</div>
+          <div class="t-role">Creative Director — Los Angeles</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-block reveal reveal-delay-2">
+      <div class="t-num">03</div>
+      <p class="t-quote">"Wore the cargo trousers to a gallery opening and three people asked me where they were from. That's all I needed to know about the design."</p>
+      <div class="t-author">
+        <div class="t-avatar">LB</div>
+        <div>
+          <div class="t-name">Léa Bonnet</div>
+          <div class="t-role">Curator — Paris</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-bg-text">DROP</div>
+  <div class="cta-content reveal">
+    <div class="cta-label">Join the Inner Circle</div>
+    <h2 class="cta-headline">GET DROP<br>ACCESS</h2>
+    <p class="cta-desc">Members receive 48-hour early access to all new drops, exclusive pieces never available to the public, and first allocation on limited runs.</p>
+  </div>
+  <div class="cta-form reveal reveal-delay-1">
+    <input type="text" placeholder="Your name">
+    <input type="email" placeholder="Your email address">
+    <button type="submit">Request Access →</button>
+    <p class="cta-note">Members-only. No spam. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">RAW<span class="slash">//</span>MATERIAL</div>
+      <p class="footer-brand-desc">Luxury streetwear built for those who refuse to be average. Limited production. Maximum intention.</p>
+      <div class="footer-socials">
+        <a href="#" class="footer-social-link">IG</a>
+        <a href="#" class="footer-social-link">TK</a>
+        <a href="#" class="footer-social-link">PIN</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Shop</div>
+      <ul>
+        <li><a href="#">Latest Drop</a></li>
+        <li><a href="#">Outerwear</a></li>
+        <li><a href="#">Tops</a></li>
+        <li><a href="#">Bottoms</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Archive Sale</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Manifesto</a></li>
+        <li><a href="#">Materials</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Support</div>
+      <ul>
+        <li><a href="#">Sizing</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Care</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 RAW//MATERIAL — All Rights Reserved</span>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

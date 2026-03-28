@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREQ — Your Vibe, Amplified</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --acid: #CCFF00;
+  --purple: #7000FF;
+  --pink: #FF0099;
+  --black: #0A0A0A;
+  --white: #F8F8F8;
+  --yellow: #FFE000;
+  --cyan: #00FFEE;
+  --border: 3px solid var(--black);
+  --shadow: 5px 5px 0 var(--black);
+  --shadow-lg: 8px 8px 0 var(--black);
+  --shadow-xl: 12px 12px 0 var(--black);
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0; z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: var(--acid);
+  border-bottom: var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--black);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+  padding: 8px 20px;
+  border: var(--border);
+  margin-left: -3px;
+  display: block;
+  transition: background 0.1s;
+}
+.nav-links a:hover { background: var(--black); color: var(--acid); }
+.nav-cta {
+  background: var(--black);
+  color: var(--acid);
+  padding: 12px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.nav-cta:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--black); }
+
+/* HERO */
+.hero {
+  background: var(--white);
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 20px,
+    rgba(204,255,0,0.08) 20px,
+    rgba(204,255,0,0.08) 21px
+  );
+  pointer-events: none;
+}
+.hero-left {
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: var(--border);
+  position: relative;
+  z-index: 2;
+  background: var(--white);
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--pink);
+  color: var(--white);
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 40px;
+  width: fit-content;
+  transform: rotate(-2deg);
+}
+.hero-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(72px, 10vw, 140px);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  color: var(--black);
+  margin-bottom: 32px;
+}
+.hero-h1 .acid { color: var(--acid); -webkit-text-stroke: 2px var(--black); }
+.hero-h1 .purple { color: var(--purple); }
+.hero-sub {
+  font-size: 18px;
+  color: var(--black);
+  max-width: 440px;
+  line-height: 1.5;
+  margin-bottom: 48px;
+  font-weight: 500;
+}
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-hero {
+  display: inline-block;
+  background: var(--purple);
+  color: var(--white);
+  padding: 20px 48px;
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.1s, box-shadow 0.1s;
+  transform: rotate(-1deg);
+}
+.btn-hero:hover { transform: rotate(-1deg) translate(3px, 3px); box-shadow: 5px 5px 0 var(--black); }
+.btn-hero-outline {
+  display: inline-block;
+  background: var(--white);
+  color: var(--black);
+  padding: 20px 48px;
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-hero-outline:hover { transform: translate(3px, 3px); box-shadow: 5px 5px 0 var(--black); background: var(--acid); }
+.hero-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  background: var(--black);
+}
+/* Phone Mockup */
+.phone-mock {
+  width: 260px;
+  height: 480px;
+  background: var(--white);
+  border: var(--border);
+  border-width: 4px;
+  border-color: var(--acid);
+  box-shadow: var(--shadow-xl);
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  transform: rotate(3deg);
+  transition: transform 0.4s;
+}
+.phone-mock:hover { transform: rotate(0deg) scale(1.02); }
+.phone-notch { height: 32px; background: var(--black); display: flex; align-items: center; justify-content: center; }
+.phone-notch-pill { width: 80px; height: 14px; background: #1A1A1A; border-radius: 7px; }
+.phone-content { padding: 16px; }
+.phone-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.phone-logo { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--black); }
+.phone-notif {
+  width: 28px; height: 28px;
+  background: var(--purple);
+  border: 2px solid var(--black);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  color: white;
+  font-weight: 700;
+}
+.feed-card {
+  background: var(--acid);
+  border: 2px solid var(--black);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 3px 3px 0 var(--black);
+}
+.feed-card:nth-child(2) { background: var(--purple); color: var(--white); }
+.feed-card:nth-child(3) { background: var(--pink); color: var(--white); }
+.feed-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--black); margin-bottom: 6px; }
+.feed-card:nth-child(2) .feed-avatar { background: var(--acid); }
+.feed-card:nth-child(3) .feed-avatar { background: var(--yellow); }
+.feed-handle { font-size: 10px; font-weight: 700; margin-bottom: 4px; }
+.feed-text { font-size: 11px; line-height: 1.4; }
+.feed-actions { display: flex; gap: 8px; margin-top: 8px; }
+.feed-btn { font-size: 10px; font-weight: 700; padding: 3px 8px; border: 1.5px solid currentColor; border-radius: 4px; }
+.hero-badge {
+  position: absolute;
+  top: 40px; right: 40px;
+  background: var(--pink);
+  color: var(--white);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  padding: 16px 20px;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+  transform: rotate(8deg);
+}
+.hero-badge .big { font-size: 28px; display: block; }
+.hero-scroll-tag {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  background: var(--acid);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  padding: 10px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: rotate(-4deg);
+  color: var(--black);
+}
+
+/* TICKER */
+.ticker-wrap {
+  background: var(--black);
+  border-top: var(--border);
+  border-bottom: var(--border);
+  padding: 16px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-inner {
+  display: inline-block;
+  animation: freq-ticker 18s linear infinite;
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--acid);
+}
+.ticker-sep { margin: 0 32px; color: var(--purple); }
+@keyframes freq-ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* FEATURES — CHAOTIC GRID */
+.features {
+  padding: 80px 40px;
+  border-bottom: var(--border);
+  background: var(--white);
+}
+.features-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+}
+.features-h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+.features-h2 .purple { color: var(--purple); }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 0;
+}
+.feat-card {
+  padding: 40px 36px;
+  border: var(--border);
+  margin: -3px -3px 0 0;
+  position: relative;
+  transition: transform 0.2s, z-index 0.2s;
+  cursor: pointer;
+}
+.feat-card:hover { transform: translate(-4px, -4px); z-index: 10; box-shadow: var(--shadow-xl); }
+.feat-card.acid { background: var(--acid); }
+.feat-card.purple { background: var(--purple); color: var(--white); }
+.feat-card.pink { background: var(--pink); color: var(--white); }
+.feat-card.yellow { background: var(--yellow); }
+.feat-card.cyan { background: var(--cyan); }
+.feat-card.black { background: var(--black); color: var(--acid); }
+.feat-card.wide { grid-column: 1 / 3; }
+.feat-num { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; opacity: 0.2; margin-bottom: 16px; }
+.feat-icon { font-size: 40px; margin-bottom: 16px; }
+.feat-h3 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+.feat-p { font-size: 14px; line-height: 1.6; opacity: 0.8; }
+.feat-badge {
+  position: absolute;
+  top: -16px; right: 24px;
+  background: var(--black);
+  color: var(--acid);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border: 2px solid var(--black);
+}
+.feat-card.purple .feat-badge { background: var(--acid); color: var(--black); }
+
+/* HOW IT WORKS */
+.how-section {
+  background: var(--black);
+  color: var(--white);
+  padding: 80px 40px;
+  border-bottom: var(--border);
+}
+.how-h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  margin-bottom: 64px;
+  color: var(--acid);
+}
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+.step-card {
+  padding: 40px 32px;
+  border: 3px solid rgba(204,255,0,0.2);
+  margin: -3px -3px 0 0;
+  transition: border-color 0.2s;
+  position: relative;
+}
+.step-card:hover { border-color: var(--acid); }
+.step-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 80px;
+  font-weight: 800;
+  line-height: 1;
+  color: rgba(204,255,0,0.15);
+  margin-bottom: 20px;
+}
+.step-h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--acid); margin-bottom: 12px; }
+.step-p { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+.step-arrow { position: absolute; top: 40px; right: -16px; z-index: 10; width: 32px; height: 32px; background: var(--acid); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; border: 3px solid var(--black); color: var(--black); }
+.step-card:last-child .step-arrow { display: none; }
+
+/* SOCIAL PROOF */
+.social-section {
+  padding: 80px 40px;
+  border-bottom: var(--border);
+  background: var(--purple);
+}
+.social-h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--acid);
+  margin-bottom: 60px;
+}
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.review-card {
+  background: var(--white);
+  border: var(--border);
+  padding: 32px;
+  margin: -3px -3px 0 0;
+  transition: transform 0.2s;
+}
+.review-card:hover { transform: translate(-4px, -4px) rotate(-1deg); z-index: 10; box-shadow: var(--shadow-lg); }
+.review-card:nth-child(2n) { background: var(--acid); }
+.review-card:nth-child(3n) { background: var(--yellow); }
+.review-handle {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--purple);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.review-card:nth-child(2n) .review-handle { color: var(--black); }
+.handle-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--purple); border: 2px solid var(--black); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.review-card:nth-child(2n) .handle-avatar { background: var(--black); }
+.review-text { font-size: 15px; font-weight: 500; line-height: 1.5; color: var(--black); margin-bottom: 16px; }
+.review-freq { display: inline-block; background: var(--black); color: var(--acid); font-size: 10px; font-weight: 700; padding: 4px 10px; letter-spacing: 0.08em; }
+.review-card:nth-child(2n) .review-freq { background: var(--purple); color: var(--acid); }
+
+/* STATS */
+.stats-section {
+  background: var(--acid);
+  border-bottom: var(--border);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.stat-cell {
+  padding: 48px 40px;
+  border-right: var(--border);
+  text-align: center;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  display: block;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--black); opacity: 0.6; }
+
+/* TILTED CTA */
+.cta-section {
+  padding: 0;
+  background: var(--pink);
+  border-bottom: var(--border);
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+}
+.cta-tilt {
+  position: absolute;
+  width: 120%;
+  height: 100%;
+  background: var(--purple);
+  transform: skewY(-6deg) translateY(-40px);
+  transform-origin: left;
+  left: -10%;
+}
+.cta-content {
+  position: relative;
+  z-index: 2;
+  padding: 100px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  width: 100%;
+}
+.cta-left {}
+.cta-h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(52px, 8vw, 100px);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--acid);
+  margin-bottom: 32px;
+}
+.cta-sub { font-size: 18px; font-weight: 500; color: rgba(204,255,0,0.7); line-height: 1.5; margin-bottom: 48px; max-width: 400px; }
+.cta-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-cta {
+  display: inline-block;
+  background: var(--acid);
+  color: var(--black);
+  padding: 20px 48px;
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border: var(--border);
+  box-shadow: var(--shadow-xl);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-cta:hover { transform: translate(4px, 4px); box-shadow: 8px 8px 0 rgba(0,0,0,0.5); }
+.btn-cta-ghost {
+  display: inline-block;
+  background: transparent;
+  color: var(--acid);
+  padding: 20px 48px;
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border: 3px solid var(--acid);
+  transition: background 0.2s;
+}
+.btn-cta-ghost:hover { background: var(--acid); color: var(--black); }
+.cta-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cta-feature {
+  background: rgba(204,255,0,0.08);
+  border: 2px solid rgba(204,255,0,0.2);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.cta-feature-icon { font-size: 24px; }
+.cta-feature-text { font-size: 14px; font-weight: 500; color: var(--acid); }
+
+/* FOOTER */
+footer {
+  background: var(--black);
+  color: var(--white);
+  border-top: var(--border);
+  padding: 60px 40px 32px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 48px;
+  border-bottom: 3px solid rgba(204,255,0,0.15);
+}
+.footer-brand { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; color: var(--acid); margin-bottom: 12px; }
+.footer-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; }
+.footer-col-label { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--purple); margin-bottom: 20px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--acid); }
+.footer-bottom { display: flex; justify-content: space-between; padding-top: 32px; font-size: 12px; color: rgba(255,255,255,0.25); }
+.footer-bottom span:last-child { color: var(--purple); font-weight: 700; }
+
+/* SCROLL ANIMATIONS */
+.pop-in {
+  opacity: 0;
+  transform: translateY(32px) rotate(1deg);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.pop-in.visible { opacity: 1; transform: translateY(0) rotate(0deg); }
+
+@media (max-width: 900px) {
+  nav { padding: 12px 16px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-right { min-height: 400px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .feat-card.wide { grid-column: 1; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .stats-section { grid-template-columns: 1fr 1fr; }
+  .cta-content { grid-template-columns: 1fr; padding: 60px 24px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">FREQ</a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#vibes">Reviews</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a href="#download" class="nav-cta">Get the App →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-left">
+    <div class="hero-tag">🔥 2.1M people are already on FREQ</div>
+    <h1 class="hero-h1">
+      YOUR<br>
+      <span class="acid">VIBE</span><br>
+      <span class="purple">AMPLI<br>FIED.</span>
+    </h1>
+    <p class="hero-sub">The social app that doesn't pretend to be neutral. Post your frequency. Find your people. Make some noise.</p>
+    <div class="hero-actions">
+      <a href="#download" class="btn-hero">Download Free →</a>
+      <a href="#how" class="btn-hero-outline">See How It Works</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="phone-mock">
+      <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+      <div class="phone-content">
+        <div class="phone-header">
+          <span class="phone-logo">FREQ</span>
+          <div class="phone-notif">3</div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-avatar"></div>
+          <div class="feed-handle">@creative_chaos</div>
+          <div class="feed-text">just finished the hardest project of my life. feeling 🌋 rn</div>
+          <div class="feed-actions">
+            <span class="feed-btn">🔥 248</span>
+            <span class="feed-btn">💬 14</span>
+            <span class="feed-btn">⚡ Boost</span>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-avatar"></div>
+          <div class="feed-handle">@neon_wolf</div>
+          <div class="feed-text">no notes. just vibes and 3am energy drinks 🟣</div>
+          <div class="feed-actions">
+            <span class="feed-btn">💜 189</span>
+            <span class="feed-btn">💬 22</span>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-avatar"></div>
+          <div class="feed-handle">@acidwave_studio</div>
+          <div class="feed-text">new drop hits different at 140bpm. frequency: max 🔊</div>
+          <div class="feed-actions">
+            <span class="feed-btn">🎵 310</span>
+            <span class="feed-btn">💬 8</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-badge"><span class="big">#1</span>Social App<br>Gen-Z Voted</div>
+    <div class="hero-scroll-tag">↓ Scroll for more</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    FREQ<span class="ticker-sep">★</span>Your Vibe Amplified<span class="ticker-sep">★</span>2.1M Users<span class="ticker-sep">★</span>Post Your Frequency<span class="ticker-sep">★</span>Find Your People<span class="ticker-sep">★</span>No Algorithm BS<span class="ticker-sep">★</span>Just Vibes<span class="ticker-sep">★</span>FREQ<span class="ticker-sep">★</span>Your Vibe Amplified<span class="ticker-sep">★</span>2.1M Users<span class="ticker-sep">★</span>Post Your Frequency<span class="ticker-sep">★</span>Find Your People<span class="ticker-sep">★</span>No Algorithm BS<span class="ticker-sep">★</span>Just Vibes<span class="ticker-sep">★</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features pop-in" id="features">
+  <div class="features-header">
+    <h2 class="features-h2">THE<br>GOOD<br><span class="purple">STUFF.</span></h2>
+    <p style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(10,10,10,0.4);">6 Reasons<br>to Get On</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card acid wide">
+      <span class="feat-badge">Fan Fave</span>
+      <div class="feat-icon">📡</div>
+      <h3 class="feat-h3">Frequency Matching</h3>
+      <p class="feat-p">Our algorithm doesn't just recommend content — it reads your energy. Post at 2am angry? You'll find your midnight crew. Feeling chaotic-creative? Here's your feral artist community.</p>
+    </div>
+    <div class="feat-card purple">
+      <div class="feat-icon">⚡</div>
+      <h3 class="feat-h3">Boost Mode</h3>
+      <p class="feat-p">Hit Boost on any post and it fires to 500 strangers who might actually get it. No paid ads. No shadowbanning. Just reach.</p>
+    </div>
+    <div class="feat-card pink">
+      <div class="feat-icon">🔊</div>
+      <h3 class="feat-h3">Loud Rooms</h3>
+      <p class="feat-p">Real-time audio chat rooms organized by energy level. Low-key. Medium chaos. Full send. You pick the room temperature.</p>
+    </div>
+    <div class="feat-card yellow">
+      <div class="feat-num">04</div>
+      <h3 class="feat-h3">No Shadowbans. Ever.</h3>
+      <p class="feat-p">What you post is what gets shown. We tell you if something gets removed and exactly why. Radical transparency, always.</p>
+    </div>
+    <div class="feat-card cyan">
+      <div class="feat-num">05</div>
+      <h3 class="feat-h3">Collab Canvas</h3>
+      <p class="feat-p">Shared creative spaces where multiple people can add to a piece — post, art, playlist, whatever. Co-create without DMs.</p>
+    </div>
+    <div class="feat-card black">
+      <div class="feat-num">06</div>
+      <h3 class="feat-h3">Chronological, Always</h3>
+      <p class="feat-p">No engagement-optimized feed. You see what happened when it happened. Radical concept, we know.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section pop-in" id="how">
+  <h2 class="how-h2">HOW IT<br>WORKS.</h2>
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-arrow">→</div>
+      <div class="step-number">01</div>
+      <h3 class="step-h3">Set Your Frequency</h3>
+      <p class="step-p">Pick your energy ranges — creative, chaotic, chill, ambitious, whatever. FREQ tunes to you, not the other way around.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-arrow">→</div>
+      <div class="step-number">02</div>
+      <h3 class="step-h3">Post Anything</h3>
+      <p class="step-p">Text. Audio clips. Visuals. Short videos. Collaborative threads. No format restrictions. No character limits. No rules about what's worthy.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-arrow">→</div>
+      <div class="step-number">03</div>
+      <h3 class="step-h3">Find Your People</h3>
+      <p class="step-p">Frequency Matching finds users who resonate with your actual posts — not your follower count, not your profile aesthetic.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">04</div>
+      <h3 class="step-h3">Amplify Together</h3>
+      <p class="step-p">Boost each other's posts. Join Loud Rooms. Collab on canvases. Build something that actually reaches people who care.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="social-section pop-in" id="vibes">
+  <h2 class="social-h2">THE PEOPLE<br>HAVE SPOKEN.</h2>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-handle"><div class="handle-avatar">🦋</div>@luna_makes_things</div>
+      <p class="review-text">"I've been on every social app since 2010. FREQ is the first one that feels like it was made for the actual internet — not a focus group's idea of the internet."</p>
+      <span class="review-freq">FREQ since Day 1</span>
+    </div>
+    <div class="review-card">
+      <div class="review-handle"><div class="handle-avatar">🔥</div>@midnight_ramen</div>
+      <p class="review-text">"The Loud Rooms thing. I got on a call with 12 strangers who all wanted to talk about obscure electronic music at 1am. I've never felt more seen in my life."</p>
+      <span class="review-freq">FREQ · 3 months</span>
+    </div>
+    <div class="review-card">
+      <div class="review-handle"><div class="handle-avatar">⚡</div>@acidwave.studio</div>
+      <p class="review-text">"Deleted Instagram, deleted TikTok. Now it's just FREQ. Found a whole community of people who actually listen to my music recommendations."</p>
+      <span class="review-freq">FREQ · Power User</span>
+    </div>
+    <div class="review-card">
+      <div class="review-handle"><div class="handle-avatar">🌙</div>@sleepy.radical</div>
+      <p class="review-text">"No shadowban in 6 months of posting genuinely chaotic stuff. Chronological feed. I can see my own reach. This is what social media was supposed to be."</p>
+      <span class="review-freq">FREQ since beta</span>
+    </div>
+    <div class="review-card">
+      <div class="review-handle"><div class="handle-avatar">🎵</div>@neonpulse</div>
+      <p class="review-text">"I got 3 collab requests in my first week from people who actually listened to my tracks. Not bots. Not copy-paste DMs. Real people."</p>
+      <span class="review-freq">FREQ · Musician</span>
+    </div>
+    <div class="review-card">
+      <div class="review-handle"><div class="handle-avatar">🟣</div>@yung.philosophy</div>
+      <p class="review-text">"Frequency Matching is scary accurate. It found my niche in 3 days. Four months in and I'm genuinely talking to people I'd be friends with IRL."</p>
+      <span class="review-freq">FREQ · 4 months</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-section pop-in">
+  <div class="stat-cell"><span class="stat-num">2.1M</span><div class="stat-label">Active Users</div></div>
+  <div class="stat-cell"><span class="stat-num">94%</span><div class="stat-label">Return Daily</div></div>
+  <div class="stat-cell"><span class="stat-num">0</span><div class="stat-label">Paid Promo Posts</div></div>
+  <div class="stat-cell"><span class="stat-num">4.9★</span><div class="stat-label">App Store Rating</div></div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section pop-in" id="download">
+  <div class="cta-tilt"></div>
+  <div class="cta-content">
+    <div class="cta-left">
+      <h2 class="cta-h2">SET YOUR<br>FREQ<br>FREE.</h2>
+      <p class="cta-sub">Download FREQ free. No subscriptions. No premium paywalls. No BS. Just the app and your frequency.</p>
+      <div class="cta-btns">
+        <a href="#" class="btn-cta">Download — iOS →</a>
+        <a href="#" class="btn-cta-ghost">Get on Android</a>
+      </div>
+    </div>
+    <div class="cta-right">
+      <div class="cta-feature"><div class="cta-feature-icon">📡</div><p class="cta-feature-text">Frequency Matching finds your people automatically</p></div>
+      <div class="cta-feature"><div class="cta-feature-icon">⚡</div><p class="cta-feature-text">Boost Mode sends your posts to 500 new people for free</p></div>
+      <div class="cta-feature"><div class="cta-feature-icon">🔊</div><p class="cta-feature-text">Loud Rooms — real-time audio, no appointment needed</p></div>
+      <div class="cta-feature"><div class="cta-feature-icon">🚫</div><p class="cta-feature-text">Zero shadowbans, zero hidden reach limits, ever</p></div>
+      <div class="cta-feature"><div class="cta-feature-icon">🕐</div><p class="cta-feature-text">Chronological feed — only. Always. No exceptions.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">FREQ</div>
+      <p class="footer-desc">The social app built for the frequency you're actually on. No algorithms gaming your mood. No ads disguised as posts. Just you, amplified.</p>
+    </div>
+    <div>
+      <p class="footer-col-label">The App</p>
+      <ul class="footer-links">
+        <li><a href="#">Download iOS</a></li>
+        <li><a href="#">Download Android</a></li>
+        <li><a href="#">FREQ Web Beta</a></li>
+        <li><a href="#">What's New</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Features</p>
+      <ul class="footer-links">
+        <li><a href="#">Frequency Matching</a></li>
+        <li><a href="#">Boost Mode</a></li>
+        <li><a href="#">Loud Rooms</a></li>
+        <li><a href="#">Collab Canvas</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Company</p>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Community Guidelines</a></li>
+        <li><a href="#">Transparency Reports</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 FREQ Inc. All rights reserved. Built different, on purpose.</span>
+    <span>YOUR VIBE. AMPLIFIED. ⚡</span>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.pop-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

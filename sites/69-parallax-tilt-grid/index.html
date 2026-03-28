@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PARALLAX — Creative Media Studio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0e0e0e;
+    --fg: #f0f0f0;
+    --accent: #ff6b35;
+    --accent2: #ffd700;
+    --border: rgba(240,240,240,0.07);
+    --muted: rgba(240,240,240,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--fg); font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 52px;
+    background: rgba(14,14,14,0.85); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo { font-size: 20px; font-weight: 900; letter-spacing: -0.03em; color: var(--fg); text-decoration: none; }
+  .logo em { color: var(--accent); font-style: normal; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-cta {
+    background: var(--accent); color: #fff;
+    font-size: 13px; font-weight: 700; padding: 10px 24px; border-radius: 6px;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 120px 52px 80px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 28px;
+    opacity: 0; animation: up 0.6s ease 0.2s forwards;
+  }
+  .hero-title {
+    font-size: clamp(60px, 11vw, 130px); font-weight: 900;
+    letter-spacing: -0.04em; line-height: 0.92;
+    margin-bottom: 32px;
+    opacity: 0; animation: up 0.8s ease 0.4s forwards;
+  }
+  .hero-title em { color: var(--accent); font-style: normal; }
+  .hero-sub {
+    font-size: 17px; font-weight: 400; color: var(--muted);
+    max-width: 480px; line-height: 1.7; margin-bottom: 48px;
+    opacity: 0; animation: up 0.7s ease 0.7s forwards;
+  }
+  .hero-ctas { display: flex; gap: 14px; opacity: 0; animation: up 0.7s ease 0.9s forwards; }
+  .btn-fire {
+    background: var(--accent); color: #fff; font-size: 14px; font-weight: 700;
+    padding: 15px 36px; border-radius: 8px; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-fire:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(255,107,53,0.4); }
+  .btn-ghost {
+    border: 1px solid var(--border); color: var(--fg);
+    font-size: 14px; font-weight: 600; padding: 15px 36px; border-radius: 8px;
+    text-decoration: none; transition: border-color 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(240,240,240,0.2); }
+
+  .hero-noise {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 50% 30%, rgba(255,107,53,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 30% at 20% 80%, rgba(255,215,0,0.04) 0%, transparent 70%);
+  }
+  .hero > * { position: relative; z-index: 1; }
+
+  @keyframes up { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── 3-COLUMN PARALLAX + TILT GRID ── */
+  .parallax-section {
+    padding: 80px 0 120px;
+    position: relative; overflow: hidden;
+  }
+  .parallax-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+    text-align: center; margin-bottom: 16px;
+  }
+  .parallax-title {
+    font-size: clamp(32px, 5vw, 52px); font-weight: 900;
+    letter-spacing: -0.03em; text-align: center; margin-bottom: 64px;
+  }
+
+  .parallax-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px; padding: 0 52px;
+    position: relative;
+  }
+
+  /* Each column scrolls at different speed via JS */
+  .parallax-col { display: flex; flex-direction: column; gap: 20px; }
+  .parallax-col.col-middle { margin-top: 60px; }
+  .parallax-col.col-right { margin-top: -40px; }
+
+  /* Tilt card */
+  .tilt-card {
+    position: relative; overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+    transform-style: preserve-3d;
+    will-change: transform;
+    cursor: pointer;
+  }
+  .tilt-card:hover { border-color: rgba(255,107,53,0.3); }
+  .tilt-inner {
+    width: 100%; padding-bottom: 130%;
+    position: relative; overflow: hidden;
+  }
+  .tilt-inner.short { padding-bottom: 85%; }
+  .tilt-inner.tall { padding-bottom: 160%; }
+
+  .tilt-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .tilt-card:hover .tilt-bg { transform: scale(1.06); }
+
+  .tilt-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(14,14,14,0.85) 0%, transparent 50%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 24px; opacity: 0;
+    transition: opacity 0.35s;
+  }
+  .tilt-card:hover .tilt-overlay { opacity: 1; }
+  .tilt-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .tilt-name { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+
+  /* Color palettes for image placeholders */
+  .c1 { background: linear-gradient(145deg, #1a0a00 0%, #4d2200 50%, #ff6b35 100%); }
+  .c2 { background: linear-gradient(145deg, #001a1a 0%, #004d4d 50%, #00b3b3 100%); }
+  .c3 { background: linear-gradient(145deg, #0d0020 0%, #280059 50%, #7b00ff 100%); }
+  .c4 { background: linear-gradient(145deg, #1a1a00 0%, #4d4d00 50%, #ffd700 100%); }
+  .c5 { background: linear-gradient(145deg, #001a00 0%, #004d00 50%, #00cc00 100%); }
+  .c6 { background: linear-gradient(145deg, #1a000d 0%, #4d0026 50%, #cc0066 100%); }
+  .c7 { background: linear-gradient(145deg, #00001a 0%, #00004d 50%, #0000cc 100%); }
+  .c8 { background: linear-gradient(145deg, #0d1a00 0%, #264d00 50%, #66cc00 100%); }
+  .c9 { background: linear-gradient(145deg, #1a0d00 0%, #4d2600 50%, #cc6600 100%); }
+
+  /* ── ABOUT / PHILOSOPHY ── */
+  .philosophy {
+    padding: 100px 52px;
+    border-top: 1px solid var(--border);
+    max-width: 1300px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: center;
+  }
+  .phil-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  .phil-title { font-size: clamp(36px, 5vw, 56px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 28px; }
+  .phil-desc { font-size: 15px; line-height: 1.8; color: var(--muted); margin-bottom: 36px; }
+  .phil-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .phil-stat { border: 1px solid var(--border); padding: 24px; border-radius: 12px; }
+  .phil-num { font-size: 40px; font-weight: 900; letter-spacing: -0.03em; color: var(--accent); }
+  .phil-label { font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 6px; }
+  .phil-image {
+    aspect-ratio: 4/5; border-radius: 20px; overflow: hidden;
+    background: linear-gradient(145deg, #1a1a1a, #333);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .phil-image-inner {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, #ff6b35 0%, #1a0800 100%);
+    opacity: 0.7;
+  }
+
+  /* ── SERVICES ── */
+  .services {
+    padding: 100px 52px;
+    background: rgba(255,107,53,0.04);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .services-inner { max-width: 1300px; margin: 0 auto; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+  .svc {
+    background: rgba(240,240,240,0.03); border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px; position: relative; overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .svc:hover { border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.04); }
+  .svc-num { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 32px; }
+  .svc-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; }
+  .svc-desc { font-size: 14px; line-height: 1.7; color: var(--muted); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { padding: 100px 52px; max-width: 1300px; margin: 0 auto; }
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 56px; }
+  .testi { border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: border-color 0.3s, transform 0.3s; }
+  .testi:hover { border-color: rgba(255,107,53,0.3); transform: translateY(-4px); }
+  .testi-stars { font-size: 13px; color: var(--accent2); margin-bottom: 16px; }
+  .testi-text { font-size: 14px; line-height: 1.75; color: var(--muted); margin-bottom: 24px; font-style: italic; }
+  .testi-by { display: flex; gap: 12px; align-items: center; }
+  .testi-av { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
+  .testi-name { font-size: 13px; font-weight: 700; }
+  .testi-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── CTA ── */
+  .cta { padding: 120px 52px; text-align: center; border-top: 1px solid var(--border); }
+  .cta h2 { font-size: clamp(48px, 8vw, 96px); font-weight: 900; letter-spacing: -0.04em; line-height: 0.95; margin-bottom: 28px; }
+  .cta h2 em { color: var(--accent); font-style: normal; display: block; }
+  .cta p { font-size: 17px; color: var(--muted); max-width: 440px; margin: 0 auto 48px; line-height: 1.65; }
+  .cta-btns { display: flex; gap: 14px; justify-content: center; }
+
+  /* ── FOOTER ── */
+  footer { border-top: 1px solid var(--border); padding: 40px 52px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-size: 18px; font-weight: 900; letter-spacing: -0.03em; color: var(--fg); text-decoration: none; }
+  .footer-logo em { color: var(--accent); font-style: normal; }
+  .footer-nav { display: flex; gap: 28px; list-style: none; }
+  .footer-nav a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-nav a:hover { color: var(--fg); }
+  .footer-copy { font-size: 12px; color: rgba(240,240,240,0.2); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">PARA<em>LLAX</em></a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Start a Project</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-noise"></div>
+  <p class="hero-label">Creative Media Studio · Est. 2016</p>
+  <h1 class="hero-title">DEPTH IS<br/><em>OUR</em><br/>MEDIUM</h1>
+  <p class="hero-sub">PARALLAX creates immersive visual media — photography, film, and digital art with layers of depth you can feel as you scroll.</p>
+  <div class="hero-ctas">
+    <a href="#work" class="btn-fire">Explore the Grid</a>
+    <a href="#studio" class="btn-ghost">Our Studio</a>
+  </div>
+</section>
+
+<!-- 3-COLUMN PARALLAX + TILT GRID -->
+<section class="parallax-section" id="work">
+  <p class="parallax-label">Featured Work</p>
+  <h2 class="parallax-title">Scroll through layers</h2>
+
+  <div class="parallax-grid" id="parallaxGrid">
+    <!-- Column 1 -->
+    <div class="parallax-col col-left" id="col1">
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner short"><div class="tilt-bg c1"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Photography · 2024</p><p class="tilt-name">Ember Campaign</p></div>
+      </div>
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner tall"><div class="tilt-bg c4"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Film · 2024</p><p class="tilt-name">Golden State</p></div>
+      </div>
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner"><div class="tilt-bg c7"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Digital · 2023</p><p class="tilt-name">Midnight Protocol</p></div>
+      </div>
+    </div>
+    <!-- Column 2 — offset down -->
+    <div class="parallax-col col-middle" id="col2">
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner tall"><div class="tilt-bg c2"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Film · 2024</p><p class="tilt-name">Cyan Dreams</p></div>
+      </div>
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner short"><div class="tilt-bg c5"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Photography · 2024</p><p class="tilt-name">Verdant</p></div>
+      </div>
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner"><div class="tilt-bg c8"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Motion · 2023</p><p class="tilt-name">Forest Light</p></div>
+      </div>
+    </div>
+    <!-- Column 3 — offset up -->
+    <div class="parallax-col col-right" id="col3">
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner"><div class="tilt-bg c3"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Digital Art · 2024</p><p class="tilt-name">Ultraviolet</p></div>
+      </div>
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner tall"><div class="tilt-bg c6"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Photography · 2023</p><p class="tilt-name">Rose Cipher</p></div>
+      </div>
+      <div class="tilt-card" data-tilt>
+        <div class="tilt-inner short"><div class="tilt-bg c9"></div></div>
+        <div class="tilt-overlay"><p class="tilt-tag">Film · 2023</p><p class="tilt-name">Amber Dusk</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section id="studio">
+  <div class="philosophy">
+    <div>
+      <p class="phil-tag">Our Philosophy</p>
+      <h2 class="phil-title">Three dimensions.<br/>One story.</h2>
+      <p class="phil-desc">We believe depth is not a technique — it's a perspective. Every project we create has physical, emotional, and temporal layers that reveal themselves as you engage.</p>
+      <div class="phil-stats">
+        <div class="phil-stat"><p class="phil-num">180+</p><p class="phil-label">Projects completed</p></div>
+        <div class="phil-stat"><p class="phil-num">48</p><p class="phil-label">Awards won</p></div>
+        <div class="phil-stat"><p class="phil-num">26</p><p class="phil-label">Countries reached</p></div>
+        <div class="phil-stat"><p class="phil-num">8</p><p class="phil-label">Years of craft</p></div>
+      </div>
+    </div>
+    <div class="phil-image">
+      <div class="phil-image-inner"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-inner">
+    <p class="parallax-label" style="text-align:left;">What We Create</p>
+    <h2 class="parallax-title" style="text-align:left;margin-bottom:0;">Crafted for depth,<br/>built for impact</h2>
+    <div class="services-grid">
+      <div class="svc">
+        <p class="svc-num">01 — Photography</p>
+        <h3 class="svc-title">Editorial & Commercial</h3>
+        <p class="svc-desc">Campaign photography with a cinematic, layered quality — natural light mastery, depth-of-field storytelling, and post-production that breathes.</p>
+      </div>
+      <div class="svc">
+        <p class="svc-num">02 — Film</p>
+        <h3 class="svc-title">Brand Films & Docs</h3>
+        <p class="svc-desc">Short-form films that feel feature-length. Character-driven stories, architectural epics, and nature immersions — always with parallax depth.</p>
+      </div>
+      <div class="svc">
+        <p class="svc-num">03 — Digital Art</p>
+        <h3 class="svc-title">Interactive & Generative</h3>
+        <p class="svc-desc">Code-driven art installations and WebGL experiences where depth responds to viewer movement in real time.</p>
+      </div>
+      <div class="svc">
+        <p class="svc-num">04 — Motion</p>
+        <h3 class="svc-title">Animation & VFX</h3>
+        <p class="svc-desc">Parallax motion graphics, 2.5D animations, and composited visual effects that live between the physical and the virtual.</p>
+      </div>
+      <div class="svc">
+        <p class="svc-num">05 — Experience</p>
+        <h3 class="svc-title">Spatial & Immersive</h3>
+        <p class="svc-desc">Projection mapping, AR/VR content, and physical installations designed to envelop the audience in layers of sensation.</p>
+      </div>
+      <div class="svc">
+        <p class="svc-num">06 — Strategy</p>
+        <h3 class="svc-title">Visual Direction</h3>
+        <p class="svc-desc">From moodboards to shot lists, we bring creative direction to every project before a camera ever rolls or a pixel is placed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <p class="parallax-label" style="text-align:left;">What Clients Say</p>
+  <h2 class="parallax-title" style="text-align:left;margin-bottom:0;">Depth you can feel</h2>
+  <div class="testi-grid">
+    <div class="testi">
+      <p class="testi-stars">★★★★★</p>
+      <p class="testi-text">"The parallax grid on our campaign site drove a 280% increase in time-on-page. People just can't stop scrolling."</p>
+      <div class="testi-by">
+        <div class="testi-av">EL</div>
+        <div><p class="testi-name">Elena Lund</p><p class="testi-role">Creative Director, ARIA Fashion</p></div>
+      </div>
+    </div>
+    <div class="testi">
+      <p class="testi-stars">★★★★★</p>
+      <p class="testi-text">"Their 3D tilt cards on our digital magazine are the most-shared element in our social analytics. The depth effect is genuinely stunning."</p>
+      <div class="testi-by">
+        <div class="testi-av" style="background:#ffd700;color:#000;">MO</div>
+        <div><p class="testi-name">Marcus Osei</p><p class="testi-role">Editor, Depth Magazine</p></div>
+      </div>
+    </div>
+    <div class="testi">
+      <p class="testi-stars">★★★★★</p>
+      <p class="testi-text">"PARALLAX understood our brand before we even briefed them. The independent scroll speeds they designed for us felt like poetry."</p>
+      <div class="testi-by">
+        <div class="testi-av" style="background:#7b00ff;">ZK</div>
+        <div><p class="testi-name">Zara Kim</p><p class="testi-role">CMO, Spectrum Labs</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <h2>CREATE WITH<br/><em>DEPTH.</em></h2>
+  <p>We take on projects that deserve layers. Tell us yours — we'll find the depth inside it.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-fire">Start a Project</a>
+    <a href="#" class="btn-ghost">See Our Process</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">PARA<em>LLAX</em></a>
+  <ul class="footer-nav">
+    <li><a href="#">Work</a></li>
+    <li><a href="#">Studio</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="#">Journal</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <p class="footer-copy">© 2024 PARALLAX Studio. All rights reserved.</p>
+</footer>
+
+<script>
+  // ── PARALLAX SCROLL (independent column speeds) ──
+  const col1 = document.getElementById('col1');
+  const col2 = document.getElementById('col2');
+  const col3 = document.getElementById('col3');
+  const section = document.querySelector('.parallax-section');
+
+  function onParallaxScroll() {
+    const rect = section.getBoundingClientRect();
+    const sectionTop = rect.top;
+    const scrolled = -sectionTop;
+
+    if (scrolled < -200) return;
+
+    // Different speeds for each column
+    const speed1 = scrolled * 0.08;   // slow
+    const speed2 = scrolled * -0.06;  // opposite direction
+    const speed3 = scrolled * 0.12;   // fastest
+
+    col1.style.transform = `translateY(${speed1}px)`;
+    col2.style.transform = `translateY(${speed2}px)`;
+    col3.style.transform = `translateY(${speed3}px)`;
+  }
+
+  window.addEventListener('scroll', onParallaxScroll, { passive: true });
+
+  // ── 3D TILT EFFECT ON HOVER ──
+  document.querySelectorAll('[data-tilt]').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotX = ((y - centerY) / centerY) * -12;
+      const rotY = ((x - centerX) / centerX) * 12;
+      card.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    });
+  });
+
+  // ── INTERSECTION OBSERVER for scroll reveal ──
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.svc, .testi, .phil-stat').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(28px)';
+    el.style.transition = `opacity 0.65s ease ${i * 0.07}s, transform 0.65s ease ${i * 0.07}s`;
+    io.observe(el);
+  });
+</script>
+</body>
+</html>

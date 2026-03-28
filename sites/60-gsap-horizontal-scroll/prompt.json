@@ -1,0 +1,44 @@
+{
+  "id": "d84cbca7-b73e-4352-999d-bf0d4768760f",
+  "createdAt": "2025-12-31T05:43:13.592Z",
+  "updatedAt": "2026-03-28T06:47:24.314Z",
+  "deletedAt": null,
+  "title": "GSAP Horizontal scroll",
+  "slug": "gsap-horizontal-scroll",
+  "description": "",
+  "teamId": "7d97ebb3-363d-49d3-a029-fa9a23815e3f",
+  "creatorId": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+  "prompt": "Create a horizontal scroll animation using GSAP ScrollTrigger. \\\n\\\nLayout: Instead of full-screen slides, I want a continuous horizontal text flow - imagine a single, very long sentenceStructure: Use a single flex container so items flow naturally next to each other with variable gaps. \\\n\\\nContent: The sentence is 'In every bottle, discover the undeniable Real Magic of sharing pure Refreshment that brings us Together'. \\\n\\\nIntegration: Embed the visual elements (SVG curves, icons) inline with the text, acting like punctuation or conjunctions, rather than separating them into their own distinct sections. \\\n\\\nVibe: It should feel like reading a really long ticker tape, not flipping through a slide deck",
+  "images": [],
+  "tags": [
+    "animation",
+    "scroll animation",
+    "landing page"
+  ],
+  "previewUrl": "https://component-a4e5f1b5-ca7e-445b-b12e-6527ca7e12f5.preview.superdesign.dev/?projectId=a8b35ac7-ec8a-40a8-ac3b-21cf391e9345",
+  "thumbnail": {
+    "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/preview-artifacts/prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/097c55d0-9562-47e1-be65-53d36cafca39.mp4",
+    "type": "video",
+    "storagePath": "prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/097c55d0-9562-47e1-be65-53d36cafca39.mp4"
+  },
+  "previewDevice": null,
+  "previewShowFrame": false,
+  "isPublic": true,
+  "previewViewCount": 1845,
+  "detailViewCount": 29429,
+  "copyCount": 154,
+  "tryCount": 11,
+  "creator": {
+    "id": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+    "name": "Zhou Jason",
+    "email": "jason.zhou.design@gmail.com",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI6-P1KTFqMDsQTtfdDZAggOdMieNKQEuMwOGmTCNPC5ZrU=s96-c"
+  },
+  "stats": {
+    "previewViewCount": 1845,
+    "detailViewCount": 29429,
+    "copyCount": 154,
+    "tryCount": 11,
+    "remixCount": 165
+  }
+}

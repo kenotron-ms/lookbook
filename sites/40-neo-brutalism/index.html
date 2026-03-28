@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACID.WORKS — Design Without Apology</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow:  #f5e642;
+      --black:   #0d0d0d;
+      --white:   #f5f3ed;
+      --off:     #f0eee8;
+      --border:  3px solid var(--black);
+      --shadow:  5px 5px 0px var(--black);
+      --shadow-lg: 8px 8px 0px var(--black);
+      --shadow-y: 5px 5px 0px var(--yellow);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Archivo', sans-serif;
+      background: var(--off);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--yellow);
+      border-bottom: var(--border);
+      padding: 0 2.5rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .nav-center {
+      display: flex;
+      gap: 0;
+    }
+
+    .nav-center a {
+      display: flex;
+      align-items: center;
+      padding: 0 1.2rem;
+      height: 64px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      border-left: var(--border);
+      transition: background 0.2s;
+    }
+
+    .nav-center a:hover { background: rgba(0,0,0,0.08); }
+
+    .nav-cta {
+      background: var(--black);
+      color: var(--yellow);
+      padding: 0 1.5rem;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .nav-cta:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-lg); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      padding: 64px 0 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--off);
+      border-bottom: var(--border);
+    }
+
+    .hero-top {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: var(--border);
+    }
+
+    .hero-left {
+      padding: 4rem 2.5rem;
+      border-right: var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--black);
+      color: var(--yellow);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: 2px solid var(--black);
+      align-self: flex-start;
+      margin-bottom: 3rem;
+    }
+
+    .hero-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(6rem, 12vw, 17rem);
+      line-height: 0.82;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .hero-title .yellow-line {
+      color: transparent;
+      -webkit-text-stroke: 3px var(--black);
+    }
+
+    .hero-title .yellow-fill { color: var(--yellow); -webkit-text-stroke: 0; }
+
+    .hero-meta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .hm-val {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2.8rem;
+      line-height: 1;
+      color: var(--black);
+    }
+
+    .hm-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      opacity: 0.5;
+      margin-top: 0.2rem;
+    }
+
+    .hero-right {
+      background: var(--yellow);
+      padding: 4rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-right-tag {
+      font-size: 0.6rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--black);
+      opacity: 0.5;
+    }
+
+    .hero-right-quote {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2rem, 4vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .hero-right-quote em {
+      font-style: italic;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+    }
+
+    .hero-right-desc {
+      font-size: 0.88rem;
+      font-weight: 400;
+      line-height: 1.7;
+      color: rgba(13,13,13,0.65);
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--black);
+      color: var(--yellow);
+      padding: 1rem 2rem;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      align-self: flex-start;
+    }
+
+    .hero-cta:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lg); }
+
+    /* MARQUEE */
+    .marquee-section {
+      background: var(--black);
+      border-bottom: var(--border);
+      overflow: hidden;
+      padding: 0.8rem 0;
+    }
+
+    .marquee-track {
+      display: flex;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 0 2.5rem;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+    }
+
+    .m-dot { width: 8px; height: 8px; background: var(--yellow); }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* BENTO GRID */
+    .bento-section {
+      padding: 3rem 2.5rem;
+      border-bottom: var(--border);
+    }
+
+    .bento-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-tag {
+      font-size: 0.6rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--black);
+      opacity: 0.45;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(3rem, 7vw, 8rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .section-title .yellow { color: var(--yellow); }
+    .section-title .stroke { -webkit-text-stroke: 2.5px var(--black); color: transparent; }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 260px;
+      gap: 0;
+      background: var(--black);
+      border: var(--border);
+    }
+
+    .bento-cell {
+      border: var(--border);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: -1.5px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .bento-cell:hover { z-index: 2; }
+
+    .bc-a { grid-column: 1 / 5; background: var(--yellow); }
+    .bc-b { grid-column: 5 / 9; background: var(--off); }
+    .bc-c { grid-column: 9 / 13; background: var(--black); color: var(--yellow); }
+    .bc-d { grid-column: 1 / 7; background: var(--off); grid-row: 2; }
+    .bc-e { grid-column: 7 / 13; background: var(--yellow); grid-row: 2; }
+
+    .bc-tag {
+      font-size: 0.55rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .bc-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.8rem);
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+
+    .bc-body {
+      font-size: 0.78rem;
+      font-weight: 400;
+      line-height: 1.7;
+      opacity: 0.65;
+      margin-top: 0.75rem;
+    }
+
+    .bc-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 8rem;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      opacity: 0.08;
+      position: absolute;
+      bottom: -1rem;
+      right: 0.5rem;
+      pointer-events: none;
+    }
+
+    /* WORK LIST */
+    .work-section {
+      padding: 3rem 2.5rem;
+      border-bottom: var(--border);
+    }
+
+    .work-inner { }
+
+    .work-list {
+      border: var(--border);
+      background: var(--black);
+    }
+
+    .work-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 180px 100px 50px;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 2px solid #222;
+      background: var(--off);
+      transition: background 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .work-row:last-child { border-bottom: none; }
+
+    .work-row:hover {
+      background: var(--yellow);
+      transform: translateX(6px);
+    }
+
+    .w-num {
+      font-size: 0.6rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: var(--black);
+      opacity: 0.35;
+    }
+
+    .w-name {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 2.2rem);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .w-type {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--black);
+      opacity: 0.4;
+    }
+
+    .w-year {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--black);
+      opacity: 0.35;
+    }
+
+    .w-arrow { font-size: 1.3rem; font-weight: 900; color: var(--black); text-align: right; }
+
+    /* MANIFESTO */
+    .manifesto-section {
+      background: var(--black);
+      padding: 5rem 2.5rem;
+      border-bottom: var(--border);
+    }
+
+    .manifesto-inner { max-width: 1400px; margin: 0 auto; }
+
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      background: var(--black);
+      border: var(--border);
+    }
+
+    .man-cell {
+      padding: 3rem 2.5rem;
+      border-right: 2px solid #222;
+      transition: background 0.2s;
+    }
+
+    .man-cell:last-child { border-right: none; }
+    .man-cell:hover { background: #111; }
+
+    .man-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 5rem;
+      color: rgba(245,230,66,0.08);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    .man-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--yellow);
+      margin-bottom: 1rem;
+    }
+
+    .man-body {
+      font-size: 0.82rem;
+      font-weight: 400;
+      line-height: 1.8;
+      color: rgba(245,243,237,0.5);
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section {
+      padding: 3rem 2.5rem;
+      border-bottom: var(--border);
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      background: var(--black);
+      border: var(--border);
+      margin-top: 2.5rem;
+    }
+
+    .t-cell {
+      background: var(--off);
+      padding: 2.5rem;
+      border-right: var(--border);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .t-cell:last-child { border-right: none; }
+    .t-cell:hover { background: var(--yellow); transform: translate(-3px, -3px); box-shadow: var(--shadow); z-index: 1; position: relative; }
+
+    .t-score {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--black);
+      margin-bottom: 1.5rem;
+    }
+
+    .t-text {
+      font-size: 0.88rem;
+      font-weight: 400;
+      line-height: 1.8;
+      color: var(--black);
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .t-author-name {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .t-author-role {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--black);
+      opacity: 0.45;
+      margin-top: 0.2rem;
+    }
+
+    /* NUMBERS */
+    .numbers-section {
+      background: var(--yellow);
+      border-bottom: var(--border);
+    }
+
+    .numbers-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .num-cell {
+      padding: 3.5rem 2.5rem;
+      border-right: var(--border);
+      transition: background 0.2s;
+    }
+
+    .num-cell:last-child { border-right: none; }
+    .num-cell:hover { background: rgba(0,0,0,0.05); }
+
+    .num-val {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 5rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--black);
+    }
+
+    .num-label {
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--black);
+      opacity: 0.5;
+      margin-top: 0.5rem;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: var(--black);
+      padding: 7rem 2.5rem;
+      text-align: center;
+      border-bottom: var(--border);
+    }
+
+    .cta-inner { max-width: 900px; margin: 0 auto; }
+
+    .cta-top-tag {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--black);
+      padding: 0.3rem 0.75rem;
+      font-size: 0.6rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 3rem;
+    }
+
+    .cta-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(5rem, 13vw, 18rem);
+      line-height: 0.82;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--off);
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-title .yellow-fill { color: var(--yellow); }
+    .cta-title .stroke { -webkit-text-stroke: 3px var(--off); color: transparent; }
+
+    .cta-sub {
+      font-size: 0.9rem;
+      font-weight: 400;
+      line-height: 1.8;
+      color: rgba(245,243,237,0.45);
+      max-width: 42ch;
+      margin: 0 auto 3rem;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--black);
+      padding: 1.2rem 3.5rem;
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: var(--border);
+      box-shadow: 6px 6px 0px var(--yellow);
+      border-color: var(--yellow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cta-btn:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0px rgba(245,230,66,0.5); }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      padding: 4rem 2.5rem 2.5rem;
+    }
+
+    .footer-inner { }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 0;
+      background: #111;
+      border: var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand {
+      padding: 2.5rem;
+      border-right: var(--border);
+    }
+
+    .f-logo {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      color: var(--yellow);
+      margin-bottom: 1rem;
+    }
+
+    .f-tagline {
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: rgba(245,243,237,0.4);
+      line-height: 1.7;
+      max-width: 28ch;
+    }
+
+    .footer-col {
+      padding: 2.5rem;
+      border-right: var(--border);
+    }
+
+    .footer-col:last-child { border-right: none; }
+
+    .footer-col h4 {
+      font-size: 0.55rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 1.5rem;
+      opacity: 0.7;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .footer-col a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: rgba(245,243,237,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: var(--yellow); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .f-copy {
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: rgba(245,243,237,0.2);
+    }
+
+    .f-social { display: flex; gap: 0; }
+
+    .f-social a {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.6rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,243,237,0.25);
+      text-decoration: none;
+      border: 1px solid rgba(245,243,237,0.1);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .f-social a:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 1.5rem; }
+      .nav-center { display: none; }
+      .hero-top { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 3rem 1.5rem; }
+      .bento-section, .work-section, .manifesto-section, .testimonials-section, .cta-section { padding: 2.5rem 1.5rem; }
+      .bento-grid { grid-template-columns: 1fr 1fr; }
+      .bc-a, .bc-b, .bc-c { grid-column: span 1; }
+      .bc-d, .bc-e { grid-column: span 2; }
+      .work-row { grid-template-columns: 40px 1fr 40px; }
+      .w-type, .w-year { display: none; }
+      .manifesto-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .t-cell { border-right: none; border-bottom: var(--border); }
+      .numbers-inner { grid-template-columns: 1fr 1fr; }
+      .num-cell { border-bottom: var(--border); }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-brand, .footer-col { border-right: none; border-bottom: var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">ACID.WORKS</a>
+    <div class="nav-center">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#blog">Blog</a>
+    </div>
+    <a href="#cta" class="nav-cta">Start a Project →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-top">
+      <div class="hero-left">
+        <div class="hero-badge">Neo-Brutalist Design Studio · NYC</div>
+        <h1 class="hero-title">
+          DESIGN<br>
+          <span class="yellow-fill">WITHOUT</span><br>
+          <span class="yellow-line">APOLOGY</span>
+        </h1>
+        <div class="hero-meta">
+          <div>
+            <div class="hm-val">200+</div>
+            <div class="hm-label">Projects</div>
+          </div>
+          <div>
+            <div class="hm-val">8</div>
+            <div class="hm-label">Years Running</div>
+          </div>
+          <div>
+            <div class="hm-val">LOUD</div>
+            <div class="hm-label">Always</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-right-tag">// Our Approach</div>
+        <blockquote class="hero-right-quote">
+          WE BUILD<br>THINGS<br><em>THAT DEMAND</em><br>ATTENTION
+        </blockquote>
+        <p class="hero-right-desc">Acid.Works is a neo-brutalist design studio that refuses comfortable choices. We build brand identities, digital experiences, and creative campaigns for companies that have something to say — and say it loudly.</p>
+        <a href="#work" class="hero-cta">See Our Work →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="m-dot"></span>Brand Identity</span>
+      <span class="marquee-item"><span class="m-dot"></span>Web Design</span>
+      <span class="marquee-item"><span class="m-dot"></span>Art Direction</span>
+      <span class="marquee-item"><span class="m-dot"></span>Motion Graphics</span>
+      <span class="marquee-item"><span class="m-dot"></span>Creative Strategy</span>
+      <span class="marquee-item"><span class="m-dot"></span>Packaging</span>
+      <span class="marquee-item"><span class="m-dot"></span>Brand Identity</span>
+      <span class="marquee-item"><span class="m-dot"></span>Web Design</span>
+      <span class="marquee-item"><span class="m-dot"></span>Art Direction</span>
+      <span class="marquee-item"><span class="m-dot"></span>Motion Graphics</span>
+      <span class="marquee-item"><span class="m-dot"></span>Creative Strategy</span>
+      <span class="marquee-item"><span class="m-dot"></span>Packaging</span>
+    </div>
+  </div>
+
+  <!-- BENTO -->
+  <section class="bento-section" id="services">
+    <div class="bento-header reveal">
+      <div>
+        <div class="section-tag">Services / What We Do</div>
+        <h2 class="section-title">OUR <span class="stroke">LOUD</span><br><span class="yellow">CRAFT</span></h2>
+      </div>
+      <a href="#cta" class="nav-cta" style="top:0">Work With Us →</a>
+    </div>
+    <div class="bento-grid">
+      <div class="bento-cell bc-a">
+        <div>
+          <div class="bc-tag">01 / Brand</div>
+        </div>
+        <div>
+          <div class="bc-title">Brand<br>Identity</div>
+          <div class="bc-body">System-level brand work that scales without losing its edge. From naming to full visual identity.</div>
+        </div>
+        <div class="bc-num">01</div>
+      </div>
+      <div class="bento-cell bc-b">
+        <div>
+          <div class="bc-tag">02 / Digital</div>
+        </div>
+        <div>
+          <div class="bc-title">Web<br>Design</div>
+          <div class="bc-body">Websites that convert because they surprise. Built with intention and built to perform.</div>
+        </div>
+        <div class="bc-num">02</div>
+      </div>
+      <div class="bento-cell bc-c">
+        <div>
+          <div class="bc-tag" style="color:rgba(245,230,66,0.4)">03 / Motion</div>
+        </div>
+        <div>
+          <div class="bc-title" style="color:var(--yellow)">Motion<br>Design</div>
+          <div class="bc-body" style="color:rgba(245,230,66,0.5)">Animation, brand films, and motion systems that move with your brand's energy.</div>
+        </div>
+        <div class="bc-num" style="color:rgba(245,230,66,0.08)">03</div>
+      </div>
+      <div class="bento-cell bc-d">
+        <div>
+          <div class="bc-tag">04 / Art Direction</div>
+        </div>
+        <div>
+          <div class="bc-title">Art<br>Direction</div>
+          <div class="bc-body">Campaign concepting, photography direction, and visual storytelling for brands ready to take creative risk.</div>
+        </div>
+        <div class="bc-num">04</div>
+      </div>
+      <div class="bento-cell bc-e">
+        <div>
+          <div class="bc-tag">05 / Packaging</div>
+        </div>
+        <div>
+          <div class="bc-title">Packaging<br>Design</div>
+          <div class="bc-body">Shelves are competitive. We make packaging that wins from three feet away, and holds your attention up close.</div>
+        </div>
+        <div class="bc-num">05</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK LIST -->
+  <section class="work-section" id="work">
+    <div class="bento-header reveal">
+      <div>
+        <div class="section-tag">Selected Projects / 2019–2025</div>
+        <h2 class="section-title">THE <span class="yellow">WORK</span></h2>
+      </div>
+    </div>
+    <div class="work-list">
+      <div class="work-row">
+        <div class="w-num">001</div>
+        <div class="w-name">Flux Finance</div>
+        <div class="w-type">Brand Identity · Web</div>
+        <div class="w-year">2025</div>
+        <div class="w-arrow">↗</div>
+      </div>
+      <div class="work-row">
+        <div class="w-num">002</div>
+        <div class="w-name">Strike Energy</div>
+        <div class="w-type">Packaging · Campaign</div>
+        <div class="w-year">2025</div>
+        <div class="w-arrow">↗</div>
+      </div>
+      <div class="work-row">
+        <div class="w-num">003</div>
+        <div class="w-name">Maxim Label</div>
+        <div class="w-type">Art Direction · Motion</div>
+        <div class="w-year">2024</div>
+        <div class="w-arrow">↗</div>
+      </div>
+      <div class="work-row">
+        <div class="w-num">004</div>
+        <div class="w-name">BLOC Platform</div>
+        <div class="w-type">Web Design · Product</div>
+        <div class="w-year">2024</div>
+        <div class="w-arrow">↗</div>
+      </div>
+      <div class="work-row">
+        <div class="w-num">005</div>
+        <div class="w-name">Raw Collective</div>
+        <div class="w-type">Brand Identity · Print</div>
+        <div class="w-year">2023</div>
+        <div class="w-arrow">↗</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto-section">
+    <div class="manifesto-inner">
+      <div class="bento-header reveal" style="padding:0 0 2.5rem 0">
+        <div>
+          <div class="section-tag" style="color:rgba(245,230,66,0.4)">Our Beliefs</div>
+          <h2 class="section-title" style="color:var(--off)">THE <span style="color:var(--yellow)">ACID</span><br>MANIFESTO</h2>
+        </div>
+      </div>
+      <div class="manifesto-grid">
+        <div class="man-cell reveal">
+          <div class="man-num">I</div>
+          <div class="man-title">Comfort is the Enemy</div>
+          <div class="man-body">Safe design is invisible design. We refuse the comfortable default in every decision — typeface, color, layout, copy. If it doesn't feel slightly dangerous, we haven't pushed far enough.</div>
+        </div>
+        <div class="man-cell reveal" style="transition-delay:0.1s">
+          <div class="man-num">II</div>
+          <div class="man-title">System Over Surface</div>
+          <div class="man-body">Aesthetics without logic is decoration. We build brand systems where every visual decision connects to a clear idea. The noise is intentional. The grid is structural. The boldness has architecture.</div>
+        </div>
+        <div class="man-cell reveal" style="transition-delay:0.2s">
+          <div class="man-num">III</div>
+          <div class="man-title">Loud is a Strategy</div>
+          <div class="man-body">In a world of beige brands, volume is a competitive advantage. We help companies find their loudest true voice — then turn it up until the right people can't ignore it and the wrong ones look away.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="bento-header reveal">
+      <div>
+        <div class="section-tag">Client Reactions</div>
+        <h2 class="section-title">THEY <span class="stroke">SAID</span> IT</h2>
+      </div>
+    </div>
+    <div class="testi-grid">
+      <div class="t-cell reveal">
+        <div class="t-score">★★★★★</div>
+        <p class="t-text">"Acid.Works gave us a brand that our competitors are genuinely scared of. Not because of size — because of clarity and conviction. We walked into every room differently after the rebrand."</p>
+        <div class="t-author-name">Maya Torres</div>
+        <div class="t-author-role">CEO, Strike Energy</div>
+      </div>
+      <div class="t-cell reveal" style="transition-delay:0.1s">
+        <div class="t-score">★★★★★</div>
+        <p class="t-text">"They pushed back hard on three of our ideas. Every time they were right. The final work was more us than anything we could have imagined. That's a rare thing to say about an outside studio."</p>
+        <div class="t-author-name">Kwame Asante</div>
+        <div class="t-author-role">Creative Director, Maxim Label</div>
+      </div>
+      <div class="t-cell reveal" style="transition-delay:0.2s">
+        <div class="t-score">★★★★★</div>
+        <p class="t-text">"Our website used to be forgettable. Now it's the first thing we show investors. Acid.Works built us something that makes people lean forward. The conversion rate went up 55% in the first month."</p>
+        <div class="t-author-name">Fatima Osei</div>
+        <div class="t-author-role">Founder, BLOC Platform</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUMBERS -->
+  <div class="numbers-section">
+    <div class="numbers-inner">
+      <div class="num-cell reveal">
+        <div class="num-val">8+</div>
+        <div class="num-label">Years of Loud</div>
+      </div>
+      <div class="num-cell reveal" style="transition-delay:0.1s">
+        <div class="num-val">200+</div>
+        <div class="num-label">Brands Built</div>
+      </div>
+      <div class="num-cell reveal" style="transition-delay:0.2s">
+        <div class="num-val">22</div>
+        <div class="num-label">Industry Awards</div>
+      </div>
+      <div class="num-cell reveal" style="transition-delay:0.3s">
+        <div class="num-val">0</div>
+        <div class="num-label">Boring Brands Made</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <div class="cta-inner reveal">
+      <div class="cta-top-tag">Let's Make Some Noise</div>
+      <h2 class="cta-title">
+        GET<br>
+        <span class="yellow-fill">LOUD</span>
+      </h2>
+      <p class="cta-sub">We take on a limited number of projects per quarter. If you're ready to stop being forgettable, tell us about what you're building.</p>
+      <a href="mailto:loud@acid.works" class="cta-btn">START A PROJECT →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="f-logo">ACID.WORKS</div>
+          <p class="f-tagline">Neo-brutalist design studio. Loud brands, bold experiences, zero apologies. NYC.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">Brand Identity</a></li>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Motion Design</a></li>
+            <li><a href="#">Art Direction</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Studio</h4>
+          <ul>
+            <li><a href="#">Work</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Process</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Find Us</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Behance</a></li>
+            <li><a href="#">Are.na</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="f-copy">© 2025 Acid.Works LLC. New York City. All rights reserved.</p>
+        <div class="f-social">
+          <a href="#">IG</a>
+          <a href="#">TW</a>
+          <a href="#">BE</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.06 });
+    reveals.forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

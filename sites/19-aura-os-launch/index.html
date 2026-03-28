@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA OS — Your Workspace, Redesigned</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Epilogue:wght@300;400;500;700;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --void: #080808;
+  --dark: #0F0F0F;
+  --surface: #161616;
+  --panel: #1C1C1C;
+  --cream: #E8E2D6;
+  --cream-dim: rgba(232,226,214,0.5);
+  --cream-ghost: rgba(232,226,214,0.08);
+  --border: rgba(232,226,214,0.1);
+  --border-mid: rgba(232,226,214,0.18);
+  --muted: rgba(232,226,214,0.35);
+  --accent: #C4975A;
+  --accent-dim: rgba(196,151,90,0.15);
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--void);
+  color: var(--cream);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0; z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 72px;
+  transition: all 0.5s ease;
+}
+nav.scrolled { background: rgba(8,8,8,0.95); border-bottom: 1px solid var(--border); padding: 18px 72px; backdrop-filter: blur(20px); }
+.nav-logo {
+  font-family: 'Cormorant', serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--cream);
+  text-decoration: none;
+}
+.nav-center { display: flex; gap: 48px; list-style: none; }
+.nav-center a {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  text-transform: uppercase;
+}
+.nav-center a:hover { color: var(--cream); }
+.nav-right { display: flex; gap: 16px; align-items: center; }
+.btn-nav-ghost {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 8px 24px;
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.btn-nav-ghost:hover { color: var(--cream); border-color: var(--border-mid); }
+.btn-nav-accent {
+  font-size: 12px;
+  background: var(--accent);
+  color: var(--void);
+  text-decoration: none;
+  padding: 8px 24px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: opacity 0.2s;
+}
+.btn-nav-accent:hover { opacity: 0.85; }
+
+/* HERO — MANIFESTO STYLE */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 140px 72px 100px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.hero-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232,226,214,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,226,214,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, var(--void) 80%);
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-vol {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+}
+.hero-vol::before, .hero-vol::after { content: '—'; }
+.hero-h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(72px, 11vw, 160px);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+  margin-bottom: 0;
+}
+.hero-h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero-divider {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(180deg, var(--border-mid), transparent);
+  margin: 40px auto;
+}
+.hero-tagline {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 60px;
+  max-width: 700px;
+}
+.hero-cta { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; }
+.btn-hero-main {
+  display: inline-block;
+  background: var(--cream);
+  color: var(--void);
+  padding: 18px 52px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.btn-hero-main:hover { opacity: 0.85; }
+.btn-hero-outline {
+  display: inline-block;
+  border: 1px solid var(--border-mid);
+  color: var(--cream);
+  padding: 18px 52px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.3s;
+}
+.btn-hero-outline:hover { border-color: var(--cream); }
+.hero-os-preview {
+  position: relative;
+  margin-top: 100px;
+  z-index: 2;
+}
+.os-window {
+  background: rgba(22,22,22,0.8);
+  backdrop-filter: blur(40px);
+  border: 1px solid var(--border-mid);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 0 0 1px var(--border), 0 40px 80px rgba(0,0,0,0.7);
+}
+.os-titlebar {
+  height: 40px;
+  background: rgba(232,226,214,0.04);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+}
+.os-btn { width: 12px; height: 12px; border-radius: 50%; }
+.os-btn-r { background: #FF5F57; }
+.os-btn-y { background: #FFBD2E; }
+.os-btn-g { background: #28C840; }
+.os-titlebar-title { flex: 1; text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+.os-body { display: grid; grid-template-columns: 200px 1fr; min-height: 280px; }
+.os-sidebar {
+  background: rgba(232,226,214,0.02);
+  border-right: 1px solid var(--border);
+  padding: 20px 16px;
+}
+.os-sidebar-item {
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  border-radius: 6px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: default;
+}
+.os-sidebar-item.active { background: rgba(232,226,214,0.08); color: var(--cream); }
+.os-sidebar-icon { width: 14px; height: 14px; border-radius: 3px; background: currentColor; opacity: 0.4; }
+.os-sidebar-item.active .os-sidebar-icon { opacity: 0.8; background: var(--accent); }
+.os-content { padding: 24px; }
+.os-content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.os-widget {
+  background: rgba(232,226,214,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.os-widget-label { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 8px; }
+.os-widget-val { font-family: 'Cormorant', serif; font-size: 28px; font-weight: 300; color: var(--cream); }
+.os-text-lines { margin-top: 12px; }
+.os-text-line { height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 6px; }
+
+/* EDITORIAL SPREAD */
+.editorial {
+  padding: 120px 72px;
+  border-bottom: 1px solid var(--border);
+}
+.editorial-grid {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.ed-divider { background: var(--border); }
+.ed-left {}
+.ed-issue { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 40px; }
+.ed-h2 { font-family: 'Cormorant', serif; font-size: clamp(44px,6vw,80px); font-weight: 300; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 40px; }
+.ed-h2 em { font-style: italic; color: var(--accent); }
+.ed-body { font-size: 15px; color: var(--muted); line-height: 1.9; margin-bottom: 24px; }
+.ed-pull {
+  font-family: 'Cormorant', serif;
+  font-size: 26px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--cream);
+  border-left: 2px solid var(--accent);
+  padding-left: 28px;
+  margin: 40px 0;
+  line-height: 1.4;
+}
+.ed-right {}
+.feature-list { list-style: none; margin-top: 48px; }
+.feature-item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.feature-item:first-child { border-top: 1px solid var(--border); }
+.feature-item:hover { padding-left: 8px; }
+.feature-num { font-family: 'Cormorant', serif; font-size: 24px; font-weight: 300; color: var(--muted); }
+.feature-name { font-family: 'Epilogue', sans-serif; font-size: 16px; font-weight: 500; color: var(--cream); margin-bottom: 8px; }
+.feature-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* MANIFESTO SECTION */
+.manifesto {
+  padding: 160px 72px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: var(--dark);
+  position: relative;
+  overflow: hidden;
+}
+.manifesto-h2 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  color: var(--cream);
+  margin-bottom: 0;
+}
+.manifesto-h2 em { font-style: italic; color: var(--accent); }
+.manifesto-statements {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 80px;
+  text-align: left;
+}
+.manifesto-stmt { background: var(--dark); padding: 48px 40px; }
+.stmt-num { font-family: 'Cormorant', serif; font-size: 48px; font-weight: 300; color: rgba(232,226,214,0.1); margin-bottom: 20px; }
+.stmt-h3 { font-family: 'Cormorant', serif; font-size: 28px; font-weight: 400; margin-bottom: 16px; }
+.stmt-p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+/* TESTIMONIALS */
+.testimonials {
+  padding: 120px 72px;
+  border-bottom: 1px solid var(--border);
+}
+.test-header { margin-bottom: 80px; }
+.test-h2 { font-family: 'Cormorant', serif; font-size: clamp(36px,5vw,64px); font-weight: 300; font-style: italic; line-height: 1.1; }
+.test-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+.test-feature { background: var(--surface); padding: 64px; }
+.test-mini-col { background: var(--dark); }
+.test-feature-mark { font-family: 'Cormorant', serif; font-size: 96px; line-height: 0.8; color: var(--accent); opacity: 0.4; margin-bottom: 24px; }
+.test-feature-text { font-family: 'Cormorant', serif; font-size: 26px; font-weight: 300; font-style: italic; line-height: 1.45; color: var(--cream); margin-bottom: 40px; }
+.test-feature-author { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.test-mini { padding: 40px; border-bottom: 1px solid var(--border); }
+.test-mini:last-child { border-bottom: none; }
+.test-mini-text { font-family: 'Cormorant', serif; font-size: 20px; font-weight: 300; font-style: italic; color: rgba(232,226,214,0.65); line-height: 1.5; margin-bottom: 16px; }
+.test-mini-author { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+
+/* CTA MANIFESTO */
+.cta-final {
+  padding: 180px 72px;
+  text-align: center;
+  background: var(--void);
+  position: relative;
+  overflow: hidden;
+}
+.cta-final-accent {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196,151,90,0.08) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.cta-final-h2 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(64px, 10vw, 140px);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--cream);
+  position: relative;
+  margin-bottom: 48px;
+}
+.cta-final-h2 em { font-style: italic; color: var(--accent); }
+.cta-final-sub { font-size: 16px; color: var(--muted); max-width: 500px; margin: 0 auto 64px; line-height: 1.8; position: relative; }
+.cta-btns { display: flex; gap: 20px; justify-content: center; position: relative; }
+.cta-note { font-size: 12px; color: rgba(232,226,214,0.2); margin-top: 32px; position: relative; }
+
+/* FOOTER */
+footer { background: var(--void); border-top: 1px solid var(--border); padding: 80px 72px 40px; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 60px; border-bottom: 1px solid var(--border); }
+.footer-brand { font-family: 'Cormorant', serif; font-size: 24px; font-weight: 300; letter-spacing: 0.15em; color: var(--cream); margin-bottom: 16px; }
+.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.8; max-width: 260px; }
+.footer-col-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0.5; margin-bottom: 20px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a { font-size: 13px; color: rgba(232,226,214,0.3); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--cream); }
+.footer-bottom { display: flex; justify-content: space-between; padding-top: 40px; font-size: 12px; color: rgba(232,226,214,0.2); }
+
+.fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.fade-in.visible { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  nav { padding: 20px 24px; }
+  .nav-center { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  .editorial-grid { grid-template-columns: 1fr; gap: 40px; }
+  .ed-divider { display: none; }
+  .manifesto-statements { grid-template-columns: 1fr; }
+  .test-layout { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="#" class="nav-logo">AURA OS</a>
+  <ul class="nav-center">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#manifesto">Manifesto</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#changelog">Changelog</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="btn-nav-ghost">Sign In</a>
+    <a href="#" class="btn-nav-accent">Join Waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <p class="hero-vol">The Operating System for Deep Work</p>
+    <h1 class="hero-h1">Your workspace,<br><em>redesigned.</em></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">"We built AURA OS for the people who think in systems — and live in their tools."</p>
+    <div class="hero-cta">
+      <a href="#" class="btn-hero-main">Join the Waitlist</a>
+      <a href="#features" class="btn-hero-outline">Read the Manifesto</a>
+    </div>
+  </div>
+  <div class="hero-os-preview fade-in">
+    <div class="os-window">
+      <div class="os-titlebar">
+        <div class="os-btn os-btn-r"></div>
+        <div class="os-btn os-btn-y"></div>
+        <div class="os-btn os-btn-g"></div>
+        <div class="os-titlebar-title">AURA OS — Deep Work Mode</div>
+      </div>
+      <div class="os-body">
+        <div class="os-sidebar">
+          <div class="os-sidebar-item active"><div class="os-sidebar-icon"></div>Overview</div>
+          <div class="os-sidebar-item"><div class="os-sidebar-icon"></div>Focus</div>
+          <div class="os-sidebar-item"><div class="os-sidebar-icon"></div>Archive</div>
+          <div class="os-sidebar-item"><div class="os-sidebar-icon"></div>Canvas</div>
+          <div class="os-sidebar-item"><div class="os-sidebar-icon"></div>Graph</div>
+        </div>
+        <div class="os-content">
+          <div class="os-content-grid">
+            <div class="os-widget"><div class="os-widget-label">FOCUS SESSION</div><div class="os-widget-val">2:34</div></div>
+            <div class="os-widget"><div class="os-widget-label">OPEN CONTEXTS</div><div class="os-widget-val">7</div></div>
+            <div class="os-widget" style="grid-column:1/-1;">
+              <div class="os-widget-label">CURRENT THREAD — Q2 Product Strategy</div>
+              <div class="os-text-lines">
+                <div class="os-text-line" style="width:90%"></div>
+                <div class="os-text-line" style="width:75%"></div>
+                <div class="os-text-line" style="width:60%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITORIAL SPREAD -->
+<section class="editorial fade-in" id="features">
+  <div class="editorial-grid">
+    <div class="ed-left">
+      <p class="ed-issue">Issue 001 · The Productivity Crisis</p>
+      <h2 class="ed-h2">The tools multiplied.<br>The work got <em>harder.</em></h2>
+      <p class="ed-body">The average knowledge worker runs eleven different applications in a single day. They context-switch an estimated 300 times. Each switch costs between four and twenty-three minutes of recovered focus time. The mathematics are catastrophic.</p>
+      <blockquote class="ed-pull">"AURA OS doesn't ask you to change how you work. It remaps your environment to how you already think."</blockquote>
+      <p class="ed-body">AURA OS is not another productivity app. It is an operating system layer that sits below your existing tools and above your file system — a unified context engine that remembers what you were doing, where you were, and why it mattered.</p>
+      <a href="#" class="btn-hero-main" style="margin-top:20px;display:inline-block;">Read the Full Research</a>
+    </div>
+    <div class="ed-divider"></div>
+    <div class="ed-right">
+      <p style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;margin-top:48px;">Core Systems</p>
+      <ul class="feature-list">
+        <li class="feature-item"><span class="feature-num">01</span><div><p class="feature-name">Context Engine</p><p class="feature-desc">Automatically saves your workspace state — open files, cursor position, active research, related notes — and restores it instantly. Zero friction context-switching.</p></div></li>
+        <li class="feature-item"><span class="feature-num">02</span><div><p class="feature-name">Deep Focus Mode</p><p class="feature-desc">An OS-level focus mode that removes all notifications, dims irrelevant applications, and tracks your uninterrupted work streaks with millisecond precision.</p></div></li>
+        <li class="feature-item"><span class="feature-num">03</span><div><p class="feature-name">Thought Graph</p><p class="feature-desc">Every note, document, search, and message is indexed into a personal knowledge graph. Ask it anything. Find the connection you forgot you'd made.</p></div></li>
+        <li class="feature-item"><span class="feature-num">04</span><div><p class="feature-name">Canvas Layer</p><p class="feature-desc">An infinite spatial canvas that overlays any application. Drag content from anywhere, arrange by thought rather than folder, and export as structured documents.</p></div></li>
+        <li class="feature-item"><span class="feature-num">05</span><div><p class="feature-name">Temporal Archive</p><p class="feature-desc">A complete, searchable history of everything you've worked on — not just files, but the context around them. Recreate the state of your mind from any past date.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto fade-in" id="manifesto">
+  <h2 class="manifesto-h2">The work<br>that <em>matters</em><br>deserves more.</h2>
+  <div class="manifesto-statements">
+    <div class="manifesto-stmt">
+      <div class="stmt-num">I</div>
+      <h3 class="stmt-h3">Against Notification Tyranny</h3>
+      <p class="stmt-p">Every notification is a hostile takeover of your attention. AURA OS treats your focus as infrastructure — not a setting to toggle, but a system to protect at the architectural level.</p>
+    </div>
+    <div class="manifesto-stmt">
+      <div class="stmt-num">II</div>
+      <h3 class="stmt-h3">For Spatial Thinking</h3>
+      <p class="stmt-p">Human cognition is spatial. Tab-based interfaces are not. AURA OS returns working memory to its natural form — a canvas of thought that you navigate by proximity, not alphabetical order.</p>
+    </div>
+    <div class="manifesto-stmt">
+      <div class="stmt-num">III</div>
+      <h3 class="stmt-h3">Memory as Infrastructure</h3>
+      <p class="stmt-p">The knowledge you generate at work is yours — permanently, searchably, structurally. AURA OS treats your intellectual history as infrastructure, not ephemera.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials fade-in">
+  <div class="test-header">
+    <h2 class="test-h2">From the waitlist.<br>From the beta.</h2>
+  </div>
+  <div class="test-layout">
+    <div class="test-feature">
+      <div class="test-feature-mark">"</div>
+      <p class="test-feature-text">I got my first three hours of uninterrupted deep work in fourteen months. I had stopped believing that was possible in a remote-first world. AURA OS proved me wrong in the first week.</p>
+      <p class="test-feature-author">— Dr. James H., Professor of Cognitive Systems, MIT</p>
+    </div>
+    <div class="test-mini-col">
+      <div class="test-mini">
+        <p class="test-mini-text">"The Context Engine is the most technically thoughtful piece of software I've encountered in five years. It doesn't feel like a feature — it feels like an OS primitive that should have always existed."</p>
+        <p class="test-mini-author">— Priya M., Staff Engineer, Infrastructure</p>
+      </div>
+      <div class="test-mini">
+        <p class="test-mini-text">"I've used Notion, Roam, Obsidian, Logseq. The Thought Graph is better than all of them — because it builds itself."</p>
+        <p class="test-mini-author">— Lucas T., Writer & Researcher, Paris</p>
+      </div>
+      <div class="test-mini">
+        <p class="test-mini-text">"The Temporal Archive is my second brain, except I didn't have to build it. It just accumulated, silently, exactly as I needed it to."</p>
+        <p class="test-mini-author">— Mira C., Creative Director, Berlin</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-final fade-in" id="pricing">
+  <div class="cta-final-accent"></div>
+  <h2 class="cta-final-h2">The workspace you<br>deserve has been<br><em>waiting.</em></h2>
+  <p class="cta-final-sub">AURA OS is in private beta. Join the waitlist for early access. We're onboarding 200 users per week, starting with those who need it most.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-hero-main">Join the Waitlist</a>
+    <a href="#" class="btn-hero-outline">View System Requirements</a>
+  </div>
+  <p class="cta-note">Available for macOS 14+. Windows and Linux support in 2025. iOS companion app in beta.</p>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">AURA OS</div>
+      <p class="footer-desc">The operating system layer for deep work. Built for people who think in systems and live in their tools. Private beta, 2024.</p>
+    </div>
+    <div>
+      <p class="footer-col-label">Product</p>
+      <ul class="footer-links">
+        <li><a href="#">Context Engine</a></li>
+        <li><a href="#">Deep Focus</a></li>
+        <li><a href="#">Thought Graph</a></li>
+        <li><a href="#">Canvas Layer</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Company</p>
+      <ul class="footer-links">
+        <li><a href="#">Manifesto</a></li>
+        <li><a href="#">Research</a></li>
+        <li><a href="#">Changelog</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Access</p>
+      <ul class="footer-links">
+        <li><a href="#">Join Waitlist</a></li>
+        <li><a href="#">Beta Access</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">hello@auraos.co</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Aura Systems Inc. All rights reserved.</span>
+    <span>Your workspace, redesigned.</span>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', scrollY > 60); });
+const obs = new IntersectionObserver(e => e.forEach(i => { if(i.isIntersecting) i.target.classList.add('visible'); }), { threshold: 0.07 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

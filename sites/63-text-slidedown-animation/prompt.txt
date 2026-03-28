@@ -1,0 +1,10 @@
+TITLE: Text slidedown animation
+SOURCE: https://app.superdesign.dev/library/text-slidedown-animation
+CREATOR: Zhou Jason
+STATS: 58 copies · 3 tries · 1197 previews
+
+── DESCRIPTION ─────────────────────────────────────────────────
+(none)
+
+── PROMPT ──────────────────────────────────────────────────────
+Add a vertical text clip slide-down animation letter by letter.

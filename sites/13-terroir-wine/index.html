@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TERROIR — Wine from the Earth</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Manrope:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --coal: #111010;
+  --dark: #1A1717;
+  --panel: #201E1E;
+  --burgundy: #7D2E3D;
+  --burgundy-light: #A84455;
+  --sage: #7A8A6A;
+  --sage-light: #9AAB88;
+  --cream: #EDE5D8;
+  --muted: #6A6360;
+  --border: rgba(237,229,216,0.12);
+  --border-mid: rgba(237,229,216,0.2);
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  color: var(--cream);
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+/* Grain texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 64px;
+  transition: all 0.5s ease;
+}
+nav.scrolled {
+  background: var(--coal);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 64px;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  color: var(--cream);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 48px; list-style: none; }
+.nav-links a {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(237,229,216,0.5);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--cream); }
+.nav-reserve {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-decoration: none;
+  border: 1px solid rgba(237,229,216,0.3);
+  padding: 10px 24px;
+  transition: all 0.3s;
+}
+.nav-reserve:hover { background: var(--burgundy); border-color: var(--burgundy); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+.hero-left {
+  padding: 140px 64px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--border);
+}
+.hero-vintage {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 80px;
+}
+.hero-h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(64px, 8vw, 120px);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  margin-bottom: 48px;
+}
+.hero-h1 em {
+  font-style: italic;
+  color: var(--burgundy-light);
+  display: block;
+}
+.hero-tagline {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 340px;
+  line-height: 1.8;
+  margin-bottom: 64px;
+}
+.hero-actions { display: flex; gap: 20px; align-items: center; }
+.btn-wine {
+  display: inline-block;
+  background: var(--burgundy);
+  color: var(--cream);
+  padding: 16px 36px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+.btn-wine:hover { background: var(--burgundy-light); }
+.btn-ghost {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.btn-ghost:hover { color: var(--cream); }
+.hero-right { position: relative; overflow: hidden; }
+.hero-visual {
+  width: 100%;
+  height: 100%;
+  min-height: 700px;
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.wine-bottle {
+  width: 80px;
+  height: 340px;
+  position: relative;
+  transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.hero-right:hover .wine-bottle { transform: scale(1.04) translateY(-8px); }
+.bottle-neck {
+  width: 24px;
+  height: 80px;
+  background: linear-gradient(90deg, #2A2020 0%, #3A2A2A 50%, #2A2020 100%);
+  margin: 0 auto;
+  border-radius: 4px 4px 0 0;
+}
+.bottle-capsule {
+  width: 28px;
+  height: 24px;
+  background: var(--burgundy);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+.bottle-body {
+  width: 80px;
+  height: 240px;
+  background: linear-gradient(90deg, #1A1210 0%, #2A1E1E 30%, #3A2A2A 50%, #2A1E1E 70%, #1A1210 100%);
+  border-radius: 4px 4px 8px 8px;
+  position: relative;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+}
+.bottle-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 80px;
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.bottle-label-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--dark);
+  text-align: center;
+  line-height: 1.2;
+}
+.bottle-label-year {
+  font-size: 8px;
+  color: var(--burgundy);
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+}
+.hero-caption {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  right: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.hero-caption-text { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
+.hero-scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(180deg, var(--muted) 0%, transparent 100%);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+.scroll-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); writing-mode: vertical-rl; }
+.hero-number {
+  position: absolute;
+  top: 160px;
+  right: 40px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  font-weight: 300;
+  color: rgba(237,229,216,0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* COLLECTION */
+.collection {
+  padding: 120px 64px;
+  border-top: 1px solid var(--border);
+}
+.collection-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: end;
+  margin-bottom: 80px;
+}
+.collection-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.collection-title em { font-style: italic; color: var(--sage-light); }
+.collection-meta { font-size: 12px; color: var(--muted); line-height: 1.9; }
+.wine-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+}
+.wine-card {
+  background: var(--panel);
+  padding: 48px 40px;
+  transition: background 0.4s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.wine-card:hover { background: #252222; }
+.wine-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 2px;
+  background: var(--burgundy);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+  transform-origin: left;
+}
+.wine-card:hover::before { transform: scaleX(1); }
+.wine-region {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.region-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--burgundy); }
+.wine-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.wine-vintage {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.wine-desc {
+  font-size: 13px;
+  color: rgba(237,229,216,0.5);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+.wine-footer { display: flex; justify-content: space-between; align-items: center; }
+.wine-price { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; }
+.wine-btn {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(237,229,216,0.2);
+  padding-bottom: 2px;
+  transition: border-color 0.3s;
+}
+.wine-btn:hover { border-color: var(--cream); }
+.wine-notes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.note-tag {
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-mid);
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* PHILOSOPHY */
+.philosophy {
+  padding: 160px 64px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  position: relative;
+}
+.phil-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 48px;
+}
+.phil-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  max-width: 900px;
+  margin: 0 auto 64px;
+  font-style: italic;
+}
+.phil-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 80px;
+  text-align: left;
+}
+.phil-card { background: var(--panel); padding: 48px 40px; }
+.phil-number { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300; color: rgba(237,229,216,0.1); margin-bottom: 20px; }
+.phil-h3 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; margin-bottom: 16px; }
+.phil-p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+/* TESTIMONIALS */
+.testimonials {
+  padding: 120px 64px;
+  border-top: 1px solid var(--border);
+}
+.test-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 64px;
+}
+.test-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 300;
+  line-height: 1.1;
+  font-style: italic;
+}
+.test-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1px;
+  background: var(--border);
+}
+.test-main {
+  background: var(--panel);
+  padding: 64px;
+}
+.test-quote-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 80px;
+  line-height: 0.8;
+  color: var(--burgundy);
+  margin-bottom: 24px;
+}
+.test-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--cream);
+  margin-bottom: 40px;
+}
+.test-meta { display: flex; align-items: center; gap: 20px; }
+.test-name { font-size: 13px; font-weight: 500; color: var(--cream); }
+.test-role { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.test-side { background: var(--panel); }
+.test-mini {
+  padding: 40px;
+  border-bottom: 1px solid var(--border);
+}
+.test-mini:last-child { border-bottom: none; }
+.test-mini-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; font-style: italic; color: rgba(237,229,216,0.7); line-height: 1.5; margin-bottom: 20px; }
+.test-mini-name { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; }
+
+/* CTA */
+.cta-section {
+  padding: 160px 64px;
+  border-top: 1px solid var(--border);
+  background: var(--coal);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 120px;
+  align-items: center;
+}
+.cta-left {}
+.cta-eyebrow { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); margin-bottom: 32px; }
+.cta-h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(44px, 6vw, 84px);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--cream);
+  margin-bottom: 32px;
+}
+.cta-h2 em { font-style: italic; color: var(--burgundy-light); }
+.cta-sub { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 48px; }
+.cta-right {}
+.membership-box {
+  border: 1px solid var(--border-mid);
+  padding: 48px;
+}
+.membership-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+.membership-tiers { }
+.tier { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.tier:last-child { border-bottom: none; }
+.tier-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; }
+.tier-price { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; color: var(--muted); }
+.tier-desc { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.tier.featured .tier-name { color: var(--burgundy-light); }
+
+/* FOOTER */
+footer {
+  background: var(--coal);
+  border-top: 1px solid var(--border);
+  padding: 80px 64px 40px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid var(--border);
+}
+.footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; letter-spacing: 0.2em; color: var(--cream); margin-bottom: 16px; }
+.footer-desc { font-size: 12px; color: var(--muted); line-height: 1.8; }
+.footer-col-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a { font-size: 13px; color: rgba(237,229,216,0.45); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--cream); }
+.footer-bottom { display: flex; justify-content: space-between; padding-top: 40px; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+
+.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.fade-in.visible { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  nav { padding: 24px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .collection-intro { grid-template-columns: 1fr; }
+  .wine-grid { grid-template-columns: 1fr; }
+  .phil-grid { grid-template-columns: 1fr; }
+  .test-grid { grid-template-columns: 1fr; }
+  .cta-section { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a href="#" class="nav-logo">T E R R O I R</a>
+  <ul class="nav-links">
+    <li><a href="#collection">Cellar</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#membership">Membership</a></li>
+    <li><a href="#visit">Visit</a></li>
+  </ul>
+  <a href="#membership" class="nav-reserve">Reserve Allocation</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-vintage">Est. 2011 · Natural Viticulture · Imported Small-Batch</p>
+    <div>
+      <h1 class="hero-h1">Wine from<br><em>the earth.</em></h1>
+      <p class="hero-tagline">A curated cellar of wines that speak of place — biodynamic growers, natural ferments, and soils that have never forgotten what they are.</p>
+      <div class="hero-actions">
+        <a href="#collection" class="btn-wine">Explore the Cellar</a>
+        <a href="#philosophy" class="btn-ghost">Our Method</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-number">01</div>
+      <div class="wine-bottle">
+        <div class="bottle-neck"></div>
+        <div class="bottle-capsule"></div>
+        <div class="bottle-body">
+          <div class="bottle-label">
+            <div class="bottle-label-name">TERROIR<br>Sélection</div>
+            <div class="bottle-label-year">2021</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-caption">
+        <span class="hero-caption-text">No. 001 — Sélection Naturelle</span>
+        <div class="hero-scroll-hint">
+          <div class="scroll-line"></div>
+          <span class="scroll-label">Scroll</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLECTION -->
+<section class="collection fade-in" id="collection">
+  <div class="collection-intro">
+    <div>
+      <p style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">Current Cellar · 14 Allocations</p>
+      <h2 class="collection-title">The wines we've<br>been <em>waiting for.</em></h2>
+    </div>
+    <p class="collection-meta">Every bottle in the Terroir cellar is sourced directly from the grower. We visit the vineyards, walk the rows, taste from the tank. If we wouldn't open it ourselves, it doesn't make the list.</p>
+  </div>
+  <div class="wine-grid">
+    <div class="wine-card">
+      <div class="wine-region"><div class="region-dot"></div>Loire Valley, France</div>
+      <h3 class="wine-name">Muscadet<br>sur Lie</h3>
+      <p class="wine-vintage">2021 · Domaine de la Pepière</p>
+      <div class="wine-notes">
+        <span class="note-tag">Citrus Pith</span>
+        <span class="note-tag">Sea Salt</span>
+        <span class="note-tag">Brioche</span>
+        <span class="note-tag">Mineral</span>
+      </div>
+      <p class="wine-desc">Thirty months on lees. The result is a Muscadet of uncommon depth — creamy, precise, and deeply saline. A wine for oysters and patience.</p>
+      <div class="wine-footer">
+        <span class="wine-price">£ 28</span>
+        <a href="#" class="wine-btn">Add to Allocation →</a>
+      </div>
+    </div>
+    <div class="wine-card">
+      <div class="wine-region"><div class="region-dot"></div>Jura, France</div>
+      <h3 class="wine-name">Savagnin<br>Ouillé</h3>
+      <p class="wine-vintage">2020 · Domaine Ganevat</p>
+      <div class="wine-notes">
+        <span class="note-tag">Walnut</span>
+        <span class="note-tag">White Peach</span>
+        <span class="note-tag">Chalk</span>
+      </div>
+      <p class="wine-desc">Ganevat's "ouillé" Savagnin — no oxidation, all freshness. The grape's natural tension without the film. Rare outside of Jura. Very limited.</p>
+      <div class="wine-footer">
+        <span class="wine-price">£ 52</span>
+        <a href="#" class="wine-btn">Add to Allocation →</a>
+      </div>
+    </div>
+    <div class="wine-card">
+      <div class="wine-region"><div class="region-dot"></div>Beaujolais, France</div>
+      <h3 class="wine-name">Fleurie<br>Naturel</h3>
+      <p class="wine-vintage">2022 · Marcel Lapierre</p>
+      <div class="wine-notes">
+        <span class="note-tag">Violet</span>
+        <span class="note-tag">Cherry</span>
+        <span class="note-tag">Granite</span>
+        <span class="note-tag">Pepper</span>
+      </div>
+      <p class="wine-desc">The Lapierre family's Fleurie — Gamay at its most graceful. Whole-cluster, minimal sulphur. Chillable, contemplative, endlessly drinkable.</p>
+      <div class="wine-footer">
+        <span class="wine-price">£ 38</span>
+        <a href="#" class="wine-btn">Add to Allocation →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy fade-in" id="philosophy">
+  <p class="phil-eyebrow">The Terroir Method</p>
+  <blockquote class="phil-quote">"The best wine is the one that makes you forget you're drinking wine, and remember where it came from."</blockquote>
+  <div class="phil-grid">
+    <div class="phil-card">
+      <div class="phil-number">I</div>
+      <h3 class="phil-h3">Grower First</h3>
+      <p class="phil-p">We don't buy wine from brokers. Every bottle in the cellar comes from a grower we've visited, whose vineyards we've walked, and whose farming we understand and respect.</p>
+    </div>
+    <div class="phil-card">
+      <div class="phil-number">II</div>
+      <h3 class="phil-h3">Soil Over Variety</h3>
+      <p class="phil-p">The grape is secondary. We source by place — soils that have character, vineyards with age, farmers who let the land speak rather than manage it into silence.</p>
+    </div>
+    <div class="phil-card">
+      <div class="phil-number">III</div>
+      <h3 class="phil-h3">Nothing Added</h3>
+      <p class="phil-p">Our catalogue is limited to natural, biodynamic, and organic producers. No exogenous yeasts, no stabilisers, no artificial fining. Wine, as it always was.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials fade-in">
+  <div class="test-header">
+    <h2 class="test-title">From those who<br>know the difference.</h2>
+    <span style="font-size:11px;color:var(--muted);letter-spacing:0.1em;">340+ Members</span>
+  </div>
+  <div class="test-grid">
+    <div class="test-main">
+      <div class="test-quote-mark">"</div>
+      <p class="test-text">There's no point having a list if you can't trust it. Terroir is the only place I've found where every single bottle has a reason to be there. The Savagnin alone converted three people I know.</p>
+      <div class="test-meta">
+        <div>
+          <p class="test-name">Oliver R.</p>
+          <p class="test-role">Sommelier & Co-Owner, The Larder, London</p>
+        </div>
+      </div>
+    </div>
+    <div class="test-side">
+      <div class="test-mini">
+        <p class="test-mini-text">"Every allocation has been a discovery. Terroir understands what natural wine actually means — not a trend, a practice."</p>
+        <p class="test-mini-name">— Nina F., Berlin · Member since 2019</p>
+      </div>
+      <div class="test-mini">
+        <p class="test-mini-text">"I've stopped going to wine shops. The Terroir cellar gives me everything I want — with the context to understand why."</p>
+        <p class="test-mini-name">— James L., Paris · Member since 2021</p>
+      </div>
+      <div class="test-mini">
+        <p class="test-mini-text">"The Lapierre Fleurie is the best £38 bottle in Europe. Full stop."</p>
+        <p class="test-mini-name">— Clara S., Copenhagen · Member since 2020</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section fade-in" id="membership">
+  <div class="cta-left">
+    <p class="cta-eyebrow">Cellar Membership</p>
+    <h2 class="cta-h2">Own a corner of<br>our <em>cellar.</em></h2>
+    <p class="cta-sub">Allocations ship quarterly. Members receive exclusive access to micro-cuvées, grower visits, and tasting events in London, Paris, and Copenhagen.</p>
+    <a href="#" class="btn-wine">Join the Cellar</a>
+  </div>
+  <div class="cta-right">
+    <div class="membership-box">
+      <p class="membership-label">Membership Tiers · Quarterly Allocation</p>
+      <div class="membership-tiers">
+        <div class="tier">
+          <div>
+            <div class="tier-name">Discovery</div>
+            <div class="tier-desc">6 bottles · Curated by Terroir</div>
+          </div>
+          <div class="tier-price">£ 95 / qtr</div>
+        </div>
+        <div class="tier featured">
+          <div>
+            <div class="tier-name">Cellar</div>
+            <div class="tier-desc">12 bottles · Curated + 1 exclusive</div>
+          </div>
+          <div class="tier-price">£ 175 / qtr</div>
+        </div>
+        <div class="tier">
+          <div>
+            <div class="tier-name">Collector</div>
+            <div class="tier-desc">24 bottles · Full access + events</div>
+          </div>
+          <div class="tier-price">£ 340 / qtr</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">TERROIR</div>
+      <p class="footer-desc">A curated natural wine cellar. Sourced from growers we trust. Imported with purpose. Available by allocation or à la carte.</p>
+    </div>
+    <div>
+      <p class="footer-col-label">The Cellar</p>
+      <ul class="footer-links">
+        <li><a href="#">White Wines</a></li>
+        <li><a href="#">Red Wines</a></li>
+        <li><a href="#">Skin Contact</a></li>
+        <li><a href="#">Sparkling</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Membership</p>
+      <ul class="footer-links">
+        <li><a href="#">Discovery Tier</a></li>
+        <li><a href="#">Cellar Tier</a></li>
+        <li><a href="#">Collector Tier</a></li>
+        <li><a href="#">Gift an Allocation</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Visit</p>
+      <ul class="footer-links">
+        <li><a href="#">Tasting Room, London</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Grower Dinners</a></li>
+        <li><a href="#">hello@terroir.co</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Terroir Wine Boutique Ltd. All rights reserved.</span>
+    <span>Wine from the earth, delivered to your door.</span>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', scrollY > 80); });
+const obs = new IntersectionObserver(e => e.forEach(i => { if (i.isIntersecting) i.target.classList.add('visible'); }), { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+TITLE: Rotating logos
+SOURCE: https://app.superdesign.dev/library/rotating-logos
+CREATOR: Zhou Jason
+STATS: 71 copies · 2 tries · 1441 previews
+
+── DESCRIPTION ─────────────────────────────────────────────────
+Logo display UI
+
+── PROMPT ──────────────────────────────────────────────────────
+**Horizontally scrolling** ticker showcases partner or client logos with **gradient edge fade, hover-pause, and seamless looping animation**.Built with Tailwind CSS, ideal for hero sections, trust bars, or sponsor strips on responsive sites.

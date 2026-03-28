@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLUEPRINT — Build What Matters</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest: #1A3C2B;
+  --forest-mid: #244D39;
+  --forest-light: #2E6147;
+  --paper: #F7F7F5;
+  --paper-mid: #EEEDE9;
+  --paper-dark: #E0DED9;
+  --ink: #1A1A18;
+  --muted: #7A7A76;
+  --border: #D4D2CC;
+  --forest-muted: rgba(26,60,43,0.12);
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0; z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  height: 60px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-logo-mark {
+  width: 24px; height: 24px;
+  background: var(--forest);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 3px;
+}
+.nav-logo-mark span { background: var(--paper); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+.btn-secondary {
+  font-size: 13px;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--forest); color: var(--forest); }
+.btn-primary {
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--forest);
+  color: var(--paper);
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--forest-light); }
+
+/* HERO */
+.hero {
+  padding: 80px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+  border-bottom: 1px solid var(--border);
+}
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--forest);
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-label::before { content: ''; width: 16px; height: 1px; background: var(--forest); display: inline-block; }
+.hero-h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(44px, 5.5vw, 72px);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 420px;
+  margin-bottom: 40px;
+}
+.hero-actions { display: flex; gap: 12px; align-items: center; margin-bottom: 60px; }
+.btn-hero {
+  display: inline-block;
+  background: var(--forest);
+  color: var(--paper);
+  padding: 14px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.btn-hero:hover { background: var(--forest-light); }
+.btn-hero-outline {
+  display: inline-block;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 14px 32px;
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.btn-hero-outline:hover { border-color: var(--forest); }
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.hero-metric {
+  padding: 20px 24px;
+  border-right: 1px solid var(--border);
+}
+.hero-metric:last-child { border-right: none; }
+.metric-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  display: block;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.metric-label { font-size: 12px; color: var(--muted); }
+/* Blueprint Wireframe Visual */
+.hero-right {}
+.wireframe-box {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--paper);
+}
+.wireframe-header {
+  background: var(--forest);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wireframe-dots { display: flex; gap: 6px; }
+.wireframe-dot { width: 10px; height: 10px; border-radius: 50%; }
+.wireframe-dot:nth-child(1) { background: rgba(247,247,245,0.2); }
+.wireframe-dot:nth-child(2) { background: rgba(247,247,245,0.15); }
+.wireframe-dot:nth-child(3) { background: rgba(247,247,245,0.1); }
+.wireframe-title-bar { flex: 1; height: 8px; background: rgba(247,247,245,0.12); border-radius: 4px; }
+.wireframe-nav { background: var(--paper-mid); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; gap: 12px; align-items: center; }
+.wireframe-nav-item { height: 8px; border-radius: 4px; background: var(--border); }
+.wireframe-body { padding: 20px; display: grid; grid-template-columns: 160px 1fr; gap: 12px; }
+.wireframe-sidebar { display: flex; flex-direction: column; gap: 6px; }
+.wireframe-sidebar-item { height: 28px; background: var(--paper-dark); border-radius: 4px; border: 1px solid var(--border); }
+.wireframe-sidebar-item.active { background: var(--forest-muted); border-color: rgba(26,60,43,0.25); }
+.wireframe-main { display: flex; flex-direction: column; gap: 10px; }
+.wireframe-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.wireframe-cell { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; padding: 12px; }
+.wireframe-cell-label { height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 8px; width: 60%; }
+.wireframe-cell-val { height: 16px; background: var(--forest-muted); border-radius: 3px; width: 80%; }
+.wireframe-table { background: var(--paper-dark); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.wireframe-table-row { padding: 8px 12px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+.wireframe-table-row:last-child { border-bottom: none; }
+.wireframe-table-bar { height: 6px; background: var(--border); border-radius: 3px; flex: 1; }
+.wireframe-table-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--forest); flex-shrink: 0; }
+
+/* BENTO FEATURES */
+.features {
+  padding: 80px 60px;
+  border-bottom: 1px solid var(--border);
+}
+.features-header { margin-bottom: 48px; }
+.features-title { font-size: clamp(28px,4vw,44px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
+.features-sub { font-size: 14px; color: var(--muted); max-width: 480px; }
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.bento {
+  background: var(--paper);
+  padding: 40px 36px;
+  transition: background 0.2s;
+}
+.bento:hover { background: var(--paper-mid); }
+.bento.wide { grid-column: 1 / 3; background: var(--forest); color: var(--paper); }
+.bento.wide:hover { background: var(--forest-mid); }
+.bento.tall { grid-row: 1 / 3; }
+.bento-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: inline-block;
+  background: var(--paper-mid);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+.bento.wide .bento-tag { color: rgba(247,247,245,0.5); background: rgba(247,247,245,0.08); }
+.bento-h3 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 12px; }
+.bento.wide .bento-h3 { font-size: 28px; }
+.bento-p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.bento.wide .bento-p { color: rgba(247,247,245,0.55); }
+.bento-visual {
+  margin-top: 28px;
+}
+.mini-chart { display: flex; align-items: flex-end; gap: 4px; height: 60px; }
+.bar-col {
+  flex: 1;
+  background: var(--forest-muted);
+  border-radius: 2px;
+  min-height: 8px;
+}
+.bento.wide .bar-col { background: rgba(247,247,245,0.15); }
+.progress-lines { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.progress-line { display: flex; align-items: center; gap: 12px; }
+.progress-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); min-width: 60px; }
+.progress-bar-bg { flex: 1; height: 4px; background: var(--paper-dark); border-radius: 2px; }
+.progress-bar-fill { height: 100%; background: var(--forest); border-radius: 2px; }
+
+/* DATA TABLE */
+.data-section {
+  padding: 80px 60px;
+  border-bottom: 1px solid var(--border);
+  background: var(--paper-mid);
+}
+.data-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
+.data-title { font-size: clamp(24px,3.5vw,40px); font-weight: 700; letter-spacing: -0.02em; }
+.data-mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+.table-container { border: 1px solid var(--border); background: var(--paper); border-radius: 6px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  text-align: left;
+  padding: 12px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--paper-mid);
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+}
+tbody td {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--paper-dark);
+  font-size: 13px;
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--paper-mid); }
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.status-badge.active { background: rgba(26,60,43,0.1); color: var(--forest); }
+.status-badge.progress { background: rgba(200,169,110,0.12); color: #8B6A30; }
+.status-badge.planned { background: var(--paper-dark); color: var(--muted); }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.task-name { font-weight: 500; color: var(--ink); }
+.task-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.progress-mini { display: flex; align-items: center; gap: 8px; }
+.pbar { flex: 1; max-width: 80px; height: 3px; background: var(--paper-dark); border-radius: 2px; }
+.pbar-fill { height: 100%; background: var(--forest); border-radius: 2px; }
+.pct { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+
+/* TESTIMONIALS */
+.testimonials { padding: 80px 60px; border-bottom: 1px solid var(--border); }
+.test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 48px; }
+.test-card { background: var(--paper); padding: 40px 32px; }
+.test-quote-icon { font-family: 'JetBrains Mono', monospace; font-size: 24px; color: var(--forest); margin-bottom: 20px; }
+.test-body { font-size: 15px; color: var(--ink); line-height: 1.7; margin-bottom: 28px; }
+.test-author { font-size: 13px; font-weight: 500; color: var(--ink); }
+.test-role { font-size: 12px; color: var(--muted); margin-top: 3px; font-family: 'JetBrains Mono', monospace; }
+.test-company { display: flex; align-items: center; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.company-logo { width: 24px; height: 24px; background: var(--forest); border-radius: 4px; }
+.company-name { font-size: 12px; font-weight: 500; color: var(--muted); }
+
+/* CTA */
+.cta-section {
+  padding: 120px 60px;
+  background: var(--forest);
+  color: var(--paper);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.cta-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(247,247,245,0.4); letter-spacing: 0.1em; margin-bottom: 24px; }
+.cta-h2 { font-size: clamp(36px,5vw,64px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.0; margin-bottom: 24px; }
+.cta-sub { font-size: 15px; color: rgba(247,247,245,0.55); line-height: 1.75; margin-bottom: 40px; }
+.btn-cta { display: inline-block; background: var(--paper); color: var(--forest); padding: 16px 36px; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 4px; transition: opacity 0.2s; margin-right: 12px; }
+.btn-cta:hover { opacity: 0.9; }
+.btn-cta-ghost { display: inline-block; border: 1px solid rgba(247,247,245,0.2); color: var(--paper); padding: 16px 36px; font-size: 14px; text-decoration: none; border-radius: 4px; transition: border-color 0.2s; }
+.btn-cta-ghost:hover { border-color: rgba(247,247,245,0.5); }
+.cta-right {}
+.pricing-cards { display: flex; flex-direction: column; gap: 1px; background: rgba(247,247,245,0.1); border: 1px solid rgba(247,247,245,0.12); border-radius: 6px; overflow: hidden; }
+.pricing-card { background: rgba(247,247,245,0.04); padding: 24px 28px; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; cursor: pointer; }
+.pricing-card:hover { background: rgba(247,247,245,0.08); }
+.pricing-card.highlight { background: rgba(247,247,245,0.1); }
+.pricing-name { font-size: 15px; font-weight: 600; color: var(--paper); margin-bottom: 4px; }
+.pricing-desc { font-size: 12px; color: rgba(247,247,245,0.4); }
+.pricing-price { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: var(--paper); }
+.pricing-per { font-size: 12px; color: rgba(247,247,245,0.4); }
+
+/* FOOTER */
+footer { padding: 60px 60px 32px; border-top: 1px solid var(--border); }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 48px; }
+.footer-brand { font-size: 16px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.footer-col-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--ink); }
+.footer-bottom { display: flex; justify-content: space-between; padding-top: 32px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 60px 24px; }
+  .bento-grid { grid-template-columns: 1fr; }
+  .bento.wide { grid-column: 1; }
+  .test-grid { grid-template-columns: 1fr; }
+  .cta-section { grid-template-columns: 1fr; padding: 80px 24px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark"><span></span><span></span><span></span><span></span></div>
+    BLUEPRINT
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#docs">Docs</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#" class="btn-secondary">Log In</a>
+    <a href="#" class="btn-primary">Start Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left fade-in">
+    <p class="hero-label">v2.4 · Now with Git Sync</p>
+    <h1 class="hero-h1">Build what<br>matters.</h1>
+    <p class="hero-sub">Blueprint is the technical project management platform built for engineering teams that care about architecture, not just tickets. Plan, build, and ship — with structural clarity.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-hero">Get Started Free</a>
+      <a href="#" class="btn-hero-outline">See a Demo</a>
+    </div>
+    <div class="hero-metrics">
+      <div class="hero-metric"><span class="metric-val">12k+</span><span class="metric-label">Active Teams</span></div>
+      <div class="hero-metric"><span class="metric-val">4.9</span><span class="metric-label">G2 Rating</span></div>
+      <div class="hero-metric"><span class="metric-val">99.9%</span><span class="metric-label">Uptime SLA</span></div>
+    </div>
+  </div>
+  <div class="hero-right fade-in">
+    <div class="wireframe-box">
+      <div class="wireframe-header">
+        <div class="wireframe-dots">
+          <div class="wireframe-dot"></div>
+          <div class="wireframe-dot"></div>
+          <div class="wireframe-dot"></div>
+        </div>
+        <div class="wireframe-title-bar"></div>
+      </div>
+      <div class="wireframe-nav">
+        <div class="wireframe-nav-item" style="width:60px"></div>
+        <div class="wireframe-nav-item" style="width:80px"></div>
+        <div class="wireframe-nav-item" style="width:50px"></div>
+        <div class="wireframe-nav-item" style="width:70px"></div>
+      </div>
+      <div class="wireframe-body">
+        <div class="wireframe-sidebar">
+          <div class="wireframe-sidebar-item active"></div>
+          <div class="wireframe-sidebar-item"></div>
+          <div class="wireframe-sidebar-item"></div>
+          <div class="wireframe-sidebar-item"></div>
+          <div class="wireframe-sidebar-item"></div>
+        </div>
+        <div class="wireframe-main">
+          <div class="wireframe-row">
+            <div class="wireframe-cell"><div class="wireframe-cell-label"></div><div class="wireframe-cell-val"></div></div>
+            <div class="wireframe-cell"><div class="wireframe-cell-label"></div><div class="wireframe-cell-val" style="width:60%"></div></div>
+            <div class="wireframe-cell"><div class="wireframe-cell-label"></div><div class="wireframe-cell-val" style="width:90%"></div></div>
+          </div>
+          <div class="wireframe-table">
+            <div class="wireframe-table-row"><div class="wireframe-table-dot"></div><div class="wireframe-table-bar" style="flex:2"></div><div class="wireframe-table-bar"></div></div>
+            <div class="wireframe-table-row"><div class="wireframe-table-dot" style="background:var(--muted)"></div><div class="wireframe-table-bar" style="flex:3"></div><div class="wireframe-table-bar" style="flex:0.5"></div></div>
+            <div class="wireframe-table-row"><div class="wireframe-table-dot"></div><div class="wireframe-table-bar" style="flex:1.5"></div><div class="wireframe-table-bar" style="flex:2"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES BENTO -->
+<section class="features fade-in" id="features">
+  <div class="features-header">
+    <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:8px;">// CORE FEATURES</p>
+    <h2 class="features-title">Engineered for<br>engineering teams.</h2>
+    <p class="features-sub">Blueprint treats your project like a codebase — structured, versioned, and built to scale. Not a kanban board with a premium plan.</p>
+  </div>
+  <div class="bento-grid">
+    <div class="bento wide">
+      <p class="bento-tag">CORE</p>
+      <h3 class="bento-h3">Architecture-first project planning.</h3>
+      <p class="bento-p">Blueprint models your project as a graph — tasks, decisions, and dependencies visualized as a living architecture diagram. See your system, not just your backlog.</p>
+      <div class="bento-visual">
+        <div class="mini-chart">
+          <div class="bar-col" style="height:30%"></div>
+          <div class="bar-col" style="height:55%"></div>
+          <div class="bar-col" style="height:80%"></div>
+          <div class="bar-col" style="height:65%"></div>
+          <div class="bar-col" style="height:90%"></div>
+          <div class="bar-col" style="height:70%"></div>
+          <div class="bar-col" style="height:95%"></div>
+          <div class="bar-col" style="height:75%"></div>
+          <div class="bar-col" style="height:85%"></div>
+          <div class="bar-col" style="height:60%"></div>
+          <div class="bar-col" style="height:100%"></div>
+          <div class="bar-col" style="height:80%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="bento tall">
+      <p class="bento-tag">INTEGRATIONS</p>
+      <h3 class="bento-h3">Syncs with your stack.</h3>
+      <p class="bento-p">GitHub, GitLab, Jira, Linear, Figma, Sentry. Two-way sync across your entire toolchain. Blueprint becomes the single source of truth — not another silo.</p>
+      <div class="bento-visual">
+        <div class="progress-lines">
+          <div class="progress-line"><span class="progress-label">GitHub</span><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:100%"></div></div></div>
+          <div class="progress-line"><span class="progress-label">Linear</span><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:100%"></div></div></div>
+          <div class="progress-line"><span class="progress-label">Figma</span><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:100%"></div></div></div>
+          <div class="progress-line"><span class="progress-label">Sentry</span><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:85%"></div></div></div>
+          <div class="progress-line"><span class="progress-label">Slack</span><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:100%"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bento">
+      <p class="bento-tag">DECISIONS</p>
+      <h3 class="bento-h3">Decision log built in.</h3>
+      <p class="bento-p">Every architectural decision gets logged as an ADR — with context, alternatives, and rationale. Future you will thank current you.</p>
+    </div>
+    <div class="bento">
+      <p class="bento-tag">REPORTING</p>
+      <h3 class="bento-h3">Metrics without noise.</h3>
+      <p class="bento-p">Velocity, cycle time, dependency health, and scope creep — surfaced automatically. No dashboard configuration required.</p>
+    </div>
+    <div class="bento">
+      <p class="bento-tag">ACCESS</p>
+      <h3 class="bento-h3">Role-based, precise access.</h3>
+      <p class="bento-p">Fine-grained permissions at the component level. Engineers see code context. PMs see delivery timelines. No information overload.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DATA TABLE -->
+<section class="data-section fade-in" id="projects">
+  <div class="data-header">
+    <h2 class="data-title">Project Status Overview</h2>
+    <span class="data-mono">LIVE · Updated 2 min ago</span>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Status</th>
+          <th>Progress</th>
+          <th>Team</th>
+          <th>Due Date</th>
+          <th>Dependencies</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><p class="task-name">Auth Service v2.0</p><p class="task-meta">API · Security · 14 tasks open</p></td>
+          <td><span class="status-badge active"><span class="status-dot"></span>In Progress</span></td>
+          <td><div class="progress-mini"><div class="pbar"><div class="pbar-fill" style="width:72%"></div></div><span class="pct">72%</span></div></td>
+          <td style="font-size:13px;color:var(--muted)">Platform</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">Apr 14</td>
+          <td style="font-size:12px;color:var(--muted)">3 upstream</td>
+        </tr>
+        <tr>
+          <td><p class="task-name">Search Indexing Pipeline</p><p class="task-meta">Infrastructure · Data · 8 tasks open</p></td>
+          <td><span class="status-badge progress"><span class="status-dot"></span>Review</span></td>
+          <td><div class="progress-mini"><div class="pbar"><div class="pbar-fill" style="width:88%"></div></div><span class="pct">88%</span></div></td>
+          <td style="font-size:13px;color:var(--muted)">Data</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">Mar 28</td>
+          <td style="font-size:12px;color:var(--muted)">1 upstream</td>
+        </tr>
+        <tr>
+          <td><p class="task-name">Mobile SDK Rewrite</p><p class="task-meta">iOS · Android · 22 tasks open</p></td>
+          <td><span class="status-badge active"><span class="status-dot"></span>In Progress</span></td>
+          <td><div class="progress-mini"><div class="pbar"><div class="pbar-fill" style="width:41%"></div></div><span class="pct">41%</span></div></td>
+          <td style="font-size:13px;color:var(--muted)">Mobile</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">May 30</td>
+          <td style="font-size:12px;color:var(--muted)">5 upstream</td>
+        </tr>
+        <tr>
+          <td><p class="task-name">Analytics Dashboard v3</p><p class="task-meta">Frontend · Design · 6 tasks open</p></td>
+          <td><span class="status-badge planned"><span class="status-dot"></span>Planned</span></td>
+          <td><div class="progress-mini"><div class="pbar"><div class="pbar-fill" style="width:12%"></div></div><span class="pct">12%</span></div></td>
+          <td style="font-size:13px;color:var(--muted)">Product</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">Jun 15</td>
+          <td style="font-size:12px;color:var(--muted)">2 upstream</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials fade-in">
+  <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:12px;">// CUSTOMER EVIDENCE</p>
+  <h2 style="font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-0.02em;">Teams that build on Blueprint.</h2>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-quote-icon">/*</div>
+      <p class="test-body">"We replaced Jira, Notion, and Confluence with Blueprint. The dependency graph alone was worth the migration — we found three critical path conflicts that would have delayed launch by weeks."</p>
+      <p class="test-author">Priya N.</p>
+      <p class="test-role">VP Engineering · Series B SaaS</p>
+      <div class="test-company"><div class="company-logo"></div><span class="company-name">Veritas Analytics</span></div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote-icon">/*</div>
+      <p class="test-body">"The ADR system alone changed how we make technical decisions. We have a complete record of every architectural choice going back two years. Onboarding new engineers dropped from 3 weeks to 4 days."</p>
+      <p class="test-author">Marco S.</p>
+      <p class="test-role">CTO · Enterprise Dev Tools</p>
+      <div class="test-company"><div class="company-logo"></div><span class="company-name">Axon Systems</span></div>
+    </div>
+    <div class="test-card">
+      <div class="test-quote-icon">/*</div>
+      <p class="test-body">"The Git sync is what sold us. Blueprint reads the actual code structure and surfaces the real dependency graph — not what someone manually typed into a ticket. It just knows."</p>
+      <p class="test-author">Leila H.</p>
+      <p class="test-role">Engineering Manager · Fintech</p>
+      <div class="test-company"><div class="company-logo"></div><span class="company-name">Strata Finance</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section fade-in" id="pricing">
+  <div class="cta-left">
+    <p class="cta-label">// START_BUILDING</p>
+    <h2 class="cta-h2">Ship faster.<br>Break less.</h2>
+    <p class="cta-sub">Free for teams up to 10. No credit card required. Full access to all features for 30 days.</p>
+    <div>
+      <a href="#" class="btn-cta">Start Free Today</a>
+      <a href="#" class="btn-cta-ghost">View Pricing</a>
+    </div>
+  </div>
+  <div class="cta-right">
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <div><p class="pricing-name">Starter</p><p class="pricing-desc">Up to 10 engineers · 3 projects</p></div>
+        <div style="text-align:right"><p class="pricing-price">Free</p><p class="pricing-per">forever</p></div>
+      </div>
+      <div class="pricing-card highlight">
+        <div><p class="pricing-name">Team</p><p class="pricing-desc">Unlimited engineers · All features</p></div>
+        <div style="text-align:right"><p class="pricing-price">£ 18<span style="font-size:14px;color:rgba(247,247,245,0.4)">/seat</span></p><p class="pricing-per">per month</p></div>
+      </div>
+      <div class="pricing-card">
+        <div><p class="pricing-name">Enterprise</p><p class="pricing-desc">SSO, audit logs, custom SLA</p></div>
+        <div style="text-align:right"><p class="pricing-price">Custom</p><p class="pricing-per">contact us</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><div class="nav-logo-mark"><span></span><span></span><span></span><span></span></div>BLUEPRINT</div>
+      <p class="footer-desc">Technical project management for engineering teams that build with intention. Architecture-first. Data-driven. Distraction-free.</p>
+    </div>
+    <div>
+      <p class="footer-col-label">Product</p>
+      <ul class="footer-links">
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Integrations</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Changelog</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Resources</p>
+      <ul class="footer-links">
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">API Reference</a></li>
+        <li><a href="#">Engineering Blog</a></li>
+        <li><a href="#">Status</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Company</p>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Blueprint Software Inc. All rights reserved.</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;">// build_what_matters</span>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(e => e.forEach(i => { if(i.isIntersecting) i.target.classList.add('visible'); }), { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

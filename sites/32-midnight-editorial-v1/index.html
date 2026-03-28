@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIDNIGHT STUDIO — We Craft Stories That Move People</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #050505;
+      --dark:     #0d0d0d;
+      --panel:    #111111;
+      --border:   #1e1e1e;
+      --coral:    #FF6B50;
+      --coral-d:  #e05540;
+      --white:    #ffffff;
+      --gray:     #888888;
+      --gray-l:   #cccccc;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--coral);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transition: transform 0.15s;
+      transform: translate(-50%, -50%);
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 40px; height: 40px;
+      border: 1.5px solid var(--coral);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: all 0.25s ease;
+      opacity: 0.5;
+    }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.035;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 1.8rem 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      mix-blend-mode: normal;
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--coral); }
+
+    .nav-center {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .nav-center a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-center a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--coral);
+      color: var(--white);
+      padding: 0.7rem 1.8rem;
+      border-radius: 0.3rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .nav-cta:hover { background: var(--coral-d); transform: translateY(-1px); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3.5rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 35vw;
+      font-weight: 800;
+      color: rgba(255,255,255,0.02);
+      user-select: none;
+      pointer-events: none;
+      letter-spacing: -0.05em;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 30px; height: 1px;
+      background: var(--coral);
+    }
+
+    .hero-title {
+      font-size: clamp(5.5rem, 12vw, 15rem);
+      font-weight: 800;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+    }
+
+    .hero-title .outline {
+      -webkit-text-stroke: 1.5px rgba(255,255,255,0.3);
+      color: transparent;
+    }
+
+    .hero-title .coral { color: var(--coral); }
+
+    .hero-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--gray);
+      max-width: 42ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-coral {
+      background: var(--coral);
+      color: var(--white);
+      padding: 1rem 2.5rem;
+      border-radius: 0.3rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .btn-coral:hover { background: var(--coral-d); transform: translateY(-2px); }
+
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--gray-l);
+      padding: 1rem 2.5rem;
+      border-radius: 0.3rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .btn-ghost:hover { border-color: var(--coral); color: var(--coral); }
+
+    /* WORK / REEL */
+    .reel-section {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+    }
+
+    .reel-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 7rem 3.5rem;
+    }
+
+    .section-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--coral);
+    }
+
+    .section-title {
+      font-size: clamp(2.5rem, 5vw, 6rem);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .section-title .outline {
+      -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+      color: transparent;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .work-card {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s;
+    }
+
+    .work-card:hover { transform: translateY(-8px); border-color: var(--coral); }
+
+    .wc-1 { grid-column: 1 / 8; min-height: 420px; }
+    .wc-2 { grid-column: 8 / 13; min-height: 420px; }
+    .wc-3 { grid-column: 1 / 5; min-height: 320px; }
+    .wc-4 { grid-column: 5 / 9; min-height: 320px; }
+    .wc-5 { grid-column: 9 / 13; min-height: 320px; }
+
+    .work-card-inner {
+      padding: 2.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .work-number {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--coral);
+    }
+
+    .work-category {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-top: 0.5rem;
+    }
+
+    .work-title {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-top: 2rem;
+    }
+
+    .work-tag {
+      display: inline-block;
+      background: rgba(255,107,80,0.15);
+      color: var(--coral);
+      padding: 0.3rem 0.8rem;
+      border-radius: 0.2rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* SERVICES */
+    .services-section {
+      border-top: 1px solid var(--border);
+    }
+
+    .services-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 7rem 3.5rem;
+    }
+
+    .services-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 5rem;
+    }
+
+    .services-desc {
+      font-size: 1.1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--gray);
+      padding-top: 1rem;
+    }
+
+    .services-list {
+      border-top: 1px solid var(--border);
+    }
+
+    .service-item {
+      display: grid;
+      grid-template-columns: 60px 1fr 200px 80px;
+      align-items: center;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+      cursor: pointer;
+    }
+
+    .service-item:hover .service-name { color: var(--coral); }
+
+    .service-num {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--coral);
+    }
+
+    .service-name {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      transition: color 0.3s;
+    }
+
+    .service-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .service-tag-sm {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--gray);
+      padding: 0.25rem 0.6rem;
+      border-radius: 0.2rem;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .service-arrow {
+      text-align: right;
+      font-size: 1.5rem;
+      color: var(--gray);
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    .service-item:hover .service-arrow {
+      color: var(--coral);
+      transform: translate(4px, -4px);
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+    }
+
+    .testimonials-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 7rem 3.5rem;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .tcard {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 2.5rem;
+      transition: border-color 0.3s;
+    }
+
+    .tcard:hover { border-color: var(--coral); }
+
+    .tcard-quote {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--gray-l);
+      margin-bottom: 2rem;
+      font-style: italic;
+    }
+
+    .tcard-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .tcard-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--coral);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .tcard-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--white);
+    }
+
+    .tcard-role {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 0.1rem;
+    }
+
+    /* STATS */
+    .stats-section {
+      border-top: 1px solid var(--border);
+    }
+
+    .stats-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 5rem 3.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      transition: border-color 0.3s;
+    }
+
+    .stat-card:hover { border-color: var(--coral); }
+
+    .stat-val {
+      font-size: 4rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--white);
+    }
+
+    .stat-val span { color: var(--coral); }
+
+    .stat-lbl {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-top: 0.75rem;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: var(--coral);
+      padding: 8rem 3.5rem;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: clamp(4rem, 10vw, 12rem);
+      font-weight: 800;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-sub {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: rgba(5,5,5,0.7);
+      max-width: 45ch;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+    }
+
+    .btn-dark {
+      background: var(--black);
+      color: var(--white);
+      padding: 1.2rem 3rem;
+      border-radius: 0.3rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .btn-dark:hover { opacity: 0.85; transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      padding: 4rem 3.5rem 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .footer-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .footer-tagline {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--gray);
+      line-height: 1.7;
+      max-width: 28ch;
+    }
+
+    .footer-col h4 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+
+    .footer-col a {
+      font-size: 0.9rem;
+      color: var(--gray-l);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-col a:hover { color: var(--coral); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--gray);
+    }
+
+    .footer-socials { display: flex; gap: 1.5rem; }
+
+    .footer-socials a {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-socials a:hover { color: var(--coral); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-center { display: none; }
+      .hero { padding: 0 1.5rem 4rem; }
+      .reel-inner, .services-inner, .testimonials-inner { padding: 5rem 1.5rem; }
+      .work-grid { grid-template-columns: 1fr; }
+      .wc-1,.wc-2,.wc-3,.wc-4,.wc-5 { grid-column: 1 / -1; min-height: 260px; }
+      .services-header { grid-template-columns: 1fr; }
+      .service-item { grid-template-columns: 40px 1fr 80px; }
+      .service-tags { display: none; }
+      .testimonials-grid, .stats-inner { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">MIDNIGHT<span>.</span>STUDIO</a>
+    <div class="nav-center">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+    </div>
+    <a href="#cta" class="nav-cta">Start a Project</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-number">MS</div>
+    <div class="hero-tag">Premium Creative Agency — Est. 2019</div>
+    <h1 class="hero-title">
+      WE CRAFT<br>
+      <span class="outline">STORIES</span><br>
+      <span class="coral">THAT MOVE</span><br>
+      <span class="outline">PEOPLE</span>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">Midnight Studio is a premium creative agency specializing in brand identity, digital experience, and visual storytelling for brands that refuse to be ordinary.</p>
+      <div class="hero-actions">
+        <a href="#work" class="btn-coral">View Our Work</a>
+        <a href="#services" class="btn-ghost">What We Do</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK GRID -->
+  <section class="reel-section" id="work">
+    <div class="reel-inner">
+      <div class="section-eyebrow">Selected Work</div>
+      <h2 class="section-title reveal">
+        STORIES<br>WE'VE <span class="outline">TOLD</span>
+      </h2>
+      <div class="work-grid">
+        <div class="work-card wc-1 reveal">
+          <div class="work-card-inner">
+            <div>
+              <div class="work-number">01 / 05</div>
+              <div class="work-category">Brand Identity · Digital</div>
+            </div>
+            <div>
+              <div class="work-title">Luminary<br>Finance</div>
+              <div class="work-tag">Fintech</div>
+            </div>
+          </div>
+        </div>
+        <div class="work-card wc-2 reveal" style="transition-delay:0.1s">
+          <div class="work-card-inner">
+            <div>
+              <div class="work-number">02 / 05</div>
+              <div class="work-category">Campaign · Photography</div>
+            </div>
+            <div>
+              <div class="work-title">Vestige<br>Fashion</div>
+              <div class="work-tag">Luxury Retail</div>
+            </div>
+          </div>
+        </div>
+        <div class="work-card wc-3 reveal" style="transition-delay:0.1s">
+          <div class="work-card-inner">
+            <div>
+              <div class="work-number">03</div>
+              <div class="work-category">Motion · UX</div>
+            </div>
+            <div>
+              <div class="work-title">Aura App</div>
+              <div class="work-tag">SaaS</div>
+            </div>
+          </div>
+        </div>
+        <div class="work-card wc-4 reveal" style="transition-delay:0.2s">
+          <div class="work-card-inner">
+            <div>
+              <div class="work-number">04</div>
+              <div class="work-category">Identity · Packaging</div>
+            </div>
+            <div>
+              <div class="work-title">Grove Co.</div>
+              <div class="work-tag">CPG</div>
+            </div>
+          </div>
+        </div>
+        <div class="work-card wc-5 reveal" style="transition-delay:0.3s">
+          <div class="work-card-inner">
+            <div>
+              <div class="work-number">05</div>
+              <div class="work-category">Platform · Brand</div>
+            </div>
+            <div>
+              <div class="work-title">Axiom Labs</div>
+              <div class="work-tag">AI/Tech</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services-section" id="services">
+    <div class="services-inner">
+      <div class="services-header reveal">
+        <div>
+          <div class="section-eyebrow">What We Do</div>
+          <h2 class="section-title">OUR<br><span class="outline">CRAFT</span></h2>
+        </div>
+        <p class="services-desc">We are not a production shop. We are strategic partners who bring creative conviction to every project. Each discipline is executed with the same obsessive standard for quality.</p>
+      </div>
+      <div class="services-list">
+        <div class="service-item">
+          <div class="service-num">01</div>
+          <div class="service-name">Brand Identity</div>
+          <div class="service-tags">
+            <span class="service-tag-sm">Strategy</span>
+            <span class="service-tag-sm">Visual</span>
+          </div>
+          <div class="service-arrow">↗</div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">02</div>
+          <div class="service-name">Digital Experience</div>
+          <div class="service-tags">
+            <span class="service-tag-sm">UX/UI</span>
+            <span class="service-tag-sm">Web</span>
+          </div>
+          <div class="service-arrow">↗</div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">03</div>
+          <div class="service-name">Campaign & Content</div>
+          <div class="service-tags">
+            <span class="service-tag-sm">Film</span>
+            <span class="service-tag-sm">Photo</span>
+          </div>
+          <div class="service-arrow">↗</div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">04</div>
+          <div class="service-name">Motion & 3D</div>
+          <div class="service-tags">
+            <span class="service-tag-sm">After FX</span>
+            <span class="service-tag-sm">Blender</span>
+          </div>
+          <div class="service-arrow">↗</div>
+        </div>
+        <div class="service-item">
+          <div class="service-num">05</div>
+          <div class="service-name">Creative Strategy</div>
+          <div class="service-tags">
+            <span class="service-tag-sm">Research</span>
+            <span class="service-tag-sm">Narrative</span>
+          </div>
+          <div class="service-arrow">↗</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-section">
+    <div class="stats-inner">
+      <div class="stat-card reveal">
+        <div class="stat-val">9<span>+</span></div>
+        <div class="stat-lbl">Years of Craft</div>
+      </div>
+      <div class="stat-card reveal" style="transition-delay:0.1s">
+        <div class="stat-val">240<span>+</span></div>
+        <div class="stat-lbl">Projects Delivered</div>
+      </div>
+      <div class="stat-card reveal" style="transition-delay:0.2s">
+        <div class="stat-val">18</div>
+        <div class="stat-lbl">Industry Awards</div>
+      </div>
+      <div class="stat-card reveal" style="transition-delay:0.3s">
+        <div class="stat-val">3<span>x</span></div>
+        <div class="stat-lbl">Avg. Client ROI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="testimonials-inner">
+      <div class="section-eyebrow">Client Voices</div>
+      <h2 class="section-title reveal">THE<br><span class="outline">VERDICT</span></h2>
+      <div class="testimonials-grid">
+        <div class="tcard reveal">
+          <p class="tcard-quote">"Midnight Studio didn't just rebrand us — they rewrote how we see ourselves. The clarity and conviction they brought to our identity is something our competitors are still trying to understand."</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar">SL</div>
+            <div>
+              <div class="tcard-name">Sofia Lund</div>
+              <div class="tcard-role">CMO, Luminary Finance</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal" style="transition-delay:0.1s">
+          <p class="tcard-quote">"Working with Midnight was an experience in itself. They have a rare ability to translate abstract brand feeling into visual language that actually performs. Our conversion rate increased 40%."</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar">DR</div>
+            <div>
+              <div class="tcard-name">David Reyes</div>
+              <div class="tcard-role">Founder, Aura Technologies</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal" style="transition-delay:0.2s">
+          <p class="tcard-quote">"The highest compliment I can give: I'm jealous of our own brand. The work Midnight delivered made our whole team fall in love with what we're building all over again."</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar">AK</div>
+            <div>
+              <div class="tcard-name">Amara Kwesi</div>
+              <div class="tcard-role">CEO, Vestige Fashion</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <h2 class="cta-title reveal">LET'S<br>MAKE<br>NOISE</h2>
+    <p class="cta-sub">We take on 6 new projects per quarter. Tell us about yours and let's see if we're the right fit.</p>
+    <a href="#" class="btn-dark">Start a Conversation</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo">MIDNIGHT.</div>
+          <p class="footer-tagline">We craft stories that move people. Premium creative for brands that mean business.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Work</h4>
+          <ul>
+            <li><a href="#">Case Studies</a></li>
+            <li><a href="#">Brand Work</a></li>
+            <li><a href="#">Motion Reel</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Studio</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Team</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Dribbble</a></li>
+            <li><a href="#">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Midnight Studio. All rights reserved.</p>
+        <div class="footer-socials">
+          <a href="#">IG</a>
+          <a href="#">TW</a>
+          <a href="#">LI</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top = mouseY + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // Hover expand cursor on interactive elements
+    document.querySelectorAll('a, button, .work-card, .service-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        ring.style.width = '64px';
+        ring.style.height = '64px';
+        ring.style.opacity = '0.3';
+        cursor.style.transform = 'translate(-50%,-50%) scale(1.5)';
+      });
+      el.addEventListener('mouseleave', () => {
+        ring.style.width = '40px';
+        ring.style.height = '40px';
+        ring.style.opacity = '0.5';
+        cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      });
+    });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAB.01 — Formulated with Science</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #FAFAF8;
+  --paper: #F2F0EC;
+  --warm-gray: #E0DDD7;
+  --mid-gray: #9B9690;
+  --dark: #1E1D1B;
+  --ink: #2C2B28;
+  --accent: #3D5A4A;
+  --accent-light: #EBF0EC;
+  --red: #C0392B;
+  --border: #D4D0C9;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0; z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  height: 56px;
+}
+.nav-logo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--dark);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--mid-gray); }
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--mid-gray);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--dark); }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.btn-nav {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  background: var(--dark);
+  color: var(--white);
+  padding: 8px 20px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-nav:hover { background: var(--accent); }
+
+/* HERO */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  min-height: calc(100vh - 56px);
+  border-bottom: 1px solid var(--border);
+}
+.hero-main {
+  padding: 80px 60px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.hero-top {}
+.specimen-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--mid-gray);
+  text-transform: uppercase;
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.specimen-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px; height: 1px;
+  background: var(--border);
+}
+.hero-h1 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  color: var(--dark);
+  margin-bottom: 40px;
+}
+.hero-h1 .mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.45em;
+  letter-spacing: 0.1em;
+  color: var(--mid-gray);
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+.hero-sub {
+  font-size: 15px;
+  color: var(--mid-gray);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 60px;
+}
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+.metric-cell {
+  padding: 24px 28px;
+  border-right: 1px solid var(--border);
+}
+.metric-cell:last-child { border-right: none; }
+.metric-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--dark);
+  display: block;
+  margin-bottom: 4px;
+}
+.metric-label {
+  font-size: 11px;
+  color: var(--mid-gray);
+  letter-spacing: 0.05em;
+}
+.hero-actions { display: flex; gap: 16px; }
+.btn-primary {
+  display: inline-block;
+  background: var(--dark);
+  color: var(--white);
+  padding: 14px 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--accent); }
+.btn-secondary {
+  display: inline-block;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 14px 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--dark); }
+.hero-sidebar {
+  padding: 40px 32px;
+  background: var(--paper);
+  overflow-y: auto;
+}
+.sidebar-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mid-gray);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.formula-block {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.formula-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.formula-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+.formula-desc { font-size: 12px; color: var(--mid-gray); }
+.formula-conc {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--dark);
+}
+.conc-bar {
+  flex: 1;
+  height: 2px;
+  background: var(--warm-gray);
+  position: relative;
+}
+.conc-fill {
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+  background: var(--accent);
+}
+
+/* DATA TABLE SECTION */
+.data-section {
+  padding: 80px 60px;
+  border-bottom: 1px solid var(--border);
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 300;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+}
+.section-mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--mid-gray);
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid-gray);
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 400;
+}
+.data-table td {
+  padding: 16px 16px;
+  border-bottom: 1px solid var(--warm-gray);
+  vertical-align: top;
+}
+.data-table tr:hover td { background: var(--paper); }
+.ingredient-name { font-weight: 500; color: var(--dark); }
+.ingredient-inci { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--mid-gray); margin-top: 3px; }
+.efficacy-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--border);
+  color: var(--mid-gray);
+}
+.efficacy-badge.high { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.efficacy-badge.clinical { border-color: var(--dark); color: var(--dark); }
+.pct { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--dark); }
+
+/* PROTOCOL SECTION */
+.protocol-section {
+  padding: 80px 60px;
+  border-bottom: 1px solid var(--border);
+  background: var(--paper);
+}
+.protocol-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+  margin-top: 48px;
+}
+.protocol-index { border-right: 1px solid var(--border); padding-right: 40px; }
+.protocol-step-btn {
+  display: block;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--warm-gray);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--mid-gray);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.protocol-step-btn.active { color: var(--dark); border-bottom-color: var(--dark); }
+.protocol-step-btn:hover { color: var(--dark); }
+.protocol-num { display: block; font-size: 9px; margin-bottom: 4px; opacity: 0.6; }
+.protocol-content {}
+.protocol-card {
+  border: 1px solid var(--border);
+  background: var(--white);
+  padding: 40px;
+  margin-bottom: 20px;
+}
+.protocol-card-id { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.12em; margin-bottom: 16px; }
+.protocol-card-title { font-size: 22px; font-weight: 400; color: var(--dark); margin-bottom: 16px; letter-spacing: -0.01em; }
+.protocol-card-body { font-size: 13px; color: var(--mid-gray); line-height: 1.8; margin-bottom: 24px; }
+.protocol-timing {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+}
+.timing-cell {
+  background: var(--paper);
+  padding: 12px 16px;
+  text-align: center;
+}
+.timing-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--mid-gray); display: block; margin-bottom: 4px; }
+.timing-val { font-size: 18px; font-weight: 500; color: var(--dark); }
+
+/* TESTIMONIALS */
+.testimonials { padding: 80px 60px; border-bottom: 1px solid var(--border); }
+.test-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.test-card {
+  background: var(--white);
+  padding: 40px 32px;
+}
+.test-code { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--mid-gray); letter-spacing: 0.1em; margin-bottom: 24px; }
+.test-body { font-size: 14px; color: var(--ink); line-height: 1.75; margin-bottom: 24px; font-style: italic; }
+.test-meta { display: flex; gap: 16px; align-items: center; }
+.test-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--warm-gray); flex-shrink: 0; }
+.test-name { font-size: 12px; font-weight: 500; color: var(--dark); }
+.test-role { font-size: 11px; color: var(--mid-gray); font-family: 'IBM Plex Mono', monospace; }
+.result-bar { margin-top: 20px; }
+.result-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--mid-gray); margin-bottom: 6px; letter-spacing: 0.06em; }
+.bar-bg { height: 2px; background: var(--warm-gray); }
+.bar-fill { height: 100%; background: var(--accent); transition: width 1s ease; }
+
+/* CTA */
+.cta-section {
+  padding: 120px 60px;
+  background: var(--dark);
+  color: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.cta-left {}
+.cta-mono { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: rgba(250,250,248,0.4); letter-spacing: 0.12em; margin-bottom: 24px; }
+.cta-h2 { font-size: clamp(36px, 5vw, 64px); font-weight: 300; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 32px; }
+.cta-sub { font-size: 14px; color: rgba(250,250,248,0.5); line-height: 1.8; margin-bottom: 40px; }
+.cta-right {}
+.facts-panel {
+  border: 1px solid rgba(250,250,248,0.15);
+  padding: 32px;
+}
+.facts-title { font-family: 'IBM Plex Mono', monospace; font-size: 18px; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 4px; color: var(--white); }
+.facts-serving { font-size: 11px; color: rgba(250,250,248,0.4); margin-bottom: 20px; padding-bottom: 20px; border-bottom: 4px solid rgba(250,250,248,0.15); }
+.facts-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(250,250,248,0.08); font-size: 12px; }
+.facts-row.bold { font-weight: 500; border-bottom-color: rgba(250,250,248,0.15); }
+.facts-name { color: rgba(250,250,248,0.7); }
+.facts-val { font-family: 'IBM Plex Mono', monospace; color: var(--white); }
+.btn-light {
+  display: inline-block;
+  background: var(--white);
+  color: var(--dark);
+  padding: 14px 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  margin-right: 16px;
+  transition: background 0.2s;
+}
+.btn-light:hover { background: var(--warm-gray); }
+
+/* FOOTER */
+footer {
+  background: var(--paper);
+  border-top: 1px solid var(--border);
+  padding: 60px 60px 32px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 48px;
+}
+.footer-brand { font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 500; color: var(--dark); margin-bottom: 12px; }
+.footer-desc { font-size: 12px; color: var(--mid-gray); line-height: 1.7; }
+.footer-col-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid-gray); margin-bottom: 20px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a { font-size: 13px; color: var(--ink); text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
+.footer-links a:hover { opacity: 1; }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--mid-gray);
+}
+
+/* FADE */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-sidebar { display: none; }
+  .test-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .cta-section { grid-template-columns: 1fr; }
+  .protocol-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">LAB<span>.01</span></a>
+  <ul class="nav-links">
+    <li><a href="#formulas">Formulas</a></li>
+    <li><a href="#protocol">Protocol</a></li>
+    <li><a href="#data">Clinical Data</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#protocol" class="btn-nav">Start Protocol</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-main">
+    <div class="hero-top">
+      <p class="specimen-label">Batch No. 2024-09-A · Clinical Grade · Dermatologist Tested</p>
+      <h1 class="hero-h1">
+        <span class="mono">LAB.01 / SKINCARE SYSTEM</span>
+        Formulated<br>with science.
+      </h1>
+      <p class="hero-sub">Medical-grade actives at clinically proven concentrations. No fragrance, no compromise, no margin for guesswork. Every formula begins with peer-reviewed data.</p>
+      <div class="hero-metrics">
+        <div class="metric-cell">
+          <span class="metric-val">97%</span>
+          <span class="metric-label">Clinical trial efficacy rate</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-val">28</span>
+          <span class="metric-label">Active ingredients per formulation</span>
+        </div>
+        <div class="metric-cell">
+          <span class="metric-val">0</span>
+          <span class="metric-label">Fragrance, parabens, fillers</span>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <a href="#protocol" class="btn-primary">View My Protocol</a>
+        <a href="#data" class="btn-secondary">Read Clinical Data</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-sidebar">
+    <p class="sidebar-title">Active Ingredient Index</p>
+    <div class="formula-block">
+      <p class="formula-id">COMPOUND-001</p>
+      <p class="formula-name">Niacinamide 10%</p>
+      <p class="formula-desc">Barrier repair, sebum regulation, pore minimization</p>
+      <div class="formula-conc">
+        <span>10%</span>
+        <div class="conc-bar"><div class="conc-fill" style="width:60%"></div></div>
+      </div>
+    </div>
+    <div class="formula-block">
+      <p class="formula-id">COMPOUND-002</p>
+      <p class="formula-name">Retinol 0.5%</p>
+      <p class="formula-desc">Cell turnover, collagen synthesis, photodamage repair</p>
+      <div class="formula-conc">
+        <span>0.5%</span>
+        <div class="conc-bar"><div class="conc-fill" style="width:30%"></div></div>
+      </div>
+    </div>
+    <div class="formula-block">
+      <p class="formula-id">COMPOUND-003</p>
+      <p class="formula-name">Azelaic Acid 15%</p>
+      <p class="formula-desc">Hyperpigmentation, post-acne marks, rosacea</p>
+      <div class="formula-conc">
+        <span>15%</span>
+        <div class="conc-bar"><div class="conc-fill" style="width:75%"></div></div>
+      </div>
+    </div>
+    <div class="formula-block">
+      <p class="formula-id">COMPOUND-004</p>
+      <p class="formula-name">Hyaluronic Acid 2%</p>
+      <p class="formula-desc">Multi-weight hydration, plumping, transepidermal</p>
+      <div class="formula-conc">
+        <span>2%</span>
+        <div class="conc-bar"><div class="conc-fill" style="width:85%"></div></div>
+      </div>
+    </div>
+    <div class="formula-block">
+      <p class="formula-id">COMPOUND-005</p>
+      <p class="formula-name">Vitamin C (L-AA) 20%</p>
+      <p class="formula-desc">Antioxidant protection, brightening, collagen co-factor</p>
+      <div class="formula-conc">
+        <span>20%</span>
+        <div class="conc-bar"><div class="conc-fill" style="width:50%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA TABLE -->
+<section class="data-section fade-in" id="formulas">
+  <div class="section-header">
+    <h2 class="section-title">Ingredient Transparency Index</h2>
+    <span class="section-mono">TABLE 1.0 · FULL DISCLOSURE</span>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Compound ID</th>
+        <th>Ingredient</th>
+        <th>Concentration</th>
+        <th>Primary Indication</th>
+        <th>Evidence Level</th>
+        <th>Efficacy Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid-gray)">LAB-N10</span></td>
+        <td><p class="ingredient-name">Niacinamide</p><p class="ingredient-inci">Niacinamide (Vitamin B3)</p></td>
+        <td class="pct">10.0%</td>
+        <td style="font-size:12px;color:var(--mid-gray)">Barrier repair, pore minimization</td>
+        <td><span class="efficacy-badge clinical">RCT Proven</span></td>
+        <td><span class="efficacy-badge high">A+</span></td>
+      </tr>
+      <tr>
+        <td><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid-gray)">LAB-R05</span></td>
+        <td><p class="ingredient-name">Retinol</p><p class="ingredient-inci">Retinol (Vitamin A)</p></td>
+        <td class="pct">0.5%</td>
+        <td style="font-size:12px;color:var(--mid-gray)">Cell turnover, anti-aging</td>
+        <td><span class="efficacy-badge clinical">RCT Proven</span></td>
+        <td><span class="efficacy-badge high">A+</span></td>
+      </tr>
+      <tr>
+        <td><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid-gray)">LAB-A15</span></td>
+        <td><p class="ingredient-name">Azelaic Acid</p><p class="ingredient-inci">Azelaic Acid</p></td>
+        <td class="pct">15.0%</td>
+        <td style="font-size:12px;color:var(--mid-gray)">Hyperpigmentation, rosacea</td>
+        <td><span class="efficacy-badge clinical">Rx Grade</span></td>
+        <td><span class="efficacy-badge high">A</span></td>
+      </tr>
+      <tr>
+        <td><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid-gray)">LAB-HA2</span></td>
+        <td><p class="ingredient-name">Hyaluronic Acid</p><p class="ingredient-inci">Sodium Hyaluronate (3-weight)</p></td>
+        <td class="pct">2.0%</td>
+        <td style="font-size:12px;color:var(--mid-gray)">Deep hydration, plumping</td>
+        <td><span class="efficacy-badge">Clinically Tested</span></td>
+        <td><span class="efficacy-badge high">A</span></td>
+      </tr>
+      <tr>
+        <td><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mid-gray)">LAB-C20</span></td>
+        <td><p class="ingredient-name">L-Ascorbic Acid</p><p class="ingredient-inci">L-Ascorbic Acid (Vit C)</p></td>
+        <td class="pct">20.0%</td>
+        <td style="font-size:12px;color:var(--mid-gray)">Antioxidant, brightening</td>
+        <td><span class="efficacy-badge clinical">RCT Proven</span></td>
+        <td><span class="efficacy-badge high">A+</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- PROTOCOL SECTION -->
+<section class="protocol-section fade-in" id="protocol">
+  <div class="section-header">
+    <h2 class="section-title">Your Daily Protocol</h2>
+    <span class="section-mono">PROTOCOL-AM / PM · 4-STEP SYSTEM</span>
+  </div>
+  <div class="protocol-grid">
+    <div class="protocol-index">
+      <div class="protocol-step-btn active"><span class="protocol-num">STEP 01</span>Cleanse</div>
+      <div class="protocol-step-btn"><span class="protocol-num">STEP 02</span>Treat</div>
+      <div class="protocol-step-btn"><span class="protocol-num">STEP 03</span>Correct</div>
+      <div class="protocol-step-btn"><span class="protocol-num">STEP 04</span>Protect</div>
+    </div>
+    <div class="protocol-content">
+      <div class="protocol-card">
+        <p class="protocol-card-id">LAB.01 / F-001 · AM + PM</p>
+        <h3 class="protocol-card-title">Low-pH Amino Acid Cleanser</h3>
+        <p class="protocol-card-body">pH 4.5–5.5. Amphiphilic amino acid surfactants maintain the skin's acid mantle while dissolving sebum, urban pollutants, and SPF residue. 0% sulfates. Rinse clarity achieved in 30 seconds.</p>
+        <div class="protocol-timing">
+          <div class="timing-cell"><span class="timing-label">pH</span><span class="timing-val">5.1</span></div>
+          <div class="timing-cell"><span class="timing-label">Contact Time</span><span class="timing-val">30s</span></div>
+          <div class="timing-cell"><span class="timing-label">Use</span><span class="timing-val">2×</span></div>
+          <div class="timing-cell"><span class="timing-label">Volume</span><span class="timing-val">1–2 pumps</span></div>
+        </div>
+      </div>
+      <div class="protocol-card">
+        <p class="protocol-card-id">LAB.01 / F-002 · TARGETED TREATMENT</p>
+        <h3 class="protocol-card-title">Multi-Active Concentrate</h3>
+        <p class="protocol-card-body">Three clinical actives in a single buffered serum: 10% Niacinamide, 15% Azelaic Acid, 2% HA (3-weight). Formulated for simultaneous barrier repair and targeted correction.</p>
+        <div class="protocol-timing">
+          <div class="timing-cell"><span class="timing-label">Actives</span><span class="timing-val">3</span></div>
+          <div class="timing-cell"><span class="timing-label">Absorption</span><span class="timing-val">2 min</span></div>
+          <div class="timing-cell"><span class="timing-label">Texture</span><span class="timing-val">Gel</span></div>
+          <div class="timing-cell"><span class="timing-label">Drops</span><span class="timing-val">4–6</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials fade-in" id="data">
+  <div class="section-header">
+    <h2 class="section-title">User Study Results</h2>
+    <span class="section-mono">n=214 · 12-WEEK TRIAL · BLIND ASSESSMENT</span>
+  </div>
+  <div class="test-grid">
+    <div class="test-card">
+      <p class="test-code">PARTICIPANT-047 · SKIN TYPE: COMBINATION · WEEK 12</p>
+      <p class="test-body">"I've used every prescription-grade product available. LAB.01 is the first over-the-counter system that has actually matched those results—and I can read every ingredient."</p>
+      <div class="test-meta">
+        <div class="test-avatar"></div>
+        <div>
+          <p class="test-name">Dr. Sarah M.</p>
+          <p class="test-role">Dermatologist, Trial Participant</p>
+        </div>
+      </div>
+      <div class="result-bar">
+        <p class="result-label">Barrier Improvement</p>
+        <div class="bar-bg"><div class="bar-fill" style="width:91%"></div></div>
+      </div>
+    </div>
+    <div class="test-card">
+      <p class="test-code">PARTICIPANT-112 · SKIN TYPE: SENSITIVE · WEEK 8</p>
+      <p class="test-body">"Within 4 weeks my TEWL score dropped by 30%. The formula stack is exactly what I'd prescribe—and the delivery system ensures stability throughout the product's shelf life."</p>
+      <div class="test-meta">
+        <div class="test-avatar"></div>
+        <div>
+          <p class="test-name">Marcus T.</p>
+          <p class="test-role">Biochemist, Trial Participant</p>
+        </div>
+      </div>
+      <div class="result-bar">
+        <p class="result-label">TEWL Reduction</p>
+        <div class="bar-bg"><div class="bar-fill" style="width:84%"></div></div>
+      </div>
+    </div>
+    <div class="test-card">
+      <p class="test-code">PARTICIPANT-189 · SKIN TYPE: DRY / AGING · WEEK 12</p>
+      <p class="test-body">"The retinol formulation caused zero initial purging. The buffered system and percentage ramp is evidence of real formulation knowledge. Results visible at week three."</p>
+      <div class="test-meta">
+        <div class="test-avatar"></div>
+        <div>
+          <p class="test-name">Anika R.</p>
+          <p class="test-role">Pharmacist, Trial Participant</p>
+        </div>
+      </div>
+      <div class="result-bar">
+        <p class="result-label">Texture Improvement</p>
+        <div class="bar-bg"><div class="bar-fill" style="width:96%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section fade-in">
+  <div class="cta-left">
+    <p class="cta-mono">LAB.01 · STARTER PROTOCOL · REV 3.2</p>
+    <h2 class="cta-h2">Start your protocol today.</h2>
+    <p class="cta-sub">Every LAB.01 protocol is built around your skin profile, not a generic routine. Completed by our clinical team in 48 hours.</p>
+    <a href="#" class="btn-light">Build My Protocol</a>
+    <a href="#" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(250,250,248,0.4);letter-spacing:0.06em;text-decoration:none;border-bottom:1px solid rgba(250,250,248,0.15);padding-bottom:1px;">Download Research PDF</a>
+  </div>
+  <div class="cta-right">
+    <div class="facts-panel">
+      <p class="facts-title">Supplement Facts</p>
+      <p class="facts-serving">Serving Size: 4-step AM + PM / Servings: 30 days</p>
+      <div class="facts-row bold"><span class="facts-name">Amount Per Full Protocol</span><span class="facts-val">% Daily</span></div>
+      <div class="facts-row"><span class="facts-name">Niacinamide (10%)</span><span class="facts-val">2000mg</span></div>
+      <div class="facts-row"><span class="facts-name">Hyaluronic Acid (2%)</span><span class="facts-val">400mg</span></div>
+      <div class="facts-row"><span class="facts-name">L-Ascorbic Acid (20%)</span><span class="facts-val">4000mg</span></div>
+      <div class="facts-row"><span class="facts-name">Azelaic Acid (15%)</span><span class="facts-val">3000mg</span></div>
+      <div class="facts-row"><span class="facts-name">Retinol (0.5%)</span><span class="facts-val">100mg</span></div>
+      <div class="facts-row bold" style="margin-top:8px;"><span class="facts-name">Fragrance / Parabens</span><span class="facts-val" style="color:var(--mid-gray)">0%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand">LAB.01</p>
+      <p class="footer-desc">Medical-grade skincare formulated by biochemists. Every active, every concentration, every clinical claim — fully disclosed.</p>
+    </div>
+    <div>
+      <p class="footer-col-label">Formulas</p>
+      <ul class="footer-links">
+        <li><a href="#">Cleanser F-001</a></li>
+        <li><a href="#">Concentrate F-002</a></li>
+        <li><a href="#">Retinol F-003</a></li>
+        <li><a href="#">SPF F-004</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Science</p>
+      <ul class="footer-links">
+        <li><a href="#">Research Library</a></li>
+        <li><a href="#">Clinical Trials</a></li>
+        <li><a href="#">Ingredient Index</a></li>
+        <li><a href="#">Safety Data</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Support</p>
+      <ul class="footer-links">
+        <li><a href="#">Build Protocol</a></li>
+        <li><a href="#">Consult Team</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">lab@lab01.co</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 LAB.01 Formulations Ltd. · Batch 2024-09-A · All claims substantiated by clinical data.</span>
+    <span>Made with precision. Not promises.</span>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

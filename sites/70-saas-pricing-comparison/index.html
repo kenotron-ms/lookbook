@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CANVAS — Project Management SaaS Pricing</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f7f7f5;
+    --white: #ffffff;
+    --dark: #111111;
+    --accent: #5b4ff5;
+    --accent-light: rgba(91,79,245,0.08);
+    --green: #16a34a;
+    --red: #dc2626;
+    --border: rgba(17,17,17,0.08);
+    --muted: rgba(17,17,17,0.45);
+    --card: #ffffff;
+    --free-col: #f9f9f7;
+    --growth-col: #f5f3ff;
+    --enterprise-col: #fff;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--dark); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 52px;
+    background: rgba(247,247,245,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: var(--dark); text-decoration: none; }
+  .logo em { color: var(--accent); font-style: normal; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--dark); }
+  .nav-group { display: flex; gap: 10px; }
+  .nav-login { font-size: 13px; font-weight: 600; color: var(--dark); text-decoration: none; padding: 9px 18px; border: 1px solid var(--border); border-radius: 8px; transition: border-color 0.2s; }
+  .nav-login:hover { border-color: rgba(17,17,17,0.2); }
+  .nav-cta { font-size: 13px; font-weight: 700; color: #fff; background: var(--accent); padding: 9px 18px; border-radius: 8px; text-decoration: none; transition: opacity 0.2s; }
+  .nav-cta:hover { opacity: 0.88; }
+
+  /* ── HERO ── */
+  .hero { padding: 140px 52px 80px; text-align: center; border-bottom: 1px solid var(--border); }
+  .hero-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-light); border: 1px solid rgba(91,79,245,0.2);
+    border-radius: 40px; padding: 7px 16px; margin-bottom: 32px;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    opacity: 0; animation: up 0.6s ease 0.2s forwards;
+  }
+  .hero-title { font-size: clamp(44px, 7vw, 80px); font-weight: 800; letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 20px; opacity: 0; animation: up 0.7s ease 0.4s forwards; }
+  .hero-sub { font-size: 18px; font-weight: 400; color: var(--muted); max-width: 500px; margin: 0 auto 40px; line-height: 1.65; opacity: 0; animation: up 0.7s ease 0.6s forwards; }
+  .billing-toggle {
+    display: inline-flex; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 4px;
+    margin-bottom: 0; gap: 4px; opacity: 0; animation: up 0.7s ease 0.8s forwards;
+  }
+  .toggle-btn {
+    font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: 7px;
+    border: none; cursor: pointer; background: transparent; color: var(--muted);
+    transition: background 0.2s, color 0.2s;
+  }
+  .toggle-btn.active { background: var(--accent); color: #fff; }
+  .toggle-save {
+    font-size: 11px; font-weight: 700; color: var(--green);
+    background: rgba(22,163,74,0.1); padding: 2px 8px; border-radius: 20px;
+    margin-left: 2px; align-self: center;
+  }
+
+  @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── PRICING CARDS (top) ── */
+  .pricing-cards {
+    padding: 60px 52px 0;
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .pricing-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px;
+    position: relative; transition: box-shadow 0.3s;
+  }
+  .pricing-card.featured {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(91,79,245,0.08), 0 16px 48px rgba(91,79,245,0.12);
+  }
+  .popular-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--accent); color: #fff;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+    padding: 4px 14px; border-radius: 20px; white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .plan-name { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .plan-price { font-size: 52px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+  .plan-price sup { font-size: 24px; font-weight: 600; vertical-align: top; margin-top: 10px; display: inline-block; }
+  .plan-price .period { font-size: 15px; font-weight: 400; color: var(--muted); letter-spacing: 0; }
+  .plan-desc { font-size: 13px; color: var(--muted); margin: 14px 0 28px; line-height: 1.6; }
+  .plan-cta {
+    display: block; text-align: center;
+    font-size: 14px; font-weight: 700; padding: 13px;
+    border-radius: 10px; text-decoration: none; transition: all 0.2s;
+    margin-bottom: 28px;
+  }
+  .plan-cta.solid { background: var(--accent); color: #fff; }
+  .plan-cta.solid:hover { opacity: 0.88; transform: translateY(-1px); }
+  .plan-cta.outline { border: 1px solid var(--border); color: var(--dark); }
+  .plan-cta.outline:hover { border-color: var(--accent); color: var(--accent); }
+  .plan-highlights { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .plan-highlights li { font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+  .plan-highlights li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── COMPARISON TABLE ── */
+  .comparison { padding: 80px 0 120px; }
+  .comparison-inner { max-width: 1200px; margin: 0 auto; padding: 0 52px; }
+  .comparison-title { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .comparison-sub { font-size: 15px; color: var(--muted); margin-bottom: 48px; }
+
+  /* Sticky header */
+  .table-wrap { position: relative; overflow: visible; }
+  .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .compare-table thead th {
+    background: var(--bg); position: sticky; top: 68px; z-index: 50;
+    font-size: 13px; font-weight: 700; padding: 14px 20px;
+    border-bottom: 2px solid var(--border);
+    text-align: center;
+  }
+  .compare-table thead th:first-child { text-align: left; width: 34%; }
+  .th-free { background: var(--free-col) !important; }
+  .th-growth { background: var(--growth-col) !important; color: var(--accent); }
+  .th-enterprise { background: var(--enterprise-col) !important; }
+
+  /* Section headers */
+  .section-row td {
+    padding: 28px 20px 10px;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted);
+    background: var(--bg);
+    cursor: pointer; user-select: none;
+  }
+  .section-row td:first-child { display: flex; align-items: center; gap: 8px; }
+  .section-toggle { transition: transform 0.25s; }
+  .section-row.collapsed .section-toggle { transform: rotate(-90deg); }
+
+  /* Feature rows */
+  .feature-row td {
+    padding: 12px 20px; font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .feature-row td:first-child { font-weight: 500; color: var(--dark); }
+  .feature-row td:not(:first-child) { text-align: center; }
+  .feature-row.hidden { display: none; }
+  .feature-row:hover td { background: rgba(91,79,245,0.02); }
+
+  .check { color: var(--green); font-size: 16px; font-weight: 700; }
+  .cross { color: var(--red); font-size: 16px; }
+  .val { font-size: 13px; font-weight: 600; color: var(--dark); }
+  .val-muted { font-size: 12px; color: var(--muted); }
+
+  /* ── FEATURES GRID ── */
+  .features-section { padding: 100px 52px; border-top: 1px solid var(--border); background: var(--dark); color: #fff; }
+  .fs-inner { max-width: 1200px; margin: 0 auto; }
+  .fs-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .fs-title { font-size: clamp(32px, 4.5vw, 52px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 56px; }
+  .fs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); }
+  .fs-card { background: var(--dark); padding: 36px; transition: background 0.3s; }
+  .fs-card:hover { background: #1a1a1a; }
+  .fs-icon { width: 44px; height: 44px; background: rgba(91,79,245,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+  .fs-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .fs-name { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+  .fs-desc { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.45); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { padding: 100px 52px; max-width: 1200px; margin: 0 auto; }
+  .t-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .t-title { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 48px; }
+  .t-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .t-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: border-color 0.3s, transform 0.3s; }
+  .t-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .t-stars { font-size: 13px; color: #f59e0b; margin-bottom: 14px; }
+  .t-text { font-size: 14px; line-height: 1.75; color: var(--muted); margin-bottom: 24px; font-style: italic; }
+  .t-by { display: flex; gap: 12px; align-items: center; }
+  .t-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
+  .t-name { font-size: 13px; font-weight: 700; }
+  .t-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── FAQ ── */
+  .faq { padding: 80px 52px; border-top: 1px solid var(--border); }
+  .faq-inner { max-width: 760px; margin: 0 auto; }
+  .faq-title { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 40px; }
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-q { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; cursor: pointer; font-size: 15px; font-weight: 600; gap: 20px; }
+  .faq-icon { flex-shrink: 0; width: 24px; height: 24px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.25s; }
+  .faq-icon svg { width: 12px; height: 12px; stroke: var(--accent); fill: none; stroke-width: 2.5; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-a { font-size: 14px; line-height: 1.75; color: var(--muted); max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s; }
+  .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
+
+  /* ── CTA ── */
+  .cta { padding: 100px 52px; text-align: center; background: linear-gradient(135deg, rgba(91,79,245,0.06), rgba(91,79,245,0.01)); border-top: 1px solid var(--border); }
+  .cta h2 { font-size: clamp(40px, 6vw, 68px); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; }
+  .cta h2 em { color: var(--accent); font-style: normal; }
+  .cta p { font-size: 17px; color: var(--muted); max-width: 440px; margin: 0 auto 40px; line-height: 1.65; }
+  .cta-btns { display: flex; gap: 14px; justify-content: center; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--dark); color: #fff; padding: 40px 52px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-size: 16px; font-weight: 800; letter-spacing: -0.03em; text-decoration: none; color: #fff; }
+  .footer-logo em { color: var(--accent); font-style: normal; }
+  .footer-nav { display: flex; gap: 28px; list-style: none; }
+  .footer-nav a { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+  .footer-nav a:hover { color: #fff; }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">CANVAS<em>.</em></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#enterprise">Enterprise</a></li>
+    <li><a href="#">Docs</a></li>
+  </ul>
+  <div class="nav-group">
+    <a href="#" class="nav-login">Sign in</a>
+    <a href="#" class="nav-cta">Start Free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="pricing">
+  <div class="hero-chip">💡 Annual billing saves up to 40%</div>
+  <h1 class="hero-title">Simple pricing,<br/>serious power</h1>
+  <p class="hero-sub">Start free. Scale as you grow. Every plan includes unlimited projects, real-time collaboration, and world-class support.</p>
+  <div class="billing-toggle">
+    <button class="toggle-btn active" id="monthlyBtn" onclick="setBilling('monthly')">Monthly</button>
+    <button class="toggle-btn" id="annualBtn" onclick="setBilling('annual')">
+      Annual <span class="toggle-save">Save 40%</span>
+    </button>
+  </div>
+</section>
+
+<!-- PRICING CARDS -->
+<div class="pricing-cards">
+  <div class="pricing-card">
+    <p class="plan-name">Free</p>
+    <p class="plan-price"><sup>$</sup>0<span class="period">/mo</span></p>
+    <p class="plan-desc">Perfect for individuals and small teams just getting started with project management.</p>
+    <a href="#" class="plan-cta outline">Get Started Free</a>
+    <ul class="plan-highlights">
+      <li>Up to 3 projects</li>
+      <li>5 team members</li>
+      <li>Basic task management</li>
+      <li>100MB file storage</li>
+      <li>Community support</li>
+    </ul>
+  </div>
+  <div class="pricing-card featured">
+    <div class="popular-badge">Most Popular</div>
+    <p class="plan-name">Growth</p>
+    <p class="plan-price" id="growthPrice"><sup>$</sup>29<span class="period">/mo per seat</span></p>
+    <p class="plan-desc">For growing teams that need automation, analytics, and deeper integrations.</p>
+    <a href="#" class="plan-cta solid">Start Growth Trial</a>
+    <ul class="plan-highlights">
+      <li>Unlimited projects</li>
+      <li>Unlimited members</li>
+      <li>Advanced automation</li>
+      <li>25GB file storage</li>
+      <li>Priority email support</li>
+      <li>Analytics dashboard</li>
+    </ul>
+  </div>
+  <div class="pricing-card">
+    <p class="plan-name">Enterprise</p>
+    <p class="plan-price">Custom</p>
+    <p class="plan-desc">For organizations that need advanced security, compliance, and dedicated support.</p>
+    <a href="#" class="plan-cta outline">Contact Sales</a>
+    <ul class="plan-highlights">
+      <li>Everything in Growth</li>
+      <li>SSO / SAML 2.0</li>
+      <li>Advanced security</li>
+      <li>Unlimited storage</li>
+      <li>Dedicated CSM</li>
+      <li>SLA guarantee</li>
+    </ul>
+  </div>
+</div>
+
+<!-- COMPARISON TABLE -->
+<section class="comparison">
+  <div class="comparison-inner">
+    <h2 class="comparison-title">Full feature comparison</h2>
+    <p class="comparison-sub">Click any section header to expand or collapse that group.</p>
+
+    <div class="table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="th-free">Free</th>
+            <th class="th-growth">Growth</th>
+            <th class="th-enterprise">Enterprise</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <!-- Projects & Workspace -->
+          <tr class="section-row" data-section="projects">
+            <td colspan="4"><span class="section-toggle">▼</span> Projects &amp; Workspace</td>
+          </tr>
+          <tr class="feature-row" data-section="projects"><td>Active projects</td><td><span class="val">3</span></td><td><span class="val">Unlimited</span></td><td><span class="val">Unlimited</span></td></tr>
+          <tr class="feature-row" data-section="projects"><td>Team members</td><td><span class="val">5</span></td><td><span class="val">Unlimited</span></td><td><span class="val">Unlimited</span></td></tr>
+          <tr class="feature-row" data-section="projects"><td>Workspaces</td><td><span class="val">1</span></td><td><span class="val">5</span></td><td><span class="val">Unlimited</span></td></tr>
+          <tr class="feature-row" data-section="projects"><td>Guest access</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="projects"><td>Project templates</td><td><span class="val">10 templates</span></td><td><span class="val">100+ templates</span></td><td><span class="val">Custom + library</span></td></tr>
+
+          <!-- Task Management -->
+          <tr class="section-row" data-section="tasks">
+            <td colspan="4"><span class="section-toggle">▼</span> Task Management</td>
+          </tr>
+          <tr class="feature-row" data-section="tasks"><td>Task creation &amp; assignment</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="tasks"><td>Subtasks &amp; dependencies</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="tasks"><td>Custom fields</td><td><span class="cross">✕</span></td><td><span class="val">Up to 20</span></td><td><span class="val">Unlimited</span></td></tr>
+          <tr class="feature-row" data-section="tasks"><td>Recurring tasks</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="tasks"><td>Time tracking</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="tasks"><td>Milestones</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+
+          <!-- Views -->
+          <tr class="section-row" data-section="views">
+            <td colspan="4"><span class="section-toggle">▼</span> Views &amp; Layouts</td>
+          </tr>
+          <tr class="feature-row" data-section="views"><td>List view</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="views"><td>Board (Kanban) view</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="views"><td>Gantt timeline</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="views"><td>Calendar view</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="views"><td>Table / spreadsheet view</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="views"><td>Workload view</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+
+          <!-- Automation -->
+          <tr class="section-row" data-section="automation">
+            <td colspan="4"><span class="section-toggle">▼</span> Automation &amp; Integrations</td>
+          </tr>
+          <tr class="feature-row" data-section="automation"><td>Automation rules</td><td><span class="cross">✕</span></td><td><span class="val">50/month</span></td><td><span class="val">Unlimited</span></td></tr>
+          <tr class="feature-row" data-section="automation"><td>Native integrations</td><td><span class="val">5 apps</span></td><td><span class="val">40+ apps</span></td><td><span class="val">100+ apps</span></td></tr>
+          <tr class="feature-row" data-section="automation"><td>Zapier / Make</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="automation"><td>Webhooks</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="automation"><td>API access</td><td><span class="cross">✕</span></td><td><span class="val">Read + Write</span></td><td><span class="val">Full + admin</span></td></tr>
+          <tr class="feature-row" data-section="automation"><td>Custom integrations (developer)</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+
+          <!-- Analytics -->
+          <tr class="section-row" data-section="analytics">
+            <td colspan="4"><span class="section-toggle">▼</span> Reporting &amp; Analytics</td>
+          </tr>
+          <tr class="feature-row" data-section="analytics"><td>Basic dashboards</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="analytics"><td>Advanced reporting</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="analytics"><td>Custom report builder</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="analytics"><td>Export to CSV/PDF</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="analytics"><td>Velocity &amp; capacity metrics</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+
+          <!-- Security -->
+          <tr class="section-row" data-section="security">
+            <td colspan="4"><span class="section-toggle">▼</span> Security &amp; Compliance</td>
+          </tr>
+          <tr class="feature-row" data-section="security"><td>SSO (Google, GitHub)</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="security"><td>SAML 2.0 / SCIM</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="security"><td>2FA enforcement</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="security"><td>Audit logs</td><td><span class="cross">✕</span></td><td><span class="val">30 days</span></td><td><span class="val">Unlimited</span></td></tr>
+          <tr class="feature-row" data-section="security"><td>Data residency (EU / US)</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="security"><td>SOC 2 Type II</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+
+          <!-- Support -->
+          <tr class="section-row" data-section="support">
+            <td colspan="4"><span class="section-toggle">▼</span> Support</td>
+          </tr>
+          <tr class="feature-row" data-section="support"><td>Help center access</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="support"><td>Email support</td><td><span class="val-muted">48h response</span></td><td><span class="val">Priority 8h</span></td><td><span class="val">Priority 2h</span></td></tr>
+          <tr class="feature-row" data-section="support"><td>Live chat</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="support"><td>Dedicated CSM</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="support"><td>SLA guarantee</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
+          <tr class="feature-row" data-section="support"><td>Onboarding &amp; training</td><td><span class="cross">✕</span></td><td><span class="val">Self-serve</span></td><td><span class="val">White-glove</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="fs-inner">
+    <p class="fs-label">Platform Power</p>
+    <h2 class="fs-title">Built for the teams<br/>that build everything</h2>
+    <div class="fs-grid">
+      <div class="fs-card">
+        <div class="fs-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+        <h3 class="fs-name">Kanban & Gantt</h3>
+        <p class="fs-desc">Visualize work in the view that fits your team — board, list, timeline, or calendar. Switch instantly with zero data loss.</p>
+      </div>
+      <div class="fs-card">
+        <div class="fs-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3 class="fs-name">Automation Engine</h3>
+        <p class="fs-desc">50+ trigger-action combinations. When status changes, assign automatically. When due date passes, notify the right person.</p>
+      </div>
+      <div class="fs-card">
+        <div class="fs-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+        <h3 class="fs-name">Analytics & Reports</h3>
+        <p class="fs-desc">Velocity trends, capacity planning, and custom dashboards. Know before your stakeholders ask.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <p class="t-label">Social Proof</p>
+  <h2 class="t-title">Teams love Canvas</h2>
+  <div class="t-grid">
+    <div class="t-card">
+      <p class="t-stars">★★★★★</p>
+      <p class="t-text">"Switched from Jira 8 months ago. Our sprint planning time went from 3 hours to 45 minutes. The Gantt view alone is worth the price."</p>
+      <div class="t-by">
+        <div class="t-av" style="background:#5b4ff5;">PL</div>
+        <div><p class="t-name">Priya Larson</p><p class="t-role">Eng Manager, Vertex Systems</p></div>
+      </div>
+    </div>
+    <div class="t-card">
+      <p class="t-stars">★★★★★</p>
+      <p class="t-text">"The Growth plan pricing is genuinely fair for what you get. We've tried everything and Canvas has the best feature-to-cost ratio in the market."</p>
+      <div class="t-by">
+        <div class="t-av" style="background:#16a34a;">BW</div>
+        <div><p class="t-name">Ben Walsh</p><p class="t-role">COO, Nova Collective</p></div>
+      </div>
+    </div>
+    <div class="t-card">
+      <p class="t-stars">★★★★★</p>
+      <p class="t-text">"Enterprise support is the real deal. Our CSM set up a custom workflow for our agency billing process in the first week. Exceptional."</p>
+      <div class="t-by">
+        <div class="t-av" style="background:#dc2626;">SR</div>
+        <div><p class="t-name">Sofia Rodriguez</p><p class="t-role">Operations Lead, Apex Agency</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="faq-inner">
+    <h2 class="faq-title">Frequently asked questions</h2>
+    <div class="faq-item">
+      <div class="faq-q">Can I switch plans at any time?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      <p class="faq-a">Yes — upgrade or downgrade at any time. Upgrades take effect immediately. Downgrades apply at the end of your billing cycle. No lock-in, no penalties.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is there a free trial for paid plans?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      <p class="faq-a">Every paid plan includes a 14-day free trial with no credit card required. You get full access to all features in your chosen plan during the trial period.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How does per-seat pricing work?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      <p class="faq-a">A seat is any user who can actively create, edit, or manage projects. Guests (view-only) don't count toward your seat count. You only pay for active seats.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What happens to my data if I downgrade?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      <p class="faq-a">Your data is always yours. If you downgrade, features beyond your plan's limits are locked (not deleted). Upgrade again to regain full access instantly.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you offer nonprofit or startup discounts?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+      <p class="faq-a">Yes! Registered nonprofits get 50% off any plan. Startups in our accelerator program may qualify for extended free access. Contact us to learn more.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Start free.<br/><em>Scale with confidence.</em></h2>
+  <p>Join 25,000+ teams already using Canvas to ship better work, faster.</p>
+  <div class="cta-btns">
+    <a href="#" class="nav-cta" style="font-size:15px;padding:15px 36px;border-radius:10px;text-decoration:none;">Start Free Trial →</a>
+    <a href="#" class="nav-login" style="font-size:15px;padding:15px 36px;border-radius:10px;text-decoration:none;">Talk to Sales</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">CANVAS<em>.</em></a>
+    <ul class="footer-nav">
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Enterprise</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Status</a></li>
+    </ul>
+    <p class="footer-copy">© 2024 Canvas Inc.</p>
+  </div>
+</footer>
+
+<script>
+  // Billing toggle
+  function setBilling(mode) {
+    document.getElementById('monthlyBtn').classList.toggle('active', mode === 'monthly');
+    document.getElementById('annualBtn').classList.toggle('active', mode === 'annual');
+    const priceEl = document.getElementById('growthPrice');
+    if (mode === 'annual') {
+      priceEl.innerHTML = '<sup>$</sup>17<span class="period">/mo per seat</span>';
+    } else {
+      priceEl.innerHTML = '<sup>$</sup>29<span class="period">/mo per seat</span>';
+    }
+  }
+
+  // Collapsible table sections
+  document.querySelectorAll('.section-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const section = row.dataset.section;
+      const isCollapsed = row.classList.toggle('collapsed');
+      document.querySelectorAll(`.feature-row[data-section="${section}"]`).forEach(r => {
+        r.classList.toggle('hidden', isCollapsed);
+      });
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.pricing-card, .t-card, .fs-card').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = `opacity 0.6s ease ${i * 0.08}s, transform 0.6s ease ${i * 0.08}s`;
+    io.observe(el);
+  });
+</script>
+</body>
+</html>

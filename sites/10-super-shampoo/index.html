@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ŌURA HAIR — Clinically Proven Restoration</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sage: #E2E8E4;
+  --sage-mid: #C8D4CC;
+  --sage-dark: #7A9A80;
+  --sage-deep: #4A6B52;
+  --beige: #F5F5F0;
+  --cream: #FAFAF7;
+  --charcoal: #1C1C1C;
+  --charcoal-mid: #2C2C2C;
+  --mid: #6A6A6A;
+  --light: #B0B0A8;
+  --white: #FFFFFF;
+  --border: rgba(28,28,28,0.1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--charcoal);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* ── PROMO BAR ── */
+.promo-bar {
+  background: var(--charcoal);
+  color: var(--cream);
+  text-align: center;
+  padding: 11px 20px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.promo-bar .sep { color: var(--sage-mid); margin: 0 8px; }
+
+.promo-bar a {
+  color: var(--sage-mid);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.promo-bar a:hover { color: var(--cream); }
+
+.scarcity-pill {
+  background: var(--sage-dark);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  background: rgba(250,250,247,0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+}
+
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--charcoal);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--mid);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--charcoal); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-cart {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+  text-decoration: none;
+}
+
+.btn-nav-shop {
+  background: var(--charcoal);
+  color: var(--cream);
+  padding: 11px 28px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btn-nav-shop:hover { background: var(--charcoal-mid); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 90vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-left {
+  background: var(--sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-product-visual {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 2/3;
+  background: linear-gradient(160deg, #d4e2d8 0%, #a8c2b0 50%, #7a9a80 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-label {
+  font-family: 'DM Serif Display', serif;
+  font-size: 14px;
+  color: white;
+  letter-spacing: 0.1em;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.hero-badges {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-badge {
+  background: white;
+  color: var(--charcoal);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-right {
+  padding: 80px 60px 80px 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--cream);
+}
+
+.hero-brand-tag {
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-brand-tag::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--sage-dark);
+  display: block;
+}
+
+.hero-h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(40px, 4.5vw, 64px);
+  line-height: 1.1;
+  color: var(--charcoal);
+  margin-bottom: 16px;
+}
+
+.hero-h1 em { font-style: italic; color: var(--sage-dark); }
+
+.hero-subtitle {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin-bottom: 24px;
+}
+
+.hero-desc {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--mid);
+  font-weight: 300;
+  max-width: 420px;
+  margin-bottom: 36px;
+}
+
+.hero-rating {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.stars {
+  color: var(--sage-dark);
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.rating-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mid);
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.price-main {
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px;
+  color: var(--charcoal);
+}
+
+.price-sub {
+  font-size: 13px;
+  color: var(--light);
+  text-decoration: line-through;
+}
+
+.price-save {
+  background: var(--sage);
+  color: var(--sage-deep);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+}
+
+.variant-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  align-items: center;
+}
+
+.variant-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--light);
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+.variant-btn {
+  padding: 8px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--mid);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.variant-btn.active {
+  border-color: var(--charcoal);
+  color: var(--charcoal);
+  background: white;
+}
+
+.variant-btn:hover { border-color: var(--charcoal); }
+
+.add-to-cart {
+  width: 100%;
+  background: var(--charcoal);
+  color: var(--cream);
+  border: none;
+  padding: 20px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 12px;
+}
+
+.add-to-cart:hover { background: var(--charcoal-mid); }
+
+.subscribe-btn {
+  width: 100%;
+  background: var(--sage);
+  color: var(--charcoal);
+  border: none;
+  padding: 18px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 20px;
+}
+
+.subscribe-btn:hover { background: var(--sage-mid); }
+
+.trust-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--light);
+  letter-spacing: 0.06em;
+}
+
+.trust-item .icon { font-size: 14px; }
+
+/* ── INGREDIENTS STRIP ── */
+.ingredients-strip {
+  background: var(--sage);
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--sage-mid);
+}
+
+.ing-label {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ing-items {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.ing-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.ing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--sage-dark);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ing-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+  letter-spacing: 0.04em;
+}
+
+/* ── TRUST BADGES ── */
+.trust-badges {
+  padding: 52px 48px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.trust-badge {
+  background: var(--cream);
+  padding: 36px 24px;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.trust-badge:hover { background: var(--sage); }
+
+.tb-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+
+.tb-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  margin-bottom: 6px;
+}
+
+.tb-desc {
+  font-size: 11px;
+  color: var(--light);
+  line-height: 1.5;
+}
+
+/* ── HOW IT WORKS ── */
+.how-it-works {
+  padding: 100px 48px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hiw-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 72px;
+}
+
+.section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--sage-dark);
+  display: block;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(40px, 4.5vw, 64px);
+  line-height: 1;
+  color: var(--charcoal);
+}
+
+.section-title em { font-style: italic; color: var(--sage-dark); }
+
+.hiw-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.hiw-step {
+  background: var(--cream);
+  padding: 48px 36px;
+  transition: background 0.3s;
+  cursor: default;
+}
+
+.hiw-step:hover { background: var(--sage); }
+
+.hiw-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 48px;
+  color: var(--sage-mid);
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.hiw-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--charcoal);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hiw-desc {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--mid);
+  font-weight: 300;
+}
+
+/* ── COMPARISON TABLE ── */
+.comparison {
+  padding: 0 48px 100px;
+}
+
+.comparison-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 4vw, 56px);
+  text-align: center;
+  margin-bottom: 48px;
+  color: var(--charcoal);
+}
+
+.comparison-title em { font-style: italic; color: var(--sage-dark); }
+
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+}
+
+.comp-table th,
+.comp-table td {
+  padding: 20px 24px;
+  text-align: center;
+  border: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.comp-table th {
+  background: var(--charcoal);
+  color: var(--cream);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.comp-table th.oura-col {
+  background: var(--sage-dark);
+  color: white;
+}
+
+.comp-table th:first-child {
+  background: var(--beige);
+  color: var(--charcoal);
+}
+
+.comp-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+  font-size: 13px;
+  background: var(--beige);
+  color: var(--charcoal);
+}
+
+.comp-table tr:nth-child(even) td { background: var(--cream); }
+.comp-table tr:nth-child(even) td:first-child { background: var(--beige); }
+
+.comp-table td.oura-col { background: rgba(122,154,128,0.08); font-weight: 600; }
+
+.check { color: var(--sage-dark); font-size: 16px; }
+.cross { color: var(--light); font-size: 16px; }
+.partial { color: var(--mid); font-size: 13px; }
+
+/* ── TESTIMONIALS ── */
+.testimonials {
+  padding: 100px 48px;
+  background: var(--beige);
+  border-top: 1px solid var(--border);
+}
+
+.t-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 60px;
+}
+
+.t-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 1;
+  color: var(--charcoal);
+}
+
+.t-title em { font-style: italic; color: var(--sage-dark); }
+
+.t-summary {
+  text-align: right;
+}
+
+.t-summary-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px;
+  color: var(--sage-dark);
+}
+
+.t-summary-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin-top: 4px;
+}
+
+.t-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.t-card {
+  background: white;
+  padding: 40px 32px;
+  border: 1px solid var(--border);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.t-card:hover { border-color: var(--sage-dark); box-shadow: 0 8px 32px rgba(74,107,82,0.1); }
+
+.t-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.t-stars {
+  color: var(--sage-dark);
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.t-verified {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.t-quote {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--charcoal);
+  margin-bottom: 28px;
+}
+
+.t-result {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  background: var(--sage);
+  padding: 8px 14px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.t-author-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.t-avatar {
+  width: 38px;
+  height: 38px;
+  background: var(--sage);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.t-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+.t-meta {
+  font-size: 11px;
+  color: var(--light);
+  margin-top: 2px;
+}
+
+/* ── SCIENCE SECTION ── */
+.science {
+  padding: 100px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+
+.science-left {}
+
+.science-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(40px, 4.5vw, 64px);
+  line-height: 1.05;
+  color: var(--charcoal);
+  margin-bottom: 24px;
+}
+
+.science-title em { font-style: italic; color: var(--sage-dark); }
+
+.science-desc {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--mid);
+  font-weight: 300;
+  max-width: 480px;
+  margin-bottom: 40px;
+}
+
+.science-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.sci-stat {
+  background: var(--cream);
+  padding: 32px 28px;
+  transition: background 0.3s;
+}
+
+.sci-stat:hover { background: var(--sage); }
+
+.sci-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 40px;
+  color: var(--sage-dark);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.sci-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mid);
+  line-height: 1.4;
+}
+
+.science-right {
+  background: var(--sage);
+  padding: 60px 48px;
+}
+
+.study-item {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--sage-mid);
+}
+
+.study-item:first-child { padding-top: 0; }
+.study-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+.study-tag {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.study-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.study-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 120px 48px;
+  background: var(--charcoal);
+  color: var(--cream);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+
+.cta-left {}
+
+.cta-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sage-mid);
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cta-eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--sage-mid);
+  display: block;
+}
+
+.cta-h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(48px, 5.5vw, 80px);
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+.cta-h2 em { font-style: italic; color: var(--sage-dark); }
+
+.cta-desc {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(250,250,247,0.6);
+  font-weight: 300;
+  max-width: 440px;
+}
+
+.cta-right {}
+
+.cta-product-card {
+  background: var(--charcoal-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 44px 40px;
+}
+
+.cpc-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: linear-gradient(160deg, #3a5a3e, #7a9a80, #4a6b52);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cpc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 24px;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+
+.cpc-sub {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(250,250,247,0.4);
+  margin-bottom: 24px;
+}
+
+.cpc-price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.cpc-price {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  color: var(--cream);
+}
+
+.cpc-original {
+  font-size: 18px;
+  color: rgba(250,250,247,0.3);
+  text-decoration: line-through;
+}
+
+.cpc-save {
+  background: var(--sage-dark);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+}
+
+.btn-cart-large {
+  width: 100%;
+  background: var(--sage);
+  color: var(--charcoal);
+  border: none;
+  padding: 20px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 12px;
+}
+
+.btn-cart-large:hover { background: var(--sage-mid); }
+
+.cpc-guarantee {
+  font-size: 12px;
+  color: rgba(250,250,247,0.4);
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+
+/* ── MOBILE STICKY CTA ── */
+.sticky-mobile-cta {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 12px 20px;
+  z-index: 1000;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .sticky-mobile-cta { display: flex; }
+  body { padding-bottom: 72px; }
+}
+
+.smc-price {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+}
+
+.smc-btn {
+  flex: 1;
+  background: var(--charcoal);
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--charcoal);
+  color: var(--cream);
+  padding: 72px 48px 40px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: var(--cream);
+  margin-bottom: 12px;
+}
+
+.footer-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(250,250,247,0.4);
+  font-weight: 300;
+  max-width: 260px;
+  margin-bottom: 24px;
+}
+
+.footer-certifications {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cert-badge {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(250,250,247,0.4);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 5px 10px;
+  transition: border-color 0.2s;
+}
+
+.cert-badge:hover { border-color: var(--sage-dark); }
+
+.footer-col-title {
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--sage-dark);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 12px; }
+.footer-col ul li a {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(250,250,247,0.4);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-col ul li a:hover { color: var(--cream); }
+
+.footer-bottom {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: rgba(250,250,247,0.3);
+}
+
+.footer-legal a {
+  font-size: 11px;
+  color: rgba(250,250,247,0.3);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  margin-left: 20px;
+  transition: color 0.3s;
+}
+
+.footer-legal a:hover { color: var(--cream); }
+</style>
+</head>
+<body>
+
+<!-- PROMO BAR -->
+<div class="promo-bar">
+  <span class="scarcity-pill">Only 47 Left</span>
+  <span>Free shipping on orders over $75 + Free 30-day returns</span>
+  <span class="sep">|</span>
+  <a href="#">Subscribe & save 20% →</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ŌURA HAIR</a>
+  <ul class="nav-links">
+    <li><a href="#">Our Science</a></li>
+    <li><a href="#">Products</a></li>
+    <li><a href="#">Routines</a></li>
+    <li><a href="#">Reviews</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="btn-cart">Cart (0)</a>
+    <a href="#" class="btn-nav-shop">Shop Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-product-visual">
+      <div class="product-label">
+        ŌURA HAIR<br>
+        Restoration Serum<br>
+        30ml
+      </div>
+    </div>
+    <div class="hero-badges">
+      <div class="hero-badge">✓ Clinically Tested</div>
+      <div class="hero-badge">✓ Dermatologist Approved</div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-brand-tag">Clinical Hair Restoration</div>
+    <h1 class="hero-h1">
+      Your hair's<br>
+      <em>transformation</em><br>
+      begins here
+    </h1>
+    <div class="hero-subtitle">Ōura Restoration Serum · 30ml</div>
+    <p class="hero-desc">Clinically proven to reduce hair loss by up to 67% in 90 days. Our proprietary TriActiv Complex works at the follicle level to restore, strengthen, and accelerate growth.</p>
+    <div class="hero-rating">
+      <span class="stars">★★★★★</span>
+      <span class="rating-text">4.9 / 5.0 · 2,847 reviews</span>
+    </div>
+    <div class="price-row">
+      <span class="price-main">$89</span>
+      <span class="price-sub">$118</span>
+      <span class="price-save">Save 25%</span>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Size:</span>
+      <button class="variant-btn active">30ml</button>
+      <button class="variant-btn">60ml</button>
+      <button class="variant-btn">90ml Bundle</button>
+    </div>
+    <button class="add-to-cart">Add to Cart — $89</button>
+    <button class="subscribe-btn">Subscribe & Save 20% — $71/mo</button>
+    <div class="trust-row">
+      <div class="trust-item"><span class="icon">🔒</span>Secure Checkout</div>
+      <div class="trust-item"><span class="icon">↩</span>30-Day Returns</div>
+      <div class="trust-item"><span class="icon">🚚</span>Free Shipping</div>
+    </div>
+  </div>
+</section>
+
+<!-- INGREDIENTS STRIP -->
+<div class="ingredients-strip">
+  <span class="ing-label">Key Actives</span>
+  <div class="ing-items">
+    <div class="ing-item"><div class="ing-dot"></div><span class="ing-text">Redensyl™ 3%</span></div>
+    <div class="ing-item"><div class="ing-dot"></div><span class="ing-text">Procapil® 3%</span></div>
+    <div class="ing-item"><div class="ing-dot"></div><span class="ing-text">Anagain™ 4%</span></div>
+    <div class="ing-item"><div class="ing-dot"></div><span class="ing-text">Baicapil™ 3%</span></div>
+    <div class="ing-item"><div class="ing-dot"></div><span class="ing-text">Biotin Complex</span></div>
+    <div class="ing-item"><div class="ing-dot"></div><span class="ing-text">Caffeine 1%</span></div>
+    <div class="ing-item"><div class="ing-dot"></div><span class="ing-text">Niacinamide 5%</span></div>
+  </div>
+</div>
+
+<!-- TRUST BADGES -->
+<div class="trust-badges">
+  <div class="trust-badge">
+    <span class="tb-icon">🧪</span>
+    <div class="tb-title">Clinically Tested</div>
+    <p class="tb-desc">3 independent clinical studies</p>
+  </div>
+  <div class="trust-badge">
+    <span class="tb-icon">👨‍⚕️</span>
+    <div class="tb-title">Derm Approved</div>
+    <p class="tb-desc">Endorsed by 200+ dermatologists</p>
+  </div>
+  <div class="trust-badge">
+    <span class="tb-icon">🌿</span>
+    <div class="tb-title">Clean Formula</div>
+    <p class="tb-desc">No sulfates, parabens, or silicones</p>
+  </div>
+  <div class="trust-badge">
+    <span class="tb-icon">🐇</span>
+    <div class="tb-title">Cruelty-Free</div>
+    <p class="tb-desc">Leaping Bunny certified</p>
+  </div>
+  <div class="trust-badge">
+    <span class="tb-icon">♻️</span>
+    <div class="tb-title">Sustainable</div>
+    <p class="tb-desc">Recyclable & refillable packaging</p>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+  <div class="hiw-header">
+    <div>
+      <div class="section-eyebrow">The Science</div>
+      <h2 class="section-title">How it <em>works</em></h2>
+    </div>
+  </div>
+  <div class="hiw-grid">
+    <div class="hiw-step">
+      <div class="hiw-num">01</div>
+      <div class="hiw-title">Activate Dormant Follicles</div>
+      <p class="hiw-desc">Redensyl and Procapil target stem cells in the hair follicle, reactivating follicles that have entered a prolonged resting phase and increasing hair cycle activity.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">02</div>
+      <div class="hiw-title">Strengthen at the Root</div>
+      <p class="hiw-desc">Our Biotin Complex and Niacinamide formulation penetrates to the dermal papilla, fortifying the anchor of each strand and reducing breakage from root to tip.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">03</div>
+      <div class="hiw-title">Accelerate Growth</div>
+      <p class="hiw-desc">Anagain extends the anagen (growth) phase of the hair cycle by up to 40% — meaning more days of active growth and fewer days of shedding per cycle.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">04</div>
+      <div class="hiw-title">Visibly Transform</div>
+      <p class="hiw-desc">Clinically measurable results within 28 days. Significant visual transformation by 90 days. Full restoration cycle of 6–12 months for lasting density.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="comparison">
+  <h2 class="comparison-title">How we compare to the <em>rest</em></h2>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th style="text-align:left;">Feature</th>
+        <th class="oura-col">ŌURA HAIR</th>
+        <th>Generic Serum</th>
+        <th>Minoxidil</th>
+        <th>Supplements</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Clinically Tested Actives</td>
+        <td class="oura-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="partial">Partial</span></td>
+      </tr>
+      <tr>
+        <td>Results within 28 days</td>
+        <td class="oura-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="partial">Partial</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td>No harsh chemicals</td>
+        <td class="oura-col"><span class="check">✓</span></td>
+        <td><span class="partial">Varies</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+      <tr>
+        <td>Scalp-to-strand formula</td>
+        <td class="oura-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+      </tr>
+      <tr>
+        <td>Dermatologist Approved</td>
+        <td class="oura-col"><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="partial">Varies</span></td>
+      </tr>
+      <tr>
+        <td>No shedding phase</td>
+        <td class="oura-col"><span class="check">✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span></td>
+      </tr>
+      <tr>
+        <td>30-day money back</td>
+        <td class="oura-col"><span class="check">✓</span></td>
+        <td><span class="partial">Varies</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="partial">Varies</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="t-header">
+    <div>
+      <div class="section-eyebrow">Real Results</div>
+      <h2 class="t-title">2,847 <em>verified</em><br>reviews</h2>
+    </div>
+    <div class="t-summary">
+      <div class="t-summary-num">4.9★</div>
+      <div class="t-summary-label">Average Rating</div>
+    </div>
+  </div>
+  <div class="t-grid">
+    <div class="t-card">
+      <div class="t-card-header">
+        <div class="t-stars">★★★★★</div>
+        <div class="t-verified">✓ Verified Buyer</div>
+      </div>
+      <p class="t-quote">"I noticed new growth within 3 weeks. My stylist asked me what I was using because she could see new baby hairs all around my hairline. I was stunned — nothing has worked like this."</p>
+      <div class="t-result">+67% density at 90 days</div>
+      <div class="t-author-row">
+        <div class="t-avatar">🌿</div>
+        <div>
+          <div class="t-name">Priya S., 34</div>
+          <div class="t-meta">3-month customer · London, UK</div>
+        </div>
+      </div>
+    </div>
+    <div class="t-card">
+      <div class="t-card-header">
+        <div class="t-stars">★★★★★</div>
+        <div class="t-verified">✓ Verified Buyer</div>
+      </div>
+      <p class="t-quote">"After postpartum hair loss I tried everything. ŌURA is the only thing that actually made a measurable difference. By month two my hair was thicker than it's ever been."</p>
+      <div class="t-result">Visible regrowth at 6 weeks</div>
+      <div class="t-author-row">
+        <div class="t-avatar">✨</div>
+        <div>
+          <div class="t-name">Amara K., 29</div>
+          <div class="t-meta">4-month subscriber · New York, USA</div>
+        </div>
+      </div>
+    </div>
+    <div class="t-card">
+      <div class="t-card-header">
+        <div class="t-stars">★★★★★</div>
+        <div class="t-verified">✓ Verified Buyer</div>
+      </div>
+      <p class="t-quote">"My dermatologist literally pointed to my crown and said 'something is working'. I hadn't told her I started ŌURA. That was enough data for me to subscribe for life."</p>
+      <div class="t-result">Dermatologist confirmed</div>
+      <div class="t-author-row">
+        <div class="t-avatar">🌱</div>
+        <div>
+          <div class="t-name">Claire M., 42</div>
+          <div class="t-meta">6-month subscriber · Paris, France</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCIENCE SECTION -->
+<section class="science">
+  <div class="science-left">
+    <div class="section-eyebrow">Clinical Evidence</div>
+    <h2 class="science-title">Built on<br><em>real science</em></h2>
+    <p class="science-desc">Every ingredient in ŌURA is backed by peer-reviewed research and independent clinical trials. We don't guess — we prove. Our TriActiv Complex has been tested on 1,200+ participants across three independent studies.</p>
+    <div class="science-stats">
+      <div class="sci-stat">
+        <div class="sci-num">67%</div>
+        <div class="sci-label">Reduction in hair loss at 90 days</div>
+      </div>
+      <div class="sci-stat">
+        <div class="sci-num">89%</div>
+        <div class="sci-label">Participants reported visible improvement</div>
+      </div>
+      <div class="sci-stat">
+        <div class="sci-num">40%</div>
+        <div class="sci-label">Increase in anagen hair count</div>
+      </div>
+      <div class="sci-stat">
+        <div class="sci-num">28d</div>
+        <div class="sci-label">Clinically measurable results from day 28</div>
+      </div>
+    </div>
+  </div>
+  <div class="science-right">
+    <div class="study-item">
+      <div class="study-tag">Study 01 — 2023</div>
+      <div class="study-title">TriActiv Complex reduces hair loss by 67% vs. placebo</div>
+      <p class="study-desc">Double-blind, placebo-controlled trial with 420 participants over 90 days. Primary endpoint: trichoscopic hair count change.</p>
+    </div>
+    <div class="study-item">
+      <div class="study-tag">Study 02 — 2022</div>
+      <div class="study-title">Redensyl + Procapil synergy extends anagen phase by 40%</div>
+      <p class="study-desc">Independent clinical evaluation demonstrating the mechanism and efficacy of our primary actives on the hair growth cycle.</p>
+    </div>
+    <div class="study-item">
+      <div class="study-tag">Study 03 — 2024</div>
+      <div class="study-title">89% of participants see visible improvement within 60 days</div>
+      <p class="study-desc">Real-world efficacy study across diverse hair types, ethnicities, and causes of hair loss including genetic, hormonal, and stress-related alopecia.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-left">
+    <div class="cta-eyebrow">Start your transformation</div>
+    <h2 class="cta-h2">Your best hair<br>is <em>ahead</em></h2>
+    <p class="cta-desc">Join 80,000+ customers who've transformed their hair with ŌURA. Clinically proven. Dermatologist approved. 30-day money-back guarantee.</p>
+  </div>
+  <div class="cta-right">
+    <div class="cta-product-card">
+      <div class="cpc-image">
+        <div style="font-family:'DM Serif Display',serif; font-size:16px; color:white; text-align:center; opacity:0.8;">ŌURA HAIR<br>Restoration Serum</div>
+      </div>
+      <div class="cpc-title">Restoration Serum</div>
+      <div class="cpc-sub">30ml · 90-day supply</div>
+      <div class="cpc-price-row">
+        <span class="cpc-price">$89</span>
+        <span class="cpc-original">$118</span>
+        <span class="cpc-save">Save 25%</span>
+      </div>
+      <button class="btn-cart-large">Add to Cart →</button>
+      <p class="cpc-guarantee">30-day money-back guarantee · Free shipping</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">ŌURA HAIR</div>
+      <p class="footer-desc">Clinically proven hair restoration for everyone. Backed by science. Loved by 80,000+ customers worldwide.</p>
+      <div class="footer-certifications">
+        <span class="cert-badge">Cruelty-Free</span>
+        <span class="cert-badge">Vegan</span>
+        <span class="cert-badge">Clean Formula</span>
+        <span class="cert-badge">Dermatologist Tested</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Products</div>
+      <ul>
+        <li><a href="#">Restoration Serum</a></li>
+        <li><a href="#">Scalp Shampoo</a></li>
+        <li><a href="#">Growth Conditioner</a></li>
+        <li><a href="#">Complete System</a></li>
+        <li><a href="#">Supplements</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Learn</div>
+      <ul>
+        <li><a href="#">Our Science</a></li>
+        <li><a href="#">Ingredients</a></li>
+        <li><a href="#">Hair Quizzes</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Results Gallery</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Support</div>
+      <ul>
+        <li><a href="#">Shipping & Returns</a></li>
+        <li><a href="#">Subscription Help</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Wholesale</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 ŌURA HAIR, Inc. — All rights reserved.</span>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Accessibility</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MOBILE STICKY CTA -->
+<div class="sticky-mobile-cta">
+  <div>
+    <span class="smc-price">$89</span>
+  </div>
+  <button class="smc-btn">Add to Cart →</button>
+</div>
+
+<script>
+// Variant selector
+document.querySelectorAll('.variant-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

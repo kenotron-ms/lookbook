@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORBIT STUDIO — Photography Reimagined</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Manrope:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f8f5f0;
+  --ink: #0f0e0c;
+  --warm: #c4a882;
+  --warm-pale: #e8ddd0;
+  --accent: #8b6b4a;
+  --muted: #7a6e64;
+  --surface: #ede9e2;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 56px; height: 72px;
+  background: rgba(248,245,240,0.88); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(15,14,12,0.06);
+}
+.nav-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 22px; letter-spacing: 0.12em; text-transform: uppercase; }
+.nav-logo span { color: var(--warm); }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none; padding: 10px 24px;
+  border: 1px solid var(--ink); border-radius: 100px; transition: all 0.3s;
+}
+.nav-cta:hover { background: var(--ink); color: var(--bg); }
+
+/* HERO */
+.hero {
+  height: 100vh; display: grid; place-items: center;
+  position: relative; overflow: hidden; padding-top: 72px;
+}
+.hero-text { position: relative; z-index: 2; text-align: center; }
+.hero-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 20px; }
+.hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(64px, 10vw, 130px); font-weight: 300; line-height: 0.9; letter-spacing: -2px; margin-bottom: 28px; }
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero p { font-size: 15px; color: var(--muted); max-width: 440px; margin: 0 auto 40px; line-height: 1.8; letter-spacing: 0.01em; }
+.hero-scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--warm)); animation: grow 2s ease-in-out infinite; }
+@keyframes grow { 0%{height:0;opacity:0} 50%{height:60px;opacity:1} 100%{height:60px;opacity:0} }
+.scroll-text { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+
+/* CIRCULAR GALLERY */
+.gallery-section { padding: 0; overflow: hidden; position: relative; background: var(--ink); }
+.gallery-wrapper { position: relative; height: 600px; display: flex; align-items: center; justify-content: center; }
+
+.circular-track {
+  position: relative; width: 560px; height: 560px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.circular-track::before {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 60%; height: 60%; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.gallery-item {
+  position: absolute; width: 120px; height: 160px;
+  border-radius: 8px; overflow: hidden; cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+  transform-origin: center center;
+}
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-item:hover { transform: scale(1.12) !important; box-shadow: 0 20px 60px rgba(0,0,0,0.5); z-index: 10; }
+.gallery-item-inner {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 14px; font-style: italic; color: rgba(255,255,255,0.6);
+}
+
+/* Color palettes for fake photos */
+.p1 { background: linear-gradient(135deg, #2c3e50 0%, #4a6741 100%); }
+.p2 { background: linear-gradient(135deg, #8b5e3c 0%, #c4a882 100%); }
+.p3 { background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+.p4 { background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%); }
+.p5 { background: linear-gradient(135deg, #6d2b6d 0%, #b5838d 100%); }
+.p6 { background: linear-gradient(135deg, #c77dff 0%, #7b2d8b 100%); }
+.p7 { background: linear-gradient(160deg, #f4a261 0%, #e76f51 100%); }
+.p8 { background: linear-gradient(135deg, #264653 0%, #2a9d8f 100%); }
+
+.gallery-center-text {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center; pointer-events: none;
+}
+.gallery-center-text .num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: rgba(255,255,255,0.1); line-height: 1; }
+.gallery-center-text .label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+/* CAROUSEL (below the circle) */
+.carousel-section { padding: 100px 0 60px; background: var(--ink); overflow: hidden; }
+.carousel-label { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 64px); font-weight: 300; color: rgba(255,255,255,0.9); letter-spacing: -1px; margin-bottom: 56px; }
+.carousel-label em { font-style: italic; color: var(--warm); }
+
+.carousel-track-wrap { overflow: hidden; position: relative; }
+.carousel-track-wrap::before,
+.carousel-track-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+}
+.carousel-track-wrap::before { left: 0; background: linear-gradient(90deg, var(--ink), transparent); }
+.carousel-track-wrap::after { right: 0; background: linear-gradient(-90deg, var(--ink), transparent); }
+
+.carousel-track {
+  display: flex; gap: 20px;
+  animation: carousel 28s linear infinite;
+  width: max-content;
+}
+.carousel-track:hover { animation-play-state: paused; }
+@keyframes carousel { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+.carousel-card {
+  flex-shrink: 0; width: 280px; height: 380px;
+  border-radius: 12px; overflow: hidden; position: relative; cursor: pointer;
+}
+.carousel-card-inner { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 24px; }
+.cc-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%); }
+.cc-content { position: relative; z-index: 1; }
+.cc-cat { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); margin-bottom: 8px; }
+.cc-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: white; line-height: 1.2; }
+
+/* ABOUT */
+.about-section { padding: 120px 56px; background: var(--bg); }
+.about-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.about-text .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 20px; }
+.about-text h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4vw, 56px); font-weight: 300; letter-spacing: -1px; line-height: 1.1; margin-bottom: 28px; }
+.about-text h2 em { font-style: italic; color: var(--accent); }
+.about-text p { color: var(--muted); font-size: 15px; line-height: 1.9; margin-bottom: 20px; }
+.about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.stat-item { padding: 24px; background: var(--surface); border-radius: 12px; }
+.stat-value { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 400; line-height: 1; margin-bottom: 8px; }
+.stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
+
+/* SERVICES */
+.services-section { padding: 100px 56px; background: var(--surface); }
+.services-inner { max-width: 1100px; margin: 0 auto; }
+.services-inner .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 16px; }
+.services-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 300; letter-spacing: -1px; margin-bottom: 60px; }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(15,14,12,0.08); border: 1px solid rgba(15,14,12,0.08); }
+.service-item { background: var(--surface); padding: 36px 32px; }
+.service-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--warm-pale); line-height: 1; margin-bottom: 20px; }
+.service-item h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; margin-bottom: 12px; }
+.service-item p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+/* TESTIMONIALS */
+.testi-section { padding: 100px 56px; background: var(--bg); }
+.testi-inner { max-width: 1100px; margin: 0 auto; }
+.testi-inner .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 16px; }
+.testi-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 300; letter-spacing: -1px; margin-bottom: 60px; }
+.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.t-card { }
+.t-card blockquote { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; font-weight: 300; line-height: 1.7; color: var(--ink); margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(15,14,12,0.1); }
+.t-attr { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
+.t-attr strong { color: var(--ink); display: block; margin-bottom: 2px; font-size: 13px; }
+
+/* CTA */
+.cta-section { padding: 160px 56px; background: var(--ink); text-align: center; position: relative; overflow: hidden; }
+.cta-deco { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(196,168,130,0.1); pointer-events: none; }
+.cta-deco::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 70%; height: 70%; border-radius: 50%; border: 1px solid rgba(196,168,130,0.07); }
+.cta-section .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 24px; position: relative; z-index: 1; }
+.cta-section h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 7vw, 88px); font-weight: 300; letter-spacing: -2px; color: rgba(248,245,240,0.95); margin-bottom: 32px; position: relative; z-index: 1; line-height: 1; }
+.cta-section h2 em { font-style: italic; color: var(--warm); }
+.cta-section p { font-size: 15px; color: rgba(248,245,240,0.5); max-width: 400px; margin: 0 auto 48px; line-height: 1.8; position: relative; z-index: 1; }
+.cta-btn { display: inline-block; background: transparent; color: var(--bg); padding: 18px 52px; border-radius: 100px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; background: var(--warm); transition: all 0.3s; position: relative; z-index: 1; }
+.cta-btn:hover { background: rgba(196,168,130,0.9); transform: translateY(-3px); box-shadow: 0 20px 60px rgba(196,168,130,0.3); }
+
+/* FOOTER */
+footer { padding: 40px 56px; background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--bg); }
+.footer-logo span { color: var(--warm); }
+.footer-links { display: flex; gap: 24px; list-style: none; }
+.footer-links a { font-size: 11px; color: rgba(248,245,240,0.35); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+.footer-links a:hover { color: rgba(248,245,240,0.7); }
+.footer-copy { font-size: 11px; color: rgba(248,245,240,0.25); letter-spacing: 0.05em; }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .services-grid, .testi-grid { grid-template-columns: 1fr; }
+  .circular-track { width: 320px; height: 320px; }
+  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">ORBIT<span>&nbsp;·&nbsp;</span>STUDIO</div>
+  <ul class="nav-links">
+    <li><a href="#">Portfolio</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Journal</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Inquire</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-label">Fine Art Photography</div>
+    <h1>Vision in<br><em>orbit</em></h1>
+    <p>We craft photographic experiences that move between worlds — editorial, commercial, and fine art, always in perfect orbit.</p>
+    <div class="hero-scroll-cue">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">Scroll to discover</span>
+    </div>
+  </div>
+</section>
+
+<!-- CIRCULAR GALLERY -->
+<section class="gallery-section">
+  <div class="gallery-wrapper">
+    <div class="circular-track" id="circularTrack">
+      <!-- Items placed by JS -->
+      <div class="gallery-center-text">
+        <div class="num">48</div>
+        <div class="label">Exhibitions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAROUSEL -->
+<section class="carousel-section">
+  <div class="carousel-label">Selected <em>Works</em></div>
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="carouselTrack">
+      <!-- duplicated for infinite loop -->
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="eyebrow">Our Philosophy</div>
+      <h2>Light is the only<br>material that <em>matters</em></h2>
+      <p>ORBIT Studio was founded on the belief that a single photograph can hold a universe — of mood, memory, and meaning. We work with fashion houses, galleries, and tastemakers who demand images that outlast trends.</p>
+      <p>Every commission is approached as a collaboration between vision and craft, resulting in photographs that don't just document moments — they define them.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-item">
+        <div class="stat-value">240+</div>
+        <div class="stat-label">Campaigns Shot</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">18</div>
+        <div class="stat-label">Years of Practice</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">48</div>
+        <div class="stat-label">Gallery Shows</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">6</div>
+        <div class="stat-label">International Awards</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section">
+  <div class="services-inner">
+    <div class="eyebrow">What We Do</div>
+    <h2>Every frame, a story</h2>
+    <div class="services-grid">
+      <div class="service-item">
+        <div class="service-num">01</div>
+        <h3>Editorial</h3>
+        <p>Magazine-grade photography for fashion and lifestyle brands. Concept development through final retouching.</p>
+      </div>
+      <div class="service-item">
+        <div class="service-num">02</div>
+        <h3>Commercial</h3>
+        <p>Campaign imagery that performs — beauty, product, and architecture for brands that understand that quality converts.</p>
+      </div>
+      <div class="service-item">
+        <div class="service-num">03</div>
+        <h3>Fine Art Prints</h3>
+        <p>Limited-edition archival prints produced to museum standards. Available for collectors and private commissions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <div class="testi-inner">
+    <div class="eyebrow">Client Words</div>
+    <h2>What our clients say</h2>
+    <div class="testi-grid">
+      <div class="t-card">
+        <blockquote>"ORBIT captured something we'd never been able to communicate in 20 years of brand building. The campaign was transformative."</blockquote>
+        <div class="t-attr"><strong>Isabelle Marchetti</strong>Creative Director, Maison Lumière</div>
+      </div>
+      <div class="t-card">
+        <blockquote>"The photographs they produced for our gallery sold out within the first private view. Collectors were calling the next morning."</blockquote>
+        <div class="t-attr"><strong>Thomas Okafor</strong>Gallery Director, Form + Space</div>
+      </div>
+      <div class="t-card">
+        <blockquote>"Working with ORBIT changed how we think about photography as a business asset. Every image pays for itself many times over."</blockquote>
+        <div class="t-attr"><strong>Cleo Nakamura</strong>Head of Brand, Kōto Atelier</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-deco"></div>
+  <div class="eyebrow">Begin Your Project</div>
+  <h2>Let's make<br>something <em>eternal</em></h2>
+  <p>We accept a limited number of commissions each season. Inquire early to secure your place.</p>
+  <a href="#" class="cta-btn">Open Inquiry →</a>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">ORBIT<span>&nbsp;·&nbsp;</span>STUDIO</div>
+    <ul class="footer-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Licensing</a></li>
+    </ul>
+    <div class="footer-copy">© 2025 Orbit Studio. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// Circular gallery placement
+const track = document.getElementById('circularTrack');
+const items = [
+  { cls: 'p1', label: 'Solitude' },
+  { cls: 'p2', label: 'Amber' },
+  { cls: 'p3', label: 'Deep Sea' },
+  { cls: 'p4', label: 'Verdant' },
+  { cls: 'p5', label: 'Bloom' },
+  { cls: 'p6', label: 'Aubergine' },
+  { cls: 'p7', label: 'Ember' },
+  { cls: 'p8', label: 'Teal Dusk' },
+];
+const count = items.length;
+const radius = 220;
+const cx = 280, cy = 280;
+
+items.forEach((item, i) => {
+  const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+  const x = cx + radius * Math.cos(angle) - 60;
+  const y = cy + radius * Math.sin(angle) - 80;
+
+  const el = document.createElement('div');
+  el.className = `gallery-item ${item.cls}`;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.transform = `rotate(${(angle + Math.PI/2) * (180/Math.PI)}deg)`;
+  el.innerHTML = `<div class="gallery-item-inner">${item.label}</div>`;
+
+  // hover restore
+  el.addEventListener('mouseenter', () => {
+    el.style.transform = `rotate(${(angle + Math.PI/2) * (180/Math.PI)}deg) scale(1.12)`;
+  });
+  el.addEventListener('mouseleave', () => {
+    el.style.transform = `rotate(${(angle + Math.PI/2) * (180/Math.PI)}deg)`;
+  });
+
+  track.appendChild(el);
+});
+
+// Auto-rotate the circular track
+let rotation = 0;
+function rotateTrack() {
+  rotation += 0.15;
+  track.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+  // Counter-rotate items so they stay upright
+  track.querySelectorAll('.gallery-item').forEach(item => {
+    item.style.transform = `rotate(${-rotation}deg)`;
+  });
+  requestAnimationFrame(rotateTrack);
+}
+// Center the track
+track.style.position = 'absolute';
+track.style.top = '50%';
+track.style.left = '50%';
+track.style.transform = 'translate(-50%, -50%)';
+track.style.transformOrigin = '280px 280px';
+rotateTrack();
+
+// Build carousel
+const carouselData = [
+  { cls: 'p1', cat: 'Editorial', title: 'The Solitude Series' },
+  { cls: 'p2', cat: 'Commercial', title: 'Amber Campaign' },
+  { cls: 'p3', cat: 'Fine Art', title: 'Midnight Depths' },
+  { cls: 'p4', cat: 'Editorial', title: 'Verdant Dreams' },
+  { cls: 'p5', cat: 'Portrait', title: 'In Full Bloom' },
+  { cls: 'p6', cat: 'Fashion', title: 'Purple Reign' },
+  { cls: 'p7', cat: 'Product', title: 'Ember Days' },
+  { cls: 'p8', cat: 'Landscape', title: 'Teal at Dusk' },
+];
+const ctEl = document.getElementById('carouselTrack');
+const doubled = [...carouselData, ...carouselData];
+doubled.forEach(d => {
+  ctEl.innerHTML += `
+    <div class="carousel-card ${d.cls}">
+      <div class="cc-overlay"></div>
+      <div class="carousel-card-inner">
+        <div class="cc-content">
+          <div class="cc-cat">${d.cat}</div>
+          <div class="cc-title">${d.title}</div>
+        </div>
+      </div>
+    </div>`;
+});
+</script>
+</body>
+</html>

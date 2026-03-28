@@ -1,0 +1,12 @@
+TITLE: Sticky Content Switch
+SOURCE: https://app.superdesign.dev/library/sticky-content-switch
+CREATOR: Zhou Jason
+STATS: 64 copies · 3 tries · 1545 previews
+
+── DESCRIPTION ─────────────────────────────────────────────────
+A split-screen section where the left-side heading remains sticky and updates dynamically as associated images scroll on the right side. Uses GSAP ScrollTrigger for precise synchronization.
+
+── PROMPT ──────────────────────────────────────────────────────
+Sticky Content Switch:
+
+> *"Pin the left-side heading in place while the right-side images scroll past. As each new image reaches the center, update the heading text to match the image content."*

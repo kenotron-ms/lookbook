@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHORUS — The SaaS Platform Customers Love</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fefefe;
+  --ink: #0d0d0d;
+  --surface: #f5f5f2;
+  --border: rgba(13,13,13,0.08);
+  --muted: #7a7a72;
+  --accent: #5c4aff;
+  --accent2: #ff4a6e;
+  --accent3: #00c480;
+  --warm: #ff8c42;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Instrument Sans', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 64px;
+  background: rgba(254,254,254,0.92); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Instrument Serif', serif; font-size: 22px; letter-spacing: -0.5px; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta { background: var(--accent); color: white; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+.nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 100px 48px 80px; text-align: center;
+}
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(92,74,255,0.08); border: 1px solid rgba(92,74,255,0.2); color: var(--accent); padding: 7px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; margin-bottom: 28px; }
+.hero h1 { font-family: 'Instrument Serif', serif; font-size: clamp(52px, 8vw, 96px); letter-spacing: -2px; line-height: 1.0; margin-bottom: 24px; }
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero p { font-size: 18px; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 44px; }
+.hero-actions { display: flex; gap: 14px; justify-content: center; margin-bottom: 48px; }
+.btn-primary { background: var(--ink); color: white; padding: 16px 36px; border-radius: 100px; font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+.btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+.btn-secondary { background: transparent; color: var(--ink); padding: 16px 32px; border-radius: 100px; font-size: 15px; font-weight: 600; text-decoration: none; border: 1.5px solid var(--border); transition: all 0.2s; }
+.btn-secondary:hover { border-color: var(--ink); }
+
+/* SOCIAL PROOF NUMBERS */
+.proof-strip { display: flex; gap: 48px; justify-content: center; flex-wrap: wrap; padding: 12px 0; }
+.proof-item { text-align: center; }
+.proof-value { font-family: 'Instrument Serif', serif; font-size: 32px; letter-spacing: -0.5px; color: var(--ink); }
+.proof-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* MARQUEE TESTIMONIALS */
+.marquee-section { padding: 80px 0 100px; background: var(--surface); overflow: hidden; }
+.marquee-header { text-align: center; padding: 0 48px 60px; }
+.marquee-header .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 12px; }
+.marquee-header h2 { font-family: 'Instrument Serif', serif; font-size: clamp(36px, 5vw, 56px); letter-spacing: -1.5px; }
+.marquee-header h2 em { font-style: italic; color: var(--accent2); }
+
+/* Row 1 — left to right */
+.marquee-row { overflow: hidden; position: relative; margin-bottom: 20px; }
+.marquee-row::before,
+.marquee-row::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 180px; z-index: 10; pointer-events: none;
+}
+.marquee-row::before { left: 0; background: linear-gradient(90deg, var(--surface) 0%, transparent 100%); }
+.marquee-row::after { right: 0; background: linear-gradient(-90deg, var(--surface) 0%, transparent 100%); }
+
+.marquee-track {
+  display: flex; gap: 20px; width: max-content;
+  animation: marqueeLeft 35s linear infinite;
+}
+.marquee-track-reverse {
+  display: flex; gap: 20px; width: max-content;
+  animation: marqueeRight 40s linear infinite;
+}
+.marquee-track:hover,
+.marquee-track-reverse:hover { animation-play-state: paused; }
+
+@keyframes marqueeLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes marqueeRight { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* Testimonial cards */
+.t-card {
+  flex-shrink: 0; width: 320px;
+  background: white; border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: box-shadow 0.3s;
+}
+.t-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.t-stars { font-size: 13px; color: #f0a500; margin-bottom: 12px; letter-spacing: 1px; }
+.t-text { font-size: 13px; line-height: 1.8; color: #555; margin-bottom: 16px; }
+.t-text strong { color: var(--ink); }
+.t-author { display: flex; align-items: center; gap: 10px; }
+.t-avatar { width: 36px; height: 36px; border-radius: 50%; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ta1 { background: linear-gradient(135deg, #5c4aff, #ff4a6e); color: white; }
+.ta2 { background: linear-gradient(135deg, #00c480, #5c4aff); color: white; }
+.ta3 { background: linear-gradient(135deg, #ff8c42, #ff4a6e); color: white; }
+.ta4 { background: linear-gradient(135deg, #5c4aff, #00c480); color: white; }
+.ta5 { background: linear-gradient(135deg, #ff4a6e, #ff8c42); color: white; }
+.ta6 { background: linear-gradient(135deg, #0090ff, #5c4aff); color: white; }
+.t-name { font-size: 13px; font-weight: 700; }
+.t-role { font-size: 11px; color: var(--muted); }
+.t-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
+.tb-purple { background: rgba(92,74,255,0.1); color: var(--accent); }
+.tb-red { background: rgba(255,74,110,0.1); color: var(--accent2); }
+.tb-green { background: rgba(0,196,128,0.1); color: var(--accent3); }
+.tb-orange { background: rgba(255,140,66,0.1); color: var(--warm); }
+
+/* FEATURES */
+.features-section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
+.features-inner .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 12px; }
+.features-inner h2 { font-family: 'Instrument Serif', serif; font-size: clamp(32px, 4vw, 52px); letter-spacing: -1.5px; margin-bottom: 60px; }
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.feat-card { padding: 32px; border-radius: 20px; border: 1.5px solid var(--border); transition: all 0.3s; }
+.feat-card:hover { border-color: rgba(92,74,255,0.2); transform: translateY(-4px); }
+.feat-icon { font-size: 28px; margin-bottom: 16px; }
+.feat-card h3 { font-family: 'Instrument Serif', serif; font-size: 20px; margin-bottom: 10px; }
+.feat-card p { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+/* PRICING */
+.pricing-section { padding: 100px 48px; background: var(--ink); color: white; }
+.pricing-inner { max-width: 1100px; margin: 0 auto; }
+.pricing-header { text-align: center; margin-bottom: 60px; }
+.pricing-header .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.4); margin-bottom: 12px; }
+.pricing-header h2 { font-family: 'Instrument Serif', serif; font-size: clamp(32px, 4vw, 52px); letter-spacing: -1.5px; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.price-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 36px; transition: all 0.3s; }
+.price-card:hover { background: rgba(255,255,255,0.08); }
+.price-card.featured { background: var(--accent); border-color: transparent; }
+.price-tier { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.5); margin-bottom: 16px; }
+.price-card.featured .price-tier { color: rgba(255,255,255,0.75); }
+.price-amount { font-family: 'Instrument Serif', serif; font-size: 48px; letter-spacing: -1.5px; line-height: 1; margin-bottom: 6px; }
+.price-period { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+.price-features { list-style: none; margin-bottom: 32px; }
+.price-features li { font-size: 14px; color: rgba(255,255,255,0.7); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 8px; }
+.price-features li::before { content: '✓'; color: var(--accent3); font-weight: 700; }
+.price-card.featured .price-features li::before { color: white; }
+.price-card.featured .price-features li { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.15); }
+.price-btn { display: block; text-align: center; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+.price-btn-dark { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.15); }
+.price-btn-dark:hover { background: rgba(255,255,255,0.15); }
+.price-btn-white { background: white; color: var(--accent); }
+.price-btn-white:hover { opacity: 0.9; }
+
+/* CTA */
+.cta-section { padding: 120px 48px; text-align: center; }
+.cta-section h2 { font-family: 'Instrument Serif', serif; font-size: clamp(40px, 6vw, 72px); letter-spacing: -2px; margin-bottom: 16px; }
+.cta-section h2 em { font-style: italic; color: var(--accent); }
+.cta-section p { font-size: 18px; color: var(--muted); max-width: 480px; margin: 0 auto 48px; line-height: 1.7; }
+.cta-pill { display: flex; gap: 10px; max-width: 420px; margin: 0 auto 14px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 100px; padding: 6px 6px 6px 20px; }
+.cta-pill input { flex: 1; background: none; border: none; outline: none; font-family: 'Instrument Sans', sans-serif; font-size: 14px; color: var(--ink); }
+.cta-pill input::placeholder { color: var(--muted); }
+.cta-pill button { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 100px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: 'Instrument Sans', sans-serif; transition: opacity 0.2s; }
+.cta-pill button:hover { opacity: 0.85; }
+.cta-note { font-size: 13px; color: var(--muted); }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--border); padding: 40px 48px; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.footer-logo { font-family: 'Instrument Serif', serif; font-size: 18px; }
+.footer-logo span { color: var(--accent); }
+.footer-links { display: flex; gap: 24px; list-style: none; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--ink); }
+.footer-copy { font-size: 12px; color: var(--muted); }
+
+@media(max-width:768px){
+  nav{padding:0 20px;} .nav-links{display:none;}
+  .hero{padding:80px 20px 40px;}
+  .features-grid,.pricing-grid{grid-template-columns:1fr;}
+  .footer-inner{flex-direction:column;gap:20px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">CH<span>O</span>RUS</div>
+  <ul class="nav-links">
+    <li><a href="#">Product</a></li>
+    <li><a href="#">Integrations</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Customers</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Start Free Trial</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">⭐ Rated #1 on G2 two years running</div>
+  <h1>The platform your<br>team will <em>actually love</em></h1>
+  <p>CHORUS helps modern teams collaborate, communicate, and ship — with an interface so good, users beg their IT department for access.</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">Start for Free</a>
+    <a href="#" class="btn-secondary">See How it Works</a>
+  </div>
+  <div class="proof-strip">
+    <div class="proof-item"><div class="proof-value">48,000+</div><div class="proof-label">Teams worldwide</div></div>
+    <div class="proof-item"><div class="proof-value">4.9 / 5</div><div class="proof-label">Average rating</div></div>
+    <div class="proof-item"><div class="proof-value">2,400+</div><div class="proof-label">Five-star reviews</div></div>
+    <div class="proof-item"><div class="proof-value">99.98%</div><div class="proof-label">Uptime SLA</div></div>
+  </div>
+</section>
+
+<!-- MARQUEE TESTIMONIALS -->
+<section class="marquee-section">
+  <div class="marquee-header">
+    <div class="eyebrow">Social Proof</div>
+    <h2>Don't take our word for it —<br>take <em>theirs</em></h2>
+  </div>
+
+  <!-- Row 1: Left direction -->
+  <div class="marquee-row" style="margin-bottom:20px">
+    <div class="marquee-track" id="row1">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <!-- Row 2: Right direction -->
+  <div class="marquee-row">
+    <div class="marquee-track-reverse" id="row2">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="features-inner">
+    <div class="eyebrow">Core Features</div>
+    <h2>Everything a modern<br>team needs</h2>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">💬</div>
+        <h3>Async-First Messaging</h3>
+        <p>Threaded conversations, voice messages, and status indicators built for distributed teams who hate pointless meetings.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📋</div>
+        <h3>Visual Project Boards</h3>
+        <p>Kanban, timeline, and list views that sync in real-time. Every task, every status, every deadline — always visible.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔗</div>
+        <h3>200+ Integrations</h3>
+        <p>Connect to Slack, Notion, GitHub, Jira, Figma, and 195+ more. Your whole stack, in one beautiful workspace.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🤖</div>
+        <h3>AI Meeting Summaries</h3>
+        <p>Every meeting auto-summarized with action items, decisions, and follow-ups. Never leave a meeting without clarity again.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <h3>Team Analytics</h3>
+        <p>Understand how your team works. Response times, throughput, and collaboration patterns surfaced automatically.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🛡️</div>
+        <h3>Enterprise Security</h3>
+        <p>SOC 2 Type II, SSO, audit logs, and data residency options. Your data stays where you put it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <div class="pricing-inner">
+    <div class="pricing-header">
+      <div class="eyebrow">Pricing</div>
+      <h2>Simple, honest pricing</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Starter</div>
+        <div class="price-amount">$0</div>
+        <div class="price-period">Free forever · up to 10 seats</div>
+        <ul class="price-features">
+          <li>Unlimited messages</li>
+          <li>5 project boards</li>
+          <li>10GB storage</li>
+          <li>20 integrations</li>
+        </ul>
+        <a href="#" class="price-btn price-btn-dark">Get Started Free</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier">Pro</div>
+        <div class="price-amount">$14</div>
+        <div class="price-period">per seat/month · billed annually</div>
+        <ul class="price-features">
+          <li>Everything in Starter</li>
+          <li>Unlimited projects</li>
+          <li>AI meeting summaries</li>
+          <li>200+ integrations</li>
+          <li>Advanced analytics</li>
+        </ul>
+        <a href="#" class="price-btn price-btn-white">Start Pro Trial</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-amount">Custom</div>
+        <div class="price-period">Volume pricing · dedicated support</div>
+        <ul class="price-features">
+          <li>Everything in Pro</li>
+          <li>SSO &amp; SAML</li>
+          <li>Data residency</li>
+          <li>SLA guarantee</li>
+          <li>Dedicated CSM</li>
+        </ul>
+        <a href="#" class="price-btn price-btn-dark">Talk to Sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Join the <em>chorus</em>.<br>Start today.</h2>
+  <p>48,000 teams can't be wrong. Sign up free — no credit card, no commitment, no excuses.</p>
+  <div class="cta-pill">
+    <input type="email" placeholder="your@work-email.com">
+    <button>Get Access →</button>
+  </div>
+  <p class="cta-note">Free 14-day trial on Pro · No credit card required</p>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">CH<span>O</span>RUS</div>
+    <ul class="footer-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Security</a></li>
+      <li><a href="#">Status</a></li>
+    </ul>
+    <div class="footer-copy">© 2025 Chorus Inc. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+const testimonials = [
+  { stars:5, text:"CHORUS completely transformed how our remote team communicates. The async-first design means we <strong>actually respect each other's time</strong> now.", name:"Sophie L.", role:"Engineering Manager", badge:"tb-purple", badgeText:"Verified Pro", avatarClass:"ta1" },
+  { stars:5, text:"Switched from Slack + Notion + Linear. CHORUS replaced all three and our team is <strong>40% more productive</strong> by our own measurement.", name:"Carlos M.", role:"CTO, Fieldstone", badge:"tb-green", badgeText:"Enterprise", avatarClass:"ta2" },
+  { stars:5, text:"The AI meeting summaries are <strong>genuinely magic</strong>. Our product team went from 3 hours of note-taking per week to zero.", name:"Aisha K.", role:"Product Lead, Luminary", badge:"tb-purple", badgeText:"Verified Pro", avatarClass:"ta3" },
+  { stars:5, text:"Customer support through CHORUS is <strong>a completely different experience</strong>. Response times dropped from 4 hours to 22 minutes.", name:"Tom H.", role:"Head of CX, Meridian", badge:"tb-orange", badgeText:"Starter", avatarClass:"ta4" },
+  { stars:5, text:"200+ integrations and they actually work. Our GitHub, Figma, and analytics stack all talk to each other through CHORUS seamlessly.", name:"Yuki S.", role:"Senior Developer", badge:"tb-red", badgeText:"Team Plan", avatarClass:"ta5" },
+  { stars:5, text:"Onboarded our 200-person org in <strong>one afternoon</strong>. I've never seen adoption this fast in 15 years of enterprise software.", name:"Diana F.", role:"VP Operations", badge:"tb-green", badgeText:"Enterprise", avatarClass:"ta6" },
+  { stars:5, text:"Our investors specifically mentioned <strong>how well-coordinated our team seems</strong>. We told them the secret is CHORUS.", name:"Raj P.", role:"Founder, Stackline", badge:"tb-purple", badgeText:"Verified Pro", avatarClass:"ta1" },
+  { stars:5, text:"The analytics dashboard showed us we were wasting 6 hours per week in redundant threads. <strong>That's now 45 minutes</strong>, tops.", name:"Emma W.", role:"Data Team Lead", badge:"tb-red", badgeText:"Team Plan", avatarClass:"ta2" },
+];
+
+function buildCard(t) {
+  const stars = '★'.repeat(t.stars);
+  return `<div class="t-card">
+    <div class="t-stars">${stars}</div>
+    <div class="t-text">"${t.text}"</div>
+    <div class="t-author">
+      <div class="t-avatar ${t.avatarClass}">${t.name.split(' ').map(n=>n[0]).join('')}</div>
+      <div>
+        <div class="t-name">${t.name}</div>
+        <div class="t-role">${t.role}</div>
+        <span class="t-badge ${t.badge}">${t.badgeText}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+// Row 1 — first 5 + duplicate for seamless
+const row1 = document.getElementById('row1');
+const set1 = [...testimonials.slice(0,5), ...testimonials.slice(0,5)];
+row1.innerHTML = set1.map(buildCard).join('');
+
+// Row 2 — last 5 + duplicate
+const row2 = document.getElementById('row2');
+const set2 = [...testimonials.slice(3), ...testimonials.slice(3)];
+row2.innerHTML = set2.map(buildCard).join('');
+</script>
+</body>
+</html>

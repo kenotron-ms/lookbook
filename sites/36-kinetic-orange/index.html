@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KINETIC — We Move Fast and Make Things</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:  #FF4D00;
+      --orange-d:#d94100;
+      --black:   #0a0a0a;
+      --white:   #f0ede8;
+      --mono:    'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--mono);
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--black);
+      border-bottom: 2px solid var(--orange);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.2em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--orange); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .nav-links a:hover { border-color: var(--orange); color: var(--orange); }
+
+    .nav-btn {
+      background: var(--orange);
+      color: var(--black);
+      padding: 0.7rem 1.6rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+
+    .nav-btn:hover { background: var(--orange-d); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+      padding: 7rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,77,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,77,0,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 3rem;
+      align-items: end;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 2rem;
+      border: 2px solid var(--orange);
+      padding: 0.4rem 0.8rem;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(7rem, 15vw, 22rem);
+      line-height: 0.85;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    .hero-title .orange-line { color: var(--orange); }
+
+    .hero-title .stroke-line {
+      -webkit-text-stroke: 2px var(--white);
+      color: transparent;
+    }
+
+    .hero-meta {
+      padding-left: 1rem;
+      border-left: 3px solid var(--orange);
+    }
+
+    .hero-meta-desc {
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: rgba(240,237,232,0.6);
+      margin-bottom: 2rem;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--black);
+      padding: 1rem 2rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .hero-btn:hover { background: var(--orange-d); transform: translate(3px, -3px); }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 3rem;
+      left: 3rem;
+      display: flex;
+      gap: 3rem;
+    }
+
+    .h-stat-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--orange);
+      line-height: 1;
+    }
+
+    .h-stat-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.4);
+      margin-top: 0.2rem;
+    }
+
+    /* MARQUEE */
+    .marquee-block {
+      background: var(--orange);
+      padding: 0.8rem 0;
+      overflow: hidden;
+    }
+
+    .marquee-track {
+      display: flex;
+      animation: marquee 18s linear infinite;
+      white-space: nowrap;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 0 2rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      color: var(--black);
+    }
+
+    .m-sep { font-size: 1rem; opacity: 0.5; }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* SERVICES */
+    .services-section {
+      padding: 7rem 3rem;
+      border-top: 2px solid rgba(255,77,0,0.2);
+    }
+
+    .services-inner { max-width: 1400px; margin: 0 auto; }
+
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+
+    .section-tag {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 8vw, 10rem);
+      line-height: 0.88;
+      letter-spacing: 0.03em;
+      color: var(--white);
+    }
+
+    .section-title .s-orange { color: var(--orange); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      background: var(--orange);
+      border: 2px solid var(--orange);
+    }
+
+    .svc-card {
+      background: var(--black);
+      padding: 3rem;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .svc-card:hover { background: #0f0f0f; }
+
+    .svc-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      line-height: 1;
+      color: rgba(255,77,0,0.1);
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      pointer-events: none;
+    }
+
+    .svc-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .svc-body {
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: rgba(240,237,232,0.55);
+      margin-bottom: 1.5rem;
+    }
+
+    .svc-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .svc-tag {
+      border: 1px solid rgba(255,77,0,0.4);
+      color: var(--orange);
+      padding: 0.2rem 0.6rem;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* PROCESS */
+    .process-section {
+      padding: 7rem 3rem;
+      background: var(--orange);
+    }
+
+    .process-inner { max-width: 1400px; margin: 0 auto; }
+
+    .process-section .section-title { color: var(--black); }
+    .process-section .section-tag { color: var(--black); opacity: 0.6; }
+
+    .process-list {
+      margin-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 2px solid var(--black);
+    }
+
+    .process-item {
+      display: grid;
+      grid-template-columns: 80px 1fr 200px;
+      align-items: center;
+      padding: 2rem 0;
+      border-bottom: 2px solid rgba(0,0,0,0.2);
+      transition: padding-left 0.3s;
+      cursor: default;
+    }
+
+    .process-item:hover { padding-left: 1rem; }
+
+    .process-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--black);
+      opacity: 0.4;
+    }
+
+    .process-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.04em;
+      color: var(--black);
+    }
+
+    .process-duration {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: rgba(0,0,0,0.5);
+      text-align: right;
+    }
+
+    /* WORK */
+    .work-section { padding: 7rem 3rem; }
+    .work-inner { max-width: 1400px; margin: 0 auto; }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--orange);
+      border: 2px solid var(--orange);
+      margin-top: 4rem;
+    }
+
+    .work-card {
+      background: var(--black);
+      padding: 0;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .work-card:hover { background: #111; }
+
+    .work-card-visual {
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      color: rgba(255,77,0,0.15);
+      border-bottom: 2px solid var(--orange);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .work-card-visual::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,77,0,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,77,0,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .work-card-visual span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .work-card-info { padding: 1.5rem; }
+
+    .wc-category {
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.4rem;
+    }
+
+    .wc-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+    }
+
+    .wc-year {
+      font-size: 0.55rem;
+      color: rgba(240,237,232,0.35);
+      margin-top: 0.25rem;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section {
+      padding: 7rem 3rem;
+      background: #0d0d0d;
+      border-top: 2px solid rgba(255,77,0,0.2);
+    }
+
+    .testi-inner { max-width: 1400px; margin: 0 auto; }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(255,77,0,0.3);
+      border: 2px solid rgba(255,77,0,0.3);
+      margin-top: 4rem;
+    }
+
+    .t-card {
+      background: #0d0d0d;
+      padding: 2.5rem;
+      transition: background 0.3s;
+    }
+
+    .t-card:hover { background: #111; }
+
+    .t-score { font-size: 0.8rem; color: var(--orange); letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+
+    .t-text {
+      font-size: 0.78rem;
+      line-height: 1.85;
+      color: rgba(240,237,232,0.6);
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+
+    .t-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+    }
+
+    .t-role {
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.35);
+      margin-top: 0.2rem;
+    }
+
+    /* ROTATING ELEMENT */
+    .rotating-badge {
+      width: 140px; height: 140px;
+      border: 2px solid var(--orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .rotating-badge svg {
+      position: absolute;
+      inset: 0;
+      animation: spin 12s linear infinite;
+    }
+
+    .rotating-badge-inner {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--orange);
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 8rem 3rem;
+      position: relative;
+      overflow: hidden;
+      border-top: 2px solid var(--orange);
+    }
+
+    .cta-bg-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22vw;
+      color: rgba(255,77,0,0.04);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: 0.02em;
+    }
+
+    .cta-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 12vw, 16rem);
+      line-height: 0.85;
+      letter-spacing: 0.03em;
+      color: var(--white);
+      margin-bottom: 2rem;
+    }
+
+    .cta-title span { color: var(--orange); }
+
+    .cta-sub {
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: rgba(240,237,232,0.5);
+      max-width: 45ch;
+      margin: 0 auto 3rem;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--black);
+      padding: 1.2rem 4rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .cta-btn:hover { background: var(--orange-d); transform: translate(4px, -4px); }
+
+    /* FOOTER */
+    footer {
+      background: #050505;
+      padding: 4rem 3rem 3rem;
+      border-top: 2px solid var(--orange);
+    }
+
+    .footer-inner { max-width: 1400px; margin: 0 auto; }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 2px solid rgba(255,77,0,0.2);
+      margin-bottom: 2rem;
+    }
+
+    .f-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 0.15em;
+      color: var(--white);
+    }
+
+    .f-logo span { color: var(--orange); }
+
+    .f-tagline {
+      font-size: 0.7rem;
+      line-height: 1.8;
+      color: rgba(240,237,232,0.4);
+      margin-top: 0.75rem;
+      max-width: 28ch;
+    }
+
+    .f-col h4 {
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+    }
+
+    .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .f-col a {
+      font-size: 0.72rem;
+      color: rgba(240,237,232,0.4);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .f-col a:hover { color: var(--white); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .f-copy { font-size: 0.62rem; color: rgba(240,237,232,0.25); }
+
+    .f-social { display: flex; gap: 2rem; }
+    .f-social a { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(240,237,232,0.3); text-decoration: none; transition: color 0.3s; }
+    .f-social a:hover { color: var(--orange); }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 6rem 1.5rem 3rem; }
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-meta { display: none; }
+      .hero-stats { position: relative; bottom: auto; left: auto; margin-top: 3rem; }
+      .services-section, .work-section, .testimonials-section, .cta-section { padding: 5rem 1.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .work-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .process-item { grid-template-columns: 60px 1fr; }
+      .process-duration { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">KINETIC<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#process">Process</a></li>
+    </ul>
+    <a href="#cta" class="nav-btn">Start a Project</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">Creative Agency · NYC · Est. 2020</div>
+        <h1 class="hero-title">
+          WE MOVE<br>
+          <span class="orange-line">FAST</span><br>
+          <span class="stroke-line">AND MAKE</span><br>
+          THINGS
+        </h1>
+      </div>
+      <div class="hero-meta">
+        <p class="hero-meta-desc">Kinetic is a creative agency that runs on urgency. We build brands, campaigns, and digital products that move — fast, bold, and with intention.</p>
+        <a href="#work" class="hero-btn">View Our Work →</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="h-stat-val">140+</div>
+        <div class="h-stat-label">Projects Shipped</div>
+      </div>
+      <div>
+        <div class="h-stat-val">48H</div>
+        <div class="h-stat-label">Avg. Brief to Concept</div>
+      </div>
+      <div>
+        <div class="h-stat-val">5★</div>
+        <div class="h-stat-label">Client Retention</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-block">
+    <div class="marquee-track">
+      <span class="marquee-item">Brand Identity <span class="m-sep">•</span></span>
+      <span class="marquee-item">Web Design <span class="m-sep">•</span></span>
+      <span class="marquee-item">Motion <span class="m-sep">•</span></span>
+      <span class="marquee-item">Strategy <span class="m-sep">•</span></span>
+      <span class="marquee-item">Campaigns <span class="m-sep">•</span></span>
+      <span class="marquee-item">Content <span class="m-sep">•</span></span>
+      <span class="marquee-item">Product Design <span class="m-sep">•</span></span>
+      <span class="marquee-item">Brand Identity <span class="m-sep">•</span></span>
+      <span class="marquee-item">Web Design <span class="m-sep">•</span></span>
+      <span class="marquee-item">Motion <span class="m-sep">•</span></span>
+      <span class="marquee-item">Strategy <span class="m-sep">•</span></span>
+      <span class="marquee-item">Campaigns <span class="m-sep">•</span></span>
+      <span class="marquee-item">Content <span class="m-sep">•</span></span>
+      <span class="marquee-item">Product Design <span class="m-sep">•</span></span>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services-section" id="services">
+    <div class="services-inner">
+      <div class="services-header reveal">
+        <div>
+          <div class="section-tag">// What We Build</div>
+          <h2 class="section-title">OUR<br><span class="s-orange">CRAFT</span></h2>
+        </div>
+        <a href="#cta" class="nav-btn" style="position:relative;top:0;">Work With Us</a>
+      </div>
+      <div class="services-grid">
+        <div class="svc-card reveal">
+          <div class="svc-num">01</div>
+          <div class="svc-title">Brand Identity</div>
+          <div class="svc-body">We build brand systems that move with intention. From naming and strategy to full visual identity systems, we build brands that are designed to scale and endure.</div>
+          <div class="svc-tags">
+            <span class="svc-tag">Naming</span>
+            <span class="svc-tag">Strategy</span>
+            <span class="svc-tag">Visual Identity</span>
+            <span class="svc-tag">Guidelines</span>
+          </div>
+        </div>
+        <div class="svc-card reveal" style="transition-delay:0.1s">
+          <div class="svc-num">02</div>
+          <div class="svc-title">Digital Experiences</div>
+          <div class="svc-body">Fast, functional, and intentionally designed web experiences. We obsess over performance, accessibility, and visual impact in equal measure.</div>
+          <div class="svc-tags">
+            <span class="svc-tag">Web Design</span>
+            <span class="svc-tag">Development</span>
+            <span class="svc-tag">UX/UI</span>
+          </div>
+        </div>
+        <div class="svc-card reveal" style="transition-delay:0.1s">
+          <div class="svc-num">03</div>
+          <div class="svc-title">Motion & Film</div>
+          <div class="svc-body">We turn strategy into visual energy. Brand films, social content, and motion design systems that stop thumbs and hold attention.</div>
+          <div class="svc-tags">
+            <span class="svc-tag">Animation</span>
+            <span class="svc-tag">Direction</span>
+            <span class="svc-tag">Social</span>
+          </div>
+        </div>
+        <div class="svc-card reveal" style="transition-delay:0.2s">
+          <div class="svc-num">04</div>
+          <div class="svc-title">Growth Campaigns</div>
+          <div class="svc-body">Data-informed creative that actually drives results. Campaign strategy, creative concepting, and production from a single team with a single goal.</div>
+          <div class="svc-tags">
+            <span class="svc-tag">Paid Social</span>
+            <span class="svc-tag">Creative Testing</span>
+            <span class="svc-tag">Analytics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process-section" id="process">
+    <div class="process-inner">
+      <div class="reveal">
+        <div class="section-tag" style="color:rgba(0,0,0,0.5)"># How We Work</div>
+        <h2 class="section-title" style="color:var(--black)">THE<br>KINETIC<br>METHOD</h2>
+      </div>
+      <div class="process-list">
+        <div class="process-item">
+          <div class="process-num">01</div>
+          <div class="process-name">Brief & Discovery</div>
+          <div class="process-duration">Days 1–2</div>
+        </div>
+        <div class="process-item">
+          <div class="process-num">02</div>
+          <div class="process-name">Strategic Foundation</div>
+          <div class="process-duration">Days 3–5</div>
+        </div>
+        <div class="process-item">
+          <div class="process-num">03</div>
+          <div class="process-name">Creative Concepting</div>
+          <div class="process-duration">Days 6–10</div>
+        </div>
+        <div class="process-item">
+          <div class="process-num">04</div>
+          <div class="process-name">Design & Production</div>
+          <div class="process-duration">Days 11–20</div>
+        </div>
+        <div class="process-item">
+          <div class="process-num">05</div>
+          <div class="process-name">Launch & Handoff</div>
+          <div class="process-duration">Day 21</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work-section" id="work">
+    <div class="work-inner">
+      <div class="reveal">
+        <div class="section-tag">// Selected Projects</div>
+        <h2 class="section-title">RECENT<br><span class="s-orange">WORK</span></h2>
+      </div>
+      <div class="work-grid">
+        <div class="work-card reveal">
+          <div class="work-card-visual"><span>01</span></div>
+          <div class="work-card-info">
+            <div class="wc-category">Brand Identity · Web</div>
+            <div class="wc-name">Flux Capital</div>
+            <div class="wc-year">2025</div>
+          </div>
+        </div>
+        <div class="work-card reveal" style="transition-delay:0.1s">
+          <div class="work-card-visual"><span>02</span></div>
+          <div class="work-card-info">
+            <div class="wc-category">Campaign · Motion</div>
+            <div class="wc-name">Apex Fitness</div>
+            <div class="wc-year">2025</div>
+          </div>
+        </div>
+        <div class="work-card reveal" style="transition-delay:0.2s">
+          <div class="work-card-visual"><span>03</span></div>
+          <div class="work-card-info">
+            <div class="wc-category">Product · Strategy</div>
+            <div class="wc-name">Daze Platform</div>
+            <div class="wc-year">2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="testi-inner">
+      <div class="reveal">
+        <div class="section-tag">// Client Feedback</div>
+        <h2 class="section-title">WHAT THEY<br><span class="s-orange">SAY</span></h2>
+      </div>
+      <div class="testi-grid">
+        <div class="t-card reveal">
+          <div class="t-score">★★★★★</div>
+          <p class="t-text">"Kinetic operates at a speed and standard I didn't think was possible from a creative agency. Concept to launch in 3 weeks, and it looked like we spent 6 months on it."</p>
+          <div class="t-name">Marcus Osei</div>
+          <div class="t-role">Founder, Flux Capital</div>
+        </div>
+        <div class="t-card reveal" style="transition-delay:0.1s">
+          <div class="t-score">★★★★★</div>
+          <p class="t-text">"They gave us work that made us uncomfortable in the best possible way. Bold, unexpected, and exactly what our brand needed to punch out of a crowded category."</p>
+          <div class="t-name">Priya Arora</div>
+          <div class="t-role">CMO, Apex Fitness</div>
+        </div>
+        <div class="t-card reveal" style="transition-delay:0.2s">
+          <div class="t-score">★★★★★</div>
+          <p class="t-text">"Working with Kinetic felt like working with a team that cared more about our success than we did. They pushed back, refined, and delivered something that actually drives results."</p>
+          <div class="t-name">Theo Nakamura</div>
+          <div class="t-role">CEO, Daze Platform</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <div class="cta-bg-title">GO</div>
+    <div class="cta-inner reveal">
+      <div class="section-tag">// Ready?</div>
+      <h2 class="cta-title">
+        LET'S<br><span>MOVE</span>
+      </h2>
+      <p class="cta-sub">We take 4 new projects per month. Tell us what you're building and let's see if we can move fast together.</p>
+      <a href="mailto:go@kinetic.studio" class="cta-btn">[ START A PROJECT ]</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="f-logo">KINETIC<span>.</span></div>
+          <p class="f-tagline">We move fast and make things. Creative agency based in New York City.</p>
+        </div>
+        <div class="f-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">Brand Identity</a></li>
+            <li><a href="#">Digital</a></li>
+            <li><a href="#">Motion</a></li>
+            <li><a href="#">Campaigns</a></li>
+          </ul>
+        </div>
+        <div class="f-col">
+          <h4>Studio</h4>
+          <ul>
+            <li><a href="#">Work</a></li>
+            <li><a href="#">Process</a></li>
+            <li><a href="#">About</a></li>
+          </ul>
+        </div>
+        <div class="f-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="f-copy">© 2025 Kinetic Creative Studio LLC. New York, NY.</p>
+        <div class="f-social">
+          <a href="#">IG</a>
+          <a href="#">TW</a>
+          <a href="#">LI</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>

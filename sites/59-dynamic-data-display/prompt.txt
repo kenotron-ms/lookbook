@@ -1,0 +1,10 @@
+TITLE: Dynamic Data Display
+SOURCE: https://app.superdesign.dev/library/dynamic-data-display
+CREATOR: Zhou Jason
+STATS: 84 copies · 3 tries · 1562 previews
+
+── DESCRIPTION ─────────────────────────────────────────────────
+(none)
+
+── PROMPT ──────────────────────────────────────────────────────
+Numbers are displayed in large font with a **count-up animation**, triggering a **dynamic increase effect when scrolling into the viewport**—suitable for data display sections or statistical information areas.

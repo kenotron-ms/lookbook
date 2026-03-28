@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDITORIAL.AI — Where Knowledge Meets Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --paper:#f7f6f2;
+  --paper2:#f0ede6;
+  --ink:#111111;
+  --muted:#888;
+  --border:#ddd9d0;
+  --accent:#1a1a2e;
+  --red:#c0392b;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* Grid-line overlay */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;z-index:0;
+  opacity:.35;
+}
+
+/* ── NAV (glassmorphism) ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 48px;
+  height:64px;
+  display:flex;align-items:center;
+  background:rgba(247,246,242,.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+
+.nav-logo{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;letter-spacing:.02em;
+  color:var(--ink);text-decoration:none;margin-right:48px;
+}
+.nav-logo span{color:var(--red)}
+
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:.08em;
+  color:var(--muted);text-decoration:none;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--ink)}
+
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+
+.btn-ink{
+  background:var(--ink);color:var(--paper);
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:.1em;
+  padding:9px 20px;border:none;cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:background .2s,transform .15s;
+}
+.btn-ink:hover{background:#333;transform:translateY(-1px)}
+
+.btn-border{
+  background:transparent;color:var(--ink);
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:.1em;
+  padding:9px 16px;
+  border:1px solid var(--border);cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:border-color .2s,background .2s;
+}
+.btn-border:hover{border-color:var(--ink);background:rgba(17,17,17,.04)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  padding:100px 48px 80px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+  position:relative;z-index:1;
+}
+
+.hero-left{padding-right:40px;border-right:1px solid var(--border)}
+
+.hero-tag{
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:32px;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-tag::before{
+  content:'';width:24px;height:1px;background:var(--red);
+}
+
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px,6vw,84px);
+  font-weight:900;
+  line-height:1.0;
+  letter-spacing:-.02em;
+  margin-bottom:28px;
+}
+
+.hero-title em{
+  font-style:italic;font-weight:400;
+  color:var(--red);
+}
+
+.hero-subtitle{
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.8;
+  max-width:420px;
+  margin-bottom:44px;
+  letter-spacing:.02em;
+}
+
+.hero-actions{display:flex;gap:12px;align-items:center}
+
+.hero-stats{
+  display:flex;gap:0;margin-top:60px;
+  border-top:1px solid var(--border);
+}
+.hero-stat{
+  flex:1;padding:20px 0;
+  border-right:1px solid var(--border);
+}
+.hero-stat:last-child{border-right:none}
+.stat-num{
+  font-family:'Playfair Display',serif;
+  font-size:32px;font-weight:700;
+  color:var(--ink);line-height:1;
+}
+.stat-label{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-top:4px;
+}
+
+/* Hero right */
+.hero-right{position:relative}
+
+/* Scan-line animation */
+.scan-container{
+  position:relative;overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--paper2);
+}
+.scan-line{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);
+  animation:scan 3s linear infinite;
+  opacity:.6;
+  z-index:2;
+}
+@keyframes scan{
+  0%{top:-2px;opacity:0}
+  5%{opacity:.6}
+  95%{opacity:.6}
+  100%{top:100%;opacity:0}
+}
+
+.document-preview{
+  padding:32px;
+  position:relative;z-index:1;
+}
+.doc-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.doc-title{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:700;
+}
+.doc-status{
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--red);
+  border:1px solid var(--red);
+  padding:3px 8px;
+}
+
+.doc-line{
+  height:10px;background:var(--border);border-radius:2px;
+  margin-bottom:8px;
+}
+.doc-line.short{width:60%}
+.doc-line.medium{width:80%}
+
+.doc-tags{
+  display:flex;gap:6px;margin-top:20px;margin-bottom:20px;
+}
+.doc-tag{
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+
+.doc-ai-note{
+  background:rgba(192,57,43,.05);
+  border-left:2px solid var(--red);
+  padding:12px 14px;
+  font-size:11px;color:var(--ink);
+  line-height:1.6;
+}
+
+/* ── FEATURES SECTION ── */
+.features{
+  padding:100px 48px;
+  background:var(--ink);
+  color:var(--paper);
+  position:relative;z-index:1;
+}
+
+.features::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(247,246,242,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(247,246,242,.04) 1px, transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
+
+.features-header{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:60px;margin-bottom:60px;
+}
+.features-header h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,4vw,56px);font-weight:900;
+  line-height:1.05;letter-spacing:-.02em;
+  color:var(--paper);
+}
+.features-header p{
+  font-size:12px;color:rgba(247,246,242,.4);
+  line-height:1.8;letter-spacing:.04em;
+  align-self:flex-end;
+}
+
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:rgba(247,246,242,.08);
+  border:1px solid rgba(247,246,242,.08);
+}
+.f-card{
+  background:var(--ink);
+  padding:40px 32px;
+  border:1px solid rgba(247,246,242,.08);
+  transition:background .2s;
+}
+.f-card:hover{background:#1a1a1a}
+
+.f-num{
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:.2em;color:var(--red);
+  margin-bottom:20px;
+}
+.f-title{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;
+  margin-bottom:12px;line-height:1.2;
+}
+.f-desc{
+  font-size:11px;color:rgba(247,246,242,.4);
+  line-height:1.8;letter-spacing:.03em;
+}
+
+/* ── RESEARCH FEED ── */
+.research{
+  padding:100px 48px;
+  position:relative;z-index:1;
+}
+
+.research-grid{
+  display:grid;grid-template-columns:2fr 1fr;
+  gap:60px;margin-top:60px;
+}
+
+.research-list{
+  display:flex;flex-direction:column;gap:0;
+}
+.research-item{
+  display:flex;gap:20px;
+  padding:24px 0;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  transition:background .2s;
+}
+.research-item:hover{background:rgba(17,17,17,.02)}
+.ri-num{
+  font-family:'Space Mono',monospace;
+  font-size:11px;color:var(--muted);
+  flex-shrink:0;width:28px;
+}
+.ri-title{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:700;
+  margin-bottom:4px;line-height:1.2;
+}
+.ri-meta{
+  font-size:10px;letter-spacing:.1em;color:var(--muted);
+}
+
+.research-sidebar{
+  border-left:1px solid var(--border);
+  padding-left:40px;
+}
+.sidebar-label{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:20px;
+}
+.topic-pill{
+  display:inline-block;
+  padding:5px 12px;
+  border:1px solid var(--border);
+  font-size:11px;color:var(--ink);
+  margin:0 4px 8px 0;
+  cursor:pointer;
+  transition:background .2s,border-color .2s;
+}
+.topic-pill:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* ── TESTIMONIALS ── */
+.testimonials{
+  padding:100px 48px;
+  background:var(--paper2);
+  position:relative;z-index:1;
+}
+
+.testi-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;margin-top:60px;
+}
+.testi-card{
+  background:var(--paper);
+  border:1px solid var(--border);
+  padding:32px;
+}
+.testi-q{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-style:italic;
+  line-height:1.55;margin-bottom:24px;
+}
+.testi-author{
+  display:flex;align-items:center;gap:10px;
+  border-top:1px solid var(--border);padding-top:20px;
+}
+.testi-av{
+  width:36px;height:36px;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:14px;font-weight:700;color:var(--paper);
+}
+.testi-name{font-size:12px;font-weight:700;letter-spacing:.04em}
+.testi-role{font-size:11px;color:var(--muted)}
+
+/* ── CTA ── */
+.cta{
+  padding:140px 48px;
+  background:var(--ink);color:var(--paper);
+  text-align:center;position:relative;z-index:1;
+}
+.cta::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(247,246,242,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(247,246,242,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
+.cta h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px,7vw,88px);
+  font-weight:900;letter-spacing:-.02em;
+  line-height:1;margin-bottom:20px;position:relative;
+}
+.cta p{
+  font-size:12px;color:rgba(247,246,242,.45);
+  letter-spacing:.06em;margin-bottom:44px;position:relative;
+}
+.cta-actions{display:flex;gap:12px;justify-content:center;position:relative}
+.btn-paper{
+  background:var(--paper);color:var(--ink);
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:.12em;
+  padding:14px 36px;border:none;cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:background .2s;
+}
+.btn-paper:hover{background:#e8e5de}
+
+/* ── FOOTER ── */
+footer{
+  padding:60px 48px 40px;
+  border-top:1px solid var(--border);
+  background:var(--paper);
+  position:relative;z-index:1;
+}
+.footer-inner{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px;margin-bottom:48px;
+}
+.footer-logo{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:900;color:var(--ink);margin-bottom:10px;
+}
+.footer-logo span{color:var(--red)}
+.footer-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:.02em}
+.fc-title{
+  font-size:10px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink);margin-bottom:14px;
+}
+.fc a{display:block;font-size:11px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
+.fc a:hover{color:var(--ink)}
+.footer-bottom{
+  display:flex;justify-content:space-between;
+  padding-top:32px;border-top:1px solid var(--border);
+  font-size:11px;color:var(--muted);letter-spacing:.04em;
+}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .hero,.features-header,.research-grid,.footer-inner{grid-template-columns:1fr}
+  .features-grid,.testi-grid{grid-template-columns:1fr}
+  .hero-left{border-right:none;padding-right:0}
+  nav{padding:0 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">EDITORIAL<span>.AI</span></a>
+  <div class="nav-links">
+    <a href="#features">PLATFORM</a>
+    <a href="#research">RESEARCH</a>
+    <a href="#testimonials">USERS</a>
+    <a href="#pricing">PRICING</a>
+  </div>
+  <div class="nav-right">
+    <a href="#" class="btn-border">Log in</a>
+    <a href="#" class="btn-ink">Request access →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">AI Research Intelligence Platform</div>
+    <h1 class="hero-title reveal">
+      Where<br><em>knowledge</em><br>meets<br>intelligence.
+    </h1>
+    <p class="hero-subtitle reveal">
+      EDITORIAL.AI is the research platform for the intellectually rigorous. Synthesize vast domains, surface non-obvious connections, and produce insights at institutional grade.
+    </p>
+    <div class="hero-actions reveal">
+      <a href="#" class="btn-ink" style="padding:12px 28px;font-size:12px">Request early access →</a>
+      <a href="#research" class="btn-border" style="padding:12px 20px;font-size:12px">See it work</a>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="hero-stat">
+        <div class="stat-num">140M+</div>
+        <div class="stat-label">Papers indexed</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num" style="padding-left:16px">98.4%</div>
+        <div class="stat-label" style="padding-left:16px">Accuracy rate</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num" style="padding-left:16px">4.2s</div>
+        <div class="stat-label" style="padding-left:16px">Avg. synthesis</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right reveal">
+    <div class="scan-container">
+      <div class="scan-line"></div>
+      <div class="document-preview">
+        <div class="doc-header">
+          <div class="doc-title">Research Synthesis · Draft</div>
+          <div class="doc-status">AI Processing</div>
+        </div>
+        <div class="doc-line"></div>
+        <div class="doc-line medium"></div>
+        <div class="doc-line short"></div>
+        <div class="doc-line"></div>
+        <div class="doc-line medium"></div>
+        <div class="doc-tags">
+          <div class="doc-tag">Quantum Computing</div>
+          <div class="doc-tag">2024</div>
+          <div class="doc-tag">MIT</div>
+        </div>
+        <div class="doc-line short"></div>
+        <div class="doc-line"></div>
+        <div class="doc-line medium"></div>
+        <div class="doc-ai-note">
+          // AI insight: Cross-referencing with 847 related papers. High confidence correlation detected with Stanford 2023 findings on decoherence thresholds. Recommend expanding methodology review.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-header">
+    <h2 class="reveal">Intelligence at<br><em style="font-style:italic;color:rgba(247,246,242,.5)">research</em> scale.</h2>
+    <p class="reveal">Built on the same infrastructure trusted by leading academic institutions and tier-1 research labs worldwide.</p>
+  </div>
+  <div class="features-grid">
+    <div class="f-card reveal">
+      <div class="f-num">// 01</div>
+      <div class="f-title">Deep Literature Synthesis</div>
+      <div class="f-desc">Indexes 140M+ papers, preprints, and reports. Synthesizes in seconds what would take a team of researchers weeks. Citation-accurate, domain-calibrated.</div>
+    </div>
+    <div class="f-card reveal">
+      <div class="f-num">// 02</div>
+      <div class="f-title">Non-Obvious Connections</div>
+      <div class="f-desc">The most valuable insights exist at the intersection of disciplines. EDITORIAL.AI surfaces cross-domain patterns invisible to siloed domain experts.</div>
+    </div>
+    <div class="f-card reveal">
+      <div class="f-num">// 03</div>
+      <div class="f-title">Institutional-Grade Output</div>
+      <div class="f-desc">Produces peer-review-quality synthesis documents with structured citations, methodology notes, and confidence scores for every claim.</div>
+    </div>
+    <div class="f-card reveal">
+      <div class="f-num">// 04</div>
+      <div class="f-title">Real-time Monitoring</div>
+      <div class="f-desc">Set research watches on any topic. EDITORIAL.AI surfaces new developments and alerts you when significant work challenges or extends your understanding.</div>
+    </div>
+    <div class="f-card reveal">
+      <div class="f-num">// 05</div>
+      <div class="f-title">Collaborative Workspaces</div>
+      <div class="f-desc">Research teams work together on shared knowledge maps. Version-controlled, with attribution tracking and peer review workflows built in.</div>
+    </div>
+    <div class="f-card reveal">
+      <div class="f-num">// 06</div>
+      <div class="f-title">Private & Secure</div>
+      <div class="f-desc">Your research stays yours. Air-gapped deployment options for classified research environments. Zero retention, full encryption, SOC2 certified.</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH FEED -->
+<section class="research" id="research">
+  <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">// Research Feed</div>
+  <h2 class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,52px);font-weight:900;margin-top:12px;margin-bottom:0">What researchers<br>are discovering.</h2>
+  <div class="research-grid">
+    <div class="research-list">
+      <div class="research-item reveal">
+        <div class="ri-num">01</div>
+        <div>
+          <div class="ri-title">Emergent Behaviors in Large Language Models: A Systematic Review</div>
+          <div class="ri-meta">Synthesized from 842 papers · Confidence 94.2% · AI/ML</div>
+        </div>
+      </div>
+      <div class="research-item reveal">
+        <div class="ri-num">02</div>
+        <div>
+          <div class="ri-title">Climate-Financial Risk Integration: Cross-Sector Exposure Analysis</div>
+          <div class="ri-meta">Synthesized from 1,240 papers · Confidence 91.7% · Economics</div>
+        </div>
+      </div>
+      <div class="research-item reveal">
+        <div class="ri-num">03</div>
+        <div>
+          <div class="ri-title">Quantum Error Correction at Scale: Progress and Remaining Barriers</div>
+          <div class="ri-meta">Synthesized from 367 papers · Confidence 96.1% · Physics</div>
+        </div>
+      </div>
+      <div class="research-item reveal">
+        <div class="ri-num">04</div>
+        <div>
+          <div class="ri-title">Microbiome-Cognitive Function Links: Longitudinal Evidence Review</div>
+          <div class="ri-meta">Synthesized from 2,180 papers · Confidence 88.4% · Neuroscience</div>
+        </div>
+      </div>
+    </div>
+    <div class="research-sidebar reveal">
+      <div class="sidebar-label">// Browse domains</div>
+      <div>
+        <div class="topic-pill">AI / ML</div>
+        <div class="topic-pill">Neuroscience</div>
+        <div class="topic-pill">Climate</div>
+        <div class="topic-pill">Quantum</div>
+        <div class="topic-pill">Genomics</div>
+        <div class="topic-pill">Economics</div>
+        <div class="topic-pill">Materials</div>
+        <div class="topic-pill">Biotech</div>
+        <div class="topic-pill">Physics</div>
+        <div class="topic-pill">Sociology</div>
+        <div class="topic-pill">Robotics</div>
+        <div class="topic-pill">Energy</div>
+      </div>
+      <div style="margin-top:40px;padding:20px;border:1px solid var(--border)">
+        <div class="sidebar-label" style="margin-bottom:12px">// New today</div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;line-height:1;margin-bottom:4px">18,420</div>
+        <div style="font-size:10px;color:var(--muted);letter-spacing:.1em">new papers indexed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">// Users</div>
+  <h2 class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,52px);font-weight:900;margin-top:12px">Trusted by<br><em style="font-style:italic">serious</em> researchers.</h2>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <p class="testi-q">"EDITORIAL.AI reduced our literature review time by 80% without sacrificing the depth that peer-reviewed work demands. It found three key connections we had missed."</p>
+      <div class="testi-author">
+        <div class="testi-av">DK</div>
+        <div>
+          <div class="testi-name">Dr. David Kim</div>
+          <div class="testi-role">Professor, MIT CSAIL</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <p class="testi-q">"The confidence scoring is genuinely useful — it tells you not just what the synthesis found, but how certain you should be. That epistemic honesty is rare."</p>
+      <div class="testi-author">
+        <div class="testi-av">AF</div>
+        <div>
+          <div class="testi-name">Dr. Amara Fouad</div>
+          <div class="testi-role">Senior Researcher, DeepMind</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <p class="testi-q">"Our investment thesis work used to take six weeks per sector. With EDITORIAL.AI, we're at two weeks with higher-quality sourcing. It's a genuine edge."</p>
+      <div class="testi-author">
+        <div class="testi-av">RC</div>
+        <div>
+          <div class="testi-name">Robert Chen</div>
+          <div class="testi-role">Partner, Sequoia Capital</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="pricing">
+  <h2 class="reveal">Request<br><em style="font-style:italic">early access.</em></h2>
+  <p class="reveal">// Available to research teams, academic institutions, and enterprise — invitation only during beta.</p>
+  <div class="cta-actions reveal">
+    <a href="#" class="btn-paper" style="font-size:12px">Apply for access →</a>
+    <a href="#" class="btn-border" style="padding:14px 24px;font-size:11px;color:var(--paper);border-color:rgba(247,246,242,.2)">Explore pricing</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">EDITORIAL<span>.AI</span></div>
+      <div class="footer-desc">The AI research intelligence platform for the intellectually rigorous. Trusted by leading academic institutions, research labs, and investment firms.</div>
+    </div>
+    <div class="fc">
+      <div class="fc-title">Platform</div>
+      <a href="#">Synthesis</a>
+      <a href="#">Research Feed</a>
+      <a href="#">API</a>
+      <a href="#">Integrations</a>
+    </div>
+    <div class="fc">
+      <div class="fc-title">Company</div>
+      <a href="#">About</a>
+      <a href="#">Research Blog</a>
+      <a href="#">Careers</a>
+      <a href="#">Press</a>
+    </div>
+    <div class="fc">
+      <div class="fc-title">Legal</div>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Editorial AI, Inc.</span>
+    <span>// where knowledge meets intelligence</span>
+  </div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

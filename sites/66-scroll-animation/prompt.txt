@@ -1,0 +1,10 @@
+TITLE: Scroll animation
+SOURCE: https://app.superdesign.dev/library/scroll-animation
+CREATOR: Zhou Jason
+STATS: 80 copies · 6 tries · 2200 previews
+
+── DESCRIPTION ─────────────────────────────────────────────────
+(none)
+
+── PROMPT ──────────────────────────────────────────────────────
+Help me implement this scroll animation component, as i scroll one of shape center, become bigger and connect to all other smaller shapes

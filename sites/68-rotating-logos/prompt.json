@@ -1,0 +1,43 @@
+{
+  "id": "968e2e41-e5a4-4ef0-a532-acfc5e397c7e",
+  "createdAt": "2025-12-31T05:59:28.678Z",
+  "updatedAt": "2026-03-28T06:16:25.241Z",
+  "deletedAt": null,
+  "title": "Rotating logos",
+  "slug": "rotating-logos",
+  "description": "Logo display UI",
+  "teamId": "7d97ebb3-363d-49d3-a029-fa9a23815e3f",
+  "creatorId": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+  "prompt": "**Horizontally scrolling** ticker showcases partner or client logos with **gradient edge fade, hover-pause, and seamless looping animation**.Built with Tailwind CSS, ideal for hero sections, trust bars, or sponsor strips on responsive sites.",
+  "images": [],
+  "tags": [
+    "landing page",
+    "ui component"
+  ],
+  "previewUrl": "https://component-fb6e3e05-239b-43ad-8a0f-391a845d1db1.preview.superdesign.dev/?projectId=2b05aaab-2298-4ee0-b5bd-e40f48d60dd7",
+  "thumbnail": {
+    "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/preview-artifacts/prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/1753b89a-6ae0-4a05-8424-f509d8ed39ac.mp4",
+    "type": "video",
+    "storagePath": "prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/1753b89a-6ae0-4a05-8424-f509d8ed39ac.mp4"
+  },
+  "previewDevice": null,
+  "previewShowFrame": false,
+  "isPublic": true,
+  "previewViewCount": 1441,
+  "detailViewCount": 96,
+  "copyCount": 71,
+  "tryCount": 2,
+  "creator": {
+    "id": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+    "name": "Zhou Jason",
+    "email": "jason.zhou.design@gmail.com",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI6-P1KTFqMDsQTtfdDZAggOdMieNKQEuMwOGmTCNPC5ZrU=s96-c"
+  },
+  "stats": {
+    "previewViewCount": 1441,
+    "detailViewCount": 96,
+    "copyCount": 71,
+    "tryCount": 2,
+    "remixCount": 73
+  }
+}

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIS ARCHITECTURE — Precision Built Into Every Line</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #FFFFFF;
+  --bg-black: #000000;
+  --text: #000000;
+  --text-mid: #444444;
+  --text-light: #888888;
+  --border: #E0E0E0;
+  --border-black: #000000;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter Tight', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; position: relative; }
+
+/* noise overlay */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 999; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  opacity: 1;
+}
+
+/* ── GRID LINES ─────────────────────────────────────────────── */
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--border) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--border) 0.5px, transparent 0.5px);
+  background-size: 80px 80px;
+  opacity: 0.5;
+}
+
+/* ── NAV ──────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 900;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+  border-bottom: 0.5px solid var(--border-black);
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+.nav-logo-cell {
+  padding: 0 32px; height: 56px;
+  display: flex; align-items: center;
+  border-right: 0.5px solid var(--border-black);
+}
+
+.nav-logo {
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--text);
+}
+
+.nav-links-cell {
+  display: flex; align-items: center; gap: 0;
+  padding: 0 32px;
+}
+
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  display: block; padding: 0 20px; height: 56px; line-height: 56px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text-light);
+  text-decoration: none; transition: color 0.2s;
+  border-right: 0.5px solid var(--border);
+}
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta-cell {
+  padding: 0 32px; height: 56px;
+  display: flex; align-items: center;
+  border-left: 0.5px solid var(--border-black);
+}
+
+.nav-cta {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text); text-decoration: none;
+  display: flex; align-items: center; gap: 8px; transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.5; }
+
+/* status indicator */
+.sys-status {
+  background: var(--bg-black); padding: 6px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 32px; border-bottom: 0.5px solid var(--border-black);
+}
+
+.sys-status-items { display: flex; gap: 32px; }
+.sys-status-item { font-family: var(--mono); font-size: 0.62rem; color: rgba(255,255,255,0.4); }
+.sys-status-item .live { color: #22C55E; }
+.sys-status-right { font-family: var(--mono); font-size: 0.62rem; color: rgba(255,255,255,0.25); }
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero {
+  border-bottom: 0.5px solid var(--border-black);
+  position: relative; z-index: 1;
+  padding: 0;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 96px);
+}
+
+.hero-left {
+  padding: 80px 80px 80px 80px;
+  border-right: 0.5px solid var(--border-black);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+
+.hero-right {
+  padding: 80px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 0.65rem; color: var(--text-light);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px;
+}
+
+.hero-title {
+  font-size: clamp(4rem, 8vw, 9rem); font-weight: 800;
+  letter-spacing: -4px; line-height: 0.9; margin-bottom: 0;
+  line-height: 0.9;
+}
+
+.hero-title .thin-line {
+  font-weight: 100; font-style: italic; display: block; letter-spacing: -3px;
+}
+
+.hero-left-bottom { }
+
+.hero-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 0.5px solid var(--border-black); border-left: 0.5px solid var(--border-black); margin-top: 60px; }
+
+.hero-stat {
+  padding: 24px 28px; border-right: 0.5px solid var(--border-black);
+  border-bottom: 0.5px solid var(--border-black);
+}
+
+.hero-stat-num { font-size: 2.4rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1; }
+.hero-stat-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); margin-top: 6px; letter-spacing: 1px; text-transform: uppercase; }
+
+.hero-right-top { }
+
+.hero-description {
+  font-size: 1rem; line-height: 1.75; color: var(--text-mid); font-weight: 400;
+  max-width: 400px; margin-bottom: 48px;
+}
+
+.hero-cta-block { }
+
+.hero-cta-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+
+.hero-cta-row { display: flex; gap: 0; }
+
+.btn-black {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 28px; background: var(--bg-black); border: none;
+  font-family: 'Inter Tight', sans-serif; font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; color: white;
+  cursor: pointer; transition: opacity 0.2s; text-decoration: none;
+  border: 0.5px solid var(--border-black);
+}
+.btn-black:hover { opacity: 0.7; }
+
+.btn-outline-b {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 28px; background: transparent;
+  border: 0.5px solid var(--border-black);
+  font-family: 'Inter Tight', sans-serif; font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid);
+  cursor: pointer; transition: all 0.2s; text-decoration: none;
+}
+.btn-outline-b:hover { background: var(--bg-black); color: white; }
+
+.hero-right-bottom { }
+
+.hero-disciplines { border-top: 0.5px solid var(--border-black); padding-top: 32px; }
+.hero-disciplines-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+.disciplines-list { display: flex; flex-direction: column; gap: 8px; }
+.discipline-item { display: flex; align-items: center; gap: 16px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+.discipline-num { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); min-width: 24px; }
+.discipline-name { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+.discipline-detail { font-family: var(--mono); font-size: 0.62rem; color: var(--text-light); margin-left: auto; }
+
+/* ── MARQUEE ──────────────────────────────────────────────── */
+.marquee-section { border-bottom: 0.5px solid var(--border-black); overflow: hidden; padding: 16px 0; position: relative; z-index: 1; }
+.marquee-inner { display: inline-flex; animation: axisSroll 22s linear infinite; white-space: nowrap; }
+.marquee-inner span { font-family: var(--mono); font-size: 0.68rem; color: var(--text-light); padding: 0 40px; letter-spacing: 2px; text-transform: uppercase; }
+.marquee-inner .sep { color: var(--border-black); }
+@keyframes axisSroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── PROJECTS SECTION ─────────────────────────────────────── */
+.projects-section { position: relative; z-index: 1; border-bottom: 0.5px solid var(--border-black); }
+
+.projects-header {
+  display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--border-black);
+}
+
+.projects-header-left { padding: 48px 80px; border-right: 0.5px solid var(--border-black); }
+.projects-header-right { padding: 48px 80px; }
+
+.section-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+.section-heading { font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; }
+.section-heading .thin { font-weight: 200; font-style: italic; }
+
+.section-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; margin-top: 12px; }
+
+.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+
+.project-card {
+  padding: 48px; border-right: 0.5px solid var(--border-black); border-bottom: 0.5px solid var(--border-black);
+  transition: background 0.2s; cursor: default;
+  opacity: 0; transform: translateY(16px);
+}
+.project-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s, background 0.2s; }
+.project-card:nth-child(3n) { border-right: none; }
+.project-card:hover { background: #FAFAFA; }
+.project-card:nth-last-child(-n+3) { border-bottom: none; }
+
+.project-num { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); letter-spacing: 2px; margin-bottom: 20px; }
+.project-type { font-family: var(--mono); font-size: 0.62rem; color: var(--text-light); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.project-title { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
+.project-desc { font-size: 0.8rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 20px; }
+.project-specs { display: flex; gap: 8px; flex-wrap: wrap; }
+.project-spec { font-family: var(--mono); font-size: 0.58rem; color: var(--text-light); border: 0.5px solid var(--border); padding: 3px 8px; }
+.project-img { width: 100%; aspect-ratio: 4/3; background: #F5F5F5; border: 0.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 3rem; margin-bottom: 24px; filter: grayscale(1); }
+
+/* ── PROCESS ──────────────────────────────────────────────── */
+.process-section { border-bottom: 0.5px solid var(--border-black); position: relative; z-index: 1; }
+
+.process-header { padding: 64px 80px; border-bottom: 0.5px solid var(--border-black); }
+
+.process-steps { display: grid; grid-template-columns: repeat(4, 1fr); }
+
+.process-step {
+  padding: 48px 40px; border-right: 0.5px solid var(--border-black);
+  opacity: 0; transform: translateY(12px);
+}
+.process-step.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s; }
+.process-step:last-child { border-right: none; }
+
+.ps-num { font-size: clamp(4rem, 6vw, 7rem); font-weight: 100; letter-spacing: -3px; color: var(--border); line-height: 0.8; margin-bottom: 24px; }
+.ps-title { font-size: 1rem; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 10px; text-transform: uppercase; }
+.ps-desc { font-size: 0.78rem; color: var(--text-mid); line-height: 1.65; }
+
+/* ── TESTIMONIALS ─────────────────────────────────────────── */
+.testimonials-section { border-bottom: 0.5px solid var(--border-black); position: relative; z-index: 1; }
+
+.testimonials-header { padding: 64px 80px; border-bottom: 0.5px solid var(--border-black); display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; }
+
+.testimonials-grid { display: grid; grid-template-columns: 2fr 1fr; }
+
+.test-featured {
+  padding: 64px 80px; border-right: 0.5px solid var(--border-black);
+  opacity: 0; transform: translateY(16px);
+}
+.test-featured.visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s, transform 0.6s; }
+
+.test-stack { display: flex; flex-direction: column; border-left: none; }
+
+.test-card-s {
+  padding: 48px; border-bottom: 0.5px solid var(--border-black);
+  opacity: 0; transform: translateY(16px);
+}
+.test-card-s.visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s, transform 0.6s; }
+.test-card-s:last-child { border-bottom: none; }
+
+.test-featured-quote { font-size: clamp(1.2rem, 2vw, 1.8rem); font-weight: 300; font-style: italic; line-height: 1.55; margin-bottom: 32px; color: var(--text); letter-spacing: -0.3px; }
+.test-quote-s { font-size: 0.88rem; font-weight: 300; color: var(--text-mid); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+
+.test-separator { width: 32px; height: 0.5px; background: var(--border-black); margin-bottom: 16px; }
+.test-name-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); letter-spacing: 1px; margin-bottom: 4px; }
+.test-name { font-size: 0.9rem; font-weight: 700; letter-spacing: -0.2px; }
+.test-co { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); margin-top: 3px; }
+
+/* ── CTA ──────────────────────────────────────────────────── */
+.cta-section { position: relative; z-index: 1; }
+
+.cta-inner { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--border-black); }
+
+.cta-left {
+  padding: 100px 80px; border-right: 0.5px solid var(--border-black);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+
+.cta-right { padding: 100px 80px; display: flex; flex-direction: column; justify-content: center; }
+
+.cta-title { font-size: clamp(3rem, 6vw, 6rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin-bottom: 40px; }
+.cta-title em { font-weight: 100; font-style: italic; }
+
+.cta-sub { font-size: 0.95rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 40px; }
+
+.cta-form { display: flex; flex-direction: column; gap: 0; }
+.cta-input { padding: 18px 20px; border: 0.5px solid var(--border-black); background: transparent; font-family: 'Inter Tight', sans-serif; font-size: 0.88rem; color: var(--text); outline: none; transition: background 0.2s; border-bottom: none; }
+.cta-input:first-child { border-bottom: none; }
+.cta-input:last-of-type { border-bottom: 0.5px solid var(--border-black); margin-bottom: 0; }
+.cta-input::placeholder { color: var(--text-light); }
+.cta-input:focus { background: #FAFAFA; }
+.cta-btn-full { padding: 18px 24px; background: var(--bg-black); border: none; font-family: 'Inter Tight', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: white; cursor: pointer; transition: opacity 0.2s; margin-top: 12px; }
+.cta-btn-full:hover { opacity: 0.7; }
+
+.cta-right-content { }
+.cta-right h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 24px; }
+.cta-right ul { list-style: none; }
+.cta-right ul li { padding: 14px 0; border-bottom: 0.5px solid var(--border); font-size: 0.82rem; color: var(--text-mid); display: flex; align-items: center; gap: 12px; }
+.cta-right ul li::before { content: '—'; color: var(--text-light); font-family: var(--mono); }
+
+.cta-contact { margin-top: 40px; padding-top: 40px; border-top: 0.5px solid var(--border-black); }
+.cta-contact-label { font-family: var(--mono); font-size: 0.6rem; color: var(--text-light); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.cta-contact-info { font-size: 0.88rem; color: var(--text); }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+footer { background: var(--bg-black); position: relative; z-index: 1; }
+.footer-inner { }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; border-bottom: 0.5px solid rgba(255,255,255,0.1); }
+.footer-col { padding: 48px 40px; border-right: 0.5px solid rgba(255,255,255,0.07); }
+.footer-col:last-child { border-right: none; }
+.footer-brand-name { font-size: 0.8rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: white; margin-bottom: 16px; }
+.footer-brand p { font-family: var(--mono); font-size: 0.65rem; color: rgba(255,255,255,0.3); line-height: 1.65; max-width: 220px; }
+.footer-col h4 { font-family: var(--mono); font-size: 0.58px; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 20px; }
+.footer-col a { display: block; font-size: 0.78rem; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom { padding: 20px 40px; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.58rem; color: rgba(255,255,255,0.25); flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 1024px) {
+  .hero-inner, .projects-header, .cta-inner { grid-template-columns: 1fr; }
+  .hero-right, .hero-left, .projects-header-left, .projects-header-right, .cta-left, .cta-right { padding: 48px 24px; border-right: none; }
+  .hero-left { border-bottom: 0.5px solid var(--border-black); }
+  .projects-header-left { border-bottom: 0.5px solid var(--border-black); border-right: none; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .project-card { border-right: none; }
+  .process-header { padding: 48px 24px; }
+  .process-steps { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-header { padding: 48px 24px; flex-direction: column; align-items: flex-start; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .test-featured { padding: 48px 24px; border-right: none; }
+  .test-card-s { padding: 40px 24px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-col { padding: 40px 24px; }
+  nav { grid-template-columns: 1fr; }
+  .nav-logo-cell { border-right: none; }
+  .nav-links-cell { display: none; }
+  .nav-cta-cell { border-left: none; }
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- STATUS BAR -->
+<div class="sys-status">
+  <div class="sys-status-items">
+    <div class="sys-status-item"><span class="live">●</span> Studio open — appointments available</div>
+    <div class="sys-status-item">AXIS-ARCHITECTURE.COM</div>
+    <div class="sys-status-item">Founded 2008 · Los Angeles, CA</div>
+  </div>
+  <div class="sys-status-right" id="sys-time">--:--:-- UTC</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo-cell">
+    <div class="nav-logo">AXIS</div>
+  </div>
+  <div class="nav-links-cell">
+    <ul class="nav-links">
+      <li><a href="#">Work</a></li>
+      <li><a href="#">Process</a></li>
+      <li><a href="#">Studio</a></li>
+      <li><a href="#">Journal</a></li>
+      <li><a href="#">Awards</a></li>
+    </ul>
+  </div>
+  <div class="nav-cta-cell">
+    <a href="#" class="nav-cta">New Project Inquiry →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div>
+        <div class="hero-eyebrow">// Axis Architecture Studio · Est. 2008</div>
+        <h1 class="hero-title">
+          Precision<br>
+          built into<br>
+          <span class="thin-line">every line.</span>
+        </h1>
+      </div>
+      <div class="hero-left-bottom">
+        <div class="hero-stat-grid">
+          <div class="hero-stat">
+            <div class="hero-stat-num">17</div>
+            <div class="hero-stat-label">Years operating</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">340+</div>
+            <div class="hero-stat-label">Projects delivered</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">28</div>
+            <div class="hero-stat-label">Awards received</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">4</div>
+            <div class="hero-stat-label">Studio locations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-right-top">
+        <p class="hero-description">AXIS is a precision architecture studio specializing in high-performance residential, commercial, and institutional structures. We design at the intersection of structural rigor and spatial poetry — where every decision has a reason and every line has purpose.</p>
+        <div class="hero-cta-block">
+          <div class="hero-cta-label">// Begin a Project</div>
+          <div class="hero-cta-row">
+            <a href="#" class="btn-black">Start a Project →</a>
+            <a href="#" class="btn-outline-b">View Our Work</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right-bottom">
+        <div class="hero-disciplines">
+          <div class="hero-disciplines-label">// Disciplines</div>
+          <div class="disciplines-list">
+            <div class="discipline-item">
+              <div class="discipline-num">01</div>
+              <div class="discipline-name">Residential Architecture</div>
+              <div class="discipline-detail">Custom · High-end</div>
+            </div>
+            <div class="discipline-item">
+              <div class="discipline-num">02</div>
+              <div class="discipline-name">Commercial & Mixed-Use</div>
+              <div class="discipline-detail">Office · Retail · Hotel</div>
+            </div>
+            <div class="discipline-item">
+              <div class="discipline-num">03</div>
+              <div class="discipline-name">Institutional Structures</div>
+              <div class="discipline-detail">Cultural · Education · Civic</div>
+            </div>
+            <div class="discipline-item">
+              <div class="discipline-num">04</div>
+              <div class="discipline-name">Interior Architecture</div>
+              <div class="discipline-detail">Spatial design · FF&E</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-inner">
+    <span>Swiss Modernism</span><span class="sep"> · </span>
+    <span>Structural Precision</span><span class="sep"> · </span>
+    <span>Spatial Poetry</span><span class="sep"> · </span>
+    <span>Material Honesty</span><span class="sep"> · </span>
+    <span>Brutalist Clarity</span><span class="sep"> · </span>
+    <span>Tectonic Expression</span><span class="sep"> · </span>
+    <span>Form Follows Reason</span><span class="sep"> · </span>
+    <span>Built to Last</span><span class="sep"> · </span>
+    <span>Swiss Modernism</span><span class="sep"> · </span>
+    <span>Structural Precision</span><span class="sep"> · </span>
+    <span>Spatial Poetry</span><span class="sep"> · </span>
+    <span>Material Honesty</span><span class="sep"> · </span>
+    <span>Brutalist Clarity</span><span class="sep"> · </span>
+    <span>Tectonic Expression</span><span class="sep"> · </span>
+    <span>Form Follows Reason</span><span class="sep"> · </span>
+    <span>Built to Last</span><span class="sep"> · </span>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section class="projects-section">
+  <div class="projects-header">
+    <div class="projects-header-left">
+      <div class="section-label">// Selected Work</div>
+      <h2 class="section-heading">Built with<br><span class="thin">exacting intent.</span></h2>
+    </div>
+    <div class="projects-header-right">
+      <p class="section-desc">Every project in our portfolio represents a fundamental challenge solved with precision. We don't build buildings — we build arguments for how space should feel and how structure should perform.</p>
+    </div>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-img">🏛</div>
+      <div class="project-num">// PRJ-001</div>
+      <div class="project-type">Cultural Institution</div>
+      <div class="project-title">Meridian Arts Center</div>
+      <p class="project-desc">A 24,000 sq ft cultural institution designed around the concept of structured light — concrete fins precisely angled to control illumination throughout the day.</p>
+      <div class="project-specs">
+        <span class="project-spec">Los Angeles, CA</span>
+        <span class="project-spec">24,000 sq ft</span>
+        <span class="project-spec">2023</span>
+        <span class="project-spec">AIA Award</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-img">🏢</div>
+      <div class="project-num">// PRJ-002</div>
+      <div class="project-type">Commercial · Office</div>
+      <div class="project-title">The Fulcrum Tower</div>
+      <p class="project-desc">A 32-story mixed-use commercial tower whose structural expression is its architecture — a pure dialogue between lateral loads and inhabitable space.</p>
+      <div class="project-specs">
+        <span class="project-spec">Chicago, IL</span>
+        <span class="project-spec">620,000 sq ft</span>
+        <span class="project-spec">2022</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-img">🏠</div>
+      <div class="project-num">// PRJ-003</div>
+      <div class="project-type">Residential · Private</div>
+      <div class="project-title">House Solano</div>
+      <p class="project-desc">A private residence on 3.4 acres in the Santa Barbara hills. A single rectilinear volume that borrows its proportion from the surrounding topography.</p>
+      <div class="project-specs">
+        <span class="project-spec">Santa Barbara, CA</span>
+        <span class="project-spec">7,200 sq ft</span>
+        <span class="project-spec">2024</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-img">📚</div>
+      <div class="project-num">// PRJ-004</div>
+      <div class="project-type">Institutional · Education</div>
+      <div class="project-title">Cascade Library</div>
+      <p class="project-desc">A public library designed as a civic anchor — a long horizontal building whose reading rooms step down toward the adjacent park in section.</p>
+      <div class="project-specs">
+        <span class="project-spec">Portland, OR</span>
+        <span class="project-spec">18,400 sq ft</span>
+        <span class="project-spec">2021</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-img">🏨</div>
+      <div class="project-num">// PRJ-005</div>
+      <div class="project-type">Hospitality · Hotel</div>
+      <div class="project-title">Hotel Plinth</div>
+      <p class="project-desc">A 120-room boutique hotel in downtown Seattle. Raw concrete, brass details, and a double-height lobby carved from the building's structural core.</p>
+      <div class="project-specs">
+        <span class="project-spec">Seattle, WA</span>
+        <span class="project-spec">120 rooms</span>
+        <span class="project-spec">2023</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-img">⛪</div>
+      <div class="project-num">// PRJ-006</div>
+      <div class="project-type">Civic · Community</div>
+      <div class="project-title">The Commons</div>
+      <p class="project-desc">A community center and public market in Phoenix — an open-plan pavilion structure with a folded concrete roof system that collects and redistributes rainwater.</p>
+      <div class="project-specs">
+        <span class="project-spec">Phoenix, AZ</span>
+        <span class="project-spec">14,800 sq ft</span>
+        <span class="project-spec">2022</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section">
+  <div class="process-header">
+    <div class="section-label">// How We Work</div>
+    <h2 class="section-heading" style="max-width:600px;">Rigor at every stage.<br><span class="thin">No exceptions.</span></h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="ps-num">01</div>
+      <div class="ps-title">Discovery</div>
+      <p class="ps-desc">We begin with site, program, and constraint. We ask harder questions than your brief contains — about use, about light, about the life you intend to live in the space.</p>
+    </div>
+    <div class="process-step">
+      <div class="ps-num">02</div>
+      <div class="ps-title">Concept</div>
+      <p class="ps-desc">A single organizing idea that makes the project inevitable. We don't pursue trends — we pursue the argument that makes this specific building make sense in this specific place.</p>
+    </div>
+    <div class="process-step">
+      <div class="ps-num">03</div>
+      <div class="ps-title">Development</div>
+      <p class="ps-desc">Structural coordination, material selection, and systems integration. Every detail is drawn with the intent that the building will outlast its architects by a century.</p>
+    </div>
+    <div class="process-step">
+      <div class="ps-num">04</div>
+      <div class="ps-title">Delivery</div>
+      <p class="ps-desc">We remain on-site through construction. Design intent is non-negotiable. What is drawn is what is built — or we find a better answer together.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="testimonials-header">
+    <div>
+      <div class="section-label">// Client Testimony</div>
+      <h2 class="section-heading" style="font-size:clamp(1.8rem,3vw,2.8rem);">What it means to<br><span class="thin">build with AXIS.</span></h2>
+    </div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="test-featured">
+      <p class="test-featured-quote">"AXIS doesn't design buildings the way other firms do. They argue for them. Every decision in House Solano was defended with structural logic and spatial clarity — and the result is something I've never seen in 30 years of residential development. It is exactly what it needed to be, and nothing else."</p>
+      <div class="test-separator"></div>
+      <div class="test-name-label">// CLIENT</div>
+      <div class="test-name">Robert Halloran</div>
+      <div class="test-co">Private Client · House Solano, Santa Barbara</div>
+    </div>
+    <div class="test-stack">
+      <div class="test-card-s">
+        <p class="test-quote-s">"The Fulcrum Tower was a structural and schedule nightmare on paper. AXIS turned the constraints into the architecture. The building is celebrated precisely because the engineers and architects never separated their thinking."</p>
+        <div class="test-separator"></div>
+        <div class="test-name">James Ortega</div>
+        <div class="test-co">VP Development · Meridian Group</div>
+      </div>
+      <div class="test-card-s">
+        <p class="test-quote-s">"Hotel Plinth has won three hospitality design awards since opening. Our occupancy rate is 15% above comp set. Good architecture is a business decision — AXIS made us understand that."</p>
+        <div class="test-separator"></div>
+        <div class="test-name">Claire Wu</div>
+        <div class="test-co">CEO · Plinth Hospitality</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div>
+        <h2 class="cta-title">Begin<br>your<br><em>project.</em></h2>
+        <p class="cta-sub">New project inquiries are reviewed by a principal architect within 48 hours. We take on a limited number of projects each year — each one receives our full attention.</p>
+      </div>
+      <div class="cta-contact">
+        <div class="cta-contact-label">// Direct Contact</div>
+        <div class="cta-contact-info">studio@axisarchitecture.com<br>+1 (213) 555-0100</div>
+      </div>
+    </div>
+    <div class="cta-right">
+      <form class="cta-form" onsubmit="return false;">
+        <input class="cta-input" type="text" placeholder="Full Name" />
+        <input class="cta-input" type="email" placeholder="Email Address" />
+        <input class="cta-input" type="text" placeholder="Project Type" />
+        <input class="cta-input" type="text" placeholder="Approximate Budget" style="border-bottom:0.5px solid var(--border-black);" />
+        <button class="cta-btn-full">Submit Inquiry →</button>
+      </form>
+      <div class="cta-right-content" style="margin-top:40px;">
+        <h3>What to expect</h3>
+        <ul>
+          <li>Principal review within 48 hours</li>
+          <li>Complimentary 30-min consultation</li>
+          <li>Full fee proposal within 2 weeks</li>
+          <li>Strict confidentiality, always</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-col">
+        <div class="footer-brand-name">AXIS Architecture</div>
+        <p>A precision architecture studio. Founded 2008. Offices in Los Angeles, New York, Chicago, and London.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <a href="#">Work</a>
+        <a href="#">Process</a>
+        <a href="#">Awards</a>
+        <a href="#">Journal</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#">Residential</a>
+        <a href="#">Commercial</a>
+        <a href="#">Institutional</a>
+        <a href="#">Interior</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="#">New Project</a>
+        <a href="#">Press</a>
+        <a href="#">Careers</a>
+        <a href="#">Locations</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 AXIS Architecture Studio. All rights reserved.</span>
+      <span>Precision built into every line.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+function updateTime() {
+  const el = document.getElementById('sys-time');
+  if (el) {
+    const now = new Date();
+    el.textContent = now.toUTCString().slice(17,25) + ' UTC';
+  }
+}
+updateTime(); setInterval(updateTime, 1000);
+
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.project-card, .process-step, .test-featured, .test-card-s').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

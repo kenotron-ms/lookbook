@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMERALD — The Future of Wealth</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#050505;
+  --surface:rgba(255,255,255,.03);
+  --surface-hover:rgba(255,255,255,.06);
+  --em:#10b981;
+  --em-dim:#059669;
+  --em-glow:rgba(16,185,129,.15);
+  --text:#f4f4f4;
+  --muted:#6b7280;
+  --border:rgba(255,255,255,.07);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* WebGL-inspired mesh background */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(16,185,129,.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(16,185,129,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(5,5,5,0) 0%, #050505 100%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── NAV (glassmorphism) ── */
+nav{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);
+  z-index:100;width:calc(100% - 80px);max-width:1200px;
+  background:rgba(5,5,5,.7);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:16px;
+  display:flex;align-items:center;
+  padding:14px 28px;
+  gap:40px;
+}
+
+.nav-logo{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:700;
+  color:var(--em);letter-spacing:.05em;
+  text-decoration:none;
+  flex-shrink:0;
+}
+
+.nav-links{
+  display:flex;align-items:center;gap:28px;flex:1;
+}
+.nav-links a{
+  font-size:13px;font-weight:400;
+  color:var(--muted);text-decoration:none;
+  transition:color .2s;letter-spacing:.03em;
+}
+.nav-links a:hover{color:var(--text)}
+
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+
+.btn-em{
+  background:var(--em);color:#000;
+  font-family:'Inter',sans-serif;
+  font-size:12px;font-weight:600;letter-spacing:.06em;
+  padding:10px 24px;border:none;cursor:pointer;
+  border-radius:8px;text-decoration:none;display:inline-block;
+  transition:background .2s,box-shadow .2s,transform .15s;
+}
+.btn-em:hover{
+  background:#34d399;
+  box-shadow:0 0 24px rgba(16,185,129,.4);
+  transform:translateY(-1px);
+}
+
+.btn-glass{
+  background:var(--surface);color:var(--text);
+  font-size:12px;font-weight:500;letter-spacing:.04em;
+  padding:10px 20px;
+  border:1px solid var(--border);border-radius:8px;
+  cursor:pointer;text-decoration:none;display:inline-block;
+  backdrop-filter:blur(10px);
+  transition:background .2s,border-color .2s;
+}
+.btn-glass:hover{background:var(--surface-hover);border-color:rgba(16,185,129,.3)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  padding:160px 60px 100px;
+  display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  position:relative;z-index:1;
+}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(16,185,129,.08);
+  border:1px solid rgba(16,185,129,.2);
+  padding:7px 16px;border-radius:100px;
+  font-size:12px;font-weight:500;letter-spacing:.06em;
+  color:var(--em);margin-bottom:40px;
+}
+.hero-badge::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--em);
+  box-shadow:0 0 8px var(--em);
+  animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(56px,8vw,110px);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-.02em;
+  max-width:900px;
+  margin-bottom:28px;
+}
+.hero-title .em{color:var(--em)}
+.hero-title .italic{font-style:italic;font-weight:400}
+
+.hero-sub{
+  font-size:18px;font-weight:300;
+  color:rgba(244,244,244,.5);
+  max-width:540px;
+  line-height:1.7;
+  margin-bottom:48px;
+}
+
+.hero-actions{display:flex;gap:14px;align-items:center;justify-content:center;margin-bottom:80px}
+
+.hero-metrics{
+  display:flex;gap:60px;
+  background:var(--surface);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:32px 60px;
+}
+.metric{text-align:center}
+.metric-num{
+  font-family:'Playfair Display',serif;
+  font-size:38px;font-weight:700;
+  color:var(--em);
+  line-height:1;margin-bottom:6px;
+}
+.metric-label{font-size:12px;color:var(--muted);letter-spacing:.06em}
+
+/* ── Spotlight cards utility ── */
+.spotlight-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:36px 32px;
+  position:relative;overflow:hidden;
+  transition:border-color .3s,box-shadow .3s,transform .2s;
+  cursor:default;
+}
+.spotlight-card::before{
+  content:'';
+  position:absolute;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(16,185,129,.12) 0%,transparent 70%);
+  border-radius:50%;
+  top:-150px;left:-150px;
+  transition:all .4s ease;
+  pointer-events:none;
+}
+.spotlight-card:hover{
+  border-color:rgba(16,185,129,.3);
+  box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 0 1px rgba(16,185,129,.1);
+  transform:translateY(-4px);
+}
+
+/* ── FEATURES ── */
+.features{
+  padding:100px 60px;
+  position:relative;z-index:1;
+}
+
+.features-header{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:60px;
+}
+.features-header h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,4vw,54px);
+  font-weight:700;line-height:1.05;
+}
+.features-header p{
+  font-size:15px;color:var(--muted);
+  max-width:340px;line-height:1.6;
+  text-align:right;
+}
+
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.feature-icon{
+  width:48px;height:48px;
+  background:rgba(16,185,129,.1);
+  border:1px solid rgba(16,185,129,.2);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:24px;
+}
+.feature-title{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:600;
+  margin-bottom:12px;
+}
+.feature-desc{
+  font-size:13px;color:var(--muted);line-height:1.7;
+}
+
+/* ── HOW IT WORKS ── */
+.how{
+  padding:100px 60px;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  position:relative;z-index:1;
+}
+
+.how-inner{
+  max-width:1100px;margin:0 auto;
+}
+
+.section-eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--em);
+  margin-bottom:16px;
+}
+
+.how-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+
+.how-steps{
+  display:flex;flex-direction:column;gap:0;
+}
+.how-step{
+  display:flex;gap:20px;
+  padding:28px 0;
+  border-bottom:1px solid var(--border);
+}
+.how-step:last-child{border-bottom:none}
+.step-num{
+  font-family:'Playfair Display',serif;
+  font-size:32px;font-weight:700;color:var(--em);
+  opacity:.3;flex-shrink:0;line-height:1;
+}
+.step-content h3{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:600;
+  margin-bottom:6px;line-height:1.3;
+}
+.step-content p{font-size:13px;color:var(--muted);line-height:1.6}
+
+.how-visual{
+  background:rgba(16,185,129,.03);
+  border:1px solid rgba(16,185,129,.1);
+  border-radius:24px;
+  padding:40px;
+  position:relative;overflow:hidden;
+}
+.portfolio-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.portfolio-item:last-child{border-bottom:none}
+.portfolio-name{font-size:13px;font-weight:500}
+.portfolio-val{font-size:13px;color:var(--em);font-weight:600}
+.portfolio-change{font-size:11px;color:#34d399;margin-left:8px}
+
+.portfolio-chart{
+  height:80px;margin:20px 0;
+  background:linear-gradient(180deg,rgba(16,185,129,.2) 0%,transparent 100%);
+  border-radius:4px;
+  position:relative;overflow:hidden;
+}
+.portfolio-chart::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(16,185,129,.1) 50%,transparent 100%);
+  animation:shimmer 2s infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* ── TESTIMONIALS ── */
+.testimonials{padding:100px 60px;position:relative;z-index:1}
+
+.testimonials-header{text-align:center;margin-bottom:60px}
+.testimonials-header h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,4vw,52px);font-weight:700;
+  margin-bottom:12px;
+}
+
+.testi-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.testi-stars{
+  display:flex;gap:4px;margin-bottom:16px;
+}
+.star{color:var(--em);font-size:14px}
+
+.testi-text{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-style:italic;
+  line-height:1.6;color:rgba(244,244,244,.85);
+  margin-bottom:24px;
+}
+.testi-author{
+  display:flex;align-items:center;gap:12px;
+}
+.testi-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--em),var(--em-dim));
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:#000;
+}
+.testi-name{font-size:13px;font-weight:600}
+.testi-role{font-size:11px;color:var(--muted)}
+
+/* ── CTA ── */
+.cta{
+  padding:140px 60px;
+  text-align:center;
+  position:relative;z-index:1;
+  overflow:hidden;
+}
+.cta::before{
+  content:'';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(16,185,129,.08) 0%,transparent 70%);
+  pointer-events:none;border-radius:50%;
+}
+.cta h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(44px,6vw,80px);
+  font-weight:900;line-height:1;
+  margin-bottom:20px;position:relative;
+}
+.cta p{
+  font-size:17px;color:var(--muted);
+  margin-bottom:48px;position:relative;
+}
+.cta-actions{display:flex;gap:16px;justify-content:center;position:relative}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:60px;
+  position:relative;z-index:1;
+}
+.footer-inner{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px;margin-bottom:48px;
+}
+.footer-logo{
+  font-family:'Playfair Display',serif;
+  font-size:24px;font-weight:700;color:var(--em);
+  margin-bottom:12px;
+}
+.footer-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.footer-col-title{
+  font-size:11px;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--text);margin-bottom:16px;
+}
+.footer-col a{
+  display:block;font-size:13px;color:var(--muted);
+  text-decoration:none;margin-bottom:10px;transition:color .2s;
+}
+.footer-col a:hover{color:var(--em)}
+.footer-bottom{
+  display:flex;justify-content:space-between;
+  padding-top:32px;border-top:1px solid var(--border);
+  font-size:12px;color:var(--muted);
+}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .features-grid,.testi-grid,.how-grid,.footer-inner{grid-template-columns:1fr}
+  .hero-metrics{flex-direction:column;gap:24px;padding:28px 32px}
+  .features-header{flex-direction:column;text-align:left;gap:16px}
+  .features-header p{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">EMERALD</a>
+  <div class="nav-links">
+    <a href="#features">Platform</a>
+    <a href="#how">How it works</a>
+    <a href="#testimonials">Stories</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <div class="nav-right">
+    <a href="#" class="btn-glass">Sign in</a>
+    <a href="#" class="btn-em">Get started free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Now in public beta</div>
+  <h1 class="hero-title reveal">
+    The <span class="italic em">future</span><br>of wealth<br><span class="italic">begins</span> here.
+  </h1>
+  <p class="hero-sub reveal">
+    EMERALD combines institutional-grade AI with elegant design to give you an investment intelligence platform once reserved for the ultra-wealthy.
+  </p>
+  <div class="hero-actions reveal">
+    <a href="#" class="btn-em" style="padding:14px 36px;font-size:13px">Open your account</a>
+    <a href="#how" class="btn-glass" style="padding:14px 28px;font-size:13px">See how it works →</a>
+  </div>
+  <div class="hero-metrics reveal">
+    <div class="metric">
+      <div class="metric-num">$2.4B+</div>
+      <div class="metric-label">Assets managed</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">18.7%</div>
+      <div class="metric-label">Avg. annual return</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">64K+</div>
+      <div class="metric-label">Investors</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">99.99%</div>
+      <div class="metric-label">Uptime SLA</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-header">
+    <h2>Built for the<br><em style="font-style:italic;color:var(--em)">serious</em> investor.</h2>
+    <p class="section-eyebrow" style="text-align:right;color:var(--muted);font-size:14px;letter-spacing:0;text-transform:none">Every feature is designed with one goal: superior, risk-adjusted returns.</p>
+  </div>
+  <div class="features-grid">
+    <div class="spotlight-card reveal">
+      <div class="feature-icon">◈</div>
+      <div class="feature-title">Neural Portfolio Engine</div>
+      <div class="feature-desc">Our AI continuously rebalances your portfolio using live market signals, macroeconomic indicators, and your personal risk tolerance.</div>
+    </div>
+    <div class="spotlight-card reveal">
+      <div class="feature-icon">⬡</div>
+      <div class="feature-title">Fractional Alternatives</div>
+      <div class="feature-desc">Access private equity, venture debt, and real assets with as little as $100. Previously institutional-only assets, democratized.</div>
+    </div>
+    <div class="spotlight-card reveal">
+      <div class="feature-icon">◉</div>
+      <div class="feature-title">Tax-Loss Harvesting AI</div>
+      <div class="feature-desc">EMERALD's AI identifies harvesting opportunities in real-time, saving the average investor $3,200+ in taxes annually.</div>
+    </div>
+    <div class="spotlight-card reveal">
+      <div class="feature-icon">◇</div>
+      <div class="feature-title">Risk Intelligence Layer</div>
+      <div class="feature-desc">Multi-factor risk modelling with stress testing across 10,000 market scenarios. Sleep confidently through any market cycle.</div>
+    </div>
+    <div class="spotlight-card reveal">
+      <div class="feature-icon">▣</div>
+      <div class="feature-title">ESG Precision Filter</div>
+      <div class="feature-desc">Align your portfolio with your values at a granular level — sector, geography, governance score, and emissions intensity.</div>
+    </div>
+    <div class="spotlight-card reveal">
+      <div class="feature-icon">⬟</div>
+      <div class="feature-title">Institutional Custody</div>
+      <div class="feature-desc">Your assets are held at SIPC-insured, bank-grade custodians. EMERALD never touches or commingles client funds.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="how-grid">
+      <div>
+        <div class="section-eyebrow">How it works</div>
+        <h2 class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(32px,3.5vw,48px);font-weight:700;line-height:1.1;margin-bottom:40px">From sign-up to<br>optimized in minutes.</h2>
+        <div class="how-steps">
+          <div class="how-step reveal">
+            <div class="step-num">01</div>
+            <div class="step-content">
+              <h3>Connect your financial picture</h3>
+              <p>Link existing accounts. EMERALD builds a complete view of your net worth, income, and current exposure.</p>
+            </div>
+          </div>
+          <div class="how-step reveal">
+            <div class="step-num">02</div>
+            <div class="step-content">
+              <h3>Define your goals</h3>
+              <p>Retirement, wealth preservation, aggressive growth — set your horizon, risk appetite, and values.</p>
+            </div>
+          </div>
+          <div class="how-step reveal">
+            <div class="step-num">03</div>
+            <div class="step-content">
+              <h3>AI builds your portfolio</h3>
+              <p>The Neural Portfolio Engine constructs and continuously manages your allocation across 40+ asset classes.</p>
+            </div>
+          </div>
+          <div class="how-step reveal">
+            <div class="step-num">04</div>
+            <div class="step-content">
+              <h3>Watch your wealth grow</h3>
+              <p>Real-time performance tracking, monthly intelligence reports, and tax optimization — all automated.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="how-visual reveal">
+        <div class="section-eyebrow" style="margin-bottom:20px">Portfolio Overview</div>
+        <div class="portfolio-chart"></div>
+        <div class="portfolio-item">
+          <div>
+            <div class="portfolio-name">US Equities</div>
+            <div style="font-size:11px;color:var(--muted)">Large Cap Growth</div>
+          </div>
+          <div style="text-align:right">
+            <div class="portfolio-val">$48,240</div>
+            <div class="portfolio-change">+12.4%</div>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <div>
+            <div class="portfolio-name">Private Credit</div>
+            <div style="font-size:11px;color:var(--muted)">Senior Secured Loans</div>
+          </div>
+          <div style="text-align:right">
+            <div class="portfolio-val">$24,100</div>
+            <div class="portfolio-change">+8.1%</div>
+          </div>
+        </div>
+        <div class="portfolio-item">
+          <div>
+            <div class="portfolio-name">Real Assets</div>
+            <div style="font-size:11px;color:var(--muted)">Infrastructure & REIT</div>
+          </div>
+          <div style="text-align:right">
+            <div class="portfolio-val">$18,900</div>
+            <div class="portfolio-change">+6.8%</div>
+          </div>
+        </div>
+        <div style="padding-top:20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:12px;color:var(--muted)">Total portfolio value</div>
+          <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--em)">$142,780</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-header reveal">
+    <div class="section-eyebrow">Investor Stories</div>
+    <h2>Wealth, <em style="font-style:italic;color:var(--em)">transformed.</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="spotlight-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"I moved my entire portfolio from a traditional advisor to EMERALD. In 18 months, I've outperformed my old advisor by 6.2 percentage points — and paid zero management fees."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">RC</div>
+        <div>
+          <div class="testi-name">Rachel Chen</div>
+          <div class="testi-role">Software Engineer, $240K portfolio</div>
+        </div>
+      </div>
+    </div>
+    <div class="spotlight-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"The tax-loss harvesting alone saved me $4,800 last year. The portfolio intelligence is genuinely elite — I've never felt this informed about my own money."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">MS</div>
+        <div>
+          <div class="testi-name">Marcus Sullivan</div>
+          <div class="testi-role">Physician, $1.1M portfolio</div>
+        </div>
+      </div>
+    </div>
+    <div class="spotlight-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"I finally have access to the alternative investments I always read about but couldn't access. EMERALD made me feel like I actually had a Goldman Sachs private banker."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">AP</div>
+        <div>
+          <div class="testi-name">Aisha Patel</div>
+          <div class="testi-role">Entrepreneur, $580K portfolio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="pricing">
+  <div class="section-eyebrow">Join 64,000+ investors</div>
+  <h2 class="reveal">Your wealth<br><em style="font-style:italic;color:var(--em)">deserves</em> better.</h2>
+  <p class="reveal">Start free. No minimums. No management fees for the first $10,000.<br>Cancel anytime — but you won't want to.</p>
+  <div class="cta-actions reveal">
+    <a href="#" class="btn-em" style="padding:16px 44px;font-size:14px">Open free account →</a>
+    <a href="#" class="btn-glass" style="padding:16px 28px;font-size:14px">Compare plans</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">EMERALD</div>
+      <div class="footer-desc">The AI-powered investment platform for the modern wealth builder. Institutional intelligence. Personal touch.</div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Product</div>
+      <a href="#">Portfolio AI</a>
+      <a href="#">Alternatives</a>
+      <a href="#">Tax Engine</a>
+      <a href="#">Mobile App</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <a href="#">About</a>
+      <a href="#">Careers</a>
+      <a href="#">Blog</a>
+      <a href="#">Press</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Legal</div>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Disclosures</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Emerald Financial, Inc. All rights reserved. SIPC insured. Not a fiduciary.</span>
+    <span>Past performance is not indicative of future results.</span>
+  </div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 70);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => io.observe(el));
+
+// Spotlight card effect
+document.querySelectorAll('.spotlight-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.querySelector('::before');
+    card.style.setProperty('--mx', x + 'px');
+    card.style.setProperty('--my', y + 'px');
+    const pseudo = card.querySelector('*:first-child');
+  });
+});
+</script>
+</body>
+</html>

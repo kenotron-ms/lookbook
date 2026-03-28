@@ -1,0 +1,44 @@
+{
+  "id": "39a40fa5-7712-40d9-a6d4-b6e1725e3059",
+  "createdAt": "2026-01-02T05:32:41.635Z",
+  "updatedAt": "2026-03-28T06:28:31.342Z",
+  "deletedAt": null,
+  "title": "\"Spotlight\" Mask",
+  "slug": "spotlight-mask",
+  "description": "A scroll-driven interaction where a circular spotlight mask grows to reveal colorful UI content underneath a dark overlay.",
+  "teamId": "7d97ebb3-363d-49d3-a029-fa9a23815e3f",
+  "creatorId": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+  "prompt": "### **The \"Lens Flare\" or \"Spotlight\" Mask**\n\nA high-end \"Dark Mode\" interaction.\n\n> *\"Cover the section with a solid black overlay. Create a circular clip-path mask that is tied to the scroll progress. As the user moves down the page, the 'spotlight' mask should grow from 0% to 150% in size, revealing the colorful UI layout hidden beneath the black layer.\"*",
+  "images": [],
+  "tags": [
+    "animation",
+    "scroll animation",
+    "landing page"
+  ],
+  "previewUrl": "https://component-ea0ea6be-df72-421b-8f67-7d0532be7a54.preview.superdesign.dev/?projectId=fa9a0ca3-9361-4934-8488-4a95ea016408",
+  "thumbnail": {
+    "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/preview-artifacts/prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/df8a4f8e-dee1-41f9-9e10-5b426176ce35.mp4",
+    "type": "video",
+    "storagePath": "prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/df8a4f8e-dee1-41f9-9e10-5b426176ce35.mp4"
+  },
+  "previewDevice": null,
+  "previewShowFrame": false,
+  "isPublic": true,
+  "previewViewCount": 1736,
+  "detailViewCount": 152,
+  "copyCount": 40,
+  "tryCount": 1,
+  "creator": {
+    "id": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+    "name": "Zhou Jason",
+    "email": "jason.zhou.design@gmail.com",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI6-P1KTFqMDsQTtfdDZAggOdMieNKQEuMwOGmTCNPC5ZrU=s96-c"
+  },
+  "stats": {
+    "previewViewCount": 1736,
+    "detailViewCount": 152,
+    "copyCount": 40,
+    "tryCount": 1,
+    "remixCount": 41
+  }
+}

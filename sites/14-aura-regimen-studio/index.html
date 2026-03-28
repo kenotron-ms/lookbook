@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA — Your Daily Regimen, Simplified</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #FBF8F3;
+  --warm: #F2EDE4;
+  --tan: #E8E0D2;
+  --brown: #8B6F5E;
+  --dark-brown: #4A3728;
+  --ink: #1E1A17;
+  --sage: #6B8C6A;
+  --gold: #C4975A;
+  --border: #DDD6CA;
+  --muted: #9E9285;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0; z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 64px;
+  height: 64px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-actions { display: flex; gap: 12px; align-items: center; }
+.btn-primary {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 10px 24px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.3s;
+  border-radius: 2px;
+}
+.btn-primary:hover { background: var(--dark-brown); }
+.btn-outline {
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 10px 24px;
+  font-size: 13px;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.btn-outline:hover { border-color: var(--brown); }
+
+/* HERO */
+.hero {
+  padding: 100px 64px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  color: var(--brown);
+  margin-bottom: 32px;
+}
+.eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); }
+.hero-h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 400;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+.hero-h1 em { font-style: italic; color: var(--brown); }
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 440px;
+  margin-bottom: 40px;
+}
+.hero-trust {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.trust-item { display: flex; align-items: center; gap: 8px; }
+.trust-icon { width: 20px; height: 20px; border-radius: 50%; background: var(--sage); display: flex; align-items: center; justify-content: center; }
+.trust-icon::after { content: '✓'; font-size: 11px; color: white; font-weight: 600; }
+.trust-text { font-size: 12px; color: var(--muted); }
+.hero-visual {}
+.bento-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 12px;
+}
+.bento-card {
+  background: var(--warm);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.bento-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(30,26,23,0.08); }
+.bento-card.large { grid-column: 1 / 3; }
+.bento-card.featured { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+.bento-card.sage { background: var(--sage); color: white; border-color: var(--sage); }
+.bento-icon {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: var(--cream);
+  margin-bottom: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.bento-card.featured .bento-icon { background: rgba(255,255,255,0.1); }
+.bento-card.sage .bento-icon { background: rgba(255,255,255,0.15); }
+.bento-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+.bento-card.featured .bento-label { color: rgba(251,248,243,0.5); }
+.bento-card.sage .bento-label { color: rgba(255,255,255,0.6); }
+.bento-name { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; }
+.bento-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.bento-card.featured .bento-desc { color: rgba(251,248,243,0.6); }
+.bento-card.sage .bento-desc { color: rgba(255,255,255,0.7); }
+.bento-price { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--gold); margin-top: 12px; }
+
+/* REGIMEN SECTION */
+.regimen-section {
+  padding: 100px 64px;
+  border-bottom: 1px solid var(--border);
+}
+.section-eyebrow { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.section-title { font-family: 'DM Serif Display', serif; font-size: clamp(32px, 4vw, 56px); font-weight: 400; color: var(--ink); margin-bottom: 16px; }
+.section-sub { font-size: 14px; color: var(--muted); max-width: 480px; line-height: 1.8; margin-bottom: 64px; }
+.protocol-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.timeline-cell {
+  background: var(--cream);
+  padding: 40px 32px;
+  transition: background 0.3s;
+}
+.timeline-cell:hover { background: var(--warm); }
+.timeline-time {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.timeline-time::before { content: ''; display: inline-block; width: 24px; height: 1px; background: var(--gold); }
+.timeline-step { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 12px; color: var(--ink); }
+.timeline-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+.timeline-products { display: flex; flex-direction: column; gap: 8px; }
+.product-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--ink);
+}
+.pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* FACTS PANEL */
+.facts-section {
+  padding: 100px 64px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.facts-left {}
+.facts-right {}
+.facts-panel {
+  border: 2px solid var(--ink);
+  padding: 0;
+}
+.facts-header {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 20px 24px;
+}
+.facts-header-title { font-size: 22px; font-weight: 500; letter-spacing: 0.05em; }
+.facts-header-sub { font-size: 12px; color: rgba(251,248,243,0.5); margin-top: 4px; }
+.facts-body { padding: 0 24px; }
+.facts-divider { height: 6px; background: var(--ink); }
+.facts-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 13px;
+}
+.facts-row.bold { font-weight: 500; border-bottom-width: 2px; border-bottom-color: var(--ink); }
+.facts-row.indent { padding-left: 16px; }
+.facts-row.indent .facts-name { color: var(--muted); font-size: 12px; }
+.facts-val { font-weight: 500; }
+.facts-footer { padding: 12px 0; font-size: 10px; color: var(--muted); line-height: 1.6; }
+.qual-modules { margin-top: 40px; }
+.qual-item { display: flex; align-items: flex-start; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.qual-item:first-child { border-top: 1px solid var(--border); }
+.qual-badge {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: var(--sage);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.qual-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+.qual-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* TESTIMONIALS */
+.testimonials { padding: 100px 64px; border-bottom: 1px solid var(--border); }
+.test-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 60px;
+}
+.test-card {
+  background: var(--warm);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  transition: box-shadow 0.3s;
+}
+.test-card:hover { box-shadow: 0 8px 32px rgba(30,26,23,0.07); }
+.test-stars { display: flex; gap: 3px; margin-bottom: 20px; }
+.star { font-size: 14px; color: var(--gold); }
+.test-body { font-family: 'DM Serif Display', serif; font-size: 17px; font-weight: 400; font-style: italic; line-height: 1.5; color: var(--ink); margin-bottom: 24px; }
+.test-meta { display: flex; align-items: center; gap: 12px; }
+.test-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--tan); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--brown); }
+.test-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+.test-regimen { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.test-result {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--sage);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.test-result::before { content: '↑'; font-weight: 600; }
+
+/* SOCIAL PROOF BAR */
+.proof-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--ink);
+  color: var(--cream);
+}
+.proof-cell {
+  padding: 40px 32px;
+  border-right: 1px solid rgba(251,248,243,0.1);
+  text-align: center;
+}
+.proof-cell:last-child { border-right: none; }
+.proof-num { font-family: 'DM Serif Display', serif; font-size: 44px; font-weight: 400; color: var(--cream); margin-bottom: 8px; }
+.proof-label { font-size: 12px; color: rgba(251,248,243,0.4); letter-spacing: 0.05em; }
+
+/* CTA */
+.cta-section {
+  padding: 120px 64px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-bg-circle {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139,111,94,0.08) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.cta-content { position: relative; }
+.cta-h2 { font-family: 'DM Serif Display', serif; font-size: clamp(44px, 6vw, 80px); font-weight: 400; line-height: 1.05; color: var(--ink); margin-bottom: 24px; }
+.cta-h2 em { font-style: italic; color: var(--brown); }
+.cta-sub { font-size: 15px; color: var(--muted); max-width: 480px; margin: 0 auto 48px; line-height: 1.8; }
+.cta-btns { display: flex; gap: 16px; justify-content: center; }
+.btn-large {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 18px 44px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+.btn-large:hover { background: var(--dark-brown); }
+.btn-large-outline {
+  display: inline-block;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 18px 44px;
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.btn-large-outline:hover { border-color: var(--brown); }
+.cta-disclaimer { font-size: 12px; color: var(--muted); margin-top: 24px; }
+
+/* FOOTER */
+footer { background: var(--ink); color: var(--cream); padding: 80px 64px 40px; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(251,248,243,0.1);
+}
+.footer-brand { font-family: 'DM Serif Display', serif; font-size: 28px; margin-bottom: 16px; }
+.footer-desc { font-size: 13px; color: rgba(251,248,243,0.4); line-height: 1.8; max-width: 260px; }
+.footer-col-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(251,248,243,0.3); margin-bottom: 20px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a { font-size: 13px; color: rgba(251,248,243,0.55); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--cream); }
+.footer-bottom { display: flex; justify-content: space-between; padding-top: 40px; font-size: 12px; color: rgba(251,248,243,0.25); }
+
+.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fade-in.visible { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 60px 24px; }
+  .protocol-timeline { grid-template-columns: 1fr 1fr; }
+  .facts-section { grid-template-columns: 1fr; padding: 60px 24px; }
+  .test-grid { grid-template-columns: 1fr; }
+  .proof-bar { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">AURA</a>
+  <ul class="nav-links">
+    <li><a href="#regimen">Regimen</a></li>
+    <li><a href="#supplements">Supplements</a></li>
+    <li><a href="#science">Science</a></li>
+    <li><a href="#results">Results</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#regimen" class="btn-outline">Take the Quiz</a>
+    <a href="#shop" class="btn-primary">Shop Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left fade-in">
+    <div class="hero-eyebrow"><div class="eyebrow-dot"></div>Evidence-based wellness · No guesswork</div>
+    <h1 class="hero-h1">Your daily regimen,<br><em>simplified.</em></h1>
+    <p class="hero-sub">AURA builds your personalized supplement protocol from peer-reviewed science, your health profile, and goals that actually matter to you — then ships everything in one daily kit.</p>
+    <div class="hero-actions">
+      <a href="#regimen" class="btn-primary">Build My Regimen</a>
+      <a href="#science" class="btn-outline">See the Science</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-item"><div class="trust-icon"></div><span class="trust-text">3rd-party tested</span></div>
+      <div class="trust-item"><div class="trust-icon"></div><span class="trust-text">NSF Certified</span></div>
+      <div class="trust-item"><div class="trust-icon"></div><span class="trust-text">No fillers</span></div>
+    </div>
+  </div>
+  <div class="hero-visual fade-in">
+    <div class="bento-preview">
+      <div class="bento-card featured">
+        <div class="bento-icon">🌅</div>
+        <p class="bento-label">Morning Protocol</p>
+        <h3 class="bento-name">Rise Stack</h3>
+        <p class="bento-desc">Magnesium, B-complex, Omega-3, CoQ10, Vitamin D3+K2</p>
+        <div class="bento-price">£ 58 / mo</div>
+      </div>
+      <div class="bento-card">
+        <div class="bento-icon">🌙</div>
+        <p class="bento-label">Evening Protocol</p>
+        <h3 class="bento-name">Restore Stack</h3>
+        <p class="bento-desc">Ashwagandha, L-Theanine, Glycine, Zinc</p>
+      </div>
+      <div class="bento-card sage">
+        <div class="bento-icon">🧬</div>
+        <p class="bento-label">Targeted</p>
+        <h3 class="bento-name">Skin Protocol</h3>
+        <p class="bento-desc">Collagen, Biotin, Vitamin C, Hyaluronic Acid</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGIMEN SECTION -->
+<section class="regimen-section fade-in" id="regimen">
+  <p class="section-eyebrow">The AURA Protocol</p>
+  <h2 class="section-title">One system. Morning to night.</h2>
+  <p class="section-sub">Every ingredient is dosed at the clinically studied amount. Not a milligram more, not less. Your regimen ships in daily packs — just open and take.</p>
+  <div class="protocol-timeline">
+    <div class="timeline-cell">
+      <div class="timeline-time">7:00 AM</div>
+      <h3 class="timeline-step">Wake Up</h3>
+      <p class="timeline-desc">Foundation nutrients for energy metabolism, immune function, and cognitive clarity.</p>
+      <div class="timeline-products">
+        <div class="product-pill"><div class="pill-dot" style="background:var(--gold)"></div>Vitamin D3+K2</div>
+        <div class="product-pill"><div class="pill-dot" style="background:var(--sage)"></div>Omega-3 DHA/EPA</div>
+        <div class="product-pill"><div class="pill-dot" style="background:var(--brown)"></div>B-Complex</div>
+      </div>
+    </div>
+    <div class="timeline-cell">
+      <div class="timeline-time">12:00 PM</div>
+      <h3 class="timeline-step">Midday</h3>
+      <p class="timeline-desc">Performance and focus support for your most demanding hours of the day.</p>
+      <div class="timeline-products">
+        <div class="product-pill"><div class="pill-dot" style="background:var(--sage)"></div>L-Tyrosine</div>
+        <div class="product-pill"><div class="pill-dot" style="background:var(--gold)"></div>CoQ10</div>
+      </div>
+    </div>
+    <div class="timeline-cell">
+      <div class="timeline-time">6:00 PM</div>
+      <h3 class="timeline-step">Wind Down</h3>
+      <p class="timeline-desc">Cortisol regulation and stress adaptation before your evening begins.</p>
+      <div class="timeline-products">
+        <div class="product-pill"><div class="pill-dot" style="background:var(--brown)"></div>Ashwagandha KSM-66</div>
+        <div class="product-pill"><div class="pill-dot" style="background:var(--sage)"></div>L-Theanine</div>
+      </div>
+    </div>
+    <div class="timeline-cell">
+      <div class="timeline-time">10:00 PM</div>
+      <h3 class="timeline-step">Sleep Protocol</h3>
+      <p class="timeline-desc">Deep sleep architecture support for recovery, HGH release, and cellular repair.</p>
+      <div class="timeline-products">
+        <div class="product-pill"><div class="pill-dot" style="background:var(--gold)"></div>Magnesium Glycinate</div>
+        <div class="product-pill"><div class="pill-dot" style="background:var(--sage)"></div>Glycine 3g</div>
+        <div class="product-pill"><div class="pill-dot" style="background:var(--brown)"></div>Zinc Bisglycinate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACTS PANEL -->
+<section class="facts-section fade-in" id="supplements">
+  <div class="facts-left">
+    <p class="section-eyebrow">Supplement Facts</p>
+    <h2 class="section-title">Nothing hidden. Everything labeled.</h2>
+    <p class="section-sub">Unlike most supplement companies, we put the exact form and dose of every ingredient on the label — not a proprietary blend that obscures reality.</p>
+    <div class="qual-modules">
+      <div class="qual-item">
+        <div class="qual-badge">🧪</div>
+        <div>
+          <p class="qual-title">Third-Party Tested</p>
+          <p class="qual-desc">Every batch is independently tested for potency, purity, and the absence of heavy metals, pesticides, and microbes.</p>
+        </div>
+      </div>
+      <div class="qual-item">
+        <div class="qual-badge">📋</div>
+        <div>
+          <p class="qual-title">NSF Certified for Sport</p>
+          <p class="qual-desc">Our sports-line carries NSF Certified for Sport certification — trusted by professional athletes and coaches worldwide.</p>
+        </div>
+      </div>
+      <div class="qual-item">
+        <div class="qual-badge">🌿</div>
+        <div>
+          <p class="qual-title">Clean Labels Only</p>
+          <p class="qual-desc">No magnesium stearate, no artificial colours, no titanium dioxide. Capsules are vegan HPMC. No exceptions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="facts-right">
+    <div class="facts-panel">
+      <div class="facts-header">
+        <div class="facts-header-title">Supplement Facts</div>
+        <div class="facts-header-sub">Serving Size: 1 Daily Pack · Servings Per Container: 30</div>
+      </div>
+      <div class="facts-divider"></div>
+      <div class="facts-body">
+        <div class="facts-row bold"><span class="facts-name">Amount Per Serving</span><span class="facts-val">% DV</span></div>
+        <div class="facts-row bold"><span class="facts-name">Vitamin D3 (as Cholecalciferol)</span><span class="facts-val">5000 IU · 625%</span></div>
+        <div class="facts-row bold"><span class="facts-name">Vitamin K2 (as MK-7)</span><span class="facts-val">200 mcg · **</span></div>
+        <div class="facts-row bold"><span class="facts-name">Magnesium (as Glycinate)</span><span class="facts-val">400 mg · 95%</span></div>
+        <div class="facts-row"><span class="facts-name" style="padding-left:16px;color:var(--muted);">Elemental Magnesium</span><span class="facts-val">57 mg</span></div>
+        <div class="facts-row bold"><span class="facts-name">Omega-3 Fatty Acids</span><span class="facts-val">2000 mg · **</span></div>
+        <div class="facts-row indent"><span class="facts-name">DHA</span><span class="facts-val">660 mg</span></div>
+        <div class="facts-row indent"><span class="facts-name">EPA</span><span class="facts-val">990 mg</span></div>
+        <div class="facts-row bold"><span class="facts-name">Ashwagandha (KSM-66®)</span><span class="facts-val">600 mg · **</span></div>
+        <div class="facts-row bold"><span class="facts-name">CoQ10 (as Ubiquinol)</span><span class="facts-val">200 mg · **</span></div>
+        <div class="facts-row bold"><span class="facts-name">L-Theanine</span><span class="facts-val">200 mg · **</span></div>
+        <div class="facts-row bold"><span class="facts-name">Glycine</span><span class="facts-val">3000 mg · **</span></div>
+        <div class="facts-row bold" style="border-bottom:none;margin-top:8px;"><span class="facts-name">Zinc (as Bisglycinate)</span><span class="facts-val">15 mg · 136%</span></div>
+        <div class="facts-footer">
+          ** Daily Value not established. † Not evaluated by the MHRA. This product is not intended to diagnose, treat, cure, or prevent any disease.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials fade-in" id="results">
+  <p class="section-eyebrow">Results</p>
+  <h2 class="section-title">What 60 days looks like.</h2>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="test-body">"My sleep quality improved dramatically within two weeks. I track HRV and it went up 22 points over the first month."</p>
+      <div class="test-meta">
+        <div class="test-avatar">JM</div>
+        <div>
+          <p class="test-name">James M.</p>
+          <p class="test-regimen">Rise + Restore Protocol · 3 months</p>
+        </div>
+      </div>
+      <div class="test-result">HRV improved by 22 points in 30 days</div>
+    </div>
+    <div class="test-card">
+      <div class="test-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="test-body">"As a GP, I'm highly skeptical of supplements. AURA is the first brand whose labelling I actually trust. The forms and doses are right."</p>
+      <div class="test-meta">
+        <div class="test-avatar">DK</div>
+        <div>
+          <p class="test-name">Dr. Karen S.</p>
+          <p class="test-regimen">Physician · Foundation Protocol · 6 months</p>
+        </div>
+      </div>
+      <div class="test-result">Recommends to patients with specific needs</div>
+    </div>
+    <div class="test-card">
+      <div class="test-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <p class="test-body">"The daily packs changed everything. I was terrible at remembering pills. Now it's one packet in the morning. Done."</p>
+      <div class="test-meta">
+        <div class="test-avatar">SL</div>
+        <div>
+          <p class="test-name">Sophie L.</p>
+          <p class="test-regimen">Full Protocol · 4 months</p>
+        </div>
+      </div>
+      <div class="test-result">Adherence rate increased to 96%</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<div class="proof-bar">
+  <div class="proof-cell">
+    <div class="proof-num">48,000+</div>
+    <div class="proof-label">Active Subscribers</div>
+  </div>
+  <div class="proof-cell">
+    <div class="proof-num">4.9/5</div>
+    <div class="proof-label">Average Rating (3,200+ Reviews)</div>
+  </div>
+  <div class="proof-cell">
+    <div class="proof-num">94%</div>
+    <div class="proof-label">Report Improved Sleep by Week 4</div>
+  </div>
+  <div class="proof-cell">
+    <div class="proof-num">0</div>
+    <div class="proof-label">Proprietary Blends. Ever.</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section fade-in" id="shop">
+  <div class="cta-bg-circle"></div>
+  <div class="cta-content">
+    <h2 class="cta-h2">Your regimen,<br><em>ready in 5 minutes.</em></h2>
+    <p class="cta-sub">Take the quiz. Get your protocol. Try it free for 30 days — if it doesn't work for you, we'll refund every penny.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-large">Build My Regimen →</a>
+      <a href="#" class="btn-large-outline">Browse Stacks</a>
+    </div>
+    <p class="cta-disclaimer">30-day money back guarantee · Cancel anytime · Ships in 2 days</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">AURA</div>
+      <p class="footer-desc">Personalized supplement protocols built on clinical evidence. No guesswork, no fillers, no compromises.</p>
+    </div>
+    <div>
+      <p class="footer-col-label">Stacks</p>
+      <ul class="footer-links">
+        <li><a href="#">Rise Protocol</a></li>
+        <li><a href="#">Restore Protocol</a></li>
+        <li><a href="#">Skin Protocol</a></li>
+        <li><a href="#">Sport Protocol</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Science</p>
+      <ul class="footer-links">
+        <li><a href="#">Research Library</a></li>
+        <li><a href="#">Third-Party Testing</a></li>
+        <li><a href="#">Ingredient Forms</a></li>
+        <li><a href="#">Clinical Advisory</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-label">Support</p>
+      <ul class="footer-links">
+        <li><a href="#">Take the Quiz</a></li>
+        <li><a href="#">Manage Subscription</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">hello@aura.co</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Aura Wellness Ltd. All rights reserved. These statements have not been evaluated by the MHRA.</span>
+    <span>Formulated with science. Taken with confidence.</span>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(e => e.forEach(i => { if(i.isIntersecting) i.target.classList.add('visible'); }), { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

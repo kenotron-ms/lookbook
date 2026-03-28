@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UNIFIED — All-in-One Workspace ROI Calculator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f8f9fb;
+    --dark: #0f0f11;
+    --accent: #7c3aed;
+    --accent2: #a855f7;
+    --accent-light: rgba(124,58,237,0.08);
+    --green: #059669;
+    --border: rgba(15,15,17,0.08);
+    --muted: rgba(15,15,17,0.45);
+    --card: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--dark); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 56px;
+    background: rgba(248,249,251,0.92); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo { font-size: 19px; font-weight: 800; letter-spacing: -0.03em; color: var(--dark); text-decoration: none; }
+  .logo em { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: normal; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--dark); }
+  .nav-cta { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 13px; font-weight: 700; padding: 10px 22px; border-radius: 8px; text-decoration: none; transition: opacity 0.2s; }
+  .nav-cta:hover { opacity: 0.88; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 130px 56px 80px; text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-light); border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 40px; padding: 7px 16px; margin-bottom: 32px;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    opacity: 0; animation: up 0.6s ease 0.2s forwards;
+  }
+  .hero-title {
+    font-size: clamp(44px, 7.5vw, 88px); font-weight: 800;
+    letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 24px;
+    opacity: 0; animation: up 0.7s ease 0.4s forwards;
+  }
+  .hero-title em {
+    font-style: normal; display: block;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, #ec4899 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-sub { font-size: 18px; color: var(--muted); max-width: 520px; margin: 0 auto 40px; line-height: 1.7; opacity: 0; animation: up 0.7s ease 0.6s forwards; }
+  .hero-ctas { display: flex; gap: 14px; justify-content: center; opacity: 0; animation: up 0.7s ease 0.8s forwards; }
+  .btn-grad { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 15px; font-weight: 700; padding: 15px 36px; border-radius: 10px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+  .btn-grad:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(124,58,237,0.35); }
+  .btn-outline { border: 1px solid var(--border); color: var(--dark); background: var(--card); font-size: 15px; font-weight: 600; padding: 15px 36px; border-radius: 10px; text-decoration: none; transition: border-color 0.2s; }
+  .btn-outline:hover { border-color: var(--accent); }
+  @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── ROI CALCULATOR ── */
+  .calculator { padding: 80px 56px 120px; max-width: 1300px; margin: 0 auto; }
+  .calc-header { text-align: center; margin-bottom: 64px; }
+  .calc-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .calc-title { font-size: clamp(32px, 4.5vw, 52px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
+  .calc-sub { font-size: 16px; color: var(--muted); }
+
+  .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+
+  /* LEFT: Input panel */
+  .calc-inputs { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .calc-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+
+  /* User count slider */
+  .user-input { margin-bottom: 36px; }
+  .user-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+  .user-label span { font-size: 15px; font-weight: 600; }
+  .user-count { font-size: 32px; font-weight: 800; color: var(--accent); }
+  .user-slider { width: 100%; appearance: none; height: 6px; background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct, 20%), #e5e7eb var(--pct, 20%), #e5e7eb 100%); border-radius: 3px; outline: none; cursor: pointer; }
+  .user-slider::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: var(--accent); border: 3px solid #fff; border-radius: 50%; box-shadow: 0 2px 8px rgba(124,58,237,0.35); cursor: pointer; }
+  .slider-range { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  /* App selection grid */
+  .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 0; }
+  .app-item {
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 14px 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    user-select: none; text-align: center;
+  }
+  .app-item.selected {
+    border-color: var(--accent); background: var(--accent-light);
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+  }
+  .app-emoji { font-size: 22px; }
+  .app-name { font-size: 11px; font-weight: 700; letter-spacing: 0.02em; color: var(--dark); }
+  .app-cost { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .app-check { display: none; width: 18px; height: 18px; background: var(--accent); border-radius: 50%; align-items: center; justify-content: center; }
+  .app-item.selected .app-check { display: flex; }
+  .app-check svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 2.5; }
+
+  /* RIGHT: Results panel */
+  .calc-results { position: sticky; top: 88px; }
+  .results-card { background: var(--dark); color: #fff; border-radius: 20px; padding: 40px; margin-bottom: 20px; }
+  .results-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .results-total { font-size: 56px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #fff; }
+  .results-period { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.45); }
+  .results-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 10px; margin-bottom: 32px; }
+  .results-divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 28px; }
+
+  .cost-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .cost-row:last-child { margin-bottom: 0; }
+  .cost-name { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+  .cost-name .emoji { font-size: 16px; }
+  .cost-value { font-size: 14px; font-weight: 700; }
+  .cost-value.red { color: #f87171; }
+  .cost-value.green { color: #34d399; }
+
+  .savings-banner {
+    background: linear-gradient(135deg, rgba(5,150,105,0.15), rgba(16,185,129,0.08));
+    border: 1px solid rgba(52,211,153,0.3);
+    border-radius: 14px; padding: 24px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .savings-icon { font-size: 32px; }
+  .savings-label { font-size: 13px; font-weight: 600; color: var(--green); margin-bottom: 4px; }
+  .savings-amount { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--green); }
+  .savings-period { font-size: 13px; color: var(--muted); }
+
+  .unified-price {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04); margin-bottom: 16px;
+  }
+  .up-left .up-label { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .up-left .up-sub { font-size: 12px; color: var(--muted); }
+  .up-right { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); }
+  .up-period { font-size: 13px; font-weight: 400; color: var(--muted); }
+
+  .cta-inline { display: block; text-align: center; font-size: 14px; font-weight: 700; padding: 14px; border-radius: 10px; text-decoration: none; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; transition: opacity 0.2s; }
+  .cta-inline:hover { opacity: 0.88; }
+
+  /* ── WHAT'S INCLUDED ── */
+  .included { padding: 100px 56px; border-top: 1px solid var(--border); }
+  .included-inner { max-width: 1200px; margin: 0 auto; }
+  .inc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .inc-title { font-size: clamp(32px, 4.5vw, 52px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 56px; }
+  .inc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .inc-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s; }
+  .inc-card:hover { border-color: rgba(124,58,237,0.3); box-shadow: 0 8px 32px rgba(124,58,237,0.08); transform: translateY(-4px); }
+  .inc-icon { font-size: 28px; margin-bottom: 16px; }
+  .inc-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .inc-desc { font-size: 13px; line-height: 1.65; color: var(--muted); }
+  .inc-replaces { font-size: 11px; font-weight: 600; color: var(--accent); margin-top: 12px; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { padding: 100px 56px; background: #f0ecff; border-top: 1px solid rgba(124,58,237,0.1); }
+  .testi-inner { max-width: 1200px; margin: 0 auto; }
+  .testi-title { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -0.03em; margin: 16px 0 48px; }
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .testi { background: var(--card); border: 1px solid rgba(124,58,237,0.1); border-radius: 16px; padding: 32px; transition: border-color 0.3s, transform 0.3s; }
+  .testi:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .testi-savings { font-size: 28px; font-weight: 800; color: var(--green); margin-bottom: 12px; }
+  .testi-text { font-size: 14px; line-height: 1.75; color: var(--muted); margin-bottom: 24px; font-style: italic; }
+  .testi-by { display: flex; gap: 12px; align-items: center; }
+  .testi-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
+  .testi-name { font-size: 13px; font-weight: 700; }
+  .testi-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── CTA ── */
+  .cta { padding: 100px 56px; text-align: center; border-top: 1px solid var(--border); }
+  .cta h2 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; }
+  .cta h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .cta p { font-size: 17px; color: var(--muted); max-width: 440px; margin: 0 auto 40px; line-height: 1.65; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--dark); color: #fff; padding: 40px 56px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-size: 16px; font-weight: 800; text-decoration: none; color: #fff; }
+  .footer-logo em { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: normal; }
+  .footer-nav { display: flex; gap: 28px; list-style: none; }
+  .footer-nav a { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+  .footer-nav a:hover { color: #fff; }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">UNI<em>FIED</em></a>
+  <ul class="nav-links">
+    <li><a href="#calculator">Calculator</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#">Docs</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Start Free →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">💰 Teams save an average of $1,247/month</div>
+  <h1 class="hero-title">
+    Stop paying for<br/><em>10 tools separately.</em>
+  </h1>
+  <p class="hero-sub">UNIFIED replaces your entire productivity stack — project management, docs, chat, CRM, and more — in one workspace at a fraction of the cost.</p>
+  <div class="hero-ctas">
+    <a href="#calculator" class="btn-grad">Calculate Your Savings</a>
+    <a href="#features" class="btn-outline">See What's Inside</a>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="calculator" id="calculator">
+  <div class="calc-header">
+    <p class="calc-tag">ROI Calculator</p>
+    <h2 class="calc-title">See your savings in real time</h2>
+    <p class="calc-sub">Select the tools you currently pay for and set your team size — we'll show you exactly how much you save.</p>
+  </div>
+
+  <div class="calc-layout">
+    <!-- INPUT SIDE -->
+    <div class="calc-inputs">
+      <div class="user-input">
+        <div class="user-label">
+          <span>Team size</span>
+          <span class="user-count" id="userCount">25</span>
+        </div>
+        <input type="range" class="user-slider" id="userSlider" min="1" max="200" value="25" step="1" />
+        <div class="slider-range"><span>1 user</span><span>50</span><span>100</span><span>200 users</span></div>
+      </div>
+
+      <p class="calc-section-title">Apps you're currently paying for</p>
+      <div class="apps-grid">
+        <div class="app-item selected" data-cost="15" data-name="Notion" onclick="toggleApp(this)">
+          <span class="app-emoji">📝</span>
+          <span class="app-name">Notion</span>
+          <span class="app-cost">$15/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+        <div class="app-item selected" data-cost="12" data-name="Slack" onclick="toggleApp(this)">
+          <span class="app-emoji">💬</span>
+          <span class="app-name">Slack</span>
+          <span class="app-cost">$12/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+        <div class="app-item selected" data-cost="16" data-name="Asana" onclick="toggleApp(this)">
+          <span class="app-emoji">✅</span>
+          <span class="app-name">Asana</span>
+          <span class="app-cost">$16/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+        <div class="app-item" data-cost="25" data-name="HubSpot" onclick="toggleApp(this)">
+          <span class="app-emoji">🔗</span>
+          <span class="app-name">HubSpot</span>
+          <span class="app-cost">$25/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+        <div class="app-item" data-cost="10" data-name="Loom" onclick="toggleApp(this)">
+          <span class="app-emoji">🎥</span>
+          <span class="app-name">Loom</span>
+          <span class="app-cost">$10/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+        <div class="app-item" data-cost="8" data-name="Miro" onclick="toggleApp(this)">
+          <span class="app-emoji">🗺️</span>
+          <span class="app-name">Miro</span>
+          <span class="app-cost">$8/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+        <div class="app-item" data-cost="20" data-name="Figma" onclick="toggleApp(this)">
+          <span class="app-emoji">🎨</span>
+          <span class="app-name">Figma</span>
+          <span class="app-cost">$20/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+        <div class="app-item" data-cost="9" data-name="Zoom" onclick="toggleApp(this)">
+          <span class="app-emoji">📹</span>
+          <span class="app-name">Zoom</span>
+          <span class="app-cost">$9/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+        <div class="app-item" data-cost="14" data-name="Monday" onclick="toggleApp(this)">
+          <span class="app-emoji">📊</span>
+          <span class="app-name">Monday</span>
+          <span class="app-cost">$14/user</span>
+          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS SIDE -->
+    <div class="calc-results">
+      <div class="results-card">
+        <p class="results-label">Your current monthly spend</p>
+        <p class="results-total" id="totalSpend">$0</p>
+        <p class="results-sub" id="totalUsers">for <span id="teamSizeLabel">25</span> users</p>
+        <div class="results-divider"></div>
+        <div id="costBreakdown"></div>
+      </div>
+
+      <div class="savings-banner">
+        <span class="savings-icon">💚</span>
+        <div>
+          <p class="savings-label">Monthly savings with UNIFIED</p>
+          <p class="savings-amount" id="savingsAmount">$0</p>
+          <p class="savings-period" id="savingsYear">($0/year)</p>
+        </div>
+      </div>
+
+      <div class="unified-price">
+        <div class="up-left">
+          <p class="up-label">UNIFIED — Business Plan</p>
+          <p class="up-sub">Everything included, unlimited projects</p>
+        </div>
+        <div class="up-right"><span id="unifiedCost">$0</span><span class="up-period">/mo</span></div>
+      </div>
+
+      <a href="#" class="cta-inline">Start Free Trial — Save immediately →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="included" id="features">
+  <div class="included-inner">
+    <p class="inc-label">All-in-One Platform</p>
+    <h2 class="inc-title">Everything you need.<br/>None of the overlap.</h2>
+    <div class="inc-grid">
+      <div class="inc-card">
+        <p class="inc-icon">📝</p>
+        <h3 class="inc-name">Docs & Wiki</h3>
+        <p class="inc-desc">Rich-text docs, team wiki, nested pages, embeds, and databases — all searchable in one place.</p>
+        <p class="inc-replaces">Replaces: Notion, Confluence</p>
+      </div>
+      <div class="inc-card">
+        <p class="inc-icon">✅</p>
+        <h3 class="inc-name">Project Management</h3>
+        <p class="inc-desc">Kanban, Gantt, sprints, goals, and automation — for engineering, marketing, and ops teams alike.</p>
+        <p class="inc-replaces">Replaces: Asana, Monday, Jira</p>
+      </div>
+      <div class="inc-card">
+        <p class="inc-icon">💬</p>
+        <h3 class="inc-name">Team Chat</h3>
+        <p class="inc-desc">Channels, threads, DMs, and shared spaces with search, reactions, and smart notifications.</p>
+        <p class="inc-replaces">Replaces: Slack, Teams</p>
+      </div>
+      <div class="inc-card">
+        <p class="inc-icon">📊</p>
+        <h3 class="inc-name">Analytics & Dashboards</h3>
+        <p class="inc-desc">Custom reports, team metrics, goal tracking, and OKR dashboards — no SQL required.</p>
+        <p class="inc-replaces">Replaces: Looker, Metabase</p>
+      </div>
+      <div class="inc-card">
+        <p class="inc-icon">🎥</p>
+        <h3 class="inc-name">Video & Screen Record</h3>
+        <p class="inc-desc">Async video messages, screen recording, and clips — embedded directly in tasks and docs.</p>
+        <p class="inc-replaces">Replaces: Loom, Vidyard</p>
+      </div>
+      <div class="inc-card">
+        <p class="inc-icon">🔗</p>
+        <h3 class="inc-name">CRM Lite</h3>
+        <p class="inc-desc">Contact management, pipeline tracking, and email sequences — for growing sales teams.</p>
+        <p class="inc-replaces">Replaces: HubSpot CRM (free)</p>
+      </div>
+      <div class="inc-card">
+        <p class="inc-icon">🗺️</p>
+        <h3 class="inc-name">Whiteboard</h3>
+        <p class="inc-desc">Infinite canvas for brainstorming, flowcharts, wireframes, and retros — real-time multiplayer.</p>
+        <p class="inc-replaces">Replaces: Miro, FigJam</p>
+      </div>
+      <div class="inc-card">
+        <p class="inc-icon">⚡</p>
+        <h3 class="inc-name">Automations & AI</h3>
+        <p class="inc-desc">Smart workflows, AI writing assistance, meeting summaries, and no-code integrations built in.</p>
+        <p class="inc-replaces">Replaces: Zapier, Make</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testi-inner">
+    <p class="inc-label">Real Savings. Real Teams.</p>
+    <h2 class="testi-title">Teams that switched<br/>to UNIFIED</h2>
+    <div class="testi-grid">
+      <div class="testi">
+        <p class="testi-savings">$2,400/mo saved</p>
+        <p class="testi-text">"We had 7 tools before UNIFIED. Now we have one. The calculator undersold it — we actually saved more because we cancelled 2 tools we forgot we were paying for."</p>
+        <div class="testi-by">
+          <div class="testi-av" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">KL</div>
+          <div><p class="testi-name">Kai Larsson</p><p class="testi-role">CTO, BlueScale (42 team members)</p></div>
+        </div>
+      </div>
+      <div class="testi">
+        <p class="testi-savings">$890/mo saved</p>
+        <p class="testi-text">"As a 12-person startup, every dollar matters. UNIFIED cut our SaaS spend by 70% and the onboarding was shockingly fast. Up and running in an afternoon."</p>
+        <div class="testi-by">
+          <div class="testi-av" style="background:linear-gradient(135deg,#059669,#10b981);">NP</div>
+          <div><p class="testi-name">Nina Park</p><p class="testi-role">Founder, Orbit Startups</p></div>
+        </div>
+      </div>
+      <div class="testi">
+        <p class="testi-savings">$5,100/mo saved</p>
+        <p class="testi-text">"130 seats, 9 different SaaS tools replaced. Finance was over the moon. The team was skeptical but now they wouldn't go back for anything."</p>
+        <div class="testi-by">
+          <div class="testi-av" style="background:linear-gradient(135deg,#dc2626,#ef4444);">MJ</div>
+          <div><p class="testi-name">Marcus Jones</p><p class="testi-role">VP Ops, Stratum Corp</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Stop the<br/><em>subscription sprawl.</em></h2>
+  <p>Join 12,000+ teams that replaced their entire stack with UNIFIED. Free trial, no credit card needed.</p>
+  <div class="hero-ctas">
+    <a href="#" class="btn-grad">Start Free — 14 Days</a>
+    <a href="#calculator" class="btn-outline">Recalculate Savings</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">UNI<em>FIED</em></a>
+    <ul class="footer-nav">
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Migrations</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <p class="footer-copy">© 2024 UNIFIED Inc.</p>
+  </div>
+</footer>
+
+<script>
+  const UNIFIED_PRICE_PER_USER = 12; // $12/user/month
+
+  function getUsers() { return parseInt(document.getElementById('userSlider').value); }
+
+  function getSelectedApps() {
+    return [...document.querySelectorAll('.app-item.selected')].map(el => ({
+      name: el.dataset.name,
+      cost: parseFloat(el.dataset.cost),
+      emoji: el.querySelector('.app-emoji').textContent
+    }));
+  }
+
+  function updateCalc() {
+    const users = getUsers();
+    const apps = getSelectedApps();
+    const totalCost = apps.reduce((sum, a) => sum + a.cost * users, 0);
+    const unifiedCost = UNIFIED_PRICE_PER_USER * users;
+    const savings = Math.max(0, totalCost - unifiedCost);
+
+    // Update slider visual
+    const slider = document.getElementById('userSlider');
+    const pct = ((users - 1) / 199 * 100).toFixed(1);
+    slider.style.setProperty('--pct', pct + '%');
+
+    document.getElementById('userCount').textContent = users;
+    document.getElementById('teamSizeLabel').textContent = users;
+    document.getElementById('totalSpend').textContent = '$' + totalCost.toLocaleString();
+    document.getElementById('savingsAmount').textContent = '$' + savings.toLocaleString();
+    document.getElementById('savingsYear').textContent = '($' + (savings * 12).toLocaleString() + '/year)';
+    document.getElementById('unifiedCost').textContent = '$' + unifiedCost.toLocaleString();
+
+    // Breakdown
+    const bd = document.getElementById('costBreakdown');
+    if (apps.length === 0) {
+      bd.innerHTML = '<p style="font-size:13px;color:rgba(255,255,255,0.35);text-align:center;padding:16px 0;">Select apps above to see breakdown</p>';
+    } else {
+      bd.innerHTML = apps.map(a => `
+        <div class="cost-row">
+          <span class="cost-name"><span class="emoji">${a.emoji}</span>${a.name}</span>
+          <span class="cost-value red">$${(a.cost * users).toLocaleString()}</span>
+        </div>
+      `).join('') + `
+        <div style="height:1px;background:rgba(255,255,255,0.08);margin:16px 0;"></div>
+        <div class="cost-row">
+          <span class="cost-name"><span class="emoji">⚡</span>UNIFIED replaces all</span>
+          <span class="cost-value green">$${unifiedCost.toLocaleString()}</span>
+        </div>
+      `;
+    }
+  }
+
+  function toggleApp(el) {
+    el.classList.toggle('selected');
+    updateCalc();
+  }
+
+  document.getElementById('userSlider').addEventListener('input', updateCalc);
+  updateCalc(); // init
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.inc-card, .testi').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = `opacity 0.6s ease ${i * 0.06}s, transform 0.6s ease ${i * 0.06}s`;
+    io.observe(el);
+  });
+</script>
+</body>
+</html>

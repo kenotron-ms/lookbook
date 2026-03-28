@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAUNCH.DEV — Zero Friction. Maximum Velocity.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #020509;
+  --navy: #050d1a;
+  --surface: #0a1628;
+  --border: rgba(0,255,102,0.08);
+  --border-bright: rgba(0,255,102,0.2);
+  --neon: #00ff66;
+  --neon-dim: rgba(0,255,102,0.6);
+  --neon-glow: rgba(0,255,102,0.15);
+  --text: #e0f0ff;
+  --text-muted: #4a6a8a;
+  --white: #f0f8ff;
+  --red: #ff3355;
+  --blue: #0af;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+/* SCANLINES */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 60px;
+  background: rgba(2,5,9,0.9); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Geist Mono', monospace; font-weight: 600; font-size: 16px;
+  color: var(--neon); letter-spacing: 0.08em;
+}
+.nav-logo .slash { color: var(--text-muted); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--text-muted); text-decoration: none; font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.05em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--neon); }
+.nav-cta {
+  font-family: 'Geist Mono', monospace; font-size: 12px; font-weight: 600;
+  color: var(--bg); background: var(--neon); padding: 8px 20px; border-radius: 4px;
+  text-decoration: none; letter-spacing: 0.05em; transition: all 0.2s;
+  box-shadow: 0 0 20px rgba(0,255,102,0.3);
+}
+.nav-cta:hover { box-shadow: 0 0 40px rgba(0,255,102,0.6); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 80px 48px 60px; position: relative; overflow: hidden;
+}
+.hero-grid-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 70%);
+}
+.hero-glow { position: absolute; top: 20%; left: 30%; width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(0,255,102,0.08) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
+.hero-terminal {
+  font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--neon-dim);
+  background: rgba(0,255,102,0.05); border: 1px solid var(--border-bright);
+  padding: 12px 20px; border-radius: 6px; display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 32px;
+}
+.term-prompt { color: var(--neon); }
+.term-cursor { display: inline-block; width: 8px; height: 14px; background: var(--neon); animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.hero h1 {
+  font-size: clamp(52px, 8vw, 96px);
+  font-weight: 900; line-height: 0.95; letter-spacing: -4px;
+  margin-bottom: 24px; text-transform: uppercase;
+}
+.hero h1 .line-neon { color: var(--neon); text-shadow: 0 0 40px rgba(0,255,102,0.5), 0 0 80px rgba(0,255,102,0.2); }
+.hero h1 .line-white { color: var(--white); }
+.hero h1 .line-dim { color: rgba(224,240,255,0.25); }
+
+.hero-sub {
+  font-family: 'Geist Mono', monospace; font-size: 14px; color: var(--text-muted);
+  line-height: 1.8; max-width: 560px; margin-bottom: 48px; border-left: 2px solid var(--border-bright); padding-left: 20px;
+}
+.hero-sub span { color: var(--neon-dim); }
+
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-neon {
+  background: var(--neon); color: var(--bg); padding: 16px 36px; border-radius: 4px;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 800;
+  text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em;
+  box-shadow: 0 0 40px rgba(0,255,102,0.4); transition: all 0.2s;
+}
+.btn-neon:hover { box-shadow: 0 0 80px rgba(0,255,102,0.7); transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent; color: var(--neon); padding: 16px 36px; border-radius: 4px;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700;
+  text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em;
+  border: 1px solid var(--border-bright); transition: all 0.2s;
+}
+.btn-ghost:hover { background: rgba(0,255,102,0.05); border-color: var(--neon); }
+
+/* METRICS BAR */
+.metrics-bar {
+  background: var(--navy); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 20px 48px;
+  display: flex; align-items: center; justify-content: space-around; gap: 40px; flex-wrap: wrap;
+}
+.metric { text-align: center; }
+.metric-value { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; font-weight: 900; color: var(--neon); letter-spacing: -1px; }
+.metric-label { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+.metric-sep { width: 1px; height: 40px; background: var(--border); }
+
+/* TERMINAL DEMO */
+.demo-section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
+.demo-header { margin-bottom: 48px; }
+.demo-header .section-tag { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--neon); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+.demo-header h2 { font-size: clamp(32px, 4vw, 52px); font-weight: 900; letter-spacing: -2px; }
+.demo-header h2 span { color: var(--neon); }
+
+.terminal-window {
+  background: var(--navy); border: 1px solid var(--border-bright); border-radius: 10px; overflow: hidden;
+  box-shadow: 0 0 60px rgba(0,255,102,0.08);
+}
+.term-titlebar {
+  background: rgba(255,255,255,0.03); padding: 12px 16px;
+  display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border);
+}
+.term-dot { width: 12px; height: 12px; border-radius: 50%; }
+.td-red { background: #ff3b30; }
+.td-yellow { background: #ffcc00; }
+.td-green { background: #28cd41; }
+.term-title { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--text-muted); margin-left: auto; margin-right: auto; }
+.term-body { padding: 24px 28px; font-family: 'Geist Mono', monospace; font-size: 13px; line-height: 2; }
+.t-cmd { color: var(--neon); }
+.t-dim { color: var(--text-muted); }
+.t-success { color: #00d464; }
+.t-warn { color: #ffd700; }
+.t-err { color: var(--red); }
+.t-info { color: var(--blue); }
+.t-white { color: var(--white); }
+.t-line { display: flex; gap: 12px; align-items: baseline; }
+
+/* FEATURES */
+.features-section { padding: 100px 48px; background: var(--navy); }
+.features-inner { max-width: 1100px; margin: 0 auto; }
+.features-section .section-tag { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--neon); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+.features-section h2 { font-size: clamp(32px, 4vw, 52px); font-weight: 900; letter-spacing: -2px; margin-bottom: 60px; }
+.features-section h2 span { color: var(--neon); }
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+.feat { background: var(--navy); padding: 36px; transition: background 0.3s; }
+.feat:hover { background: rgba(0,255,102,0.03); }
+.feat-num { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--neon); letter-spacing: 0.1em; margin-bottom: 20px; }
+.feat h3 { font-size: 18px; font-weight: 800; color: var(--white); margin-bottom: 12px; }
+.feat p { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--text-muted); line-height: 1.9; }
+.feat-tag { display: inline-block; margin-top: 16px; font-family: 'Geist Mono', monospace; font-size: 10px; color: var(--neon); background: rgba(0,255,102,0.08); border: 1px solid var(--border-bright); padding: 3px 10px; border-radius: 3px; letter-spacing: 0.08em; }
+
+/* TESTIMONIALS */
+.testi-section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
+.testi-section .section-tag { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--neon); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 12px; }
+.testi-section h2 { font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; letter-spacing: -1.5px; margin-bottom: 48px; }
+.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.t-card { background: var(--bg); padding: 28px; }
+.t-card:hover { background: rgba(0,255,102,0.02); }
+.tc-header { font-family: 'Geist Mono', monospace; font-size: 10px; color: var(--neon); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+.tc-text { font-size: 14px; line-height: 1.8; color: rgba(224,240,255,0.7); margin-bottom: 20px; }
+.tc-text strong { color: var(--white); }
+.tc-author { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--text-muted); }
+.tc-author span { color: var(--neon-dim); }
+
+/* CTA */
+.cta-section { padding: 120px 48px; text-align: center; background: var(--navy); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+.cta-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(0,255,102,0.1) 0%, transparent 70%); pointer-events: none; }
+.cta-section .section-tag { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--neon); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; position: relative; z-index: 1; }
+.cta-section h2 { font-size: clamp(36px, 5vw, 64px); font-weight: 900; letter-spacing: -2.5px; margin-bottom: 20px; position: relative; z-index: 1; }
+.cta-section h2 span { color: var(--neon); text-shadow: 0 0 40px rgba(0,255,102,0.4); }
+.cta-section p { font-family: 'Geist Mono', monospace; font-size: 13px; color: var(--text-muted); max-width: 480px; margin: 0 auto 48px; line-height: 1.8; position: relative; z-index: 1; }
+.cta-cmd {
+  font-family: 'Geist Mono', monospace; font-size: 15px;
+  background: rgba(0,255,102,0.05); border: 1px solid var(--border-bright);
+  padding: 16px 32px; border-radius: 6px; display: inline-flex; align-items: center; gap: 12px;
+  color: var(--neon); margin-bottom: 32px; position: relative; z-index: 1; cursor: pointer;
+  transition: all 0.2s;
+}
+.cta-cmd:hover { background: rgba(0,255,102,0.1); box-shadow: 0 0 30px rgba(0,255,102,0.2); }
+.cta-cmd .copy-hint { font-size: 10px; color: var(--text-muted); padding: 2px 8px; border: 1px solid var(--border); border-radius: 3px; }
+.cta-actions { display: flex; gap: 16px; justify-content: center; position: relative; z-index: 1; }
+
+/* FOOTER */
+footer { padding: 40px 48px; border-top: 1px solid var(--border); }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.footer-logo { font-family: 'Geist Mono', monospace; font-weight: 600; font-size: 14px; color: var(--neon); }
+.footer-links { display: flex; gap: 28px; list-style: none; }
+.footer-links a { font-family: 'Geist Mono', monospace; color: var(--text-muted); text-decoration: none; font-size: 11px; transition: color 0.2s; }
+.footer-links a:hover { color: var(--neon); }
+.footer-copy { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--text-muted); }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero, .demo-section { padding: 80px 20px 40px; }
+  .features-grid, .testi-grid { grid-template-columns: 1fr; }
+  .metrics-bar { padding: 20px; gap: 20px; }
+  .metric-sep { display: none; }
+  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">LAUNCH<span class="slash">/</span>DEV</div>
+  <ul class="nav-links">
+    <li><a href="#">docs</a></li>
+    <li><a href="#">pricing</a></li>
+    <li><a href="#">changelog</a></li>
+    <li><a href="#">status</a></li>
+  </ul>
+  <a href="#" class="nav-cta">npm install</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-terminal">
+      <span class="term-prompt">$</span>
+      <span>launch deploy --prod --zero-downtime</span>
+      <span class="term-cursor"></span>
+    </div>
+    <h1>
+      <div class="line-neon">ZERO</div>
+      <div class="line-white">FRICTION.</div>
+      <div class="line-neon">MAXIMUM</div>
+      <div class="line-dim">VELOCITY.</div>
+    </h1>
+    <p class="hero-sub">Deploy from <span>git push</span> to live in under <span>3 seconds</span>. Atomic deployments, instant rollbacks, edge-native by default. Built for engineers who move fast and <span>don't break things</span>.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-neon">Start Deploying</a>
+      <a href="#" class="btn-ghost">Read the Docs</a>
+    </div>
+  </div>
+</section>
+
+<div class="metrics-bar">
+  <div class="metric"><div class="metric-value">2.8s</div><div class="metric-label">Avg Deploy Time</div></div>
+  <div class="metric-sep"></div>
+  <div class="metric"><div class="metric-value">99.99%</div><div class="metric-label">Uptime SLA</div></div>
+  <div class="metric-sep"></div>
+  <div class="metric"><div class="metric-value">840K+</div><div class="metric-label">Deploys / Day</div></div>
+  <div class="metric-sep"></div>
+  <div class="metric"><div class="metric-value">0ms</div><div class="metric-label">Cold Start</div></div>
+  <div class="metric-sep"></div>
+  <div class="metric"><div class="metric-value">186</div><div class="metric-label">Edge Locations</div></div>
+</div>
+
+<section class="demo-section">
+  <div class="demo-header">
+    <div class="section-tag">// live demo</div>
+    <h2>Watch it <span>deploy.</span></h2>
+  </div>
+  <div class="terminal-window">
+    <div class="term-titlebar">
+      <div class="term-dot td-red"></div>
+      <div class="term-dot td-yellow"></div>
+      <div class="term-dot td-green"></div>
+      <div class="term-title">launch — deploy</div>
+    </div>
+    <div class="term-body" id="termBody">
+      <div class="t-line"><span class="t-dim">$</span><span class="t-cmd">git push origin main</span></div>
+      <div class="t-line"><span class="t-dim">→</span><span class="t-dim">Enumerating objects: 12, done.</span></div>
+      <div class="t-line"><span class="t-dim">→</span><span class="t-dim">Compressing objects: 100% (8/8), done.</span></div>
+      <div class="t-line"><span class="t-dim">&nbsp;</span></div>
+      <div class="t-line"><span class="t-info">⚡</span><span class="t-white">Launch detected push to [main] — initiating deploy pipeline</span></div>
+      <div class="t-line"><span class="t-dim">→</span><span class="t-dim">Build context: 847 files, 2.4MB</span></div>
+      <div class="t-line"><span class="t-warn">▶</span><span class="t-warn">Running build step: next build</span></div>
+      <div class="t-line"><span class="t-dim">&nbsp;&nbsp;</span><span class="t-dim">Compiling TypeScript...</span></div>
+      <div class="t-line"><span class="t-dim">&nbsp;&nbsp;</span><span class="t-dim">Optimizing 248 pages...</span></div>
+      <div class="t-line"><span class="t-success">✔</span><span class="t-success">Build completed in 1.24s</span></div>
+      <div class="t-line"><span class="t-info">→</span><span class="t-info">Bundling edge functions (18 routes)...</span></div>
+      <div class="t-line"><span class="t-success">✔</span><span class="t-success">Edge bundle: 42KB (gzip) — nominal</span></div>
+      <div class="t-line"><span class="t-info">→</span><span class="t-info">Propagating to 186 edge nodes...</span></div>
+      <div class="t-line"><span class="t-success">✔</span><span class="t-success">Deployment live: <span class="t-cmd">https://myapp.launch.dev</span></span></div>
+      <div class="t-line"><span class="t-neon" style="color:var(--neon)">⚡</span><span style="color:var(--neon);font-weight:700">Total deploy time: 2.84s — 🟢 DEPLOYED</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="features-inner">
+    <div class="section-tag">// capabilities</div>
+    <h2>Everything you need to<br>ship <span>at light speed.</span></h2>
+    <div class="features-grid">
+      <div class="feat">
+        <div class="feat-num">01 // EDGE</div>
+        <h3>Edge-Native Runtime</h3>
+        <p>Every function runs at the edge — 186 locations, sub-millisecond cold starts, zero infrastructure to manage.</p>
+        <span class="feat-tag">ZERO_CONFIG</span>
+      </div>
+      <div class="feat">
+        <div class="feat-num">02 // BUILD</div>
+        <h3>Instant Builds</h3>
+        <p>Distributed build cache eliminates redundant work. Subsequent builds are 10-100x faster. Cache hits across your entire org.</p>
+        <span class="feat-tag">CACHE_AWARE</span>
+      </div>
+      <div class="feat">
+        <div class="feat-num">03 // PREVIEW</div>
+        <h3>Preview Branches</h3>
+        <p>Every PR gets its own isolated preview deployment. Share with stakeholders, test in production parity, merge with confidence.</p>
+        <span class="feat-tag">PR_DRIVEN</span>
+      </div>
+      <div class="feat">
+        <div class="feat-num">04 // ROLLBACK</div>
+        <h3>Atomic Rollbacks</h3>
+        <p>Every deployment is immutable and atomic. Roll back to any historical version in under 1 second — no re-build required.</p>
+        <span class="feat-tag">IMMUTABLE</span>
+      </div>
+      <div class="feat">
+        <div class="feat-num">05 // OBS</div>
+        <h3>Built-in Observability</h3>
+        <p>Real-time logs, distributed tracing, and anomaly detection. Know what's happening before your users do.</p>
+        <span class="feat-tag">LIVE_TRACE</span>
+      </div>
+      <div class="feat">
+        <div class="feat-num">06 // SEC</div>
+        <h3>Security Hardened</h3>
+        <p>OIDC-based auth, secret scanning, automated SBOM, and SOC 2 Type II compliance built into every deployment.</p>
+        <span class="feat-tag">SOC2_TYPE_II</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testi-section">
+  <div class="section-tag">// testimonials</div>
+  <h2>Engineers who've made<br>the switch.</h2>
+  <div class="testi-grid">
+    <div class="t-card">
+      <div class="tc-header">// @k_devops · staff engineer</div>
+      <p class="tc-text">"We cut our deploy pipeline from <strong>18 minutes to 2.8 seconds</strong>. Launch is the deployment tool we always wished existed."</p>
+      <div class="tc-author">KENJI T. — <span>Staff Eng, Orbit Systems</span></div>
+    </div>
+    <div class="t-card">
+      <div class="tc-header">// @p_infra · platform lead</div>
+      <p class="tc-text">"The atomic rollback saved us during a critical incident. <strong>Sub-second rollback</strong> while the old system took 40 minutes. No contest."</p>
+      <div class="tc-author">PRIYA N. — <span>Platform Lead, Cascade Bank</span></div>
+    </div>
+    <div class="t-card">
+      <div class="tc-header">// @alexr · solo founder</div>
+      <p class="tc-text">"As a solo founder, Launch means I <strong>never think about infra</strong>. I push code and it's live. Exactly how it should be."</p>
+      <div class="tc-author">ALEX R. — <span>Founder, Threadline</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-tag">// get started</div>
+  <h2>Ship your first deploy<br>in <span>under 60 seconds.</span></h2>
+  <p>// free tier: 100 deploys/day · unlimited preview envs · 5GB edge bandwidth · no credit card required</p>
+  <div class="cta-cmd" onclick="this.querySelector('.copy-hint').textContent='copied!'">
+    <span>npx launch-cli init</span>
+    <span class="copy-hint">copy</span>
+  </div>
+  <div class="cta-actions">
+    <a href="#" class="btn-neon">Get Started Free</a>
+    <a href="#" class="btn-ghost">Read Docs</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">LAUNCH/DEV</div>
+    <ul class="footer-links">
+      <li><a href="#">privacy</a></li>
+      <li><a href="#">terms</a></li>
+      <li><a href="#">security</a></li>
+      <li><a href="#">status</a></li>
+    </ul>
+    <div class="footer-copy">© 2025 Launch Inc. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+// Animate terminal lines on load
+const lines = document.querySelectorAll('#termBody .t-line');
+lines.forEach((line, i) => {
+  line.style.opacity = '0';
+  line.style.transform = 'translateX(-8px)';
+  setTimeout(() => {
+    line.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    line.style.opacity = '1';
+    line.style.transform = 'translateX(0)';
+  }, 300 + i * 120);
+});
+</script>
+</body>
+</html>

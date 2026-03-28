@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL — See Everything, Miss Nothing</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #FFFFFF;
+  --bg-subtle: #F8FAFC;
+  --slate-900: #0F172A;
+  --slate-800: #1E293B;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-400: #94A3B8;
+  --slate-200: #E2E8F0;
+  --slate-100: #F1F5F9;
+  --blue: #1D4ED8;
+  --blue-light: #3B82F6;
+  --blue-subtle: #EFF6FF;
+  --blue-border: #BFDBFE;
+  --green: #10B981;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --white: #FFFFFF;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--slate-800); overflow-x: hidden; }
+
+/* ── GLASS NAV ────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 64px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--slate-200);
+  box-shadow: 0 1px 8px rgba(15, 23, 42, 0.06);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 1.1rem; color: var(--slate-900);
+  letter-spacing: -0.3px;
+}
+
+.nav-logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-light) 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 0.9rem;
+}
+
+.nav-links { display: flex; gap: 0; list-style: none; }
+
+.nav-links a {
+  display: block; padding: 0 18px; line-height: 64px;
+  text-decoration: none; color: var(--slate-600); font-size: 0.875rem; font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--slate-900); }
+
+.nav-right { display: flex; align-items: center; gap: 12px; }
+
+.btn-ghost {
+  padding: 8px 18px; font-size: 0.875rem; font-weight: 500; font-family: 'Inter', sans-serif;
+  background: transparent; border: 1px solid var(--slate-200); border-radius: 8px;
+  color: var(--slate-700); cursor: pointer; transition: all 0.2s; text-decoration: none;
+}
+
+.btn-ghost:hover { border-color: var(--slate-400); color: var(--slate-900); }
+
+.btn-blue {
+  padding: 8px 18px; font-size: 0.875rem; font-weight: 600; font-family: 'Inter', sans-serif;
+  background: var(--blue); border: none; border-radius: 8px;
+  color: white; cursor: pointer; transition: all 0.2s; text-decoration: none;
+  display: inline-block;
+}
+
+.btn-blue:hover { background: #1d40c0; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3); }
+
+/* ── STATUS BAR ───────────────────────────────────────────── */
+.status-bar {
+  margin-top: 64px;
+  background: var(--slate-900);
+  padding: 10px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.status-items { display: flex; gap: 32px; }
+
+.status-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+  color: var(--slate-400);
+}
+
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+
+.status-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.status-dot.amber { background: var(--amber); }
+.status-dot.red { background: var(--red); }
+
+.status-time { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--slate-400); }
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero {
+  padding: 100px 48px 0;
+  background: var(--bg);
+  position: relative; overflow: hidden;
+}
+
+.hero-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border: 1px solid var(--blue-border);
+  background: var(--blue-subtle); border-radius: 100px;
+  font-size: 0.75rem; font-weight: 600; color: var(--blue);
+  letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.status-dot-pulse {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+  font-weight: 800; color: var(--slate-900);
+  letter-spacing: -2px; line-height: 1.05; margin-bottom: 20px;
+}
+
+.hero-title .blue { color: var(--blue); }
+
+.hero-sub {
+  font-size: 1.05rem; color: var(--slate-600); line-height: 1.75;
+  font-weight: 400; margin-bottom: 36px; max-width: 480px;
+}
+
+.hero-cta-row { display: flex; gap: 12px; align-items: center; margin-bottom: 48px; }
+
+.hero-btn-main {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; background: var(--blue); border-radius: 10px;
+  font-size: 0.9rem; font-weight: 600; color: white; text-decoration: none;
+  transition: all 0.2s; box-shadow: 0 4px 16px rgba(29, 78, 216, 0.25);
+}
+
+.hero-btn-main:hover { background: #1d40c0; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(29, 78, 216, 0.35); }
+
+.hero-btn-demo {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 24px; background: var(--bg); border: 1px solid var(--slate-200);
+  border-radius: 10px; font-size: 0.9rem; font-weight: 500; color: var(--slate-700);
+  text-decoration: none; transition: all 0.2s;
+}
+
+.hero-btn-demo:hover { border-color: var(--blue); color: var(--blue); }
+
+.hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+.hero-stat { text-align: left; }
+.hero-stat-num {
+  font-size: 2rem; font-weight: 800; color: var(--slate-900); letter-spacing: -1px;
+  font-feature-settings: 'tnum';
+}
+
+.hero-stat-num .unit { font-size: 1rem; font-weight: 600; color: var(--blue); }
+.hero-stat-label { font-size: 0.78rem; color: var(--slate-500); margin-top: 2px; font-weight: 500; letter-spacing: 0.3px; }
+
+/* Dashboard preview */
+.dashboard-preview {
+  background: var(--slate-900);
+  border-radius: 16px 16px 0 0;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(255,255,255,0.05);
+  transform: perspective(1200px) rotateY(-8deg) rotateX(4deg);
+  transition: transform 0.4s ease;
+}
+
+.dashboard-preview:hover { transform: perspective(1200px) rotateY(-4deg) rotateX(2deg); }
+
+.dash-topbar {
+  background: #1E293B; padding: 12px 20px;
+  display: flex; align-items: center; justify-between; gap: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-wrap: wrap;
+}
+
+.dash-dots { display: flex; gap: 6px; margin-right: auto; }
+.dash-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+.dash-tabs { display: flex; gap: 4px; }
+.dash-tab {
+  padding: 4px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 500;
+  font-family: 'Inter', sans-serif; color: var(--slate-400); cursor: pointer;
+}
+
+.dash-tab.active { background: rgba(29, 78, 216, 0.2); color: #93C5FD; }
+
+.dash-body { padding: 20px; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+
+.kpi-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px; padding: 14px 16px;
+}
+
+.kpi-label { font-size: 0.62rem; color: var(--slate-500); font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; }
+.kpi-value { font-size: 1.4rem; font-weight: 700; color: white; letter-spacing: -0.5px; font-feature-settings: 'tnum'; }
+.kpi-delta { font-size: 0.62rem; margin-top: 4px; }
+.kpi-delta.up { color: var(--green); }
+.kpi-delta.down { color: var(--red); }
+
+.dash-chart-row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+
+.dash-panel {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px; padding: 16px;
+}
+
+.dash-panel-title { font-size: 0.7rem; font-weight: 600; color: var(--slate-400); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-family: 'JetBrains Mono', monospace; }
+
+.chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 60px; }
+.chart-bar {
+  flex: 1; border-radius: 3px 3px 0 0;
+  background: linear-gradient(to top, rgba(29, 78, 216, 0.6), rgba(59, 130, 246, 0.4));
+  min-height: 8px;
+}
+
+.threat-list { display: flex; flex-direction: column; gap: 8px; }
+
+.threat-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 6px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+}
+
+.threat-sev { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.threat-name { font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; color: #94A3B8; flex: 1; }
+.threat-time { font-size: 0.6rem; font-family: 'JetBrains Mono', monospace; color: #475569; }
+
+/* ── METRICS SECTION ──────────────────────────────────────── */
+.metrics-section {
+  background: var(--slate-900);
+  padding: 80px 48px;
+}
+
+.metrics-inner { max-width: 1200px; margin: 0 auto; }
+
+.section-overline {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+  color: var(--blue-light); text-transform: uppercase; letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.section-heading-light {
+  font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700;
+  color: white; letter-spacing: -1px; line-height: 1.2; margin-bottom: 64px;
+}
+
+.section-heading-light span { color: var(--blue-light); }
+
+.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; }
+
+.metric-card {
+  background: var(--slate-900); padding: 40px 32px;
+  text-align: center;
+  opacity: 0; transform: translateY(20px);
+}
+
+.metric-card.visible {
+  opacity: 1; transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.metric-number {
+  font-size: 3rem; font-weight: 800; letter-spacing: -2px;
+  color: white; font-feature-settings: 'tnum'; line-height: 1;
+  margin-bottom: 8px;
+}
+
+.metric-number .suffix { color: var(--blue-light); }
+.metric-label { font-size: 0.82rem; color: var(--slate-400); font-weight: 500; }
+.metric-sub { font-size: 0.72rem; color: var(--slate-600); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+/* ── FEATURES ─────────────────────────────────────────────── */
+.features-section { padding: 100px 48px; background: var(--bg-subtle); }
+.features-inner { max-width: 1200px; margin: 0 auto; }
+
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+
+.feat-card {
+  background: var(--white); border-radius: 14px; padding: 36px 32px;
+  border: 1px solid var(--slate-200);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: transform 0.25s, box-shadow 0.25s;
+  opacity: 0; transform: translateY(20px);
+}
+
+.feat-card.visible {
+  opacity: 1; transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s;
+}
+
+.feat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1); }
+
+.feat-icon {
+  width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; font-size: 1.2rem;
+  background: var(--blue-subtle); border: 1px solid var(--blue-border);
+}
+
+.feat-card h3 { font-size: 1rem; font-weight: 700; color: var(--slate-900); margin-bottom: 10px; }
+.feat-card p { font-size: 0.85rem; color: var(--slate-600); line-height: 1.7; }
+
+.feat-tag {
+  display: inline-block; margin-top: 16px;
+  padding: 3px 10px; border-radius: 4px;
+  font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.tag-blue { background: var(--blue-subtle); color: var(--blue); }
+.tag-green { background: #ECFDF5; color: var(--green); }
+.tag-amber { background: #FFFBEB; color: var(--amber); }
+
+/* ── TESTIMONIALS ─────────────────────────────────────────── */
+.testimonials-section { padding: 100px 48px; }
+.testimonials-inner { max-width: 1200px; margin: 0 auto; }
+
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+
+.test-card {
+  border: 1px solid var(--slate-200); border-radius: 14px; padding: 32px;
+  background: var(--white); box-shadow: 0 2px 6px rgba(15,23,42,0.04);
+  opacity: 0; transform: translateY(20px);
+}
+
+.test-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s; }
+
+.test-logo { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700; color: var(--slate-400); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
+.test-quote { font-size: 0.9rem; color: var(--slate-700); line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+.test-author { display: flex; gap: 10px; align-items: center; }
+.test-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--slate-100); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: var(--slate-600); }
+.test-name { font-size: 0.82rem; font-weight: 600; color: var(--slate-800); }
+.test-role { font-size: 0.75rem; color: var(--slate-400); }
+
+/* featured */
+.test-card.feat { background: var(--slate-900); border-color: rgba(255,255,255,0.07); grid-column: span 2; }
+.test-card.feat .test-logo { color: var(--slate-500); }
+.test-card.feat .test-quote { color: rgba(255,255,255,0.75); font-size: 1rem; }
+.test-card.feat .test-name { color: white; }
+.test-card.feat .test-role { color: var(--slate-500); }
+.test-card.feat .test-avatar { background: rgba(29,78,216,0.2); color: var(--blue-light); }
+
+/* ── CTA ──────────────────────────────────────────────────── */
+.cta-section {
+  background: linear-gradient(135deg, var(--slate-900) 0%, var(--slate-800) 100%);
+  padding: 100px 48px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(29, 78, 216, 0.2) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cta-inner { max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+
+.cta-badge {
+  display: inline-block; padding: 5px 14px;
+  background: rgba(29, 78, 216, 0.2); border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 100px; font-size: 0.72rem; font-weight: 600;
+  color: #93C5FD; text-transform: uppercase; letter-spacing: 1px;
+  font-family: 'JetBrains Mono', monospace; margin-bottom: 24px;
+}
+
+.cta-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: white; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 16px; }
+.cta-sub { font-size: 1rem; color: var(--slate-400); line-height: 1.7; margin-bottom: 36px; }
+
+.cta-btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.cta-btn-primary {
+  padding: 16px 32px; background: var(--blue); border-radius: 10px; border: none;
+  font-size: 0.95rem; font-weight: 700; color: white; cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: all 0.2s; text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 4px 16px rgba(29, 78, 216, 0.4);
+}
+
+.cta-btn-primary:hover { background: #1d40c0; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(29, 78, 216, 0.5); }
+
+.cta-btn-outline {
+  padding: 16px 28px; background: transparent;
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
+  font-size: 0.95rem; font-weight: 500; color: rgba(255,255,255,0.7); cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: all 0.2s; text-decoration: none;
+  display: inline-block;
+}
+
+.cta-btn-outline:hover { border-color: rgba(255,255,255,0.4); color: white; }
+
+.cta-trust { display: flex; gap: 24px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+
+.trust-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: var(--slate-400); font-weight: 500;
+}
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+footer {
+  background: var(--slate-900); border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 60px 48px 32px;
+}
+
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+
+.footer-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+  padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.07); margin-bottom: 32px;
+}
+
+.footer-brand-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 1.1rem; color: white; margin-bottom: 12px;
+}
+
+.footer-brand p { font-size: 0.82rem; color: var(--slate-400); line-height: 1.65; max-width: 220px; }
+
+.footer-col h4 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--slate-500); margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; }
+.footer-col a { display: block; font-size: 0.82rem; color: var(--slate-400); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--slate-600); flex-wrap: wrap; gap: 16px; }
+.footer-bottom-links { display: flex; gap: 24px; }
+.footer-bottom-links a { color: var(--slate-600); text-decoration: none; transition: color 0.2s; }
+.footer-bottom-links a:hover { color: white; }
+
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 60px 24px 0; }
+  .hero-grid { grid-template-columns: 1fr; }
+  .dashboard-preview { transform: none; margin-top: 40px; }
+  .metrics-section, .features-section, .testimonials-section, .cta-section { padding: 60px 24px; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
+  .test-card.feat { grid-column: span 1; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  footer { padding: 48px 24px 24px; }
+  .status-bar { padding: 10px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">⚔</div>
+    SENTINEL
+  </div>
+  <ul class="nav-links">
+    <li><a href="#">Platform</a></li>
+    <li><a href="#">Security</a></li>
+    <li><a href="#">Compliance</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Docs</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#" class="btn-ghost">Sign In</a>
+    <a href="#" class="btn-blue">Request Demo</a>
+  </div>
+</nav>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="status-items">
+    <div class="status-item"><div class="status-dot green"></div> All systems operational</div>
+    <div class="status-item"><div class="status-dot green"></div> Threat Engine: Active</div>
+    <div class="status-item"><div class="status-dot amber"></div> 3 alerts require review</div>
+  </div>
+  <div class="status-time" id="live-time">Loading...</div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <div class="status-dot-pulse"></div>
+        SOC2 Type II Certified &middot; FedRAMP Authorized
+      </div>
+      <h1 class="hero-title">See <span class="blue">everything.</span><br>Miss nothing.</h1>
+      <p class="hero-sub">SENTINEL is an enterprise security operations platform that gives your SOC team complete visibility across your entire infrastructure — endpoints, cloud, identity, and network — in a single unified command center.</p>
+      <div class="hero-cta-row">
+        <a href="#" class="hero-btn-main">Request Demo &rarr;</a>
+        <a href="#" class="hero-btn-demo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
+          Watch Platform Tour
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num"><span class="stat-count" data-target="99.97">0</span><span class="unit">%</span></div>
+          <div class="hero-stat-label">Uptime SLA</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num"><span class="stat-count" data-target="2.4">0</span><span class="unit">s</span></div>
+          <div class="hero-stat-label">Mean Detection Time</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num"><span class="stat-count" data-target="500">0</span><span class="unit">+</span></div>
+          <div class="hero-stat-label">Enterprise Customers</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="dashboard-preview">
+        <div class="dash-topbar">
+          <div class="dash-dots">
+            <div class="dash-dot" style="background:#FF5F57;"></div>
+            <div class="dash-dot" style="background:#FFBD2E;"></div>
+            <div class="dash-dot" style="background:#28C840;"></div>
+          </div>
+          <div class="dash-tabs">
+            <div class="dash-tab active">Overview</div>
+            <div class="dash-tab">Threats</div>
+            <div class="dash-tab">Endpoints</div>
+          </div>
+        </div>
+        <div class="dash-body">
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">Active Threats</div>
+              <div class="kpi-value" style="color:#F87171;">3</div>
+              <div class="kpi-delta down">▲ 2 new (1h)</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Endpoints</div>
+              <div class="kpi-value">14,847</div>
+              <div class="kpi-delta up">▲ 99.9% healthy</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Events/sec</div>
+              <div class="kpi-value">84.2K</div>
+              <div class="kpi-delta up">● Live</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">MTTR</div>
+              <div class="kpi-value">2.4s</div>
+              <div class="kpi-delta up">▼ -18% vs avg</div>
+            </div>
+          </div>
+          <div class="dash-chart-row">
+            <div class="dash-panel">
+              <div class="dash-panel-title">Event Volume · 24h</div>
+              <div class="chart-bars">
+                <div class="chart-bar" style="height:30%;"></div>
+                <div class="chart-bar" style="height:45%;"></div>
+                <div class="chart-bar" style="height:60%;"></div>
+                <div class="chart-bar" style="height:40%;"></div>
+                <div class="chart-bar" style="height:80%;"></div>
+                <div class="chart-bar" style="height:65%;"></div>
+                <div class="chart-bar" style="height:90%;"></div>
+                <div class="chart-bar" style="height:75%;"></div>
+                <div class="chart-bar" style="height:55%;"></div>
+                <div class="chart-bar" style="height:70%;"></div>
+                <div class="chart-bar" style="height:85%;"></div>
+                <div class="chart-bar" style="height:100%;"></div>
+              </div>
+            </div>
+            <div class="dash-panel">
+              <div class="dash-panel-title">Active Threats</div>
+              <div class="threat-list">
+                <div class="threat-item"><div class="threat-sev" style="background:#EF4444;"></div><div class="threat-name">CVE-2024-12831</div><div class="threat-time">2m ago</div></div>
+                <div class="threat-item"><div class="threat-sev" style="background:#F59E0B;"></div><div class="threat-name">Lateral movement</div><div class="threat-time">7m ago</div></div>
+                <div class="threat-item"><div class="threat-sev" style="background:#F59E0B;"></div><div class="threat-name">Priv escalation</div><div class="threat-time">14m ago</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section class="metrics-section">
+  <div class="metrics-inner">
+    <div class="section-overline">// by the numbers</div>
+    <h2 class="section-heading-light">Security at <span>enterprise scale</span></h2>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-number"><span class="count-up" data-target="14">0</span><span class="suffix">B+</span></div>
+        <div class="metric-label">Events Processed Daily</div>
+        <div class="metric-sub">across all customers</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number"><span class="count-up" data-target="2.4">0</span><span class="suffix">s</span></div>
+        <div class="metric-label">Mean Time to Detect</div>
+        <div class="metric-sub">industry avg: 197 days</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number"><span class="count-up" data-target="500">0</span><span class="suffix">+</span></div>
+        <div class="metric-label">Enterprise Clients</div>
+        <div class="metric-sub">across 40+ countries</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-number"><span class="count-up" data-target="99.97">0</span><span class="suffix">%</span></div>
+        <div class="metric-label">Platform Uptime</div>
+        <div class="metric-sub">contractual SLA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="features-inner">
+    <div class="section-overline" style="color:var(--blue);">// platform capabilities</div>
+    <h2 style="font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;color:var(--slate-900);letter-spacing:-1px;margin-bottom:8px;">Complete security coverage.<br><span style="font-weight:300;color:var(--slate-500);">No gaps. No compromises.</span></h2>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🛡</div>
+        <h3>Threat Intelligence Engine</h3>
+        <p>Real-time correlation against 50+ global threat feeds. Our AI engine detects novel attack patterns before signatures exist.</p>
+        <span class="feat-tag tag-blue">AI-Powered</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔍</div>
+        <h3>Unified SIEM & SOAR</h3>
+        <p>Ingest, correlate, and automate response across 500+ data sources. Reduce alert fatigue by 94% with intelligent triage.</p>
+        <span class="feat-tag tag-green">Automated</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌐</div>
+        <h3>Zero Trust Network Access</h3>
+        <p>Identity-first access control with continuous verification. Microsegmentation that adapts to your workforce in real time.</p>
+        <span class="feat-tag tag-blue">Zero Trust</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📋</div>
+        <h3>Compliance Automation</h3>
+        <p>Continuous compliance monitoring for SOC2, ISO 27001, PCI-DSS, HIPAA, and FedRAMP. Evidence collection on autopilot.</p>
+        <span class="feat-tag tag-amber">12+ Frameworks</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💻</div>
+        <h3>Endpoint Detection & Response</h3>
+        <p>Lightweight agent with zero performance impact. Block, isolate, and remediate threats across 100k+ endpoints simultaneously.</p>
+        <span class="feat-tag tag-green">EDR/XDR</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔑</div>
+        <h3>Identity Security Posture</h3>
+        <p>Detect compromised credentials, shadow admins, and lateral movement across Active Directory, Okta, and Entra ID.</p>
+        <span class="feat-tag tag-blue">ISPM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="testimonials-inner">
+    <div class="section-overline" style="color:var(--blue);">// customer outcomes</div>
+    <h2 style="font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:var(--slate-900);letter-spacing:-1px;margin-bottom:64px;">Trusted by security teams<br><span style="font-weight:300;color:var(--slate-500);">at the world's largest enterprises.</span></h2>
+    <div class="testimonials-grid">
+      <div class="test-card feat">
+        <div class="test-logo">GLOBALBANK CORP &middot; 180,000 Employees</div>
+        <p class="test-quote">"SENTINEL replaced our three-vendor stack and gave us visibility we simply didn't have before. Our MTTR dropped from 4.5 hours to under 3 seconds. The ROI was apparent within the first quarter."</p>
+        <div class="test-author">
+          <div class="test-avatar">JR</div>
+          <div>
+            <div class="test-name">James R.</div>
+            <div class="test-role">Chief Information Security Officer</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-logo">NEXUS HEALTH SYSTEMS</div>
+        <p class="test-quote">"HIPAA compliance used to consume 30% of our team's bandwidth. SENTINEL automated 90% of the evidence collection. We passed our audit without a single finding."</p>
+        <div class="test-author">
+          <div class="test-avatar">SK</div>
+          <div>
+            <div class="test-name">Sarah K.</div>
+            <div class="test-role">VP of IT Security</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-logo">MERIDIAN LOGISTICS</div>
+        <p class="test-quote">"We detected and contained a ransomware attempt in 4.7 seconds. Before SENTINEL, we wouldn't have known for days. This platform is non-negotiable for our security posture."</p>
+        <div class="test-author">
+          <div class="test-avatar">MP</div>
+          <div>
+            <div class="test-name">Marcus P.</div>
+            <div class="test-role">Head of Cybersecurity</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-badge">// request access</div>
+    <h2 class="cta-title">Deploy enterprise security in 48 hours</h2>
+    <p class="cta-sub">Speak with a security architect. Get a custom threat assessment for your environment — no strings attached.</p>
+    <div class="cta-btn-row">
+      <a href="#" class="cta-btn-primary">Request Demo &rarr;</a>
+      <a href="#" class="cta-btn-outline">View Documentation</a>
+    </div>
+    <div class="cta-trust">
+      <div class="trust-item">✓ SOC2 Type II</div>
+      <div class="trust-item">✓ FedRAMP Authorized</div>
+      <div class="trust-item">✓ GDPR Compliant</div>
+      <div class="trust-item">✓ 24/7 SOC Support</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo"><div class="nav-logo-icon">⚔</div> SENTINEL</div>
+        <p>Enterprise security operations platform. Protecting the world's most critical infrastructure since 2019.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="#">SIEM / SOAR</a>
+        <a href="#">Threat Intelligence</a>
+        <a href="#">EDR / XDR</a>
+        <a href="#">Zero Trust</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#">Partners</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Documentation</a>
+        <a href="#">Security Blog</a>
+        <a href="#">Threat Reports</a>
+        <a href="#">Status Page</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sentinel Security Inc. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Security</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Live time
+function updateTime() {
+  const el = document.getElementById('live-time');
+  if (el) el.textContent = new Date().toUTCString().slice(0, -7) + ' UTC';
+}
+updateTime(); setInterval(updateTime, 1000);
+
+// Scroll reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.feat-card, .test-card, .metric-card').forEach(el => obs.observe(el));
+
+// Count up
+function animateCountUp(el) {
+  const target = parseFloat(el.dataset.target);
+  const duration = 2000;
+  const start = performance.now();
+  function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = target * ease;
+    el.textContent = target % 1 !== 0 ? val.toFixed(2) : Math.round(val);
+    if (p < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+const countObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCountUp(e.target); countObs.unobserve(e.target); } });
+}, { threshold: 0.5 });
+document.querySelectorAll('.count-up, .stat-count').forEach(el => countObs.observe(el));
+</script>
+</body>
+</html>

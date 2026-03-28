@@ -1,0 +1,45 @@
+{
+  "id": "59214618-7db5-4456-bb79-797c9165d2f9",
+  "createdAt": "2025-12-31T05:56:45.327Z",
+  "updatedAt": "2026-03-28T06:45:59.133Z",
+  "deletedAt": null,
+  "title": "Dynamic Data Display",
+  "slug": "dynamic-data-display",
+  "description": "",
+  "teamId": "7d97ebb3-363d-49d3-a029-fa9a23815e3f",
+  "creatorId": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+  "prompt": "Numbers are displayed in large font with a **count-up animation**, triggering a **dynamic increase effect when scrolling into the viewport**—suitable for data display sections or statistical information areas.",
+  "images": [],
+  "tags": [
+    "text animation",
+    "animation",
+    "scroll animation",
+    "landing page"
+  ],
+  "previewUrl": "https://component-0d7745c0-bb64-44b6-852f-9209c2ddb68c.preview.superdesign.dev/?projectId=2b05aaab-2298-4ee0-b5bd-e40f48d60dd7",
+  "thumbnail": {
+    "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/preview-artifacts/prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/9ea44b98-d284-4f92-89b1-e3131fe54823.mp4",
+    "type": "video",
+    "storagePath": "prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/9ea44b98-d284-4f92-89b1-e3131fe54823.mp4"
+  },
+  "previewDevice": null,
+  "previewShowFrame": false,
+  "isPublic": true,
+  "previewViewCount": 1562,
+  "detailViewCount": 152,
+  "copyCount": 84,
+  "tryCount": 3,
+  "creator": {
+    "id": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+    "name": "Zhou Jason",
+    "email": "jason.zhou.design@gmail.com",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI6-P1KTFqMDsQTtfdDZAggOdMieNKQEuMwOGmTCNPC5ZrU=s96-c"
+  },
+  "stats": {
+    "previewViewCount": 1562,
+    "detailViewCount": 152,
+    "copyCount": 84,
+    "tryCount": 3,
+    "remixCount": 87
+  }
+}

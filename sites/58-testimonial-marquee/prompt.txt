@@ -1,0 +1,10 @@
+TITLE: Testimonial
+SOURCE: https://app.superdesign.dev/library/testimonial
+CREATOR: Zhou Jason
+STATS: 89 copies · 13 tries · 1386 previews
+
+── DESCRIPTION ─────────────────────────────────────────────────
+(none)
+
+── PROMPT ──────────────────────────────────────────────────────
+Make the cards animate marquis in an infinite loop with alpha mask slowly.

@@ -1,0 +1,44 @@
+{
+  "id": "71a41811-fa09-49a0-99d2-335adf59def8",
+  "createdAt": "2026-01-02T05:34:19.260Z",
+  "updatedAt": "2026-03-28T06:28:22.479Z",
+  "deletedAt": null,
+  "title": "\"Exploded View\" Assembly",
+  "slug": "exploded-view-assembly",
+  "description": "A scroll-driven animation where a central product or UI element explodes into its constituent parts and then reassembles into a new layout. Perfect for 'how it works' or feature breakdown sections.",
+  "teamId": "7d97ebb3-363d-49d3-a029-fa9a23815e3f",
+  "creatorId": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+  "prompt": "### **The \"Exploded View\" Assembly**\n\nPerfect for showing product components or \"how it works.\"\n\n> *\"Pin a central product mockup. As the user scrolls, have the internal components (UI elements, icons, layers) 'explode' outwards in different directions. As they continue to scroll, have the components fly back together and 'lock' into a final, different layout.\"*",
+  "images": [],
+  "tags": [
+    "animation",
+    "scroll animation",
+    "landing page"
+  ],
+  "previewUrl": "https://component-6d21bf40-6b58-4965-85a0-d485018210d4.preview.superdesign.dev/?projectId=fa9a0ca3-9361-4934-8488-4a95ea016408",
+  "thumbnail": {
+    "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/preview-artifacts/prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/052b6901-6caf-4a69-833e-3516c40d427e.mp4",
+    "type": "video",
+    "storagePath": "prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/052b6901-6caf-4a69-833e-3516c40d427e.mp4"
+  },
+  "previewDevice": null,
+  "previewShowFrame": false,
+  "isPublic": true,
+  "previewViewCount": 2271,
+  "detailViewCount": 1016,
+  "copyCount": 133,
+  "tryCount": 13,
+  "creator": {
+    "id": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+    "name": "Zhou Jason",
+    "email": "jason.zhou.design@gmail.com",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI6-P1KTFqMDsQTtfdDZAggOdMieNKQEuMwOGmTCNPC5ZrU=s96-c"
+  },
+  "stats": {
+    "previewViewCount": 2271,
+    "detailViewCount": 1016,
+    "copyCount": 133,
+    "tryCount": 13,
+    "remixCount": 146
+  }
+}

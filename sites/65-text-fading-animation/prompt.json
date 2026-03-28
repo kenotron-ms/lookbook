@@ -1,0 +1,44 @@
+{
+  "id": "745fb53c-f7ca-4f65-bc45-d48db8689fac",
+  "createdAt": "2025-12-31T05:51:46.715Z",
+  "updatedAt": "2026-03-28T06:10:19.154Z",
+  "deletedAt": null,
+  "title": "Text fading animation",
+  "slug": "text-fading-animation",
+  "description": "",
+  "teamId": "7d97ebb3-363d-49d3-a029-fa9a23815e3f",
+  "creatorId": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+  "prompt": "Responsive oversized heading with **fade text effect**,\n\nFeatures fluid typography that scales with viewport size.Create a text animation that **slides in with a clipping mask effect.**",
+  "images": [],
+  "tags": [
+    "animation",
+    "text animation",
+    "landing page"
+  ],
+  "previewUrl": "https://component-a6b343af-72ff-47e1-87ca-55bd2863fb7f.preview.superdesign.dev/?projectId=2b05aaab-2298-4ee0-b5bd-e40f48d60dd7",
+  "thumbnail": {
+    "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/preview-artifacts/prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/14f08a38-70e8-4c0e-aa9c-a9d1d6b1052f.mp4",
+    "type": "video",
+    "storagePath": "prompt-library/7d97ebb3-363d-49d3-a029-fa9a23815e3f/thumbnails/14f08a38-70e8-4c0e-aa9c-a9d1d6b1052f.mp4"
+  },
+  "previewDevice": null,
+  "previewShowFrame": false,
+  "isPublic": true,
+  "previewViewCount": 1331,
+  "detailViewCount": 292,
+  "copyCount": 41,
+  "tryCount": 1,
+  "creator": {
+    "id": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+    "name": "Zhou Jason",
+    "email": "jason.zhou.design@gmail.com",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI6-P1KTFqMDsQTtfdDZAggOdMieNKQEuMwOGmTCNPC5ZrU=s96-c"
+  },
+  "stats": {
+    "previewViewCount": 1331,
+    "detailViewCount": 292,
+    "copyCount": 41,
+    "tryCount": 1,
+    "remixCount": 42
+  }
+}

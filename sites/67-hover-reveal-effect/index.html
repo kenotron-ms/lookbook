@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>REVEAL.CO — Creative Agency</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a09;
+    --cream: #f2ede3;
+    --accent: #d4ff00;
+    --border: rgba(242,237,227,0.08);
+    --muted: rgba(242,237,227,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed; z-index: 9999;
+    width: 12px; height: 12px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor.hovering { width: 80px; height: 80px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 56px;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px; letter-spacing: 0.1em;
+    color: var(--cream); text-decoration: none;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+    color: var(--muted); text-decoration: none; text-transform: uppercase;
+    position: relative; transition: color 0.2s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1px; background: var(--accent);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-avail {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .avail-dot {
+    width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 56px 72px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(180px, 26vw, 380px);
+    letter-spacing: -0.02em; line-height: 1;
+    color: rgba(242,237,227,0.025);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    white-space: nowrap; pointer-events: none;
+    user-select: none;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0; animation: up 0.7s ease 0.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 180px);
+    line-height: 0.88; letter-spacing: 0.02em;
+    opacity: 0; animation: up 0.8s ease 0.4s forwards;
+  }
+  .hero-title .line2 { color: var(--accent); }
+  .hero-bottom {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-top: 48px;
+    opacity: 0; animation: up 0.7s ease 0.7s forwards;
+  }
+  .hero-sub {
+    font-size: 15px; font-weight: 300; line-height: 1.8;
+    color: var(--muted); max-width: 360px;
+  }
+  .hero-btns { display: flex; gap: 14px; }
+  .btn-lime {
+    background: var(--accent); color: #0a0a09;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.06em;
+    padding: 15px 32px; text-decoration: none; text-transform: uppercase;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-lime:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(212,255,0,0.3); }
+  .btn-outline {
+    border: 1px solid var(--border); color: var(--cream);
+    font-size: 13px; font-weight: 600; letter-spacing: 0.06em;
+    padding: 15px 32px; text-decoration: none; text-transform: uppercase;
+    transition: border-color 0.2s;
+  }
+  .btn-outline:hover { border-color: rgba(242,237,227,0.25); }
+
+  @keyframes up {
+    from { opacity: 0; transform: translateY(32px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── PORTFOLIO WITH HOVER REVEAL ── */
+  .portfolio {
+    padding: 0 56px 100px;
+    max-width: 100%;
+  }
+  .portfolio-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 56px;
+    border-top: 1px solid var(--border);
+    padding-top: 56px;
+  }
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .section-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 60px); letter-spacing: 0.04em;
+    margin-top: 10px;
+  }
+  .view-all {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .view-all:hover { color: var(--accent); }
+
+  /* HOVER REVEAL ROWS */
+  .project-list { display: flex; flex-direction: column; }
+  .project-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    cursor: none;
+    transition: padding-left 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .project-row:first-child { border-top: 1px solid var(--border); }
+  .project-row:hover { padding-left: 24px; }
+  .project-row:hover .proj-title { color: var(--accent); }
+  .project-row:hover .proj-reveal { opacity: 1; transform: scale(1); }
+  .proj-left { display: flex; align-items: center; gap: 28px; flex: 1; }
+  .proj-num {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
+    color: var(--accent); width: 36px; flex-shrink: 0;
+  }
+  .proj-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 4vw, 52px); letter-spacing: 0.03em;
+    transition: color 0.3s;
+  }
+  .proj-tags { display: flex; gap: 8px; }
+  .proj-tag {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--border); padding: 4px 10px;
+  }
+  .proj-year {
+    font-size: 13px; font-weight: 500; color: var(--muted);
+    flex-shrink: 0;
+  }
+  /* Hover-reveal image */
+  .proj-reveal {
+    position: absolute; right: 80px; top: 50%;
+    transform: translateY(-50%) scale(0.85);
+    width: 220px; height: 150px;
+    overflow: hidden; pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    z-index: 10;
+  }
+  .proj-reveal-img {
+    width: 100%; height: 100%;
+    transition: transform 0.4s;
+  }
+  .project-row:hover .proj-reveal-img { transform: scale(1.05); }
+  .reveal-c1 { background: linear-gradient(135deg, #1a1a0a, #3d3d00); }
+  .reveal-c2 { background: linear-gradient(135deg, #0a1a1a, #003d3d); }
+  .reveal-c3 { background: linear-gradient(135deg, #1a0a1a, #3d003d); }
+  .reveal-c4 { background: linear-gradient(135deg, #0a0a1a, #00003d); }
+  .reveal-c5 { background: linear-gradient(135deg, #1a0a0a, #3d0000); }
+
+  /* ── SERVICES ── */
+  .services {
+    padding: 100px 56px;
+    background: #0f0f0d;
+    border-top: 1px solid var(--border);
+  }
+  .services-inner { max-width: 1400px; margin: 0 auto; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 56px;
+  }
+  .svc-card {
+    background: #0f0f0d; padding: 44px 36px;
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
+  }
+  .svc-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--accent); transform: translateY(101%);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    z-index: 0;
+  }
+  .svc-card:hover::before { transform: translateY(0); }
+  .svc-card:hover .svc-num,
+  .svc-card:hover .svc-title,
+  .svc-card:hover .svc-desc { color: var(--bg); }
+  .svc-card > * { position: relative; z-index: 1; }
+  .svc-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px; letter-spacing: 0.15em;
+    color: var(--accent); margin-bottom: 32px;
+    transition: color 0.3s;
+  }
+  .svc-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 0.04em;
+    margin-bottom: 16px; transition: color 0.3s;
+  }
+  .svc-desc {
+    font-size: 13px; line-height: 1.75; color: var(--muted);
+    transition: color 0.3s;
+  }
+
+  /* ── HOVER REVEAL NAV DEMO ── */
+  .reveal-demo {
+    padding: 100px 56px;
+    border-top: 1px solid var(--border);
+  }
+  .reveal-demo-inner { max-width: 1400px; margin: 0 auto; }
+  .reveal-links { display: flex; flex-direction: column; gap: 0; }
+  .reveal-link-item {
+    display: flex; align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: visible;
+    cursor: none; gap: 24px;
+  }
+  .reveal-link-item:first-child { border-top: 1px solid var(--border); }
+  .rl-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); width: 72px; flex-shrink: 0;
+  }
+  .rl-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 0.04em;
+    transition: color 0.25s, letter-spacing 0.3s;
+    flex: 1;
+  }
+  .reveal-link-item:hover .rl-name { color: var(--accent); letter-spacing: 0.08em; }
+  .rl-preview {
+    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    width: 180px; height: 120px; overflow: hidden;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16,1,0.3,1);
+    z-index: 10;
+  }
+  .reveal-link-item:hover .rl-preview { opacity: 1; }
+  .rl-preview-fill { width: 100%; height: 100%; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials {
+    padding: 100px 56px;
+    background: #0f0f0d;
+    border-top: 1px solid var(--border);
+  }
+  .testi-inner { max-width: 1400px; margin: 0 auto; }
+  .testi-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 24px; margin-top: 56px;
+  }
+  .testi-box {
+    border: 1px solid var(--border); padding: 40px;
+    transition: border-color 0.3s;
+  }
+  .testi-box:hover { border-color: rgba(212,255,0,0.25); }
+  .testi-q {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 2.5vw, 28px); letter-spacing: 0.03em;
+    line-height: 1.3; margin-bottom: 28px; color: var(--cream);
+  }
+  .testi-by { display: flex; align-items: center; gap: 14px; }
+  .testi-av {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: var(--bg);
+  }
+  .testi-name { font-size: 13px; font-weight: 700; }
+  .testi-role { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* ── CTA ── */
+  .cta {
+    padding: 140px 56px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .cta-bg-text {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(100px, 20vw, 280px);
+    color: rgba(212,255,0,0.03);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    white-space: nowrap; pointer-events: none; letter-spacing: -0.02em;
+    user-select: none;
+  }
+  .cta h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 11vw, 140px);
+    line-height: 0.9; letter-spacing: 0.02em;
+    position: relative; z-index: 1; margin-bottom: 36px;
+  }
+  .cta h2 em { color: var(--accent); font-style: normal; display: block; }
+  .cta p {
+    font-size: 16px; font-weight: 300; color: var(--muted);
+    max-width: 400px; margin: 0 auto 48px; line-height: 1.7;
+    position: relative; z-index: 1;
+  }
+  .cta-actions { display: flex; gap: 16px; justify-content: center; position: relative; z-index: 1; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 56px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 0.1em;
+    color: var(--cream); text-decoration: none;
+  }
+  .footer-logo span { color: var(--accent); }
+  .footer-nav { display: flex; gap: 32px; list-style: none; }
+  .footer-nav a {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .footer-nav a:hover { color: var(--cream); }
+  .footer-copy { font-size: 11px; color: rgba(242,237,227,0.2); }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+
+<nav>
+  <a href="#" class="nav-logo">REVEAL<span>.</span>CO</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-avail"><span class="avail-dot"></span>Available Q3 2024</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">REVEAL</div>
+  <p class="hero-eyebrow">Creative Agency · London / New York</p>
+  <h1 class="hero-title">
+    <span class="line1">WE DON'T</span><br/>
+    <span class="line2">DESIGN.</span><br/>
+    <span class="line3">WE REVEAL.</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-sub">REVEAL.CO is a creative agency for brands that refuse to blend in. We make the invisible visible — hover to see what we mean.</p>
+    <div class="hero-btns">
+      <a href="#work" class="btn-lime">See the Work</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO — HOVER REVEAL ROWS -->
+<section class="portfolio" id="work">
+  <div class="portfolio-header">
+    <div>
+      <p class="section-label">Selected Projects</p>
+      <h2 class="section-heading">Work That Speaks</h2>
+    </div>
+    <a href="#" class="view-all">View All →</a>
+  </div>
+  <div class="project-list">
+
+    <div class="project-row">
+      <div class="proj-left">
+        <span class="proj-num">01</span>
+        <span class="proj-title">HELIO ENERGY</span>
+        <div class="proj-tags">
+          <span class="proj-tag">Brand Identity</span>
+          <span class="proj-tag">Campaign</span>
+        </div>
+      </div>
+      <span class="proj-year">2024</span>
+      <div class="proj-reveal">
+        <div class="proj-reveal-img reveal-c1"></div>
+      </div>
+    </div>
+
+    <div class="project-row">
+      <div class="proj-left">
+        <span class="proj-num">02</span>
+        <span class="proj-title">STRATA BANK</span>
+        <div class="proj-tags">
+          <span class="proj-tag">Digital</span>
+          <span class="proj-tag">Motion</span>
+        </div>
+      </div>
+      <span class="proj-year">2024</span>
+      <div class="proj-reveal">
+        <div class="proj-reveal-img reveal-c2"></div>
+      </div>
+    </div>
+
+    <div class="project-row">
+      <div class="proj-left">
+        <span class="proj-num">03</span>
+        <span class="proj-title">OBSIDIAN LABS</span>
+        <div class="proj-tags">
+          <span class="proj-tag">Product</span>
+          <span class="proj-tag">UI/UX</span>
+        </div>
+      </div>
+      <span class="proj-year">2023</span>
+      <div class="proj-reveal">
+        <div class="proj-reveal-img reveal-c3"></div>
+      </div>
+    </div>
+
+    <div class="project-row">
+      <div class="proj-left">
+        <span class="proj-num">04</span>
+        <span class="proj-title">NOVA FASHION</span>
+        <div class="proj-tags">
+          <span class="proj-tag">Editorial</span>
+          <span class="proj-tag">Retail</span>
+        </div>
+      </div>
+      <span class="proj-year">2023</span>
+      <div class="proj-reveal">
+        <div class="proj-reveal-img reveal-c4"></div>
+      </div>
+    </div>
+
+    <div class="project-row">
+      <div class="proj-left">
+        <span class="proj-num">05</span>
+        <span class="proj-title">ATLAS COLLECTIVE</span>
+        <div class="proj-tags">
+          <span class="proj-tag">Strategy</span>
+          <span class="proj-tag">Spatial</span>
+        </div>
+      </div>
+      <span class="proj-year">2023</span>
+      <div class="proj-reveal">
+        <div class="proj-reveal-img reveal-c5"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-inner">
+    <p class="section-label">What We Do</p>
+    <h2 class="section-heading">Craft at every<br/>touchpoint</h2>
+    <div class="services-grid">
+      <div class="svc-card">
+        <p class="svc-num">01 — Strategy</p>
+        <h3 class="svc-title">Brand Strategy</h3>
+        <p class="svc-desc">Positioning, narrative, naming, and competitive differentiation — the thinking that makes everything else coherent.</p>
+      </div>
+      <div class="svc-card">
+        <p class="svc-num">02 — Identity</p>
+        <h3 class="svc-title">Visual Identity</h3>
+        <p class="svc-desc">Logos, typefaces, color systems, and graphic languages that express what words alone never could.</p>
+      </div>
+      <div class="svc-card">
+        <p class="svc-num">03 — Motion</p>
+        <h3 class="svc-title">Motion & Film</h3>
+        <p class="svc-desc">Kinetic identities, campaign films, and brand animations — stories told through movement and time.</p>
+      </div>
+      <div class="svc-card">
+        <p class="svc-num">04 — Digital</p>
+        <h3 class="svc-title">Digital Experiences</h3>
+        <p class="svc-desc">Websites, apps, and interactive installations that reveal your brand through every interaction.</p>
+      </div>
+      <div class="svc-card">
+        <p class="svc-num">05 — Spatial</p>
+        <h3 class="svc-title">Spatial Design</h3>
+        <p class="svc-desc">Environments, exhibitions, and retail spaces that are unmistakably yours from the moment you enter.</p>
+      </div>
+      <div class="svc-card">
+        <p class="svc-num">06 — Campaign</p>
+        <h3 class="svc-title">Campaign Direction</h3>
+        <p class="svc-desc">Art direction and creative production for advertising, editorial, and social — ideas with visual teeth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOVER REVEAL DEMO: NAV LINKS -->
+<section class="reveal-demo" id="studio">
+  <div class="reveal-demo-inner">
+    <p class="section-label">Interactive Reveal Demo</p>
+    <h2 class="section-heading">Hover to reveal</h2>
+    <p style="font-size:14px;color:var(--muted);margin:16px 0 48px;max-width:400px;line-height:1.7;">
+      This is the interaction we use throughout our work — content concealed until curiosity takes over.
+    </p>
+    <div class="reveal-links">
+      <div class="reveal-link-item">
+        <span class="rl-tag">Identity</span>
+        <span class="rl-name">Brand System Design</span>
+        <div class="rl-preview">
+          <div class="rl-preview-fill" style="background:linear-gradient(135deg,#d4ff00,#a8cc00);"></div>
+        </div>
+      </div>
+      <div class="reveal-link-item">
+        <span class="rl-tag">Motion</span>
+        <span class="rl-name">Film & Animation</span>
+        <div class="rl-preview">
+          <div class="rl-preview-fill" style="background:linear-gradient(135deg,#1a1a1a,#444);"></div>
+        </div>
+      </div>
+      <div class="reveal-link-item">
+        <span class="rl-tag">Digital</span>
+        <span class="rl-name">Web Experience</span>
+        <div class="rl-preview">
+          <div class="rl-preview-fill" style="background:linear-gradient(135deg,#001a2e,#003d5c);"></div>
+        </div>
+      </div>
+      <div class="reveal-link-item">
+        <span class="rl-tag">Spatial</span>
+        <span class="rl-name">Environmental Branding</span>
+        <div class="rl-preview">
+          <div class="rl-preview-fill" style="background:linear-gradient(135deg,#1a0d00,#4d2800);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="about">
+  <div class="testi-inner">
+    <p class="section-label">What Clients Say</p>
+    <h2 class="section-heading">Words from the work</h2>
+    <div class="testi-grid">
+      <div class="testi-box">
+        <p class="testi-q">"REVEAL.CO didn't just rebrand us — they revealed who we actually were. The hover interactions on our site have a 340% higher engagement rate than before."</p>
+        <div class="testi-by">
+          <div class="testi-av">NK</div>
+          <div>
+            <p class="testi-name">Nadia Kowalski</p>
+            <p class="testi-role">CEO, Helio Energy</p>
+          </div>
+        </div>
+      </div>
+      <div class="testi-box">
+        <p class="testi-q">"The subtlety of their work is what gets you. Nothing is overdone. Everything has a reason. They've ruined every other agency for us — in the best way."</p>
+        <div class="testi-by">
+          <div class="testi-av" style="background:#333;color:var(--accent);">JF</div>
+          <div>
+            <p class="testi-name">James Fowler</p>
+            <p class="testi-role">Brand Director, Atlas Collective</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="cta-bg-text">REVEAL</div>
+  <h2>Let's<br/><em>reveal</em><br/>yours.</h2>
+  <p>We take on 6 projects per quarter. Availability is limited. Let's talk before it's gone.</p>
+  <div class="cta-actions">
+    <a href="#" class="btn-lime">Start a Project</a>
+    <a href="#" class="btn-outline">hello@reveal.co</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">REVEAL<span>.</span>CO</a>
+  <ul class="footer-nav">
+    <li><a href="#">Work</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="#">Studio</a></li>
+    <li><a href="#">Journal</a></li>
+  </ul>
+  <p class="footer-copy">© 2024 REVEAL.CO — London · New York</p>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  document.querySelectorAll('.project-row, .reveal-link-item, .svc-card, a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+  });
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.project-row, .svc-card, .testi-box, .reveal-link-item').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = `opacity 0.55s ease ${i * 0.06}s, transform 0.55s ease ${i * 0.06}s`;
+    io.observe(el);
+  });
+</script>
+</body>
+</html>

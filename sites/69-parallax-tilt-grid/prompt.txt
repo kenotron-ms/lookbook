@@ -1,0 +1,14 @@
+TITLE: "Parallax Tilt" Grid
+SOURCE: https://app.superdesign.dev/library/parallax-tilt-grid
+CREATOR: Zhou Jason
+STATS: 38 copies · 2 tries · 1884 previews
+
+── DESCRIPTION ─────────────────────────────────────────────────
+A 3-column image grid with independent scroll speeds and 3D tilt effects on scroll.
+
+── PROMPT ──────────────────────────────────────────────────────
+The "Parallax Tilt" Grid 
+
+Makes a standard 3-column grid feel alive.
+
+"In a 3-column image grid, apply independent scroll speeds to each column (e.g., left: 1.2x, center: 1.0x, right: 1.4x). Additionally, add a scroll-linked 3D tilt where the images lean forward as they enter from the bottom and lean back as they exit the top."

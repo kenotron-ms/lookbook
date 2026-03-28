@@ -1,0 +1,44 @@
+{
+  "id": "2ff65aa8-5288-4253-9b6f-daa59ae426f7",
+  "createdAt": "2026-01-01T01:26:04.199Z",
+  "updatedAt": "2026-03-28T05:35:21.719Z",
+  "deletedAt": null,
+  "title": "Testimonial",
+  "slug": "testimonial",
+  "description": "",
+  "teamId": "7d97ebb3-363d-49d3-a029-fa9a23815e3f",
+  "creatorId": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+  "prompt": "Make the cards animate marquis in an infinite loop with alpha mask slowly.",
+  "images": [],
+  "tags": [
+    "ui component",
+    "testimonial",
+    "landing page"
+  ],
+  "previewUrl": "https://component-1daae677-3c3f-424f-bd09-8b0822659842.preview.superdesign.dev/?projectId=2b05aaab-2298-4ee0-b5bd-e40f48d60dd7",
+  "thumbnail": {
+    "url": "https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/screenshots/components/29d400b1-7278-456b-8771-1b25f5ffb582/1daae677-3c3f-424f-bd09-8b0822659842/1767230681166.png",
+    "type": "image",
+    "storagePath": ""
+  },
+  "previewDevice": null,
+  "previewShowFrame": false,
+  "isPublic": true,
+  "previewViewCount": 1386,
+  "detailViewCount": 535,
+  "copyCount": 89,
+  "tryCount": 13,
+  "creator": {
+    "id": "f9d8c84d-888c-4030-bf75-477f0928ee4d",
+    "name": "Zhou Jason",
+    "email": "jason.zhou.design@gmail.com",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocI6-P1KTFqMDsQTtfdDZAggOdMieNKQEuMwOGmTCNPC5ZrU=s96-c"
+  },
+  "stats": {
+    "previewViewCount": 1386,
+    "detailViewCount": 535,
+    "copyCount": 89,
+    "tryCount": 13,
+    "remixCount": 102
+  }
+}

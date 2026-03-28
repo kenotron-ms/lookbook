@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMINA — Get Paid for What You Make</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --yellow: #FFE17C;
+  --yellow-dark: #F0CC40;
+  --black: #0D0D0D;
+  --white: #FFFFFF;
+  --surface: #F5F5F5;
+  --border: #0D0D0D;
+  --shadow: 4px 4px 0px #0D0D0D;
+  --shadow-lg: 6px 6px 0px #0D0D0D;
+  --shadow-xl: 8px 8px 0px #0D0D0D;
+  --gray: #888;
+  --mid: #555;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── PROMO BAR ── */
+.promo-bar {
+  background: var(--black);
+  color: var(--yellow);
+  text-align: center;
+  padding: 10px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.promo-inner {
+  display: inline-flex;
+  gap: 60px;
+  animation: promo-scroll 20s linear infinite;
+}
+
+.promo-sep { color: var(--yellow); opacity: 0.5; }
+
+@keyframes promo-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--white);
+  border-bottom: 2px solid var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 64px;
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--black);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.nav-logo .dot { color: var(--yellow); }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--black);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--gray); }
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-nav-outline {
+  background: transparent;
+  color: var(--black);
+  border: 2px solid var(--black);
+  padding: 10px 24px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--black);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-nav-outline:hover { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--black); }
+
+.btn-nav-fill {
+  background: var(--yellow);
+  color: var(--black);
+  border: 2px solid var(--black);
+  padding: 10px 24px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--black);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-nav-fill:hover { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--black); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 88vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 2px solid var(--black);
+}
+
+.hero-left {
+  padding: 80px 60px 80px 40px;
+  border-right: 2px solid var(--black);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--black);
+  color: var(--yellow);
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  margin-bottom: 32px;
+  width: fit-content;
+}
+
+.hero-badge::before {
+  content: '★';
+  font-size: 10px;
+}
+
+.hero-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(56px, 7vw, 100px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  margin-bottom: 28px;
+}
+
+.hero-h1 .highlight {
+  background: var(--yellow);
+  padding: 0 8px;
+  display: inline;
+}
+
+.hero-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--mid);
+  max-width: 480px;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 56px;
+}
+
+.btn-hero {
+  background: var(--yellow);
+  color: var(--black);
+  border: 2px solid var(--black);
+  padding: 18px 44px;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  box-shadow: var(--shadow-xl);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-hero:hover { transform: translate(4px, 4px); box-shadow: 4px 4px 0 var(--black); }
+
+.btn-hero-ghost {
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid var(--black);
+  padding-bottom: 2px;
+}
+
+.hero-social-proof {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.social-avatars {
+  display: flex;
+}
+
+.social-avatar {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--black);
+  background: var(--yellow);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  margin-left: -8px;
+  flex-shrink: 0;
+}
+
+.social-avatar:first-child { margin-left: 0; }
+
+.social-avatar:nth-child(2) { background: var(--black); color: var(--yellow); }
+.social-avatar:nth-child(3) { background: #fff; }
+.social-avatar:nth-child(4) { background: var(--yellow); }
+
+.social-text { font-size: 13px; font-weight: 500; }
+.social-text strong { font-weight: 800; }
+
+.hero-right {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--surface);
+  justify-content: center;
+}
+
+/* BENTO GRID in hero right */
+.bento-main {
+  background: var(--yellow);
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-lg);
+  padding: 36px 32px;
+}
+
+.bento-main-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  color: var(--black);
+  opacity: 0.6;
+}
+
+.bento-main-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.bento-main-sub {
+  font-size: 13px;
+  color: rgba(0,0,0,0.6);
+  font-weight: 500;
+}
+
+.bento-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.bento-small {
+  background: var(--white);
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.bento-small-label {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 8px;
+}
+
+.bento-small-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.bento-small.dark {
+  background: var(--black);
+  color: var(--yellow);
+}
+
+.bento-small.dark .bento-small-label { color: rgba(255,225,124,0.5); }
+
+/* ── MARQUEE ── */
+.marquee-section {
+  border-bottom: 2px solid var(--black);
+  overflow: hidden;
+  padding: 18px 0;
+  background: var(--yellow);
+}
+
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 18s linear infinite;
+}
+
+.marquee-item {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0 40px;
+  flex-shrink: 0;
+  color: var(--black);
+}
+
+.marquee-sep { opacity: 0.4; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── FEATURES / HOW IT WORKS ── */
+.how-it-works {
+  padding: 100px 40px;
+  border-bottom: 2px solid var(--black);
+}
+
+.hiw-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 64px;
+}
+
+.section-tag {
+  display: inline-block;
+  background: var(--black);
+  color: var(--yellow);
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 4.5vw, 68px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.hiw-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.step-card {
+  border: 2px solid var(--black);
+  padding: 36px 28px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s, box-shadow 0.15s;
+  cursor: default;
+}
+
+.step-card:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-xl); }
+
+.step-card.yellow { background: var(--yellow); }
+.step-card.black { background: var(--black); color: var(--yellow); }
+
+.step-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 24px;
+  opacity: 0.15;
+}
+
+.step-card.black .step-num { color: var(--yellow); opacity: 0.3; }
+
+.step-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.step-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--mid);
+}
+
+.step-card.black .step-desc { color: rgba(255,225,124,0.7); }
+.step-card.yellow .step-desc { color: rgba(0,0,0,0.6); }
+
+/* ── BENTO FEATURES ── */
+.bento-features {
+  padding: 0 40px 100px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: 16px;
+}
+
+.bento-feat {
+  border: 2px solid var(--black);
+  padding: 44px 36px;
+  box-shadow: var(--shadow);
+  background: var(--white);
+  transition: transform 0.15s, box-shadow 0.15s;
+  cursor: default;
+}
+
+.bento-feat:hover { transform: translate(-2px,-2px); box-shadow: var(--shadow-xl); }
+
+.bento-feat.wide { grid-column: span 2; }
+.bento-feat.yellow { background: var(--yellow); }
+.bento-feat.black { background: var(--black); color: var(--yellow); }
+
+.feat-emoji {
+  font-size: 32px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.feat-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.feat-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--mid);
+}
+
+.bento-feat.black .feat-desc { color: rgba(255,225,124,0.7); }
+.bento-feat.yellow .feat-desc { color: rgba(0,0,0,0.6); }
+
+/* ── SOCIAL PROOF ── */
+.social-proof {
+  padding: 100px 40px;
+  background: var(--black);
+  color: var(--white);
+  border-top: 2px solid var(--black);
+}
+
+.sp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 60px;
+}
+
+.sp-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.sp-title .yellow { color: var(--yellow); }
+
+.sp-tag {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.t-card {
+  border: 2px solid #333;
+  padding: 36px 28px;
+  background: #111;
+  box-shadow: var(--shadow);
+  transition: border-color 0.2s;
+}
+
+.t-card:hover { border-color: var(--yellow); }
+
+.t-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.t-avatar {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--yellow);
+  background: var(--yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--black);
+  flex-shrink: 0;
+}
+
+.t-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--white);
+}
+
+.t-handle {
+  font-size: 11px;
+  color: #555;
+  margin-top: 2px;
+}
+
+.t-stars {
+  color: var(--yellow);
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.t-quote {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #bbb;
+}
+
+.t-earning {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #222;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--yellow);
+}
+
+/* ── PRICING ── */
+.pricing {
+  padding: 100px 40px;
+  border-bottom: 2px solid var(--black);
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.price-card {
+  border: 2px solid var(--black);
+  padding: 44px 36px;
+  background: var(--white);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+.price-card.featured {
+  background: var(--yellow);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px);
+}
+
+.price-plan {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 16px;
+}
+
+.price-card.featured .price-plan { color: rgba(0,0,0,0.5); }
+
+.price-amount {
+  font-family: 'Syne', sans-serif;
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.price-period {
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 28px;
+  font-weight: 500;
+}
+
+.price-features {
+  list-style: none;
+  flex: 1;
+  margin-bottom: 32px;
+}
+
+.price-features li {
+  font-size: 13px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.price-card.featured .price-features li { border-color: rgba(0,0,0,0.1); }
+
+.price-features li::before {
+  content: '✓';
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--black);
+}
+
+.btn-plan {
+  display: block;
+  text-align: center;
+  padding: 16px 24px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border: 2px solid var(--black);
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow);
+  background: var(--black);
+  color: var(--white);
+}
+
+.btn-plan:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--black); }
+
+.price-card.featured .btn-plan {
+  background: var(--black);
+  color: var(--yellow);
+}
+
+/* ── CTA ── */
+.cta {
+  padding: 100px 40px;
+  background: var(--yellow);
+  border-top: 2px solid var(--black);
+  text-align: center;
+}
+
+.cta-eyebrow {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.5);
+  margin-bottom: 20px;
+}
+
+.cta-headline {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(56px, 8vw, 110px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  margin-bottom: 40px;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.btn-cta-black {
+  background: var(--black);
+  color: var(--yellow);
+  border: 2px solid var(--black);
+  padding: 20px 52px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: var(--shadow-xl);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-cta-black:hover { transform: translate(4px,4px); box-shadow: 4px 4px 0 var(--black); }
+
+.btn-cta-outline {
+  background: transparent;
+  color: var(--black);
+  border: 2px solid var(--black);
+  padding: 20px 48px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: var(--shadow-xl);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-cta-outline:hover { transform: translate(4px,4px); box-shadow: 4px 4px 0 var(--black); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--black);
+  color: var(--white);
+  padding: 72px 40px 40px;
+  border-top: 2px solid var(--black);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid #222;
+}
+
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--yellow);
+  margin-bottom: 12px;
+}
+
+.footer-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+.footer-col-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { font-size: 13px; color: #888; text-decoration: none; transition: color 0.2s; }
+.footer-col ul li a:hover { color: var(--yellow); }
+
+.footer-bottom {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy { font-size: 11px; color: #555; }
+
+.footer-legal a {
+  font-size: 11px;
+  color: #555;
+  text-decoration: none;
+  margin-left: 20px;
+  transition: color 0.2s;
+}
+
+.footer-legal a:hover { color: var(--yellow); }
+</style>
+</head>
+<body>
+
+<!-- PROMO BAR -->
+<div class="promo-bar">
+  <div class="promo-inner">
+    <span>🎉 Creators earned $4.2M last month</span>
+    <span class="promo-sep">★</span>
+    <span>Free plan — no credit card</span>
+    <span class="promo-sep">★</span>
+    <span>New: Direct Bank Payouts 🏦</span>
+    <span class="promo-sep">★</span>
+    <span>🎉 Creators earned $4.2M last month</span>
+    <span class="promo-sep">★</span>
+    <span>Free plan — no credit card</span>
+    <span class="promo-sep">★</span>
+    <span>New: Direct Bank Payouts 🏦</span>
+    <span class="promo-sep">★</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">LUMINA<span class="dot">●</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Creators</a></li>
+    <li><a href="#">Buyers</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Blog</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#" class="btn-nav-outline">Sign In</a>
+    <a href="#" class="btn-nav-fill">Get Started →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">Now with AI Pricing Suggestions</div>
+    <h1 class="hero-h1">
+      GET PAID<br>
+      FOR <span class="highlight">WHAT</span><br>
+      YOU MAKE
+    </h1>
+    <p class="hero-desc">LUMINA is the monetization platform for creators. Sell courses, digital products, memberships, and 1:1 services — all in one place. You create. We handle the money.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-hero">Start for Free →</a>
+      <a href="#" class="btn-hero-ghost">See How It Works</a>
+    </div>
+    <div class="hero-social-proof">
+      <div class="social-avatars">
+        <div class="social-avatar">AK</div>
+        <div class="social-avatar">NR</div>
+        <div class="social-avatar">JP</div>
+        <div class="social-avatar">+</div>
+      </div>
+      <div class="social-text"><strong>14,200+ creators</strong> earning on LUMINA today</div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="bento-main">
+      <div class="bento-main-label">Your Earnings This Month</div>
+      <div class="bento-main-amount">$8,340</div>
+      <div class="bento-main-sub">↑ 32% from last month · Next payout in 3 days</div>
+    </div>
+    <div class="bento-row">
+      <div class="bento-small">
+        <div class="bento-small-label">New Subscribers</div>
+        <div class="bento-small-val">+142</div>
+      </div>
+      <div class="bento-small dark">
+        <div class="bento-small-label">Conversion Rate</div>
+        <div class="bento-small-val">8.4%</div>
+      </div>
+    </div>
+    <div class="bento-row">
+      <div class="bento-small">
+        <div class="bento-small-label">Products Live</div>
+        <div class="bento-small-val">7</div>
+      </div>
+      <div class="bento-small" style="background:var(--yellow); border:2px solid var(--black);">
+        <div class="bento-small-label">Payout Rate</div>
+        <div class="bento-small-val">95%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Courses <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Digital Downloads <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Memberships <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">1:1 Coaching <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Live Events <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Templates <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Webinars <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Courses <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Digital Downloads <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Memberships <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">1:1 Coaching <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Live Events <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Templates <span class="marquee-sep">★</span></span>
+    <span class="marquee-item">Webinars <span class="marquee-sep">★</span></span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+  <div class="hiw-header">
+    <div>
+      <div class="section-tag">How It Works</div>
+      <h2 class="section-title">THREE STEPS<br>TO EARNING</h2>
+    </div>
+    <a href="#" class="btn-nav-fill">Start Free →</a>
+  </div>
+  <div class="hiw-grid">
+    <div class="step-card yellow">
+      <div class="step-num">01</div>
+      <div class="step-title">Create Your Page</div>
+      <p class="step-desc">Set up your LUMINA creator page in under 5 minutes. Add your bio, photo, and brand colors. Your store is live instantly.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-title">Add Your Products</div>
+      <p class="step-desc">Upload courses, PDFs, templates, or set up a subscription tier. Drag-and-drop builder — no code required.</p>
+    </div>
+    <div class="step-card black">
+      <div class="step-num">03</div>
+      <div class="step-title">Share & Sell</div>
+      <p class="step-desc">Get your unique link. Share anywhere — Instagram, TikTok, newsletter, YouTube. We handle checkout, delivery, and refunds.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-title">Get Paid</div>
+      <p class="step-desc">Weekly payouts direct to your bank. Keep 95% of every sale. No surprise fees. Full transparency always.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BENTO FEATURES -->
+<div class="bento-features">
+  <div class="bento-feat wide yellow">
+    <span class="feat-emoji">⚡</span>
+    <div class="feat-title">The fastest way to sell anything digital</div>
+    <p class="feat-desc">From upload to sale in 90 seconds. LUMINA handles payment processing, tax compliance, content delivery, and customer management — so you focus on creating, not admin.</p>
+  </div>
+  <div class="bento-feat black">
+    <span class="feat-emoji">💳</span>
+    <div class="feat-title">Global Payments</div>
+    <p class="feat-desc">Accept payments in 135+ currencies. Local payment methods everywhere.</p>
+  </div>
+  <div class="bento-feat">
+    <span class="feat-emoji">📊</span>
+    <div class="feat-title">Revenue Analytics</div>
+    <p class="feat-desc">Real-time revenue, churn, LTV, and buyer demographics. Know your numbers.</p>
+  </div>
+  <div class="bento-feat">
+    <span class="feat-emoji">🤖</span>
+    <div class="feat-title">AI Pricing</div>
+    <p class="feat-desc">LUMINA AI analyzes your market and recommends the optimal price for each product.</p>
+  </div>
+  <div class="bento-feat wide">
+    <span class="feat-emoji">🔗</span>
+    <div class="feat-title">Integrates with your whole stack</div>
+    <p class="feat-desc">Connect to Mailchimp, ConvertKit, Zapier, Discord, Notion, and 400+ more tools. Automate your entire creator business.</p>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF -->
+<section class="social-proof">
+  <div class="sp-header">
+    <h2 class="sp-title">REAL CREATORS.<br><span class="yellow">REAL MONEY.</span></h2>
+    <div class="sp-tag">14,200+ Creators</div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="t-card">
+      <div class="t-card-header">
+        <div class="t-avatar">JK</div>
+        <div>
+          <div class="t-name">Julia K.</div>
+          <div class="t-handle">@juliadesigns · Product Designer</div>
+        </div>
+      </div>
+      <div class="t-stars">★★★★★</div>
+      <p class="t-quote">"I moved from Gumroad to LUMINA and my conversion rate jumped from 4% to 9%. The checkout is just cleaner, faster. My audience trusts it more."</p>
+      <div class="t-earning">💰 Earned $28,400 in 6 months</div>
+    </div>
+    <div class="t-card">
+      <div class="t-card-header">
+        <div class="t-avatar" style="background:var(--black);border-color:#333;">MO</div>
+        <div>
+          <div class="t-name">Marcus O.</div>
+          <div class="t-handle">@marcusbuilds · Developer Educator</div>
+        </div>
+      </div>
+      <div class="t-stars">★★★★★</div>
+      <p class="t-quote">"LUMINA's membership tiers gave me predictable MRR for the first time. I went from $800/mo to $6,200/mo in four months. The platform just works."</p>
+      <div class="t-earning">💰 MRR of $6,200 · 240 subscribers</div>
+    </div>
+    <div class="t-card">
+      <div class="t-card-header">
+        <div class="t-avatar">SP</div>
+        <div>
+          <div class="t-name">Sasha P.</div>
+          <div class="t-handle">@sashacooks · Food Creator</div>
+        </div>
+      </div>
+      <div class="t-stars">★★★★★</div>
+      <p class="t-quote">"I sold 420 copies of my cookbook PDF on launch day. The LUMINA checkout handled everything — payments, delivery, receipts. I just watched the notifications come in."</p>
+      <div class="t-earning">💰 $12,600 on launch day alone</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+  <div class="pricing-header">
+    <div class="section-tag">Pricing</div>
+    <h2 class="section-title" style="margin-top:12px;">KEEP MORE.<br>EARN MORE.</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-plan">Starter</div>
+      <div class="price-amount">$0</div>
+      <div class="price-period">Forever free · 5% transaction fee</div>
+      <ul class="price-features">
+        <li>3 products</li>
+        <li>Unlimited buyers</li>
+        <li>Basic analytics</li>
+        <li>Weekly payouts</li>
+      </ul>
+      <a href="#" class="btn-plan" style="background:var(--black);color:var(--yellow);">Start Free →</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-plan">Pro Creator</div>
+      <div class="price-amount">$29</div>
+      <div class="price-period">per month · 2% transaction fee</div>
+      <ul class="price-features">
+        <li>Unlimited products</li>
+        <li>Memberships & subscriptions</li>
+        <li>Full analytics dashboard</li>
+        <li>Daily payouts</li>
+        <li>AI Pricing suggestions</li>
+        <li>Custom domain</li>
+      </ul>
+      <a href="#" class="btn-plan">Get Pro →</a>
+    </div>
+    <div class="price-card">
+      <div class="price-plan">Business</div>
+      <div class="price-amount">$79</div>
+      <div class="price-period">per month · 0% transaction fee</div>
+      <ul class="price-features">
+        <li>Everything in Pro</li>
+        <li>Team access</li>
+        <li>Affiliate program</li>
+        <li>Priority support</li>
+        <li>API access</li>
+      </ul>
+      <a href="#" class="btn-plan">Get Business →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-eyebrow">Your next step</div>
+  <h2 class="cta-headline">START EARNING<br>TODAY</h2>
+  <div class="cta-actions">
+    <a href="#" class="btn-cta-black">Create Free Account →</a>
+    <a href="#" class="btn-cta-outline">See Creator Stories</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">LUMINA●</div>
+      <p class="footer-desc">The monetization platform for the creator economy. 14,200+ creators. $42M+ paid out.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">For Creators</div>
+      <ul>
+        <li><a href="#">Start Selling</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Creator Stories</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Products</div>
+      <ul>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Memberships</a></li>
+        <li><a href="#">Digital Downloads</a></li>
+        <li><a href="#">Coaching</a></li>
+        <li><a href="#">Live Events</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Status</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 LUMINA, Inc. All rights reserved.</span>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookie Prefs</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
