@@ -1,0 +1,3 @@
+Model: Anthropic Claude Opus 4.6
+Site: 01 — High Contrast Landing Page
+Source: https://app.superdesign.dev/library/high-contrast-landing-page
