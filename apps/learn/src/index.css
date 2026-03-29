@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  color: #1f1f1f;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --accent: #0056d2;
+  --text-primary: #1f1f1f;
+  --text-muted: #636363;
+  --bg-white: #ffffff;
+  --bg-section: #f9f9f9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
