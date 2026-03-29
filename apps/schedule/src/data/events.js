@@ -1,0 +1,140 @@
+export const eventTypes = [
+  {
+    id: 1,
+    name: '30 Minute Meeting',
+    duration: 30,
+    durationLabel: '30 min',
+    description: 'A quick sync to connect, align, or explore working together.',
+    color: '#006bff',
+    link: 'https://schedule.paranet/jordan/30min',
+    slug: '30min',
+  },
+  {
+    id: 2,
+    name: '1 Hour Deep Dive',
+    duration: 60,
+    durationLabel: '1 hour',
+    description: 'An in-depth session for complex topics, strategy, or demos.',
+    color: '#16a34a',
+    link: 'https://schedule.paranet/jordan/1hour',
+    slug: '1hour',
+  },
+  {
+    id: 3,
+    name: '15 Min Intro Call',
+    duration: 15,
+    durationLabel: '15 min',
+    description: 'A short intro — let\'s see if we\'re a good fit to work together.',
+    color: '#ea6c00',
+    link: 'https://schedule.paranet/jordan/intro',
+    slug: 'intro',
+  },
+]
+
+export const upcomingMeetings = [
+  {
+    id: 1,
+    attendee: 'Alex Rivera',
+    email: 'alex.r@venture.co',
+    type: '30 Minute Meeting',
+    date: 'Mon, Mar 31',
+    time: '9:00 AM',
+    platform: 'Zoom',
+    avatarColor: '#7c3aed',
+    initials: 'AR',
+  },
+  {
+    id: 2,
+    attendee: 'Priya Nair',
+    email: 'priya@designstudio.io',
+    type: '1 Hour Deep Dive',
+    date: 'Mon, Mar 31',
+    time: '11:00 AM',
+    platform: 'Zoom',
+    avatarColor: '#0891b2',
+    initials: 'PN',
+  },
+  {
+    id: 3,
+    attendee: 'Sam Chen',
+    email: 'sam.chen@corp.com',
+    type: '15 Min Intro Call',
+    date: 'Tue, Apr 1',
+    time: '2:30 PM',
+    platform: 'Zoom',
+    avatarColor: '#16a34a',
+    initials: 'SC',
+  },
+  {
+    id: 4,
+    attendee: 'Maya Okonkwo',
+    email: 'maya@growth.vc',
+    type: '30 Minute Meeting',
+    date: 'Wed, Apr 2',
+    time: '10:00 AM',
+    platform: 'Zoom',
+    avatarColor: '#dc2626',
+    initials: 'MO',
+  },
+]
+
+export const stats = [
+  { label: "Today's meetings", value: '2', sub: 'Next at 9:00 AM' },
+  { label: 'This week', value: '7', sub: '3 remaining' },
+  { label: 'Scheduled', value: '24', sub: 'This month' },
+  { label: 'Cancellations', value: '1', sub: 'This month' },
+]
+
+// Days unavailable (day numbers of current month)
+export const unavailableDays = [6, 7, 13, 14, 20, 21, 27, 28]
+
+export const timeSlots = [
+  '9:00 AM',
+  '9:30 AM',
+  '10:00 AM',
+  '10:30 AM',
+  '11:00 AM',
+  '11:30 AM',
+  '12:00 PM',
+  '1:00 PM',
+  '1:30 PM',
+  '2:00 PM',
+  '2:30 PM',
+  '3:00 PM',
+  '3:30 PM',
+  '4:00 PM',
+  '4:30 PM',
+]
+
+export const scheduledEvents = [
+  {
+    id: 1,
+    attendee: 'Alex Rivera',
+    type: '30 Minute Meeting',
+    date: 'Monday, March 31, 2025',
+    time: '9:00 AM – 9:30 AM',
+    platform: 'Zoom',
+    initials: 'AR',
+    avatarColor: '#7c3aed',
+  },
+  {
+    id: 2,
+    attendee: 'Priya Nair',
+    type: '1 Hour Deep Dive',
+    date: 'Monday, March 31, 2025',
+    time: '11:00 AM – 12:00 PM',
+    platform: 'Zoom',
+    initials: 'PN',
+    avatarColor: '#0891b2',
+  },
+  {
+    id: 3,
+    attendee: 'Sam Chen',
+    type: '15 Min Intro Call',
+    date: 'Tuesday, April 1, 2025',
+    time: '2:30 PM – 2:45 PM',
+    platform: 'Zoom',
+    initials: 'SC',
+    avatarColor: '#16a34a',
+  },
+]
