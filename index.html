@@ -572,7 +572,7 @@
   <div class="filters-bar" role="navigation" aria-label="Filter by category">
     <div class="filters-inner">
       <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">
-        All <span class="btn-count">72</span>
+        All <span class="btn-count">73</span>
       </button>
       <button class="filter-btn" data-filter="design" onclick="setFilter('design', this)">
         Design Systems <span class="btn-count">47</span>
@@ -583,8 +583,11 @@
       <button class="filter-btn" data-filter="component" onclick="setFilter('component', this)">
         Components <span class="btn-count">19</span>
       </button>
+      <button class="filter-btn" data-filter="apps" onclick="setFilter('apps', this)" style="background:rgba(99,102,241,0.12);color:#a5b4fc;border-color:rgba(99,102,241,0.35);">
+        ✦ App Universe <span class="btn-count" style="background:rgba(99,102,241,0.25);color:#a5b4fc;">1</span>
+      </button>
       <div class="filters-spacer"></div>
-      <span class="result-count" id="result-count">72 sites</span>
+      <span class="result-count" id="result-count">73 sites</span>
     </div>
   </div>
 
@@ -596,7 +599,7 @@
   <!-- ─── Footer ───────────────────────────────────────────────────────── -->
   <footer>
     <div class="footer">
-      <span class="footer-left">LOOKBOOK / 72 LANDING PAGE SITES</span>
+      <span class="footer-left">LOOKBOOK / 72 SITES + APP UNIVERSE</span>
       <span class="footer-right">Click any card to open the site in a new tab</span>
     </div>
   </footer>
@@ -675,7 +678,10 @@
       { num:"069", folder:"69-parallax-tilt-grid", title:"Parallax Tilt Grid", product:"PARALLAX", cat:"component", tags:["parallax","3d","grid"], prompt:"A 3-column image grid with independent scroll speeds per column and CSS 3D rotateX/Y tilt effects on hover via mousemove event listeners." },
       { num:"070", folder:"70-saas-pricing-comparison", title:"Pricing Comparison Table", product:"CANVAS", cat:"pricing", tags:["pricing","comparison","table"], prompt:"A detailed pricing comparison table with sticky tier headers, collapsible sections, tiered columns (Free, Growth, Enterprise), and extensive feature lists with status indicators." },
       { num:"071", folder:"71-clickup-pricing-calculator", title:"Pricing Calculator", product:"UNIFIED", cat:"pricing", tags:["calculator","interactive","roi"], prompt:"A cost savings calculator comparing app spending vs a unified platform. Interactive app selection grid, user count slider, and dynamic cost breakdown showing live savings." },
-      { num:"072", folder:"72-mixpanel-pricing-comparison", title:"Mixpanel-Style Comparison", product:"INSIGHT", cat:"pricing", tags:["pricing","purple","comparison"], prompt:"A detailed pricing comparison table with sticky headers, collapsible sections, tiered columns, and purple gradient curtain background. Billing toggle and FAQ accordion." }
+      { num:"072", folder:"72-mixpanel-pricing-comparison", title:"Mixpanel-Style Comparison", product:"INSIGHT", cat:"pricing", tags:["pricing","purple","comparison"], prompt:"A detailed pricing comparison table with sticky headers, collapsible sections, tiered columns, and purple gradient curtain background. Billing toggle and FAQ accordion." },
+
+      /* ── App Universe ── */
+      { num:"073", folder:"echo", title:"Echo — Social Network", product:"ECHO / PARANET", cat:"apps", tags:["react","social","vite","tailwind"], prompt:"Echo is a fictitious social network from the ParaNet universe — a parallel internet where every major platform has a clean-room twin. Built with React 19 + Vite 6 + Tailwind CSS v4, Echo mirrors X/Twitter's three-column layout: sticky left sidebar with AudioWaveform logo and indigo accent, a tabbed feed (For You / Following) with live-state post cards (like, re-echo, bookmark), character-counted post composer, Explore with trending topics, full Notifications center, Messages inbox, and a Profile page. Hashbang routing via React Router 7 lets the built dist/ open as a static file." }
     ];
 
     /* ─── Helpers ──────────────────────────────────────────────────────── */
@@ -695,7 +701,7 @@
     function renderCard(site) {
       const tags = site.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('');
       return `
-        <article class="card" role="listitem" onclick="openSite('${esc(site.folder)}')" aria-label="${esc(site.title)}">
+        <article class="card" role="listitem" onclick="openSite('${esc(site.folder)}','${esc(site.cat)}')" aria-label="${esc(site.title)}"${site.cat === 'apps' ? ' style="outline: 1px solid rgba(99,102,241,0.4); outline-offset:-1px;"' : ''}>
           <div class="card-img-wrapper">
             <img
               src="thumbnails/${esc(site.folder)}.jpg"
@@ -758,6 +764,11 @@
         key:   'component',
         label: 'Components & Interactions',
         desc:  'Standalone UI components, animations, and interaction patterns'
+      },
+      {
+        key:   'apps',
+        label: 'App Universe — ParaNet',
+        desc:  'Full React + Vite + Tailwind app clones from a fictitious parallel internet — same look & feel, different universe'
       }
     ];
 
@@ -787,8 +798,7 @@
       }
 
       grid.innerHTML = html;
-      document.getElementById('result-count').textContent =
-        visibleCount === 72 ? '72 sites' : `${visibleCount} sites`;
+      document.getElementById('result-count').textContent = `${visibleCount} site${visibleCount === 1 ? '' : 's'}`;
     }
 
     /* ─── Filter Handler ───────────────────────────────────────────────── */
@@ -814,8 +824,12 @@
     }
 
     /* ─── Open Site ────────────────────────────────────────────────────── */
-    function openSite(folder) {
-      window.open('sites/' + folder + '/index.html', '_blank', 'noopener');
+    function openSite(folder, cat) {
+      if (cat === 'apps') {
+        window.open('apps/' + folder + '/dist/index.html', '_blank', 'noopener');
+      } else {
+        window.open('sites/' + folder + '/index.html', '_blank', 'noopener');
+      }
     }
 
     /* ─── Init ─────────────────────────────────────────────────────────── */
