@@ -572,7 +572,7 @@
   <div class="filters-bar" role="navigation" aria-label="Filter by category">
     <div class="filters-inner">
       <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">
-        All <span class="btn-count">73</span>
+        All <span class="btn-count">81</span>
       </button>
       <button class="filter-btn" data-filter="design" onclick="setFilter('design', this)">
         Design Systems <span class="btn-count">47</span>
@@ -584,7 +584,7 @@
         Components <span class="btn-count">19</span>
       </button>
       <button class="filter-btn" data-filter="apps" onclick="setFilter('apps', this)" style="background:rgba(99,102,241,0.12);color:#a5b4fc;border-color:rgba(99,102,241,0.35);">
-        ✦ App Universe <span class="btn-count" style="background:rgba(99,102,241,0.25);color:#a5b4fc;">1</span>
+        ✦ App Universe <span class="btn-count" style="background:rgba(99,102,241,0.25);color:#a5b4fc;">9</span>
       </button>
       <div class="filters-spacer"></div>
       <span class="result-count" id="result-count">73 sites</span>
@@ -681,7 +681,15 @@
       { num:"072", folder:"72-mixpanel-pricing-comparison", title:"Mixpanel-Style Comparison", product:"INSIGHT", cat:"pricing", tags:["pricing","purple","comparison"], prompt:"A detailed pricing comparison table with sticky headers, collapsible sections, tiered columns, and purple gradient curtain background. Billing toggle and FAQ accordion." },
 
       /* ── App Universe ── */
-      { num:"073", folder:"echo", title:"Echo — Social Network", product:"ECHO / PARANET", cat:"apps", tags:["react","social","vite","tailwind"], prompt:"Echo is a fictitious social network from the ParaNet universe — a parallel internet where every major platform has a clean-room twin. Built with React 19 + Vite 6 + Tailwind CSS v4, Echo mirrors X/Twitter's three-column layout: sticky left sidebar with AudioWaveform logo and indigo accent, a tabbed feed (For You / Following) with live-state post cards (like, re-echo, bookmark), character-counted post composer, Explore with trending topics, full Notifications center, Messages inbox, and a Profile page. Hashbang routing via React Router 7 lets the built dist/ open as a static file." }
+      { num:"073", folder:"echo",     title:"Echo — Social Network",  product:"ECHO / PARANET",     cat:"apps", tags:["react","social","vite","tailwind"],   prompt:"Echo is ParaNet's X/Twitter — a three-column dark social network with indigo accent. For You / Following feed, live-state post cards (like, re-echo, bookmark), character-counted post composer, Explore trending, Notifications center, Messages, Profile." },
+      { num:"074", folder:"prism",    title:"Prism — Photo Network",  product:"PRISM / PARANET",    cat:"apps", tags:["react","instagram","photo","social"], prompt:"Prism is ParaNet's Instagram — icon sidebar, stories row with rose gradient rings, 12 gradient photo posts, Explore masonry grid, Reels (9:16 cards), DM conversations, and a full Profile with highlights + 3-col grid." },
+      { num:"075", folder:"groove",   title:"Groove — Music Streaming", product:"GROOVE / PARANET",  cat:"apps", tags:["react","spotify","music","player"],  prompt:"Groove is ParaNet's Spotify — 3-zone layout (sidebar, content, fixed player bar). Home carousels, Search category grid, Library playlists, Playlist/Album track list, Artist page with discography. Green #1db954 accent." },
+      { num:"076", folder:"forge",    title:"Forge — Code Platform",  product:"FORGE / PARANET",    cat:"apps", tags:["react","github","developer","code"],  prompt:"Forge is ParaNet's GitHub — dark #0d1117 theme, dashboard feed, repo file browser with breadcrumbs, PR list with status/labels, Issues tracker, and Profile with 52×7 contribution heatmap. Green #3fb950 accent." },
+      { num:"077", folder:"oracle",   title:"Oracle — AI Assistant",  product:"ORACLE / PARANET",   cat:"apps", tags:["react","chatgpt","ai","chat"],        prompt:"Oracle is ParaNet's ChatGPT — grouped conversation sidebar, full chat with typing indicator, code blocks with syntax highlighting (blue/orange/green), Settings (theme, data controls), and a GPT Store grid. Teal #10a37f accent." },
+      { num:"078", folder:"agora",    title:"Agora — Communities",    product:"AGORA / PARANET",    cat:"apps", tags:["react","reddit","forum","voting"],    prompt:"Agora is ParaNet's Reddit — dark #1a1a1b, g/ community prefix, upvote/downvote toggle with score coloring, 3-level nested comment tree with collapse, community banner pages, and a post submit form with flair. Orange #ff6314 accent." },
+      { num:"079", folder:"parchment",title:"Parchment — Workspace",  product:"PARCHMENT / PARANET",cat:"apps", tags:["react","notion","docs","blocks"],     prompt:"Parchment is ParaNet's Notion — page tree sidebar, block-based editor (H1/H2/bullets/code/callout), slash command menu, Database Table with colored status pills, Board (Kanban) view, and a home dashboard. Purple #9333ea accent." },
+      { num:"080", folder:"reel",     title:"Reel — Video Platform",  product:"REEL / PARANET",     cat:"apps", tags:["react","youtube","video","streaming"],prompt:"Reel is ParaNet's YouTube — collapsible sidebar, 4-col video grid with gradient thumbnails + duration badges, Watch page with click-to-toggle player + comments + recommendations, Search filters, Shorts (full-screen vertical), Channel page. Red #ff0000 accent." },
+      { num:"081", folder:"hive",     title:"Hive — Community Chat",  product:"HIVE / PARANET",     cat:"apps", tags:["react","discord","chat","voice"],     prompt:"Hive is ParaNet's Discord — 4-column layout (72px server rail, channel list with collapsible categories + voice rooms, grouped messages with role-colored usernames + reactions + code blocks, member list). DMs view and Settings. Violet #7c3aed accent." }
     ];
 
     /* ─── Helpers ──────────────────────────────────────────────────────── */
