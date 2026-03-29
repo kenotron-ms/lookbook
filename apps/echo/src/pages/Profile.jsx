@@ -3,29 +3,29 @@ import { ArrowLeft, Link, MapPin, Calendar } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import PostCard from '../components/PostCard'
 import { Avatar } from '../components/LeftSidebar'
-import { CURRENT_USER, POSTS } from '../data/posts'
+import { useCurrentUser, useUserPosts } from '../hooks/useUser.js'
+import { CURRENT_USER_ID } from '../db/seed.js'
 
 const PROFILE_TABS = ['Posts', 'Replies', 'Highlights', 'Media', 'Likes']
-
-const MY_POSTS = POSTS.slice(0, 5).map((p) => ({
-  ...p,
-  user: {
-    name: CURRENT_USER.name,
-    handle: CURRENT_USER.handle,
-    initials: CURRENT_USER.initials,
-    avatarBg: CURRENT_USER.avatarBg,
-    verified: false,
-  },
-  likes: Math.floor(p.likes * 0.3),
-  replies: Math.floor(p.replies * 0.3),
-  echoes: Math.floor(p.echoes * 0.3),
-  views: Math.floor(p.views * 0.3),
-}))
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState(0)
   const [editOpen, setEditOpen] = useState(false)
   const navigate = useNavigate()
+
+  const user = useCurrentUser()
+  const myPosts = useUserPosts(CURRENT_USER_ID)
+
+  if (!user) {
+    return (
+      <div style={{ padding: '32px 16px', textAlign: 'center', color: '#71767b' }}>
+        Loading...
+      </div>
+    )
+  }
+
+  // Filter out replies for the Posts tab
+  const topLevelPosts = myPosts ? myPosts.filter(p => !p.parentId) : []
 
   return (
     <div>
@@ -66,10 +66,10 @@ export default function Profile() {
         </button>
         <div>
           <div style={{ fontWeight: '800', fontSize: '19px', color: '#e7e9ea', letterSpacing: '-0.02em' }}>
-            {CURRENT_USER.name}
+            {user.name}
           </div>
           <div style={{ fontSize: '13px', color: '#71767b' }}>
-            {MY_POSTS.length} posts
+            {topLevelPosts.length} posts
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export default function Profile() {
       <div
         style={{
           height: '200px',
-          background: 'linear-gradient(135deg, #312e81, #6366f1, #818cf8)',
+          background: user.bannerColor || 'linear-gradient(135deg, #312e81, #6366f1, #818cf8)',
           position: 'relative',
         }}
       />
@@ -94,11 +94,15 @@ export default function Profile() {
             borderRadius: '50%',
           }}
         >
-          <Avatar
-            initials={CURRENT_USER.initials}
-            bg={CURRENT_USER.avatarBg}
-            size={80}
-          />
+          {user.avatar ? (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', display: 'block' }}
+            />
+          ) : (
+            <Avatar initials={user.name?.[0] || 'J'} bg="#6366f1" size={80} />
+          )}
         </div>
 
         {/* Edit button */}
@@ -127,25 +131,27 @@ export default function Profile() {
         <div style={{ marginTop: '48px', paddingBottom: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
             <span style={{ fontWeight: '800', fontSize: '20px', color: '#e7e9ea', letterSpacing: '-0.02em' }}>
-              {CURRENT_USER.name}
+              {user.name}
             </span>
           </div>
           <div style={{ fontSize: '15px', color: '#71767b', marginBottom: '12px' }}>
-            @{CURRENT_USER.handle}
+            @{user.handle}
           </div>
 
           {/* Bio */}
-          <p style={{ fontSize: '15px', color: '#e7e9ea', marginBottom: '12px', lineHeight: '20px' }}>
-            {CURRENT_USER.bio}
-          </p>
+          {user.bio && (
+            <p style={{ fontSize: '15px', color: '#e7e9ea', marginBottom: '12px', lineHeight: '20px' }}>
+              {user.bio}
+            </p>
+          )}
 
           {/* Meta */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '12px' }}>
             {[
-              { icon: MapPin, text: CURRENT_USER.location },
-              { icon: Link, text: CURRENT_USER.website, accent: true },
-              { icon: Calendar, text: `Joined ${CURRENT_USER.joinedDate}` },
-            ].map(({ icon: Icon, text, accent }) => (
+              user.location && { icon: MapPin, text: user.location },
+              user.website && { icon: Link, text: user.website, accent: true },
+              user.joinedDate && { icon: Calendar, text: `Joined ${user.joinedDate}` },
+            ].filter(Boolean).map(({ icon: Icon, text, accent }) => (
               <div
                 key={text}
                 style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#71767b', fontSize: '15px' }}
@@ -159,8 +165,8 @@ export default function Profile() {
           {/* Followers row */}
           <div style={{ display: 'flex', gap: '20px', marginBottom: '4px' }}>
             {[
-              { count: CURRENT_USER.following, label: 'Following' },
-              { count: CURRENT_USER.followers, label: 'Followers' },
+              { count: user.following, label: 'Following' },
+              { count: user.followers, label: 'Followers' },
             ].map(({ count, label }) => (
               <button
                 key={label}
@@ -175,7 +181,7 @@ export default function Profile() {
                 }}
               >
                 <span style={{ fontWeight: '700', fontSize: '15px', color: '#e7e9ea' }}>
-                  {count.toLocaleString()}
+                  {(count ?? 0).toLocaleString()}
                 </span>
                 <span style={{ fontSize: '15px', color: '#71767b' }}>{label}</span>
               </button>
@@ -237,8 +243,13 @@ export default function Profile() {
       </div>
 
       {/* Posts */}
+      {activeTab === 0 && !myPosts && (
+        <div style={{ padding: '32px 16px', textAlign: 'center', color: '#71767b' }}>
+          Loading...
+        </div>
+      )}
       {activeTab === 0 &&
-        MY_POSTS.map((post) => <PostCard key={post.id} post={post} />)}
+        topLevelPosts.map((post) => <PostCard key={post.id} post={post} />)}
 
       {activeTab !== 0 && (
         <div

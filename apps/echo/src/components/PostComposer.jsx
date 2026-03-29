@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Image, Smile, BarChart2, MapPin, Calendar } from 'lucide-react'
-import { Avatar } from './LeftSidebar'
-import { CURRENT_USER } from '../data/posts'
+import { createPost } from '../hooks/useFeed.js'
+import { useCurrentUser } from '../hooks/useUser.js'
 
 const MAX_CHARS = 280
 
 export default function PostComposer({ placeholder = "What's on your mind?" }) {
   const [text, setText] = useState('')
   const [focused, setFocused] = useState(false)
+  const currentUser = useCurrentUser()
 
   const remaining = MAX_CHARS - text.length
   const canPost = text.trim().length > 0
@@ -28,11 +29,22 @@ export default function PostComposer({ placeholder = "What's on your mind?" }) {
         gap: '12px',
       }}
     >
-      <Avatar
-        initials={CURRENT_USER.initials}
-        bg={CURRENT_USER.avatarBg}
-        size={48}
-      />
+      {/* Current user avatar */}
+      {currentUser?.avatar ? (
+        <img
+          src={currentUser.avatar}
+          alt={currentUser.name}
+          style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+        />
+      ) : (
+        <div style={{
+          width: 48, height: 48, borderRadius: '50%', background: '#6366f1',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: 'white', fontWeight: 700, fontSize: 16, flexShrink: 0,
+        }}>
+          {currentUser?.name?.[0] || 'J'}
+        </div>
+      )}
 
       <div style={{ flex: 1, minWidth: 0 }}>
         {/* Audience selector pill — only when focused */}
@@ -214,8 +226,9 @@ export default function PostComposer({ placeholder = "What's on your mind?" }) {
                 if (canPost && !overLimit)
                   e.currentTarget.style.background = '#6366f1'
               }}
-              onClick={() => {
+              onClick={async () => {
                 if (canPost && !overLimit) {
+                  await createPost(text.trim())
                   setText('')
                   setFocused(false)
                 }

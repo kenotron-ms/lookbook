@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { MessageCircle, Repeat2, Heart, BarChart2, Bookmark, Share, MoreHorizontal } from 'lucide-react'
-import { Avatar } from './LeftSidebar'
+import { useLiveQuery } from 'dexie-react-hooks'
+import db from '../db/index.js'
+import { useLike } from '../hooks/useLike.js'
+import { useEcho } from '../hooks/useEcho.js'
+import { useBookmark } from '../hooks/useBookmark.js'
 
 function formatCount(n) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M'
@@ -8,30 +12,33 @@ function formatCount(n) {
   return n.toString()
 }
 
+function formatTime(timestamp) {
+  const now = Date.now()
+  const diff = now - timestamp
+  const minutes = Math.floor(diff / 60_000)
+  const hours = Math.floor(diff / 3_600_000)
+  const days = Math.floor(diff / 86_400_000)
+  if (minutes < 1) return 'now'
+  if (hours < 1) return `${minutes}m`
+  if (days < 1) return `${hours}h`
+  if (days < 30) return `${days}d`
+  return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
 export default function PostCard({ post }) {
-  const [liked, setLiked] = useState(post.liked)
-  const [likeCount, setLikeCount] = useState(post.likes)
-  const [echoed, setEchoed] = useState(post.echoed)
-  const [echoCount, setEchoCount] = useState(post.echoes)
-  const [bookmarked, setBookmarked] = useState(post.bookmarked || false)
   const [hovered, setHovered] = useState(false)
 
-  const handleLike = (e) => {
-    e.stopPropagation()
-    setLikeCount(liked ? likeCount - 1 : likeCount + 1)
-    setLiked(!liked)
-  }
+  // Live post data so counts stay in sync
+  const livePost = useLiveQuery(() => db.posts.get(post.id), [post.id]) ?? post
+  const author = useLiveQuery(() => db.users.get(post.userId), [post.userId])
 
-  const handleEcho = (e) => {
-    e.stopPropagation()
-    setEchoCount(echoed ? echoCount - 1 : echoCount + 1)
-    setEchoed(!echoed)
-  }
+  const { liked, toggleLike } = useLike(post.id)
+  const { echoed, toggleEcho } = useEcho(post.id)
+  const { bookmarked, toggleBookmark } = useBookmark(post.id)
 
-  const handleBookmark = (e) => {
-    e.stopPropagation()
-    setBookmarked(!bookmarked)
-  }
+  const handleLike = (e) => { e.stopPropagation(); toggleLike() }
+  const handleEcho = (e) => { e.stopPropagation(); toggleEcho() }
+  const handleBookmark = (e) => { e.stopPropagation(); toggleBookmark() }
 
   return (
     <article
@@ -49,11 +56,21 @@ export default function PostCard({ post }) {
     >
       {/* Avatar */}
       <div style={{ flexShrink: 0, paddingTop: '2px' }}>
-        <Avatar
-          initials={post.user.initials}
-          bg={post.user.avatarBg}
-          size={48}
-        />
+        {author?.avatar ? (
+          <img
+            src={author.avatar}
+            alt={author.name}
+            style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }}
+          />
+        ) : (
+          <div style={{
+            width: 48, height: 48, borderRadius: '50%', background: '#6366f1',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: 'white', fontWeight: 700, fontSize: 16,
+          }}>
+            {author?.name?.[0] || '?'}
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -85,15 +102,15 @@ export default function PostCard({ post }) {
                 whiteSpace: 'nowrap',
               }}
             >
-              {post.user.name}
+              {author?.name ?? '…'}
             </span>
-            {post.user.verified && <VerifiedBadge />}
+            {author?.verified && <VerifiedBadge />}
             <span style={{ fontSize: '15px', color: '#71767b', whiteSpace: 'nowrap' }}>
-              @{post.user.handle}
+              @{author?.handle ?? '…'}
             </span>
             <span style={{ color: '#71767b', fontSize: '15px' }}>·</span>
             <span style={{ fontSize: '15px', color: '#71767b', whiteSpace: 'nowrap' }}>
-              {post.timestamp}
+              {formatTime(livePost.timestamp)}
             </span>
           </div>
           <button
@@ -136,8 +153,23 @@ export default function PostCard({ post }) {
             wordBreak: 'break-word',
           }}
         >
-          {post.content}
+          {livePost.content}
         </p>
+
+        {/* Media */}
+        {livePost.mediaUrl && (
+          <img
+            src={livePost.mediaUrl}
+            alt=""
+            style={{
+              width: '100%',
+              borderRadius: '16px',
+              marginBottom: '12px',
+              maxHeight: '400px',
+              objectFit: 'cover',
+            }}
+          />
+        )}
 
         {/* Action row */}
         <div
@@ -151,13 +183,13 @@ export default function PostCard({ post }) {
         >
           <ActionBtn
             icon={MessageCircle}
-            count={post.replies}
+            count={livePost.replies}
             hoverColor="#1d9bf0"
             hoverBg="rgba(29,155,240,0.1)"
           />
           <ActionBtn
             icon={Repeat2}
-            count={echoCount}
+            count={livePost.echoes}
             active={echoed}
             activeColor="#00ba7c"
             hoverColor="#00ba7c"
@@ -166,7 +198,7 @@ export default function PostCard({ post }) {
           />
           <ActionBtn
             icon={Heart}
-            count={likeCount}
+            count={livePost.likes}
             active={liked}
             activeColor="#f91880"
             hoverColor="#f91880"
@@ -176,7 +208,7 @@ export default function PostCard({ post }) {
           />
           <ActionBtn
             icon={BarChart2}
-            count={post.views}
+            count={livePost.views}
             hoverColor="#1d9bf0"
             hoverBg="rgba(29,155,240,0.1)"
           />

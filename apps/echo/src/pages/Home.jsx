@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import PostComposer from '../components/PostComposer'
 import PostCard from '../components/PostCard'
-import { POSTS, FOLLOWING_POSTS } from '../data/posts'
+import { useFeed } from '../hooks/useFeed.js'
 
 const TABS = ['For You', 'Following']
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState(0)
-  const posts = activeTab === 0 ? POSTS : FOLLOWING_POSTS
+  const posts = useFeed(activeTab === 0 ? 'foryou' : 'following')
 
   return (
     <div>
@@ -52,21 +52,35 @@ export default function Home() {
       <PostComposer />
 
       {/* Feed */}
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
+      {!posts ? (
+        <LoadingFeed />
+      ) : (
+        posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))
+      )}
 
       {/* Load more sentinel */}
-      <div
-        style={{
-          padding: '24px 16px',
-          textAlign: 'center',
-          color: '#71767b',
-          fontSize: '15px',
-        }}
-      >
-        You're all caught up — check back later.
-      </div>
+      {posts && (
+        <div
+          style={{
+            padding: '24px 16px',
+            textAlign: 'center',
+            color: '#71767b',
+            fontSize: '15px',
+          }}
+        >
+          You're all caught up — check back later.
+        </div>
+      )}
+    </div>
+  )
+}
+
+function LoadingFeed() {
+  return (
+    <div style={{ padding: '32px 16px', textAlign: 'center', color: '#71767b' }}>
+      Loading...
     </div>
   )
 }

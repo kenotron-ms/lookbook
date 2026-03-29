@@ -8,9 +8,8 @@ import {
   User,
   MoreHorizontal,
   AudioWaveform,
-  Feather,
 } from 'lucide-react'
-import { CURRENT_USER } from '../data/posts'
+import { useCurrentUser } from '../hooks/useUser.js'
 
 const NAV_ITEMS = [
   { icon: Home, label: 'Home', to: '/', end: true },
@@ -187,6 +186,9 @@ function MoreButton() {
 }
 
 function UserAccount() {
+  const user = useCurrentUser()
+  if (!user) return null
+
   return (
     <div
       style={{
@@ -202,7 +204,15 @@ function UserAccount() {
       onMouseEnter={(e) => (e.currentTarget.style.background = '#16181c')}
       onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
     >
-      <Avatar initials={CURRENT_USER.initials} bg={CURRENT_USER.avatarBg} size={40} />
+      {user.avatar ? (
+        <img
+          src={user.avatar}
+          alt={user.name}
+          style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+        />
+      ) : (
+        <Avatar initials={user.name?.[0] || 'J'} bg="#6366f1" size={40} />
+      )}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div
           style={{
@@ -214,7 +224,7 @@ function UserAccount() {
             textOverflow: 'ellipsis',
           }}
         >
-          {CURRENT_USER.name}
+          {user.name}
         </div>
         <div
           style={{
@@ -225,7 +235,7 @@ function UserAccount() {
             textOverflow: 'ellipsis',
           }}
         >
-          @{CURRENT_USER.handle}
+          @{user.handle}
         </div>
       </div>
       <MoreHorizontal size={18} color="#71767b" />
