@@ -1,0 +1,111 @@
+export const revenueData = [
+  { date: 'Mar 1',  amount: 1823 },
+  { date: 'Mar 2',  amount: 2145 },
+  { date: 'Mar 3',  amount: 1654 },
+  { date: 'Mar 4',  amount: 1987 },
+  { date: 'Mar 5',  amount: 2341 },
+  { date: 'Mar 6',  amount: 1256 },
+  { date: 'Mar 7',  amount: 1789 },
+  { date: 'Mar 8',  amount: 2034 },
+  { date: 'Mar 9',  amount: 2567 },
+  { date: 'Mar 10', amount: 1934 },
+  { date: 'Mar 11', amount: 2123 },
+  { date: 'Mar 12', amount: 2456 },
+  { date: 'Mar 13', amount: 1876 },
+  { date: 'Mar 14', amount: 2089 },
+  { date: 'Mar 15', amount: 2312 },
+  { date: 'Mar 16', amount: 1654 },
+  { date: 'Mar 17', amount: 1923 },
+  { date: 'Mar 18', amount: 2234 },
+  { date: 'Mar 19', amount: 2567 },
+  { date: 'Mar 20', amount: 1987 },
+  { date: 'Mar 21', amount: 2145 },
+  { date: 'Mar 22', amount: 2389 },
+  { date: 'Mar 23', amount: 1834 },
+  { date: 'Mar 24', amount: 2078 },
+  { date: 'Mar 25', amount: 2456 },
+  { date: 'Mar 26', amount: 2623 },
+  { date: 'Mar 27', amount: 2567 },
+  { date: 'Mar 28', amount: 2834 },
+  { date: 'Mar 29', amount: 2678 },
+  { date: 'Mar 30', amount: 2890 },
+]
+
+export const payments = [
+  { id: 'ch_1A2b3C', amount: 4200,   currency: 'USD', status: 'succeeded', customer: 'Maya Patel',      email: 'maya@acme.io',       description: 'Pro plan · monthly',      method: 'Visa',       last4: '4242', date: 'Mar 30, 2026 · 11:42 AM' },
+  { id: 'ch_2B3c4D', amount: 1800,   currency: 'USD', status: 'succeeded', customer: 'Ethan Rogers',    email: 'ethan@devops.co',    description: 'Starter plan · monthly',  method: 'Mastercard', last4: '8888', date: 'Mar 30, 2026 · 10:18 AM' },
+  { id: 'ch_3C4d5E', amount: 12900,  currency: 'USD', status: 'succeeded', customer: 'Aria Technologies', email: 'billing@ariatech.io', description: 'Enterprise plan · annual', method: 'Visa',    last4: '1234', date: 'Mar 29, 2026 · 4:55 PM'  },
+  { id: 'ch_4D5e6F', amount: 990,    currency: 'USD', status: 'refunded',  customer: 'Leo Chang',        email: 'leo@chang.dev',      description: 'Add-on: extra seats',     method: 'Amex',       last4: '3782', date: 'Mar 29, 2026 · 2:30 PM'  },
+  { id: 'ch_5E6f7G', amount: 4200,   currency: 'USD', status: 'failed',    customer: 'Priya Singh',      email: 'priya@design.me',    description: 'Pro plan · monthly',      method: 'Visa',       last4: '0069', date: 'Mar 29, 2026 · 1:14 PM'  },
+  { id: 'ch_6F7g8H', amount: 2400,   currency: 'USD', status: 'succeeded', customer: 'Sam Okafor',       email: 'sam@okafor.ng',      description: 'Team plan · monthly',     method: 'Mastercard', last4: '5555', date: 'Mar 28, 2026 · 9:03 AM'  },
+  { id: 'ch_7G8h9I', amount: 4200,   currency: 'USD', status: 'succeeded', customer: 'Zoe Müller',       email: 'zoe@muller.de',      description: 'Pro plan · monthly',      method: 'Visa',       last4: '9999', date: 'Mar 28, 2026 · 8:47 AM'  },
+  { id: 'ch_8H9i0J', amount: 890,    currency: 'USD', status: 'succeeded', customer: 'James Whitfield',  email: 'james@whitfield.co', description: 'Starter plan · monthly',  method: 'Discover',   last4: '6011', date: 'Mar 27, 2026 · 5:22 PM'  },
+  { id: 'ch_9I0j1K', amount: 12900,  currency: 'USD', status: 'succeeded', customer: 'NovaSpark Inc.',   email: 'pay@novaspark.io',   description: 'Enterprise plan · annual', method: 'Visa',      last4: '4444', date: 'Mar 27, 2026 · 3:10 PM'  },
+  { id: 'ch_0J1k2L', amount: 1800,   currency: 'USD', status: 'failed',    customer: 'Hana Kobayashi',   email: 'hana@kobayashi.jp',  description: 'Starter plan · monthly',  method: 'Mastercard', last4: '2222', date: 'Mar 27, 2026 · 11:55 AM' },
+  { id: 'ch_1K2l3M', amount: 2400,   currency: 'USD', status: 'succeeded', customer: 'Carlos Reyes',     email: 'carlos@reyes.mx',    description: 'Team plan · monthly',     method: 'Visa',       last4: '7777', date: 'Mar 26, 2026 · 2:41 PM'  },
+  { id: 'ch_2L3m4N', amount: 4200,   currency: 'USD', status: 'refunded',  customer: 'Fatima Al-Rashid', email: 'fatima@alrashid.ae', description: 'Pro plan · monthly',      method: 'Mastercard', last4: '3333', date: 'Mar 26, 2026 · 10:05 AM' },
+  { id: 'ch_3M4n5O', amount: 990,    currency: 'USD', status: 'succeeded', customer: 'Noah Bergström',   email: 'noah@bergstrom.se',  description: 'Add-on: extra seats',     method: 'Visa',       last4: '6666', date: 'Mar 25, 2026 · 4:15 PM'  },
+  { id: 'ch_4N5o6P', amount: 4200,   currency: 'USD', status: 'succeeded', customer: 'Lena Fischer',     email: 'lena@fischer.de',    description: 'Pro plan · monthly',      method: 'Amex',       last4: '0005', date: 'Mar 25, 2026 · 1:28 PM'  },
+  { id: 'ch_5O6p7Q', amount: 2400,   currency: 'USD', status: 'succeeded', customer: 'Raj Mehta',        email: 'raj@mehta.in',       description: 'Team plan · monthly',     method: 'Visa',       last4: '1111', date: 'Mar 24, 2026 · 9:44 AM'  },
+]
+
+export const customers = [
+  { id: 'cus_A1b2C3', name: 'Maya Patel',       email: 'maya@acme.io',        spend: 16800,  lastPayment: 'Mar 30, 2026', since: 'Jan 2025', status: 'active'   },
+  { id: 'cus_B2c3D4', name: 'Aria Technologies', email: 'billing@ariatech.io', spend: 38700,  lastPayment: 'Mar 29, 2026', since: 'Sep 2024', status: 'active'   },
+  { id: 'cus_C3d4E5', name: 'Ethan Rogers',      email: 'ethan@devops.co',     spend: 7200,   lastPayment: 'Mar 30, 2026', since: 'Feb 2025', status: 'active'   },
+  { id: 'cus_D4e5F6', name: 'Leo Chang',          email: 'leo@chang.dev',       spend: 2970,   lastPayment: 'Mar 29, 2026', since: 'Mar 2025', status: 'inactive' },
+  { id: 'cus_E5f6G7', name: 'NovaSpark Inc.',     email: 'pay@novaspark.io',    spend: 51600,  lastPayment: 'Mar 27, 2026', since: 'Jul 2024', status: 'active'   },
+  { id: 'cus_F6g7H8', name: 'Sam Okafor',         email: 'sam@okafor.ng',       spend: 9600,   lastPayment: 'Mar 28, 2026', since: 'Dec 2024', status: 'active'   },
+  { id: 'cus_G7h8I9', name: 'Priya Singh',        email: 'priya@design.me',     spend: 4200,   lastPayment: 'Mar 29, 2026', since: 'Feb 2026', status: 'inactive' },
+  { id: 'cus_H8i9J0', name: 'Carlos Reyes',       email: 'carlos@reyes.mx',     spend: 12000,  lastPayment: 'Mar 26, 2026', since: 'Oct 2024', status: 'active'   },
+  { id: 'cus_I9j0K1', name: 'Noah Bergström',     email: 'noah@bergstrom.se',   spend: 3960,   lastPayment: 'Mar 25, 2026', since: 'Jan 2026', status: 'active'   },
+  { id: 'cus_J0k1L2', name: 'Fatima Al-Rashid',   email: 'fatima@alrashid.ae',  spend: 16800,  lastPayment: 'Mar 26, 2026', since: 'Jun 2024', status: 'active'   },
+]
+
+export const apiEvents = [
+  { id: 'evt_1A',  type: 'charge.succeeded',      object: 'charge',   created: 'Mar 30, 2026 · 11:42 AM', livemode: false },
+  { id: 'evt_2B',  type: 'customer.created',       object: 'customer', created: 'Mar 30, 2026 · 10:18 AM', livemode: false },
+  { id: 'evt_3C',  type: 'charge.succeeded',        object: 'charge',   created: 'Mar 29, 2026 · 4:55 PM',  livemode: false },
+  { id: 'evt_4D',  type: 'charge.refunded',         object: 'charge',   created: 'Mar 29, 2026 · 2:30 PM',  livemode: false },
+  { id: 'evt_5E',  type: 'charge.failed',           object: 'charge',   created: 'Mar 29, 2026 · 1:14 PM',  livemode: false },
+  { id: 'evt_6F',  type: 'invoice.payment_succeeded', object: 'invoice', created: 'Mar 28, 2026 · 9:03 AM', livemode: false },
+  { id: 'evt_7G',  type: 'customer.subscription.updated', object: 'subscription', created: 'Mar 28, 2026 · 8:47 AM', livemode: false },
+  { id: 'evt_8H',  type: 'payment_intent.succeeded', object: 'payment_intent', created: 'Mar 27, 2026 · 5:22 PM', livemode: false },
+]
+
+export const apiLogs = [
+  { id: 'log_1', method: 'POST', status: 200, endpoint: '/v1/charges',              duration: '142ms', date: 'Mar 30, 2026 · 11:42 AM' },
+  { id: 'log_2', method: 'GET',  status: 200, endpoint: '/v1/customers/cus_A1b2C3', duration: '89ms',  date: 'Mar 30, 2026 · 11:41 AM' },
+  { id: 'log_3', method: 'POST', status: 200, endpoint: '/v1/customers',            duration: '203ms', date: 'Mar 30, 2026 · 10:18 AM' },
+  { id: 'log_4', method: 'POST', status: 402, endpoint: '/v1/charges',              duration: '320ms', date: 'Mar 29, 2026 · 1:14 PM'  },
+  { id: 'log_5', method: 'POST', status: 200, endpoint: '/v1/refunds',              duration: '178ms', date: 'Mar 29, 2026 · 2:30 PM'  },
+  { id: 'log_6', method: 'GET',  status: 200, endpoint: '/v1/events',               duration: '54ms',  date: 'Mar 28, 2026 · 9:03 AM'  },
+  { id: 'log_7', method: 'POST', status: 200, endpoint: '/v1/payment_intents',      duration: '256ms', date: 'Mar 27, 2026 · 5:22 PM'  },
+  { id: 'log_8', method: 'GET',  status: 404, endpoint: '/v1/customers/cus_XXXXX',  duration: '41ms',  date: 'Mar 27, 2026 · 3:05 PM'  },
+]
+
+export const webhooks = [
+  {
+    id: 'we_1A',
+    url: 'https://api.acme.io/stripe/webhooks',
+    status: 'enabled',
+    events: ['charge.succeeded', 'charge.failed', 'customer.created'],
+    lastAttempt: 'Mar 30, 2026 · 11:43 AM',
+    attempts: [
+      { date: 'Mar 30, 2026 · 11:43 AM', status: 200 },
+      { date: 'Mar 29, 2026 · 4:56 PM',  status: 200 },
+      { date: 'Mar 29, 2026 · 1:15 PM',  status: 500 },
+    ],
+  },
+  {
+    id: 'we_2B',
+    url: 'https://hooks.devops.co/payments',
+    status: 'enabled',
+    events: ['invoice.payment_succeeded', 'customer.subscription.updated'],
+    lastAttempt: 'Mar 28, 2026 · 9:04 AM',
+    attempts: [
+      { date: 'Mar 28, 2026 · 9:04 AM', status: 200 },
+      { date: 'Mar 26, 2026 · 2:42 PM', status: 200 },
+    ],
+  },
+]
