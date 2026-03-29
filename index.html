@@ -1,1873 +1,821 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOOKBOOK — 72 Landing Page Styles</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOOKBOOK — 72 Landing Page Sites</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>
+    /* ─── Reset ──────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
-:root {
-  --bg: #0a0a0a;
-  --surface: #111111;
-  --border: #1e1e1e;
-  --text: #f0f0f0;
-  --muted: #666;
-  --accent: #e0ff4f;
-  --font-sans: 'Space Grotesk', sans-serif;
-  --font-ui: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-}
+    /* ─── Tokens ─────────────────────────────────────────────────────── */
+    :root {
+      --bg:           #0a0a0a;
+      --surface:      #111111;
+      --surface-2:    #161616;
+      --border:       #1e1e1e;
+      --border-mid:   #2a2a2a;
+      --muted:        #333333;
+      --text:         #e8e8e8;
+      --text-mid:     #888888;
+      --text-dim:     #4a4a4a;
+      --accent:       #e0ff4f;
+      --accent-dim:   rgba(224, 255, 79, 0.10);
+      --accent-glow:  rgba(224, 255, 79, 0.06);
+      --font:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono:         'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+      --ease:         cubic-bezier(0.16, 1, 0.3, 1);
+      --t:            200ms;
+    }
 
-html { scroll-behavior: smooth; }
+    /* ─── Base ───────────────────────────────────────────────────────── */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-ui);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
+    /* ─── Header ─────────────────────────────────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 10, 0.90);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
 
-/* ── HEADER ── */
-header {
-  border-bottom: 1px solid var(--border);
-  padding: 32px 48px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-}
+    .header-inner {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 0 28px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
 
-.logo {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  text-transform: uppercase;
-}
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-.header-meta {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
+    .logo-mark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-/* ── HERO ── */
-.hero {
-  padding: 80px 48px 64px;
-  border-bottom: 1px solid var(--border);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 48px;
-}
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border-mid);
+      border-radius: 4px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      padding: 5px;
+    }
 
-.hero-title {
-  font-family: var(--font-sans);
-  font-size: clamp(48px, 7vw, 96px);
-  font-weight: 700;
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-  max-width: 800px;
-}
+    .logo-icon-dot {
+      background: var(--accent);
+      border-radius: 1px;
+    }
 
-.hero-title em {
-  font-style: normal;
-  color: var(--accent);
-}
+    .logo-icon-dot:nth-child(3) {
+      background: var(--text-dim);
+    }
 
-.hero-desc {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.7;
-  max-width: 280px;
-  text-align: right;
-}
+    .logo-icon-dot:nth-child(4) {
+      background: var(--text-dim);
+    }
 
-/* ── FILTERS ── */
-.filters {
-  padding: 24px 48px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-}
+    .logo-text {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
 
-.filter-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-right: 8px;
-}
+    .header-sep {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+    }
 
-.filter-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 6px 14px;
-  cursor: pointer;
-  border-radius: 2px;
-  transition: all 0.15s ease;
-}
+    .header-subtitle {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
 
-.filter-btn:hover, .filter-btn.active {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(224,255,79,0.06);
-}
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-/* ── SECTION LABELS ── */
-.section-header {
-  padding: 40px 48px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 99px;
+      letter-spacing: 0.02em;
+    }
 
-.section-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
+    .count-badge svg {
+      color: var(--accent);
+    }
 
-.section-count {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--accent);
-  background: rgba(224,255,79,0.1);
-  padding: 2px 8px;
-  border-radius: 10px;
-}
+    .header-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color var(--t);
+      letter-spacing: 0.02em;
+    }
 
-.section-line {
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
+    .header-link:hover {
+      color: var(--text);
+    }
 
-/* ── GRID ── */
-.grid {
-  padding: 0 48px 48px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1px;
-  background: var(--border);
-}
+    /* ─── Filters Bar ────────────────────────────────────────────────── */
+    .filters-bar {
+      position: sticky;
+      top: 62px;
+      z-index: 99;
+      background: rgba(10, 10, 10, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
 
-/* ── CARD ── */
-.card {
-  background: var(--surface);
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  overflow: hidden;
-  transition: background 0.2s ease;
-  position: relative;
-}
+    .filters-inner {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
 
-.card:hover { background: #161616; }
+    .filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      font-family: var(--font);
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background var(--t), border-color var(--t), color var(--t);
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
 
-.card-preview {
-  height: 180px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .filter-btn:hover {
+      color: var(--text);
+      border-color: var(--border-mid);
+      background: var(--surface-2);
+    }
 
-.card-preview::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.4));
-  pointer-events: none;
-}
+    .filter-btn.active {
+      color: var(--bg);
+      background: var(--accent);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
 
-.preview-label {
-  font-family: var(--font-sans);
-  font-size: clamp(20px, 3vw, 32px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  z-index: 1;
-  padding: 16px;
-  text-align: center;
-  mix-blend-mode: multiply;
-  filter: contrast(1.2);
-}
+    .filter-btn .btn-count {
+      font-size: 0.64rem;
+      opacity: 0.65;
+      font-family: var(--mono);
+    }
 
-.card-body {
-  padding: 16px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-}
+    .filter-btn.active .btn-count {
+      opacity: 0.75;
+    }
 
-.card-num {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-}
+    .filters-spacer {
+      flex: 1;
+    }
 
-.card-title {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.3;
-  color: var(--text);
-}
+    .result-count {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      letter-spacing: 0.04em;
+    }
 
-.card-product {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--accent);
-  letter-spacing: 0.05em;
-}
+    /* ─── Main Wrapper ───────────────────────────────────────────────── */
+    .main {
+      max-width: 1800px;
+      margin: 0 auto;
+    }
 
-.card-desc {
-  font-size: 11px;
-  color: var(--muted);
-  line-height: 1.6;
-  margin-top: 4px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+    /* ─── Grid ───────────────────────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
 
-.card-tags {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
+    /* ─── Section Divider ────────────────────────────────────────────── */
+    .section-divider {
+      grid-column: 1 / -1;
+      background: var(--bg);
+      padding: 44px 28px 22px;
+      display: flex;
+      align-items: flex-end;
+      gap: 22px;
+      border-top: 1px solid var(--border);
+    }
 
-.tag {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  padding: 2px 6px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  color: var(--muted);
-  letter-spacing: 0.06em;
-}
+    .section-divider:first-child {
+      border-top: none;
+      padding-top: 36px;
+    }
 
-.card-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  height: 100%;
-}
+    .section-num {
+      font-family: var(--mono);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+      flex-shrink: 0;
+      letter-spacing: -0.02em;
+    }
 
-.card-arrow {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 28px;
-  height: 28px;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.2s ease;
-  z-index: 2;
-  backdrop-filter: blur(4px);
-}
+    .section-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-bottom: 4px;
+    }
 
-.card:hover .card-arrow {
-  opacity: 1;
-  transform: scale(1);
-}
+    .section-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
 
-.card-arrow svg { width: 12px; height: 12px; }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
 
-/* ── FOOTER ── */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 32px 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
+    .section-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
 
-.footer-text {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
-}
+    /* ─── Card ───────────────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      position: relative;
+      transition: background var(--t);
+    }
 
-.footer-stat {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--accent);
-}
+    .card:hover {
+      background: var(--surface-2);
+    }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 768px) {
-  header, .hero, .filters, .section-header { padding-left: 24px; padding-right: 24px; }
-  .grid { padding: 0 0 0; }
-  .hero { grid-template-columns: 1fr; }
-  .hero-desc { text-align: left; max-width: 100%; }
-  footer { padding: 24px; flex-direction: column; align-items: flex-start; }
-}
+    /* ─── Card Image ─────────────────────────────────────────────────── */
+    .card-img-wrapper {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+      background: #0c0c0c;
+      flex-shrink: 0;
+    }
 
-/* Hide cards based on filter */
-.grid[data-filter="design-systems"] .card[data-cat]:not([data-cat="design"]) { display: none; }
-.grid[data-filter="pricing"] .card[data-cat]:not([data-cat="pricing"]) { display: none; }
-.grid[data-filter="components"] .card[data-cat]:not([data-cat="component"]) { display: none; }
-</style>
+    .card-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform var(--t) var(--ease);
+    }
+
+    .card:hover .card-img-wrapper img {
+      transform: scale(1.04);
+    }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        165deg,
+        rgba(0, 0, 0, 0) 20%,
+        rgba(0, 0, 0, 0.72) 100%
+      );
+      opacity: 0;
+      transition: opacity var(--t) var(--ease);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 14px 16px;
+    }
+
+    .card:hover .card-overlay {
+      opacity: 1;
+    }
+
+    .overlay-title {
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 500;
+      line-height: 1.35;
+      flex: 1;
+      margin-right: 10px;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .overlay-arrow {
+      flex-shrink: 0;
+      color: #ffffff;
+      opacity: 0.85;
+    }
+
+    /* ─── Card Meta ──────────────────────────────────────────────────── */
+    .card-meta {
+      padding: 14px 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .card-num {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+    }
+
+    .card-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+
+    .card-product {
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 3px;
+    }
+
+    .tag {
+      font-size: 0.6rem;
+      padding: 2px 7px;
+      border: 1px solid var(--muted);
+      border-radius: 3px;
+      color: var(--text-dim);
+      letter-spacing: 0.03em;
+      text-transform: lowercase;
+    }
+
+    /* ─── Prompt Toggle ──────────────────────────────────────────────── */
+    .card-footer {
+      padding: 8px 16px 14px;
+    }
+
+    .prompt-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: var(--font);
+      font-size: 0.67rem;
+      font-weight: 500;
+      padding: 4px 9px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: border-color 150ms, color 150ms, background 150ms;
+      letter-spacing: 0.02em;
+    }
+
+    .prompt-toggle:hover {
+      border-color: var(--border-mid);
+      color: var(--text-mid);
+      background: var(--surface-2);
+    }
+
+    .prompt-toggle .toggle-icon {
+      flex-shrink: 0;
+      transition: transform 200ms var(--ease);
+    }
+
+    .prompt-toggle.is-open .toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    .prompt-toggle.is-open {
+      color: var(--text-mid);
+      border-color: var(--border-mid);
+    }
+
+    .prompt-body {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+      background: rgba(255, 255, 255, 0.018);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 11px 12px;
+      margin-top: 7px;
+    }
+
+    /* ─── No Results ─────────────────────────────────────────────────── */
+    .no-results {
+      grid-column: 1 / -1;
+      background: var(--bg);
+      padding: 80px 28px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    .footer-left {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      font-family: var(--mono);
+    }
+
+    .footer-right {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      letter-spacing: 0.02em;
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .header-inner  { padding: 0 16px; }
+      .header-subtitle { display: none; }
+      .header-sep { display: none; }
+      .filters-inner { padding: 0 12px; gap: 3px; }
+      .filter-btn { padding: 4px 10px; font-size: 0.68rem; }
+      .section-divider { padding: 28px 16px 16px; gap: 14px; }
+      .section-num { font-size: 2rem; }
+      .card-meta { padding: 12px 14px 6px; }
+      .card-footer { padding: 6px 14px 12px; }
+      .footer { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">Lookbook</div>
-  <div class="header-meta">72 sites · sourced from superdesign.dev/library</div>
-</header>
-
-<section class="hero">
-  <h1 class="hero-title">72 <em>Landing<br>Page</em> Styles</h1>
-  <p class="hero-desc">Every design system prompt from the Superdesign library, built into a full, self-contained landing page. Click any card to open the live site.</p>
-</section>
-
-<div class="filters">
-  <span class="filter-label">Filter</span>
-  <button class="filter-btn active" onclick="setFilter('all', this)">All · 72</button>
-  <button class="filter-btn" onclick="setFilter('design-systems', this)">Design Systems · 50</button>
-  <button class="filter-btn" onclick="setFilter('pricing', this)">Pricing · 5</button>
-  <button class="filter-btn" onclick="setFilter('components', this)">Components · 17</button>
-</div>
-
-<!-- ─────────────────────────────── DESIGN SYSTEMS ─────────────────────────────── -->
-
-<div class="section-header">
-  <span class="section-label">Design Systems</span>
-  <span class="section-count">50</span>
-  <div class="section-line"></div>
-</div>
-
-<div class="grid" id="mainGrid">
-
-  <!-- 01 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/01-high-contrast/index.html" target="_blank">
-      <div class="card-preview" style="background:#f5f5f2;">
-        <div class="preview-label" style="color:#0a0a0a;font-family:'Georgia',serif;letter-spacing:-0.04em;">FORM.<br>STUDIO</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">001</span>
-        <div class="card-title">High Contrast Landing Page</div>
-        <div class="card-product">FORM.STUDIO — Architecture</div>
-        <p class="card-desc">Swiss-style minimalist · brutalist typography · editorial layouts · echo text effects</p>
-        <div class="card-tags"><span class="tag">swiss</span><span class="tag">editorial</span><span class="tag">monochrome</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 02 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/02-brutalist-ecommerce/index.html" target="_blank">
-      <div class="card-preview" style="background:#E4E2DD;">
-        <div class="preview-label" style="color:#DB4A2B;font-size:clamp(24px,4vw,40px);">SOLSTICE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">002</span>
-        <div class="card-title">Brutalist E-commerce Page</div>
-        <div class="card-product">SOLSTICE — Streetwear</div>
-        <p class="card-desc">Poster-campaign aesthetics · grotesque typography · red-orange gradient blobs · cream bg</p>
-        <div class="card-tags"><span class="tag">brutalist</span><span class="tag">ecommerce</span><span class="tag">fashion</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 03 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/03-brutalist-style-ecommerce/index.html" target="_blank">
-      <div class="card-preview" style="background:#111;display:flex;align-items:center;justify-content:center;">
-        <div class="preview-label" style="color:#B8FF00;font-size:16px;letter-spacing:0.1em;">RAW//MATERIAL</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">003</span>
-        <div class="card-title">Brutalist Style Ecommerce Page</div>
-        <div class="card-product">RAW//MATERIAL — Luxury Streetwear</div>
-        <p class="card-desc">Raw industrial · grain texture · monochrome + burnt orange + neon green · asymmetric grid</p>
-        <div class="card-tags"><span class="tag">brutalist</span><span class="tag">dark</span><span class="tag">neon</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 04 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/04-saas-landing-developer-tool/index.html" target="_blank">
-      <div class="card-preview" style="background:#F5F0E8;">
-        <div class="preview-label" style="color:#1533CC;font-family:'Courier New',monospace;font-size:14px;letter-spacing:0.15em;">$ GRID.SH<br>--deploy</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">004</span>
-        <div class="card-title">SaaS Landing for Developer Tool</div>
-        <div class="card-product">GRID.SH — CLI Deploy Tool</div>
-        <p class="card-desc">Exhibition poster meets tech docs · cream & cobalt · 12-column grid · no rounded corners</p>
-        <div class="card-tags"><span class="tag">saas</span><span class="tag">developer</span><span class="tag">modernist</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 05 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/05-superdesign-editorial-waitlist/index.html" target="_blank">
-      <div class="card-preview" style="background:#181818;">
-        <div class="preview-label" style="color:#EBDCC4;font-family:'Georgia',serif;font-size:28px;">ATELIER</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">005</span>
-        <div class="card-title">Editorial Waitlist</div>
-        <div class="card-product">ATELIER — AI Design Tool Waitlist</div>
-        <p class="card-desc">Cinematic high-fashion · matte dark bg · warm beige type · noise texture · coral accents</p>
-        <div class="card-tags"><span class="tag">editorial</span><span class="tag">waitlist</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 06 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/06-luxury-design-system/index.html" target="_blank">
-      <div class="card-preview" style="background:linear-gradient(135deg,#c9b8b0,#3d3533);">
-        <div class="preview-label" style="color:#fff;font-family:'Georgia',serif;">MAISON<br>DUVAL</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">006</span>
-        <div class="card-title">Luxury-focused Design System</div>
-        <div class="card-product">MAISON DUVAL — Boutique Hotel</div>
-        <p class="card-desc">Dusty rose & charcoal · staggered grids · glassmorphism nav · grayscale-to-color transitions</p>
-        <div class="card-tags"><span class="tag">luxury</span><span class="tag">editorial</span><span class="tag">hospitality</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 07 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/07-lumina-saas/index.html" target="_blank">
-      <div class="card-preview" style="background:#FFE17C;border:2px solid #000;">
-        <div class="preview-label" style="color:#000;font-weight:900;font-size:36px;">LUMINA</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">007</span>
-        <div class="card-title">Lumina SaaS Landing Page</div>
-        <div class="card-product">LUMINA — Creator Monetization</div>
-        <p class="card-desc">Neo-Brutalist · #ffe17c yellow · 2px black borders · hard shadows · bento grids · marquee</p>
-        <div class="card-tags"><span class="tag">neo-brutalist</span><span class="tag">creator</span><span class="tag">yellow</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 08 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/08-bold-editorial-style/index.html" target="_blank">
-      <div class="card-preview" style="background:#171e19;">
-        <div class="preview-label" style="color:#ffe17c;font-size:32px;font-weight:900;">PULSE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">008</span>
-        <div class="card-title">Bold Editorial Style</div>
-        <div class="card-product">PULSE DESIGN — Design Analytics</div>
-        <p class="card-desc">Anton display · golden yellow + deep charcoal · bento grid · aggressive visual hierarchy</p>
-        <div class="card-tags"><span class="tag">editorial</span><span class="tag">bold</span><span class="tag">saas</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 09 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/09-bold-editorial-design-style/index.html" target="_blank">
-      <div class="card-preview" style="background:#0d1a2b;">
-        <div class="preview-label" style="color:#7A9E7E;font-size:28px;font-weight:900;">VAULT<br>STUDIO</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">009</span>
-        <div class="card-title">Bold Editorial Design Style</div>
-        <div class="card-product">VAULT STUDIO — Digital Studio</div>
-        <p class="card-desc">Dark navy & sage · crosshair cursor · floating gradients · masonry · mix-blend-mode nav</p>
-        <div class="card-tags"><span class="tag">editorial</span><span class="tag">agency</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 10 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/10-super-shampoo/index.html" target="_blank">
-      <div class="card-preview" style="background:#E2E8E4;">
-        <div class="preview-label" style="color:#1C1C1C;font-family:'Georgia',serif;font-size:20px;">ŌURA HAIR</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">010</span>
-        <div class="card-title">High-Conversion E-commerce</div>
-        <div class="card-product">ŌURA HAIR — Clinical Haircare</div>
-        <p class="card-desc">Clinical luxury · sage green + off-white · trust badges · comparison table · sticky CTA bar</p>
-        <div class="card-tags"><span class="tag">ecommerce</span><span class="tag">d2c</span><span class="tag">beauty</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 11 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/11-archive-form/index.html" target="_blank">
-      <div class="card-preview" style="background:#F7F4EF;">
-        <div class="preview-label" style="color:#2a2a2a;font-family:'Georgia',serif;font-size:28px;letter-spacing:0.1em;">ARCHIV</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">011</span>
-        <div class="card-title">Archive & Form</div>
-        <div class="card-product">ARCHIV — Luxury Furniture</div>
-        <p class="card-desc">Museum-grade catalog · warm minimalist · asymmetric grids · thin architectural borders</p>
-        <div class="card-tags"><span class="tag">editorial</span><span class="tag">furniture</span><span class="tag">minimal</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 12 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/12-laboratory-skincare/index.html" target="_blank">
-      <div class="card-preview" style="background:#FAFAF7;">
-        <div class="preview-label" style="color:#333;font-family:'Courier New',monospace;font-size:14px;letter-spacing:0.2em;">LAB.01<br>SKINCARE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">012</span>
-        <div class="card-title">Laboratory Skincare</div>
-        <div class="card-product">LAB.01 — Medical-Grade Skincare</div>
-        <p class="card-desc">Clinical academic · warm gray palette · tabular data · formula sheets · protocol approach</p>
-        <div class="card-tags"><span class="tag">clinical</span><span class="tag">beauty</span><span class="tag">data</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 13 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/13-terroir-wine/index.html" target="_blank">
-      <div class="card-preview" style="background:#1a1414;">
-        <div class="preview-label" style="color:#8b3a3a;font-family:'Georgia',serif;font-size:24px;letter-spacing:0.15em;">TERROIR</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">013</span>
-        <div class="card-title">Natural Wine Boutique</div>
-        <div class="card-product">TERROIR — Natural Wine</div>
-        <p class="card-desc">Dark editorial · charcoal + burgundy + sage · Cormorant Garamond · grain textures</p>
-        <div class="card-tags"><span class="tag">dark</span><span class="tag">editorial</span><span class="tag">beverage</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 14 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/14-aura-regimen-studio/index.html" target="_blank">
-      <div class="card-preview" style="background:#F5F2EE;">
-        <div class="preview-label" style="color:#4a7c6f;font-family:'Georgia',serif;font-size:24px;">AURA</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">014</span>
-        <div class="card-title">Aura Regimen Studio</div>
-        <div class="card-product">AURA — Wellness Supplements</div>
-        <p class="card-desc">Calm wellness UX · bento regimen grid · supplement facts panels · usage timeline</p>
-        <div class="card-tags"><span class="tag">wellness</span><span class="tag">ecommerce</span><span class="tag">bento</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 15 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/15-aura-audio-showroom/index.html" target="_blank">
-      <div class="card-preview" style="background:#0f0f14;">
-        <div class="preview-label" style="color:#e0d4c8;font-size:16px;letter-spacing:0.2em;">AURA AUDIO</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">015</span>
-        <div class="card-title">Product Showroom Flow</div>
-        <div class="card-product">AURA AUDIO — Premium Audio</div>
-        <p class="card-desc">Product-first electronics · showroom flow · model selection · scenario-based features</p>
-        <div class="card-tags"><span class="tag">product</span><span class="tag">electronics</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 16 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/16-header-hero-refinement/index.html" target="_blank">
-      <div class="card-preview" style="background:#f0ede8;">
-        <div class="preview-label" style="color:#111;font-size:18px;font-weight:900;letter-spacing:0.05em;">CONCRETE<br>MATTER</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">016</span>
-        <div class="card-title">Header & Hero Refinement</div>
-        <div class="card-product">CONCRETE MATTER — Streetwear</div>
-        <p class="card-desc">Brutalist streetwear · concrete & ink · mix-blend nav · grain overlay · horizontal scroll</p>
-        <div class="card-tags"><span class="tag">brutalist</span><span class="tag">streetwear</span><span class="tag">industrial</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 17 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/17-mosaic-grid-architecture/index.html" target="_blank">
-      <div class="card-preview" style="background:#F7F7F5;">
-        <div class="preview-label" style="color:#1A3C2B;font-size:20px;font-weight:700;letter-spacing:0.1em;">BLUEPRINT</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">017</span>
-        <div class="card-title">Mosaic Grid Architecture</div>
-        <div class="card-product">BLUEPRINT — B2B SaaS</div>
-        <p class="card-desc">Technical blueprint · forest green + paper gray · Space Grotesk · JetBrains Mono · wireframe</p>
-        <div class="card-tags"><span class="tag">b2b</span><span class="tag">technical</span><span class="tag">grid</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 18 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/18-futuristic-saas/index.html" target="_blank">
-      <div class="card-preview" style="background:linear-gradient(135deg,#0a0a14,#1a1a2e);">
-        <div class="preview-label" style="color:#fff;font-size:24px;">AETHON</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">018</span>
-        <div class="card-title">Futuristic SaaS</div>
-        <div class="card-product">AETHON — AI Writing Tool</div>
-        <p class="card-desc">Dark/light contrast blend · glassmorphism · serif-sans pairing · ethereal glows · micro-interactions</p>
-        <div class="card-tags"><span class="tag">ai</span><span class="tag">glassmorphism</span><span class="tag">saas</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 19 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/19-aura-os-launch/index.html" target="_blank">
-      <div class="card-preview" style="background:#0e0e0e;">
-        <div class="preview-label" style="color:#d4c9b0;font-family:'Georgia',serif;font-size:20px;font-style:italic;">Aura OS</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">019</span>
-        <div class="card-title">Launch Manifesto</div>
-        <div class="card-product">AURA OS — Productivity Tool</div>
-        <p class="card-desc">Magazine manifesto · serif-grotesk pairing · asymmetric layouts · dark mode · cream accents</p>
-        <div class="card-tags"><span class="tag">manifesto</span><span class="tag">editorial</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 20 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/20-gen-z-social-app/index.html" target="_blank">
-      <div class="card-preview" style="background:#fff;border:2px solid #000;">
-        <div class="preview-label" style="color:#7000ff;font-size:32px;font-weight:900;transform:rotate(-3deg);">FREQ</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">020</span>
-        <div class="card-title">Gen-Z Social App</div>
-        <div class="card-product">FREQ — Gen-Z Social</div>
-        <p class="card-desc">Neo-Brutalist · acid green + purple + hot pink · thick borders · hard shadows · tilted elements</p>
-        <div class="card-tags"><span class="tag">gen-z</span><span class="tag">neo-brutalist</span><span class="tag">social</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 21 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/21-softly-wellness/index.html" target="_blank">
-      <div class="card-preview" style="background:#FDFCF8;">
-        <div class="preview-label" style="color:#d4a5a0;font-family:'Georgia',serif;font-size:28px;font-style:italic;">softly</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">021</span>
-        <div class="card-title">Digital Wellness App</div>
-        <div class="card-product">SOFTLY — Mindfulness App</div>
-        <p class="card-desc">Soft Gen-Z · pastel coral/sage/lavender · grain overlay · Outfit + handwriting · organic shapes</p>
-        <div class="card-tags"><span class="tag">wellness</span><span class="tag">soft</span><span class="tag">gen-z</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 22 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/22-enterprise-admin-platform/index.html" target="_blank">
-      <div class="card-preview" style="background:#f8fafc;">
-        <div class="preview-label" style="color:#1e3a5f;font-size:18px;font-weight:700;letter-spacing:0.12em;">SENTINEL</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">022</span>
-        <div class="card-title">Enterprise Admin Platform</div>
-        <div class="card-product">SENTINEL — Enterprise Security</div>
-        <p class="card-desc">Corporate B2B · slate palette · dashboard preview · KPI animations · glassmorphism nav</p>
-        <div class="card-tags"><span class="tag">enterprise</span><span class="tag">b2b</span><span class="tag">dashboard</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 23 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/23-chrome-extension/index.html" target="_blank">
-      <div class="card-preview" style="background:#f5f7fa;">
-        <div class="preview-label" style="color:#06B6D4;font-family:'Courier New',monospace;font-size:13px;">TABFLOW<br>&gt;_ extension</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">023</span>
-        <div class="card-title">Chrome Extension Landing</div>
-        <div class="card-product">TABFLOW — Browser Extension</div>
-        <p class="card-desc">System interface look · cyan accent · DevTools-inspired · Inter + JetBrains Mono · panel reveals</p>
-        <div class="card-tags"><span class="tag">developer</span><span class="tag">extension</span><span class="tag">technical</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 24 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/24-premium-dark-b2b/index.html" target="_blank">
-      <div class="card-preview" style="background:#0a0a0a;">
-        <div class="preview-label" style="color:#e11d48;font-size:20px;font-weight:700;letter-spacing:0.2em;">OBSIDIAN<br>AUTO</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">024</span>
-        <div class="card-title">Premium Dark B2B Service</div>
-        <div class="card-product">OBSIDIAN AUTO — Detailing</div>
-        <p class="card-desc">Dark luxury brutalism · ultra-dark bg · crimson accents · glass nav · ROI badges · before/after</p>
-        <div class="card-tags"><span class="tag">dark</span><span class="tag">luxury</span><span class="tag">b2b</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 25 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/25-neon-velocity-countdown/index.html" target="_blank">
-      <div class="card-preview" style="background:#050910;">
-        <div class="preview-label" style="color:#00FF87;font-family:'Courier New',monospace;font-size:16px;">VELOCITY<br>v2.0.0</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">025</span>
-        <div class="card-title">Neon Velocity Countdown</div>
-        <div class="card-product">VELOCITY — Deploy Platform</div>
-        <p class="card-desc">High-velocity futuristic · laser green + navy · bento grid · countdown timer · scroll reveals</p>
-        <div class="card-tags"><span class="tag">dark</span><span class="tag">neon</span><span class="tag">countdown</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 26 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/26-minimalist-beta-capture/index.html" target="_blank">
-      <div class="card-preview" style="background:#080808;">
-        <div class="preview-label" style="color:#c8c8c8;font-family:'Georgia',serif;font-size:22px;">CIPHER</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">026</span>
-        <div class="card-title">Minimalist Beta Capture</div>
-        <div class="card-product">CIPHER — AI Code Assistant</div>
-        <p class="card-desc">Editorial brutalist waitlist · dark #080808 · DM Serif + Geist Mono · silver metallic gradient</p>
-        <div class="card-tags"><span class="tag">waitlist</span><span class="tag">editorial</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 27 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/27-disruptor-beta-launch/index.html" target="_blank">
-      <div class="card-preview" style="background:#121212;border:2px solid #CCFF00;">
-        <div class="preview-label" style="color:#CCFF00;font-size:32px;font-weight:900;">VOLT</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">027</span>
-        <div class="card-title">Disruptor Beta Launch</div>
-        <div class="card-product">VOLT — Disruptive Fintech</div>
-        <p class="card-desc">Neo-Brutalist · volt green #CCFF00 · 8px hard shadows · sticker elements · massive display type</p>
-        <div class="card-tags"><span class="tag">neo-brutalist</span><span class="tag">fintech</span><span class="tag">launch</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 28 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/28-architectural-type-system/index.html" target="_blank">
-      <div class="card-preview" style="background:#fff;">
-        <div class="preview-label" style="color:#000;font-size:20px;font-weight:900;letter-spacing:-0.04em;line-height:1;">AXIS<br>ARCHITECTURE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">028</span>
-        <div class="card-title">Architectural Type System</div>
-        <div class="card-product">AXIS ARCHITECTURE — Firm</div>
-        <p class="card-desc">Swiss Modernism · monochrome · hairline grid · Inter Tight · JetBrains Mono metadata · noise overlay</p>
-        <div class="card-tags"><span class="tag">swiss</span><span class="tag">monochrome</span><span class="tag">architecture</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 29 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/29-neural-noir/index.html" target="_blank">
-      <div class="card-preview" style="background:#0a0a0a;">
-        <div class="preview-label" style="color:#a78b71;font-family:'Georgia',serif;font-size:24px;font-style:italic;">NEURAL</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">029</span>
-        <div class="card-title">Neural Noir Interface</div>
-        <div class="card-product">NEURAL — AI Reasoning Engine</div>
-        <p class="card-desc">Tech-noir · gold & bronze accents · glassmorphism · SVG neural network lines · bento grid</p>
-        <div class="card-tags"><span class="tag">ai</span><span class="tag">noir</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 30 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/30-cinematic-style/index.html" target="_blank">
-      <div class="card-preview" style="background:linear-gradient(135deg,#00D9FF,#FF0080);">
-        <div class="preview-label" style="color:#fff;font-size:28px;font-weight:900;">FRAME</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">030</span>
-        <div class="card-title">Cinematic Style</div>
-        <div class="card-product">FRAME — Creative Studio</div>
-        <p class="card-desc">3D CSS cube hero · glassmorphism · mix-blend nav · cyan-to-pink neon gradients · scroll parallax</p>
-        <div class="card-tags"><span class="tag">cinematic</span><span class="tag">3d</span><span class="tag">neon</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 31 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/31-nature-inspired/index.html" target="_blank">
-      <div class="card-preview" style="background:#2d5a3d;">
-        <div class="preview-label" style="color:#e8f0e4;font-size:32px;font-weight:900;">GROVE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">031</span>
-        <div class="card-title">Nature Inspired</div>
-        <div class="card-product">GROVE — Organic Nutrition</div>
-        <p class="card-desc">Organic brutalist · deep forest greens · Anton + Inter · rounded grids · film grain · parallax</p>
-        <div class="card-tags"><span class="tag">organic</span><span class="tag">wellness</span><span class="tag">green</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 32 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/32-midnight-editorial-v1/index.html" target="_blank">
-      <div class="card-preview" style="background:#050505;">
-        <div class="preview-label" style="color:#FF6B50;font-size:24px;font-weight:700;">MIDNIGHT<br>STUDIO</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">032</span>
-        <div class="card-title">Midnight Editorial v1</div>
-        <div class="card-product">MIDNIGHT STUDIO — Agency</div>
-        <p class="card-desc">Ultra-dark #050505 · Satoshi bold · coral #FF6B50 accents · visual drama · ring cursor</p>
-        <div class="card-tags"><span class="tag">editorial</span><span class="tag">agency</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 33 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/33-bold-editorial-studio/index.html" target="_blank">
-      <div class="card-preview" style="background:#fff;">
-        <div class="preview-label" style="color:#000;font-size:48px;font-weight:900;letter-spacing:-0.05em;">EDIT</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">033</span>
-        <div class="card-title">Bold Editorial Studio</div>
-        <div class="card-product">EDIT — Design Studio</div>
-        <p class="card-desc">12vw display type · custom cursor · marquee animations · mix-blend nav · monochromatic</p>
-        <div class="card-tags"><span class="tag">editorial</span><span class="tag">monochrome</span><span class="tag">studio</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 34 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/34-midnight-editorial-v2/index.html" target="_blank">
-      <div class="card-preview" style="background:#050505;">
-        <div class="preview-label" style="color:#c9a96e;font-family:'Georgia',serif;font-size:22px;letter-spacing:0.1em;">MERIDIAN</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">034</span>
-        <div class="card-title">Midnight Editorial v2</div>
-        <div class="card-product">MERIDIAN — Luxury Fintech</div>
-        <p class="card-desc">Clash Display · deep #050505 · atmospheric glows · mix-blend interactions · whitespace hierarchy</p>
-        <div class="card-tags"><span class="tag">fintech</span><span class="tag">luxury</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 35 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/35-cinematic-noir/index.html" target="_blank">
-      <div class="card-preview" style="background:#0d0b0b;">
-        <div class="preview-label" style="color:#d4c4b0;font-family:'Georgia',serif;font-size:20px;font-style:italic;letter-spacing:0.1em;">NOIR MAISON</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">035</span>
-        <div class="card-title">Cinematic Noir</div>
-        <div class="card-product">NOIR MAISON — Luxury Fashion</div>
-        <p class="card-desc">Dramatic dark mode · grain overlay · radial warm tints · Cormorant serif · scroll parallax</p>
-        <div class="card-tags"><span class="tag">cinematic</span><span class="tag">fashion</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 36 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/36-kinetic-orange/index.html" target="_blank">
-      <div class="card-preview" style="background:#FF4D00;">
-        <div class="preview-label" style="color:#000;font-size:32px;font-weight:900;letter-spacing:-0.02em;">KINETIC</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">036</span>
-        <div class="card-title">Kinetic Orange</div>
-        <div class="card-product">KINETIC — Creative Agency</div>
-        <p class="card-desc">#FF4D00 & black · oversized editorial type · monospace accents · marquees · rotating elements</p>
-        <div class="card-tags"><span class="tag">brutalist</span><span class="tag">orange</span><span class="tag">agency</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 37 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/37-glassmorphism-style/index.html" target="_blank">
-      <div class="card-preview" style="background:#0a0d08;">
-        <div class="preview-label" style="color:#a8ff3e;font-family:'Courier New',monospace;font-size:16px;letter-spacing:0.1em;">OBSIDIAN</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">037</span>
-        <div class="card-title">Glassmorphism</div>
-        <div class="card-product">OBSIDIAN — AI Infrastructure</div>
-        <p class="card-desc">Neon lime on obsidian · backdrop blur · grid patterns · glowing gradients · JetBrains Mono</p>
-        <div class="card-tags"><span class="tag">glassmorphism</span><span class="tag">ai</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 38 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/38-red-noir/index.html" target="_blank">
-      <div class="card-preview" style="background:#0d0808;">
-        <div class="preview-label" style="color:#e63946;font-size:24px;font-weight:700;">REDLINE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">038</span>
-        <div class="card-title">Red Noir</div>
-        <div class="card-product">REDLINE — AI Security</div>
-        <p class="card-desc">Bold dark · red accents · glassmorphism · smooth scroll · futuristic AI aesthetic</p>
-        <div class="card-tags"><span class="tag">security</span><span class="tag">ai</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 39 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/39-warm-industrial-gray/index.html" target="_blank">
-      <div class="card-preview" style="background:#c8c4be;">
-        <div class="preview-label" style="color:#1a1a1a;font-size:20px;font-weight:900;">CONCRETE<br><span style="color:#2563eb;font-size:14px;">.AI</span></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">039</span>
-        <div class="card-title">Warm Industrial Gray</div>
-        <div class="card-product">CONCRETE.AI — Data Infrastructure</div>
-        <p class="card-desc">Warm concrete + charcoal + electric blue · grid-line overlays · film grain · serif-grotesk contrast</p>
-        <div class="card-tags"><span class="tag">industrial</span><span class="tag">ai</span><span class="tag">warm</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 40 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/40-neo-brutalism/index.html" target="_blank">
-      <div class="card-preview" style="background:#f0ede5;border:3px solid #000;">
-        <div class="preview-label" style="color:#000;background:#f5e642;padding:4px 12px;box-shadow:4px 4px 0 #000;font-size:18px;font-weight:900;">ACID.WORKS</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">040</span>
-        <div class="card-title">Neo-Brutalism</div>
-        <div class="card-product">ACID.WORKS — Creative Platform</div>
-        <p class="card-desc">Acid aesthetics · off-white + black + neon yellow · thick borders · hard shadows · bento grid</p>
-        <div class="card-tags"><span class="tag">neo-brutalist</span><span class="tag">acid</span><span class="tag">yellow</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 41 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/41-dark-avant-garde/index.html" target="_blank">
-      <div class="card-preview" style="background:#141414;">
-        <div class="preview-label" style="color:#c8f250;font-size:28px;font-weight:700;">APEX</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">041</span>
-        <div class="card-title">Dark Avant-Garde</div>
-        <div class="card-product">APEX — AI Creative Masterclass</div>
-        <p class="card-desc">Digital naturalism · charcoal + acid green · serrated edges · skewed nav · grain overlay</p>
-        <div class="card-tags"><span class="tag">avant-garde</span><span class="tag">dark</span><span class="tag">masterclass</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 42 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/42-cyber-serif/index.html" target="_blank">
-      <div class="card-preview" style="background:#050505;">
-        <div class="preview-label" style="color:#10b981;font-family:'Georgia',serif;font-size:22px;font-style:italic;">EMERALD</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">042</span>
-        <div class="card-title">Cyber Serif</div>
-        <div class="card-product">EMERALD — AI Investment</div>
-        <p class="card-desc">Classical editorial + futuristic tech · neon emerald · glassmorphism · spotlight hover cards</p>
-        <div class="card-tags"><span class="tag">cyber</span><span class="tag">fintech</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 43 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/43-red-sun/index.html" target="_blank">
-      <div class="card-preview" style="background:#1a0e0a;">
-        <div class="preview-label" style="color:#e8593a;font-family:'Georgia',serif;font-size:22px;font-style:italic;">SOLARA</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">043</span>
-        <div class="card-title">Red Sun</div>
-        <div class="card-product">SOLARA — AI Design Tool</div>
-        <p class="card-desc">Coral & ink · Instrument Serif + Manrope · bento grid · glass nav · warm ambient blurs</p>
-        <div class="card-tags"><span class="tag">coral</span><span class="tag">editorial</span><span class="tag">saas</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 44 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/44-clean-fluid/index.html" target="_blank">
-      <div class="card-preview" style="background:#fcfbf9;">
-        <div class="preview-label" style="color:#171717;font-family:'Georgia',serif;font-size:18px;font-style:italic;">claude light</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">044</span>
-        <div class="card-title">Clean Fluid</div>
-        <div class="card-product">CLAUDE LIGHT — AI Assistant</div>
-        <p class="card-desc">Luxury serif + mono · cream & charcoal · mesh gradients · concave wave transitions · elegant</p>
-        <div class="card-tags"><span class="tag">minimal</span><span class="tag">fluid</span><span class="tag">luxury</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 45 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/45-glassmorphism-card/index.html" target="_blank">
-      <div class="card-preview" style="background:#080c10;">
-        <div class="preview-label" style="color:#10b981;font-size:24px;font-weight:700;">GLASS</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">045</span>
-        <div class="card-title">Glassmorphism Card</div>
-        <div class="card-product">GLASS — Portfolio Builder</div>
-        <p class="card-desc">Deep translucent layers · heavy backdrop-blur · grain textures · emerald accents · bento hero</p>
-        <div class="card-tags"><span class="tag">glassmorphism</span><span class="tag">portfolio</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 46 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/46-tech-editorial/index.html" target="_blank">
-      <div class="card-preview" style="background:#f7f6f2;">
-        <div class="preview-label" style="color:#1a1a1a;font-family:'Georgia',serif;font-size:18px;">EDITORIAL<br><span style="font-family:'Courier New',monospace;font-size:12px;color:#666;">.AI</span></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">046</span>
-        <div class="card-title">Tech Editorial</div>
-        <div class="card-product">EDITORIAL.AI — Research Platform</div>
-        <p class="card-desc">Paper-like palette · Playfair + Space Mono · grid lines · scan-line animations · glass nav</p>
-        <div class="card-tags"><span class="tag">editorial</span><span class="tag">paper</span><span class="tag">ai</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 47 -->
-  <div class="card" data-cat="design">
-    <a class="card-link" href="sites/47-synapse/index.html" target="_blank">
-      <div class="card-preview" style="background:linear-gradient(135deg,#030303,#0d0318);">
-        <div class="preview-label" style="color:#8B5CF6;font-size:24px;font-weight:700;">SYNAPSE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">047</span>
-        <div class="card-title">Synapse</div>
-        <div class="card-product">SYNAPSE — Neural API Platform</div>
-        <p class="card-desc">Neural dark · violet + cyan · Instrument Serif + Inter · shimmer text · mesh gradients</p>
-        <div class="card-tags"><span class="tag">neural</span><span class="tag">ai</span><span class="tag">purple</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 48 -->
-  <div class="card" data-cat="pricing">
-    <a class="card-link" href="sites/48-mixpanel-pricing/index.html" target="_blank">
-      <div class="card-preview" style="background:linear-gradient(180deg,#7c3aed 0%,#4c1d95 100%);">
-        <div class="preview-label" style="color:#fff;font-size:20px;font-weight:700;">PRISM<br><span style="font-size:11px;opacity:0.7;font-weight:400;">Analytics Pricing</span></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">048</span>
-        <div class="card-title">Mixpanel Pricing Style</div>
-        <div class="card-product">PRISM — Product Analytics</div>
-        <p class="card-desc">Purple gradient curtain · interactive pricing cards · usage estimator slider · three-tier</p>
-        <div class="card-tags"><span class="tag">pricing</span><span class="tag">analytics</span><span class="tag">purple</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 49 -->
-  <div class="card" data-cat="pricing">
-    <a class="card-link" href="sites/49-single-pricing/index.html" target="_blank">
-      <div class="card-preview" style="background:#fafafa;">
-        <div class="preview-label" style="color:#111;font-size:20px;font-weight:700;">STACKR<br><span style="font-size:14px;font-weight:400;color:#555;">$49/mo flat</span></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">049</span>
-        <div class="card-title">Single Pricing</div>
-        <div class="card-product">STACKR — Equity Management</div>
-        <p class="card-desc">Clean two-column · flat fee highlight · feature list · AngelList SPV aesthetic · confident</p>
-        <div class="card-tags"><span class="tag">pricing</span><span class="tag">minimal</span><span class="tag">fintech</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 50 -->
-  <div class="card" data-cat="pricing">
-    <a class="card-link" href="sites/50-pricing-saas-framer/index.html" target="_blank">
-      <div class="card-preview" style="background:#08090e;">
-        <div class="preview-label" style="color:#3b82f6;font-size:24px;font-weight:700;">ORBIT<br><span style="font-size:11px;color:#888;">Monthly / Annual</span></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">050</span>
-        <div class="card-title">Pricing — SaaS / Framer Motion</div>
-        <div class="card-product">ORBIT — SaaS Platform</div>
-        <p class="card-desc">Monthly/annual toggle · glassmorphism Pro card · 3 tiers · FAQ accordion · smooth animations</p>
-        <div class="card-tags"><span class="tag">pricing</span><span class="tag">saas</span><span class="tag">glassmorphism</span></div>
-      </div>
-    </a>
-  </div>
-
-</div>
-
-<!-- ─────────────────────────────── COMPONENTS ─────────────────────────────── -->
-
-<div class="section-header">
-  <span class="section-label">Components & Interactions</span>
-  <span class="section-count">22</span>
-  <div class="section-line"></div>
-</div>
-
-<div class="grid">
-
-  <!-- 51 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/51-bento-grid/index.html" target="_blank">
-      <div class="card-preview" style="background:#0f1117;display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:16px;">
-        <div style="background:#1e2433;border-radius:4px;height:60px;border:1px solid #2a3347;"></div>
-        <div style="background:#1e2433;border-radius:4px;height:60px;border:1px solid #2a3347;"></div>
-        <div style="background:#1a2040;border-radius:4px;height:60px;border:1px solid #2a3347;grid-column:span 2;"></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">051</span>
-        <div class="card-title">Bento Grid</div>
-        <div class="card-product">PANEL — Dashboard SaaS</div>
-        <p class="card-desc">Interactive bento grid · spotlight + tilt + particle stars · count-up stats · magnetism</p>
-        <div class="card-tags"><span class="tag">bento</span><span class="tag">interactive</span><span class="tag">dashboard</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 52 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/52-stacking-cards/index.html" target="_blank">
-      <div class="card-preview" style="background:#f5f4f0;display:flex;align-items:center;justify-content:center;position:relative;">
-        <div style="position:absolute;width:80%;height:80px;background:#e8e6e0;border-radius:8px;top:20px;left:10%;box-shadow:0 2px 8px rgba(0,0,0,0.1);"></div>
-        <div style="position:absolute;width:80%;height:80px;background:#dddad2;border-radius:8px;top:28px;left:10%;box-shadow:0 2px 8px rgba(0,0,0,0.1);"></div>
-        <div style="position:absolute;width:80%;height:80px;background:#fff;border-radius:8px;top:36px;left:10%;box-shadow:0 4px 16px rgba(0,0,0,0.15);"></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">052</span>
-        <div class="card-title">Stacking Cards Effect</div>
-        <div class="card-product">STACK — Portfolio Platform</div>
-        <p class="card-desc">CSS sticky stacking deck · 5 portfolio cards peel away on scroll · deck-of-cards effect</p>
-        <div class="card-tags"><span class="tag">scroll</span><span class="tag">cards</span><span class="tag">portfolio</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 53 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/53-neon-velocity/index.html" target="_blank">
-      <div class="card-preview" style="background:#050910;">
-        <div class="preview-label" style="color:#00FF87;font-family:'Courier New',monospace;font-size:14px;">LAUNCH.DEV<br>&gt;_ deploy</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">053</span>
-        <div class="card-title">Neon Velocity</div>
-        <div class="card-product">LAUNCH.DEV — Deploy Tool</div>
-        <p class="card-desc">Neon green on navy-black · terminal deploy animation · high-velocity aesthetic · brutalist</p>
-        <div class="card-tags"><span class="tag">neon</span><span class="tag">terminal</span><span class="tag">dark</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 54 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/54-circular-gallery/index.html" target="_blank">
-      <div class="card-preview" style="background:#0c0c0c;display:flex;align-items:center;justify-content:center;">
-        <div style="width:100px;height:100px;border-radius:50%;border:1px solid #333;display:flex;align-items:center;justify-content:center;position:relative;">
-          <div style="width:60px;height:60px;border-radius:50%;border:1px solid #555;"></div>
-          <div style="position:absolute;top:-6px;left:50%;width:12px;height:12px;background:#e0d4c8;border-radius:50%;transform:translateX(-50%);"></div>
-          <div style="position:absolute;bottom:-6px;right:16px;width:8px;height:8px;background:#888;border-radius:50%;"></div>
+  <!-- ─── Header ──────────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="logo-mark">
+          <div class="logo-icon" aria-hidden="true">
+            <div class="logo-icon-dot"></div>
+            <div class="logo-icon-dot"></div>
+            <div class="logo-icon-dot"></div>
+            <div class="logo-icon-dot"></div>
+          </div>
+          <span class="logo-text">Lookbook</span>
         </div>
+        <div class="header-sep" aria-hidden="true"></div>
+        <span class="header-subtitle">Design Gallery</span>
       </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">054</span>
-        <div class="card-title">Circular Gallery</div>
-        <div class="card-product">ORBIT STUDIO — Photography</div>
-        <p class="card-desc">Auto-rotating circular item track · infinite CSS marquee carousel · immersive portfolio</p>
-        <div class="card-tags"><span class="tag">gallery</span><span class="tag">circular</span><span class="tag">animation</span></div>
-      </div>
-    </a>
-  </div>
 
-  <!-- 55 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/55-aurora-background/index.html" target="_blank">
-      <div class="card-preview" style="background:linear-gradient(135deg,#0a1628,#1a0a2e);overflow:hidden;">
-        <div style="position:absolute;width:200px;height:80px;background:radial-gradient(ellipse,rgba(100,200,255,0.3),transparent);border-radius:50%;top:20px;left:-40px;filter:blur(20px);"></div>
-        <div style="position:absolute;width:150px;height:60px;background:radial-gradient(ellipse,rgba(150,100,255,0.3),transparent);border-radius:50%;bottom:20px;right:-20px;filter:blur(15px);"></div>
-        <div class="preview-label" style="color:#e0f0ff;font-size:22px;position:relative;">AURORA</div>
+      <div class="header-right">
+        <span class="count-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+          72 Sites
+        </span>
+        <a href="sites/" class="header-link" target="_blank" rel="noopener">
+          Browse Sites
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
       </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">055</span>
-        <div class="card-title">Aurora Background</div>
-        <div class="card-product">AURORA — AI Ambient Brand</div>
-        <p class="card-desc">CSS aurora borealis animation · 4-layer flowing radial gradients · northern lights aesthetic</p>
-        <div class="card-tags"><span class="tag">animation</span><span class="tag">aurora</span><span class="tag">ambient</span></div>
-      </div>
-    </a>
-  </div>
+    </div>
+  </header>
 
-  <!-- 56 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/56-exploded-view/index.html" target="_blank">
-      <div class="card-preview" style="background:#f8f7f5;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:20px;">
-        <div style="background:#e8e5e0;height:30px;border-radius:2px;"></div>
-        <div style="background:#d4d0c8;height:30px;border-radius:2px;"></div>
-        <div style="background:#e8e5e0;height:30px;border-radius:2px;"></div>
-        <div style="background:#d4d0c8;height:30px;border-radius:2px;"></div>
-        <div style="background:#b8b4ac;height:30px;border-radius:2px;border:2px solid #888;"></div>
-        <div style="background:#d4d0c8;height:30px;border-radius:2px;"></div>
-        <div style="background:#e8e5e0;height:30px;border-radius:2px;"></div>
-        <div style="background:#d4d0c8;height:30px;border-radius:2px;"></div>
-        <div style="background:#e8e5e0;height:30px;border-radius:2px;"></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">056</span>
-        <div class="card-title">Exploded View Assembly</div>
-        <div class="card-product">ASSEMBLE — Modular Platform</div>
-        <p class="card-desc">Click to explode/reassemble UI block · 9 animated parts · CSS transition choreography</p>
-        <div class="card-tags"><span class="tag">animation</span><span class="tag">interactive</span><span class="tag">scroll</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 57 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/57-spotlight-mask/index.html" target="_blank">
-      <div class="card-preview" style="background:#111;position:relative;overflow:hidden;">
-        <div style="position:absolute;width:80px;height:80px;background:radial-gradient(circle,rgba(255,220,100,0.6) 0%,transparent 70%);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
-        <div class="preview-label" style="color:rgba(255,255,255,0.15);font-size:18px;">SPOTLIGHT</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">057</span>
-        <div class="card-title">Spotlight Mask</div>
-        <div class="card-product">SPOTLIGHT — Design Tool</div>
-        <p class="card-desc">Mouse-following spotlight mask · reveals colorful UI under dark overlay · scroll-driven reveal</p>
-        <div class="card-tags"><span class="tag">mask</span><span class="tag">interactive</span><span class="tag">scroll</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 58 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/58-testimonial-marquee/index.html" target="_blank">
-      <div class="card-preview" style="background:#0d1117;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:16px;">
-        <div style="display:flex;gap:6px;opacity:0.7;">
-          <div style="min-width:80px;height:32px;background:#1e2433;border-radius:4px;border:1px solid #2a3347;flex-shrink:0;"></div>
-          <div style="min-width:100px;height:32px;background:#1e2433;border-radius:4px;border:1px solid #2a3347;flex-shrink:0;"></div>
-          <div style="min-width:70px;height:32px;background:#1e2433;border-radius:4px;border:1px solid #2a3347;flex-shrink:0;"></div>
-        </div>
-        <div style="display:flex;gap:6px;opacity:0.5;justify-content:flex-end;">
-          <div style="min-width:90px;height:32px;background:#1e2433;border-radius:4px;border:1px solid #2a3347;flex-shrink:0;"></div>
-          <div style="min-width:75px;height:32px;background:#1e2433;border-radius:4px;border:1px solid #2a3347;flex-shrink:0;"></div>
-        </div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">058</span>
-        <div class="card-title">Testimonial Marquee</div>
-        <div class="card-product">CHORUS — Team SaaS</div>
-        <p class="card-desc">Two-row infinite marquee · opposite directions · gradient alpha edge fades · endless loop</p>
-        <div class="card-tags"><span class="tag">marquee</span><span class="tag">testimonial</span><span class="tag">animation</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 59 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/59-dynamic-data-display/index.html" target="_blank">
-      <div class="card-preview" style="background:#fff;display:flex;align-items:center;justify-content:center;gap:20px;">
-        <div style="text-align:center;">
-          <div style="font-size:28px;font-weight:900;color:#111;font-family:'Georgia',serif;">10M+</div>
-          <div style="font-size:9px;color:#888;">EVENTS</div>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-size:28px;font-weight:900;color:#111;font-family:'Georgia',serif;">99.9%</div>
-          <div style="font-size:9px;color:#888;">UPTIME</div>
-        </div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">059</span>
-        <div class="card-title">Dynamic Data Display</div>
-        <div class="card-product">METRIC — Analytics Platform</div>
-        <p class="card-desc">Scroll-triggered count-up counters · viewport intersection · large stat display · flash effects</p>
-        <div class="card-tags"><span class="tag">counter</span><span class="tag">animation</span><span class="tag">data</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 60 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/60-gsap-horizontal-scroll/index.html" target="_blank">
-      <div class="card-preview" style="background:#d42b22;overflow:hidden;display:flex;align-items:center;padding:0 16px;">
-        <div style="font-family:'Georgia',serif;font-size:13px;color:#fff;white-space:nowrap;font-style:italic;">In every bottle, discover the undeniable Real Magic →</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">060</span>
-        <div class="card-title">Horizontal Scroll Ticker</div>
-        <div class="card-product">REAL MAGIC — Beverage Brand</div>
-        <p class="card-desc">CSS ticker tape · the full Coca-Cola sentence flows endlessly · word hover turns red</p>
-        <div class="card-tags"><span class="tag">horizontal</span><span class="tag">marquee</span><span class="tag">scroll</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 61 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/61-image-trail/index.html" target="_blank">
-      <div class="card-preview" style="background:#f5f0e8;">
-        <div class="preview-label" style="color:#2a2a2a;font-family:'Georgia',serif;font-size:20px;font-style:italic;">TRACE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">061</span>
-        <div class="card-title">Image Trail</div>
-        <div class="card-product">TRACE — Luxury Agency</div>
-        <p class="card-desc">Mouse-following image trail · gradient photo cards appear & fade as cursor moves</p>
-        <div class="card-tags"><span class="tag">cursor</span><span class="tag">trail</span><span class="tag">interactive</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 62 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/62-sticky-content-switch/index.html" target="_blank">
-      <div class="card-preview" style="background:#fff;display:flex;">
-        <div style="width:40%;background:#f5f4f0;display:flex;align-items:center;justify-content:center;padding:8px;">
-          <div style="font-size:11px;font-weight:700;color:#333;text-align:center;">STICKY<br>HEADLINE</div>
-        </div>
-        <div style="width:60%;display:flex;flex-direction:column;gap:4px;padding:12px;">
-          <div style="height:20px;background:#e8e5e0;border-radius:2px;"></div>
-          <div style="height:20px;background:#e8e5e0;border-radius:2px;"></div>
-          <div style="height:20px;background:#e8e5e0;border-radius:2px;"></div>
-          <div style="height:20px;background:#e8e5e0;border-radius:2px;"></div>
-        </div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">062</span>
-        <div class="card-title">Sticky Content Switch</div>
-        <div class="card-product">FEATURE — Product Showcase</div>
-        <p class="card-desc">Split-screen sticky left headline · updates dynamically via IntersectionObserver · GSAP-style</p>
-        <div class="card-tags"><span class="tag">sticky</span><span class="tag">scroll</span><span class="tag">split</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 63 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/63-text-slidedown-animation/index.html" target="_blank">
-      <div class="card-preview" style="background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-        <div style="font-size:28px;font-weight:900;color:#fff;letter-spacing:-0.03em;font-family:'Georgia',serif;">REVEAL</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">063</span>
-        <div class="card-title">Text Slidedown Animation</div>
-        <div class="card-product">REVEAL — Motion Design Studio</div>
-        <p class="card-desc">Letter-by-letter clip-path slide-down · JS DOM per-character staggered animation-delay</p>
-        <div class="card-tags"><span class="tag">text</span><span class="tag">animation</span><span class="tag">clip-path</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 64 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/64-text-blur-animation/index.html" target="_blank">
-      <div class="card-preview" style="background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-        <div style="font-size:20px;font-weight:900;color:#111;letter-spacing:0.1em;filter:blur(0.5px);">CLARITY TYPE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">064</span>
-        <div class="card-title">Text Blur Animation</div>
-        <div class="card-product">CLARITY TYPE — Font Foundry</div>
-        <p class="card-desc">Per-letter blur-to-sharp · opacity + translateY + blur easing per span · staggered reveal</p>
-        <div class="card-tags"><span class="tag">text</span><span class="tag">blur</span><span class="tag">animation</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 65 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/65-text-fading-animation/index.html" target="_blank">
-      <div class="card-preview" style="background:#0d0d0d;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-        <div style="font-size:32px;font-weight:900;color:#e63946;letter-spacing:-0.04em;">FADE</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">065</span>
-        <div class="card-title">Text Fading Animation</div>
-        <div class="card-product">FADE.STUDIO — Branding Studio</div>
-        <p class="card-desc">Oversized clipping-mask slide-in · overflow hidden + translateY per line · skewed clip CTA</p>
-        <div class="card-tags"><span class="tag">text</span><span class="tag">clip-path</span><span class="tag">animation</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 66 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/66-scroll-animation/index.html" target="_blank">
-      <div class="card-preview" style="background:#0f0f14;display:flex;align-items:center;justify-content:center;">
-        <div style="position:relative;width:80px;height:80px;">
-          <div style="position:absolute;top:50%;left:50%;width:16px;height:16px;background:#6366f1;border-radius:50%;transform:translate(-50%,-50%);"></div>
-          <div style="position:absolute;top:8px;left:8px;width:8px;height:8px;background:#818cf8;border-radius:50%;"></div>
-          <div style="position:absolute;top:8px;right:8px;width:8px;height:8px;background:#818cf8;border-radius:50%;"></div>
-          <div style="position:absolute;bottom:8px;left:8px;width:8px;height:8px;background:#818cf8;border-radius:50%;"></div>
-          <div style="position:absolute;bottom:8px;right:8px;width:8px;height:8px;background:#818cf8;border-radius:50%;"></div>
-        </div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">066</span>
-        <div class="card-title">Scroll Animation — Shape Connect</div>
-        <div class="card-product">CONNECT — Network Analytics</div>
-        <p class="card-desc">Canvas 2D scroll-driven · center node grows · 12 satellite nodes · animated connection lines</p>
-        <div class="card-tags"><span class="tag">canvas</span><span class="tag">scroll</span><span class="tag">nodes</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 67 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/67-hover-reveal-effect/index.html" target="_blank">
-      <div class="card-preview" style="background:#f5f0e8;display:flex;align-items:center;justify-content:center;">
-        <div style="font-size:18px;font-weight:900;color:#2a2a2a;letter-spacing:0.05em;text-decoration:underline;text-underline-offset:4px;">REVEAL.CO</div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">067</span>
-        <div class="card-title">Hover Reveal Effect</div>
-        <div class="card-product">REVEAL.CO — Creative Agency</div>
-        <p class="card-desc">Custom cursor + hover-reveal panels on portfolio rows · fill-reveal service cards</p>
-        <div class="card-tags"><span class="tag">hover</span><span class="tag">reveal</span><span class="tag">cursor</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 68 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/68-rotating-logos/index.html" target="_blank">
-      <div class="card-preview" style="background:#fff;display:flex;align-items:center;justify-content:center;">
-        <div style="position:relative;width:80px;height:80px;">
-          <div style="position:absolute;top:50%;left:50%;width:40px;height:40px;border:1px solid #ddd;border-radius:50%;transform:translate(-50%,-50%);"></div>
-          <div style="position:absolute;top:50%;left:50%;width:70px;height:70px;border:1px dashed #ccc;border-radius:50%;transform:translate(-50%,-50%);"></div>
-          <div style="position:absolute;top:-4px;left:50%;width:8px;height:8px;background:#6366f1;border-radius:50%;transform:translateX(-50%);"></div>
-          <div style="position:absolute;bottom:-4px;right:4px;width:6px;height:6px;background:#888;border-radius:50%;"></div>
-          <div style="position:absolute;top:50%;right:-4px;width:6px;height:6px;background:#888;border-radius:50%;transform:translateY(-50%);"></div>
-        </div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">068</span>
-        <div class="card-title">Rotating Logos</div>
-        <div class="card-product">CONNECT.IO — Integration Platform</div>
-        <p class="card-desc">Two counter-rotating CSS orbit rings · 12 partner logos · counter-rotation keeps text upright</p>
-        <div class="card-tags"><span class="tag">logos</span><span class="tag">rotation</span><span class="tag">css</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 69 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/69-parallax-tilt-grid/index.html" target="_blank">
-      <div class="card-preview" style="background:#1a1a2e;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:16px;">
-        <div style="background:#2a2a4a;height:70px;border-radius:2px;transform:translateY(-6px);"></div>
-        <div style="background:#3a3a5a;height:70px;border-radius:2px;transform:translateY(4px);"></div>
-        <div style="background:#2a2a4a;height:70px;border-radius:2px;transform:translateY(-10px);"></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">069</span>
-        <div class="card-title">Parallax Tilt Grid</div>
-        <div class="card-product">PARALLAX — Media Studio</div>
-        <p class="card-desc">3-column grid · independent scroll speeds · CSS 3D rotateX/Y tilt on mousemove per card</p>
-        <div class="card-tags"><span class="tag">parallax</span><span class="tag">3d</span><span class="tag">grid</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 70 -->
-  <div class="card" data-cat="pricing">
-    <a class="card-link" href="sites/70-saas-pricing-comparison/index.html" target="_blank">
-      <div class="card-preview" style="background:#fafafa;display:flex;align-items:center;justify-content:center;gap:4px;padding:12px;">
-        <div style="width:52px;border:1px solid #e5e7eb;border-radius:4px;padding:6px 4px;text-align:center;">
-          <div style="font-size:9px;font-weight:700;color:#888;margin-bottom:4px;">FREE</div>
-          <div style="font-size:12px;font-weight:900;color:#111;">$0</div>
-        </div>
-        <div style="width:52px;border:2px solid #6366f1;border-radius:4px;padding:6px 4px;text-align:center;">
-          <div style="font-size:9px;font-weight:700;color:#6366f1;margin-bottom:4px;">PRO</div>
-          <div style="font-size:12px;font-weight:900;color:#111;">$29</div>
-        </div>
-        <div style="width:52px;border:1px solid #e5e7eb;border-radius:4px;padding:6px 4px;text-align:center;">
-          <div style="font-size:9px;font-weight:700;color:#888;margin-bottom:4px;">ENT</div>
-          <div style="font-size:12px;font-weight:900;color:#111;">$99</div>
-        </div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">070</span>
-        <div class="card-title">Pricing Comparison Table</div>
-        <div class="card-product">CANVAS — Project Management SaaS</div>
-        <p class="card-desc">Sticky headers · 7 collapsible sections · billing toggle · check/cross feature indicators</p>
-        <div class="card-tags"><span class="tag">pricing</span><span class="tag">comparison</span><span class="tag">table</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 71 -->
-  <div class="card" data-cat="pricing">
-    <a class="card-link" href="sites/71-clickup-pricing-calculator/index.html" target="_blank">
-      <div class="card-preview" style="background:#f8f7ff;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:16px;">
-        <div style="font-size:11px;color:#6366f1;font-weight:700;">YOU SAVE</div>
-        <div style="font-size:32px;font-weight:900;color:#111;">$847<span style="font-size:14px;font-weight:400;color:#888;">/mo</span></div>
-        <div style="width:100%;height:4px;background:#e5e7eb;border-radius:2px;"><div style="width:65%;height:100%;background:#6366f1;border-radius:2px;"></div></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">071</span>
-        <div class="card-title">Pricing Calculator</div>
-        <div class="card-product">UNIFIED — All-in-One Workspace</div>
-        <p class="card-desc">Interactive ROI calculator · 9-app selection grid · user count slider · live savings breakdown</p>
-        <div class="card-tags"><span class="tag">calculator</span><span class="tag">interactive</span><span class="tag">roi</span></div>
-      </div>
-    </a>
-  </div>
-
-  <!-- 72 -->
-  <div class="card" data-cat="component">
-    <a class="card-link" href="sites/72-mixpanel-pricing-comparison/index.html" target="_blank">
-      <div class="card-preview" style="background:linear-gradient(180deg,#7c3aed 0%,#4c1d95 100%);display:flex;align-items:center;justify-content:center;">
-        <div class="preview-label" style="color:#fff;font-size:20px;font-weight:700;">INSIGHT<br><span style="font-size:10px;opacity:0.7;font-weight:400;">vs Free vs Growth vs Enterprise</span></div>
-      </div>
-      <div class="card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></div>
-      <div class="card-body">
-        <span class="card-num">072</span>
-        <div class="card-title">Mixpanel-Style Comparison</div>
-        <div class="card-product">INSIGHT — Analytics SaaS</div>
-        <p class="card-desc">Purple gradient curtain · sticky tier headers · 6 collapsible sections · billing toggle · FAQ</p>
-        <div class="card-tags"><span class="tag">pricing</span><span class="tag">purple</span><span class="tag">comparison</span></div>
-      </div>
-    </a>
-  </div>
-
-</div>
-
-<footer>
-  <div class="footer-text">Built from <a href="https://app.superdesign.dev/library" target="_blank" style="color:var(--muted);text-decoration:underline;text-underline-offset:3px;">superdesign.dev/library</a> prompts · All sites self-contained HTML/CSS</div>
-  <div class="footer-stat">72 sites generated</div>
-</footer>
-
-<script>
-function setFilter(filter, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  document.querySelectorAll('.card').forEach(card => {
-    if (filter === 'all') {
-      card.style.display = '';
-    } else if (filter === 'design-systems') {
-      card.style.display = card.dataset.cat === 'design' ? '' : 'none';
-    } else if (filter === 'pricing') {
-      card.style.display = card.dataset.cat === 'pricing' ? '' : 'none';
-    } else if (filter === 'components') {
-      card.style.display = card.dataset.cat === 'component' ? '' : 'none';
-    }
-  });
-}
-</script>
-
-<style>
-/* ── PROMPT SECTION ── */
-.prompt-section {
-  border-top: 1px solid var(--border);
-  margin-top: 12px;
-}
-
-.prompt-toggle {
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 10px 0 6px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  transition: color 0.15s;
-  gap: 8px;
-}
-
-.prompt-toggle:hover { color: var(--accent); }
-
-.prompt-toggle .toggle-icon {
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.prompt-section.open .prompt-toggle .toggle-icon {
-  transform: rotate(45deg);
-}
-
-.prompt-section.open .prompt-toggle { color: var(--accent); }
-
-.prompt-content {
-  display: none;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  line-height: 1.7;
-  color: #888;
-  padding: 6px 0 12px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  border-top: 1px solid #1a1a1a;
-}
-
-.prompt-section.open .prompt-content { display: block; }
-
-.prompt-source {
-  display: inline-block;
-  margin-top: 8px;
-  font-size: 9px;
-  color: var(--accent);
-  opacity: 0.6;
-  letter-spacing: 0.08em;
-}
-</style>
-
-<script>
-const PROMPTS = {
-  "001": { title: "High Contrast Landing Page", text: "A high-contrast Swiss-style minimalist design system utilizing brutalist typography and editorial layouts. Characterized by a neutral palette of off-whites, deep blacks, and monochromatic grays, this style emphasizes rhythmic patterns through stacked text 'echo' effects and asymmetrical grids. Ideal for luxury travel, architecture portfolios, high-end fashion, and premium editorial content where typography acts as the primary visual driver." },
-  "002": { title: "Brutalist E-commerce Page", text: "A brutalist editorial e-commerce style guide inspired by poster-campaign aesthetics. Characterized by massive grotesque typography (Clash Display), soft-blurred gradient forms in red-orange tones (#DB4A2B, #F8A348), and a warm cream background (#E4E2DD). This aesthetic is optimized for high-end fashion, architecture, or lifestyle brands that want a 'poster-first' digital presence. Features include scroll-triggered entrance animations, mix-blend-mode interactions, and a clean, borderless grid structure." },
-  "003": { title: "Brutalist Style Ecommerce Page", text: "A brutalist editorial design system for high-fashion, streetwear, or luxury brands. Featuring a raw, industrial aesthetic with massive typography, high-contrast photography, and utilitarian components. Key elements include a noise-grain texture overlay, a monochromatic palette with burnt orange and neon green accents, and asymmetrical layout grids. The style uses 'Clash Grotesk' for aggressive impact and 'General Sans' for technical clarity. Ideal for product launches, lookbooks, and fashion portfolios looking for a 'Raw Campaign' or 'Modern Brutalist' feel with scroll-triggered visual impact." },
-  "004": { title: "SaaS Landing Page for Developer Tool", text: "A bold modernist design system inspired by exhibition poster aesthetics and technical documentation. Characterized by a high-contrast 'cream and cobalt' color palette, oversized aggressive typography, and a rigid 12-column grid layout with 1px border dividers. This style is ideal for technical SaaS, developer tools, high-end design agencies, or architectural portfolios. Key elements include tight line-heights (0.85), no rounded corners, and a unique vertical labeling system in a dedicated left-hand grid column." },
-  "005": { title: "Superdesign Editorial Waitlist", text: "Editorial waiting list landing page with a cinematic, high-fashion aesthetic. Features a deep matte #181818 background, warm beige #EBDCC4 typography, and a brutalist yet refined grid. Key elements include oversized edge-to-edge display type, subtle noise textures, and a layered text depth effect. Ideal for luxury tech, creative agency portfolios, high-end SaaS tools, architecture firms, and invite-only exclusivity campaigns. Layout utilizes strong typographic hierarchy and generous negative space with accent tones in coral, rust, and sage." },
-  "006": { title: "Luxury-focused Design System", text: "A refined, editorial-style design system characterized by heavy geometric sans-serif typography, a sophisticated dusty rose and charcoal palette, and staggered grid layouts. This aesthetic is optimized for high-end luxury services, boutique hospitality, premium fashion brands, or architectural portfolios. It features scroll-triggered reveal animations, grayscale-to-color image transitions, and a 'glassmorphism' navigation bar. The layout focuses on massive, bold headlines paired with hyper-minimalist utility text, creating a contrast that feels modern yet timeless." },
-  "007": { title: "Lumina SaaS Landing Page", text: "Lumina is a high-energy, Neo-Brutalist B2C SaaS design characterized by its bold #ffe17c yellow primary color, heavy 2px black borders, and zero-blur hard shadows. It utilizes a striking combination of 'Cabinet Grotesk' for display-heavy typography and 'Satoshi' for body copy. This style is ideal for the creator economy, modern fintech, edtech, or any startup looking to break the 'clean corporate blue' mold with a confident, high-contrast interface. The layout features bento-style grids, marquee animations, and playful asymmetric card shapes." },
-  "008": { title: "Bold Editorial Style", text: "A high-contrast, editorial-style SaaS landing page design optimized for designers and creative tools. It features bold Anton display typography, a sophisticated palette of golden yellow (#ffe17c) and deep charcoal (#171e19), and a structured layout combining grid patterns and bento-box feature blocks. This style is characterized by aggressive visual hierarchy, oversized headlines, and a minimalist yet punchy aesthetic suitable for high-velocity startups, fintech, or creative agency portfolios." },
-  "009": { title: "Bold Editorial Design Style", text: "A premium, bold editorial design system characterized by high-contrast brutalist typography and a sophisticated dark navy and sage color palette. Optimized for creative agencies, design portfolios, luxury architecture, and high-end digital studios. Features include 'Anton' display headers, a custom crosshair cursor, floating ambient gradients, asymmetric masonry layouts, and smooth scroll-triggered reveal animations. The aesthetic balances minimalist white space with massive, impactful type and subtle micro-interactions like mix-blend-mode navigation and grayscale-to-color image transitions." },
-  "010": { title: "Super Shampoo – High Conversion LP", text: "A premium, high-conversion e-commerce style guide optimized for D2C beauty and wellness brands. Features a sophisticated 'clinical luxury' aesthetic with a palette of sage green (#E2E8E4), off-white beige (#F5F5F0), and deep charcoal (#1C1C1C). The typography balances bold 'General Sans' headings with clean 'Switzer' body text. Includes specialized conversion elements like scarcity-driven promo bars, trust badge grids, comparison tables, and a sticky mobile 'Add to Cart' bar. Ideal for skincare, haircare, or luxury lifestyle products requiring a mix of editorial imagery and performance-driven UI." },
-  "011": { title: "Archive & Form", text: "An editorial, museum-grade furniture catalog design system with an 'Archive & Form' aesthetic. Featuring a warm minimalist color palette of off-white and charcoal, it utilizes a sophisticated pairing of Zodiak serif and General Sans typography. The layout mimics high-end print magazines with asymmetric grids, thin architectural borders, and generous negative space. Suitable for luxury furniture, high-end architecture firms, fashion lookbooks, and minimalist eCommerce brands. Key features include scroll-triggered fades, slow-scale image interactions, and index-style navigation." },
-  "012": { title: "Laboratory Skincare", text: "Laboratory Skincare is a warm academic, methodical design system inspired by research journals and clinical lab notebooks. It features a grid-based, disciplined layout with generous white space and a restrained color palette of off-whites, warm grays, and soft blacks. Ideal for medical-grade skincare, high-tech beauty, pharmaceutical brands, or scientific SaaS, the design focuses on data-driven trust, factual evidence, and structural clarity over luxury tropes. Key features include tabular data presentation, formula sheets, and a 'Protocol' approach to content organization." },
-  "013": { title: "TERROIR | Natural Wine Boutique", text: "A high-end, dark-mode editorial design system inspired by boutique natural wine tasting rooms. Features a moody palette of charcoal, burgundy, and sage, anchored by the Cormorant Garamond serif and Manrope sans-serif. Ideal for luxury DTC brands, artisanal beverages, high-end furniture, or museum-curated collections. Utilizes generous whitespace, subtle grain textures, and restrained scroll-triggered animations to create a sophisticated, museum-like atmosphere." },
-  "014": { title: "Aura Regimen Studio", text: "A calm, deliberately designed wellness and e-commerce landing page featuring editorial typography and a soft natural color palette. The aesthetic is focused on trust and clarity, utilizing a mix of high-contrast serif headings and clean sans-serif body text. Key features include a 'bento-grid' regimen selector, detailed supplement protocol sections with 'Supplement Facts' panels, a visual usage timeline, and high-transparency quality modules. Ideal for wellness brands, premium supplements, high-end skincare, or curated lifestyle products. Optimized for a 'shop-ready but pressure-free' user experience with subtle micro-interactions and generous whitespace." },
-  "015": { title: "Aura Audio Showroom", text: "Product Walkthrough is a product-first electronics landing page built around a Showroom Flow layout—product theater followed by guided model selection, scenario-based feature explanations, lightweight comparison, and a confident close—making it best suited for consumer electronics and DTC hardware brands with multiple models or configurations that want a clear, trust-building shopping experience without spec overload or lifestyle clichés." },
-  "016": { title: "Header & Hero Layout Refinement", text: "A brutalist streetwear design system characterized by heavy editorial typography, a high-contrast neutral palette (concrete and ink), and asymmetric layouts. Features include a fixed mix-blend header, a grainy texture overlay, and a 'broken' grid for product displays. Ideal for high-end fashion, streetwear boutiques, architectural studios, and edgy SaaS brands looking for a raw, industrial aesthetic. Includes horizontal scrolling components, masonry-style social proof, and grayscale-to-color hover effects." },
-  "017": { title: "Mosaic Grid Architecture Style", text: "An architectural, technical-blueprint style design system featuring a minimalist mosaic grid, forest green (#1A3C2B) and light-gray paper-textured (#F7F7F5) palette. Optimized for B2B SaaS, developer tools, and high-end agency portfolios. Key features include editorial typography with Space Grotesk, JetBrains Mono labels, bento grid layouts, and 2D flat wireframe aesthetics with zero shadows." },
-  "018": { title: "Futuristic SaaS Landing Page", text: "A modern, atmospheric SaaS design system featuring a high-contrast blend of dark mode hero sections and light mode content areas. Characterized by glassmorphism, sophisticated serif-sans typography pairing, and ethereal glows, it is ideal for AI startups, design tools, creative portfolios, and premium digital platforms. The style emphasizes depth through backdrop blurs, subtle borders (1px), and smooth micro-interactions like scroll-triggered navigation and hover-based transforms." },
-  "019": { title: "Aura OS – Launch Manifesto", text: "An editorial, typography-heavy design system mimicking a high-end magazine or manifesto. Features high-contrast serif and grotesk font pairings, asymmetric layouts, and a sophisticated dark-mode palette with cream accents. Suitable for high-end product launches, boutique SaaS, architectural portfolios, and literary-focused platforms that value narrative and white space." },
-  "020": { title: "Gen-Z Social App", text: "A high-energy, Gen-Z-inspired design system with a 'Neo-Brutalist' aesthetic. This style features high-saturation colors like acid green (#ccff00), vibrant purple (#7000ff), and hot pink (#ff0099), paired with heavy black borders and hard shadows. It utilizes expressive, oversized typography and intentional layout chaos through asymmetrical sections and tilted elements. Ideal for social media apps, youth-oriented fintech, creative portfolios, and lifestyle products that prioritize attitude over corporate structure." },
-  "021": { title: "Softly – Digital Wellness App", text: "A soft-aesthetic, Gen-Z oriented design system optimized for wellness, meditation, journaling, and lifestyle brands. Features a warm off-white foundation (#FDFCF8) layered with soft pastel accents (Coral #FFB7B2, Sage #E8EFE8, Lavender #EFEDF4), grain-textured overlays, and a mix of modern geometric sans-serif ('Outfit') and organic handwriting ('Reenie Beanie') typography. The layout emphasizes breathing room, gentle scroll-triggered reveals, and 'floating' organic shapes to reduce cognitive load and evoke a sense of calm." },
-  "022": { title: "Enterprise Admin Platform", text: "Enterprise Admin Platform is a professional, high-trust landing page design for corporate B2B SaaS, fintech, and infrastructure tools. It features a muted corporate color palette (whites, deep slates, and technical blues), a structured grid-based layout, and a focus on operational control and security. Key elements include a high-fidelity dashboard preview, KPI count-up animations, and a glass-morphism navigation bar. Suitable for enterprise management systems, cybersecurity platforms, and developer infrastructure tools." },
-  "023": { title: "Chrome Extension Landing Page", text: "A browser-native developer tool aesthetic characterized by a 'system interface' look rather than a marketing landing page. This style features a light-neutral base with a vibrant cyan (#06B6D4) accent, mimicking the layout of Chrome DevTools or a workspace IDE. It uses a combination of Inter for primary readability and JetBrains Mono for technical labels and commands. Suitable for SaaS, developer tools, extensions, and technical platforms requiring a high-density, utility-focused layout with scroll-triggered panel reveals and simulated interactive environments." },
-  "024": { title: "Premium Dark B2B Service Landing", text: "This production-grade, high-contrast dark-mode luxury landing page template is optimized for high-ticket B2B automotive services, premium restoration businesses, and affluent customer acquisition using brutalist modernism with crimson accent luxury. The core color palette features ultra-dark backgrounds (#121212, #0a0a0a) paired with pure white text (#ffffff) and strategic crimson (#e11d48) accents. Typography uses Cal Sans for bold headlines and Poppins for readable body text with extreme letter-spacing for authority. Best described as \"dark luxury brutalism\" — sticky glass-morphism headers, live chat indicators, urgency badges, interactive trust bars, ROI badges, testimonial grids, and gradient CTAs." },
-  "025": { title: "Neon Velocity Countdown", text: "A high-velocity, futuristic dark-mode design system characterized by neon accents, brutalist typography, and 3D glassmorphism. Featuring a 'Laser Green' and 'Navy Black' palette, it utilizes 'Plus Jakarta Sans' for high-impact headlines and 'Geist Mono' for technical metadata. This aesthetic is ideal for high-growth tech startups, SaaS platforms, developer tools, and fintech products that want to convey speed, precision, and cutting-edge innovation. The layout uses a bento-grid structure, fluid typography, and sophisticated scroll-triggered reveal animations." },
-  "026": { title: "Minimalist Beta Capture", text: "A high-end 'Editorial Brutalist' style guide optimized for SaaS waitlists, fintech, or premium developer tools. It features a dark-mode palette (#080808), high-contrast monochromatic typography (DM Serif Display + Geist Mono), and sophisticated glassmorphism. The layout utilizes a bento-grid structure and fluid width (92vw) with oversized hero typography. Key features include scroll-triggered slide-up animations, a silver-metallic gradient system, and a persistent floating mobile navigation bar." },
-  "027": { title: "Disruptor Beta Launch", text: "A high-impact Neo-Brutalist design system designed for product launches and disruptive SaaS platforms. Characterized by stark color contrasts, industrial typography, and heavy geometric borders. The aesthetic utilizes a dark mode base (#121212) punctuated by vibrant 'Volt' accents (#CCFF00) and crisp white containers. Key features include 'sticker-style' rotated elements, massive display type, solid 8px offsets (Neo-shadows), and vertical navigation elements. Ideal for high-growth tech, developer tools, fintech, and creative agencies looking for an aggressive, authoritative, and innovative brand presence." },
-  "028": { title: "Architectural Type System Style", text: "A high-contrast, architectural design system rooted in Swiss Modernism and Brutalist minimalism. Characterized by a monochrome palette, massive 'Inter Tight' display typography, and a rigid grid defined by 0.5px hairlines. Features a technical 'JetBrains Mono' font for metadata and system status indicators, creating an engineering-first aesthetic. Suitable for high-end SaaS, developer tools, fintech, architecture portfolios, and design agencies. Includes a persistent noise overlay for texture and grid-based layouts that utilize viewport-relative sizing for maximalist impact." },
-  "029": { title: "Neural Noir Interface Style", text: "The Neural Noir Interface Style is a high-end, futuristic aesthetic characterized by a 'tech-noir' atmosphere. It blends deep dark backgrounds (#0a0a0a) with sophisticated gold and bronze accents (#a78b71, #e8d5b7) and editorial typography. Key features include glassmorphism, neural network-inspired SVG connection lines, and a bento-grid layout. This style is optimized for premium AI platforms, creative design engines, high-end SaaS, and editorial-driven tech portfolios. It utilizes a combination of sleek sans-serif (Inter) for functional elements and elegant serif italics (Playfair Display) for headlines, creating a contrast between high-tech performance and classic sophistication." },
-  "030": { title: "Cinematic Style", text: "A high-end 'Cinematic' design system characterized by deep-space dark backgrounds, sophisticated 3D CSS transforms, and bold editorial typography. Optimized for premium portfolios, creative agencies, fintech, and high-tech SaaS. It features a signature 3D rolodex/cube hero section, glassmorphism elements, and smooth GSAP-driven scroll parallax. Key aesthetics include 'mix-blend-difference' navigation, vibrant neon gradients (cyan to pink), and a monochromatic 'Aspekta' font foundation with heavy weights and tight tracking." },
-  "031": { title: "Nature Inspired Style", text: "A nature-inspired 'Organic Brutalist' design system perfect for wellness, sustainable CPG, eco-friendly lifestyle brands, or high-end nutrition. Characterized by a palette of deep forest greens and earthy sages, the style utilizes massive editorial typography (Anton) paired with functional sans-serifs (Inter). The layout features 'bento-adjacent' rounded grids, floating organic elements with parallax effects, and a subtle film grain noise overlay that gives the digital experience a tactile, premium paper-like feel. Key elements include oversized headings, ultra-rounded corners (up to 5rem), and fluid reveal animations." },
-  "032": { title: "Midnight Editorial Style (v1)", text: "A premium, ultra-modern dark aesthetic featuring deep black backgrounds (#050505), massive 'Satoshi' typography for impact, and striking coral (#FF6B50) accents. Designed for high-end agencies and portfolios that prioritize storytelling and visual drama." },
-  "033": { title: "Bold Editorial Studio Style", text: "Bold Editorial Studio Style is a high-impact, minimalist design system characterized by massive typography, a strict monochromatic palette, and sophisticated micro-interactions. It features a signature 'editorial' look using ultra-large display fonts (up to 12vw), custom cursor logic, and fluid marquee animations. Ideal for creative agencies, high-end portfolios, fashion brands, and premium fintech products, the system leverages white space and motion to create a premium, curated feel. Key elements include mix-blend-mode navigation, staggered text reveals, and asymmetrical image containers with varied border radii." },
-  "034": { title: "Midnight Editorial Style (v2)", text: "A high-contrast, midnight-themed editorial design system optimized for premium portfolios, fintech SaaS, and luxury brand storytelling. Characterized by oversized 'Clash Display' typography, a deep #050505 background, and sophisticated mix-blend-mode interactions. Features smooth reveal animations, subtle atmospheric glows, and a brutalist yet refined layout that prioritizes whitespace and typographic hierarchy." },
-  "035": { title: "Cinematic Noir Style", text: "A high-end 'Cinematic Noir' design system characterized by dramatic dark-mode aesthetics, high-contrast editorial typography, and immersive scroll-driven parallax effects. Suitable for creative agencies, luxury fashion, fintech, and high-end portfolios. Features include grain overlays, radial gradients with subtle warm tints, and brutalist-scale headings that blur the line between digital interface and cinematic experience." },
-  "036": { title: "Kinetic Orange Style", text: "A high-energy brutalist design system characterized by a high-contrast 'Kinetic Orange' (#FF4D00) and black palette. It features bold, oversized editorial typography, technical monospace accents, and rhythmic motion through marquees and rotating elements. Ideal for creative agencies, fintech, modern portfolios, or AI-driven startups looking for a 'loud' and confident brand presence." },
-  "037": { title: "Glassmorphism Style", text: "A high-tech glassmorphism design system featuring neon lime accents, deep obsidian surfaces, and a sophisticated blend of architectural grid patterns and organic glowing gradients. Optimized for high-end SaaS, AI product studios, and fintech platforms, this style uses JetBrains Mono for a developer-centric feel and Space Grotesk for bold, editorial headings. Key elements include backdrop-blur effects (glassmorphism), grain/noise overlays, and a 'floating shell' layout that gives the web interface a premium, app-like quality." },
-  "038": { title: "Red Noir Style", text: "A bold, dark-themed landing page featuring high-contrast red accents, glassmorphism, and smooth scroll animations. Designed for AI and tech products with a futuristic aesthetic." },
-  "039": { title: "Warm Industrial Gray Style", text: "A sophisticated warm industrial aesthetic that blends brutalist grid structures with editorial typography. Featuring a primary palette of warm concrete gray and rich charcoal accented by electric blue, this style is ideal for AI startups, creative technology studios, fintech platforms, and architecture portfolios. It utilizes a high-contrast pairing of heavy grotesque sans-serifs and elegant serif italics, layered over a subtle film grain noise texture. Key features include scroll-triggered reveals, magnetic hover states, and structural grid-line overlays that emphasize a 'form follows function' technical philosophy." },
-  "040": { title: "Neo-Brutalism Style", text: "A high-impact Neo-Brutalist design system characterized by 'Acid' aesthetics. It features high-contrast color palettes (off-white, deep black, and neon yellow), heavy-weight typography, and 'hard' UI elements like non-blurred shadows and thick borders. The layout utilizes bento grids, oversized display text, and dynamic marquee components. Suitable for creative agencies, experimental e-commerce, fintech, and portfolio sites looking for a 'loud', digital-first brand identity." },
-  "041": { title: "Dark Avant-Garde Style", text: "A dark avant-garde design system termed 'Digital Naturalism,' characterized by a sophisticated interplay between deep charcoal surfaces and high-energy acid green accents. Featuring editorial serif typography paired with clean sans-serif UI, the style utilizes Brutalist-inspired elements like serrated edges, skewed 'tab' navigation, and grainy noise overlays. Ideal for high-end design agencies, AI masterclasses, editorial portfolios, and premium fintech brands seeking a bold, technical, yet organic aesthetic." },
-  "042": { title: "Cyber Serif Style", text: "A high-end 'Cyber Serif' aesthetic blending classical editorial typography with futuristic tech elements. Features a deep #050505 dark mode palette, neon emerald accents (#10b981), glassmorphism, and sophisticated micro-interactions. Suitable for high-end AI SaaS, creative agencies, fintech portfolios, and developer tools. Includes WebGL-inspired background effects, spotlight hover cards, and staggered scroll-reveal animations." },
-  "043": { title: "Red Sun", text: "A sophisticated editorial-style design system named 'Red Sun', characterized by a high-contrast 'Coral and Ink' color palette. This style blends 'Instrument Serif' for high-impact typography with 'Manrope' for technical precision. Features include bento-grid layouts, glassmorphism navigation, scroll-triggered animations with subtle rotations, and soft ambient background blurs. Ideal for premium SaaS, creative agencies, AI product design tools, and fintech platforms looking for a balance between warmth and authority." },
-  "044": { title: "Clean Fluid", text: "A high-end, editorial design system blending luxury serif typography with technical monospace accents. Characterized by fluid 'premium ease' animations, a sophisticated cream and dark charcoal palette (#fcfbf9, #171717), and organic curved transitions. Optimized for AI startups, design studios, fintech dashboards, and luxury tech brands requiring a balance of intelligence and elegance. Key features include scroll-triggered reveal animations, mesh gradient backgrounds, and a signature concave wave transition between sections." },
-  "045": { title: "Glassmorphism Card", text: "A premium, high-tech glassmorphism design system characterized by deep translucent layers, dark-to-light transitions, and editorial typography. Featuring a 'Superdesign' aesthetic, it utilizes heavy background blurs, grain textures, and emerald accents. This style is ideal for SaaS, AI platforms, fintech, and high-end design agencies requiring a sophisticated, futuristic feel with bento-grid layouts and fluid animations." },
-  "046": { title: "Tech Editorial", text: "A high-end 'Tech Editorial' aesthetic that merges brutalist precision with classic editorial sophistication. It features a muted, paper-like color palette (#f7f6f2), a structured grid-line system, and a unique pairing of high-contrast Serif (Playfair Display) for display headers and technical Mono (Space Mono) for functional UI. The style is characterized by scroll-triggered text reveals, glassmorphism navigation, and 'scan-line' animations that suggest a sophisticated AI-driven process. Ideal for high-tech SaaS, AI research labs, design agencies, and premium fintech platforms." },
-  "047": { title: "Synapse", text: "A high-performance 'neural' dark mode design system characterized by deep black backgrounds (#030303), vibrant neon accents in violet (#8B5CF6) and cyan (#06B6D4), and a sophisticated blend of editorial serif typography (Instrument Serif) with functional sans-serif (Inter). The style utilizes glassmorphism, animated mesh gradients, and 'shimmer' text effects to evoke a sense of advanced intelligence, encryption, and institutional-grade technology. Ideal for Fintech, AI, Cybersecurity, and Web3 verticals where speed, security, and technical sophistication are core values." },
-  "048": { title: "Mixpanel Pricing", text: "A pixel-perfect recreation of the Mixpanel pricing section featuring a distinctive purple gradient curtain background, interactive pricing cards, and a dynamic usage estimator slider." },
-  "049": { title: "Single Pricing", text: "[SECTION] A clean, two-column pricing section with a flat fee highlight and feature list. Mimics the AngelList SPV pricing design." },
-  "050": { title: "Pricing (SaaS / Framer Motion)", text: "A high-conversion pricing section with a toggle for monthly/annual billing. Features three tiers with a highlighted 'Pro' plan, glassmorphism effects, and smooth Framer Motion animations. Designed for SaaS and digital products." },
-  "051": { title: "Bento", text: "A high-end, minimalist bento grid component with advanced interactive effects including spotlight, border glow, particles (stars), tilt, and magnetism. Designed for modern dashboards and landing pages. Source: ReactBits" },
-  "052": { title: "The \"Stacking Cards\" Effect", text: "A portfolio section where cards stack sticky at the top as the user scrolls, creating a deck-of-cards effect using GSAP." },
-  "053": { title: "Neon Velocity Countdown", text: "A high-velocity, futuristic dark-mode design system characterized by neon accents, brutalist typography, and 3D glassmorphism. Featuring a 'Laser Green' and 'Navy Black' palette, it utilizes 'Plus Jakarta Sans' for high-impact headlines and 'Geist Mono' for technical metadata." },
-  "054": { title: "Circular Gallery", text: "A high-end, WebGL-powered circular gallery with smooth scroll, image bending effects, and elegant typography. Ideal for immersive storytelling or creative portfolios." },
-  "055": { title: "Aurora Background", text: "A WebGL-based aurora borealis effect using OGL. It creates a smooth, flowing gradient animation that simulates the northern lights." },
-  "056": { title: "\"Exploded View\" Assembly", text: "A scroll-driven animation where a central product or UI element explodes into its constituent parts and then reassembles into a new layout. Perfect for 'how it works' or feature breakdown sections." },
-  "057": { title: "\"Spotlight\" Mask", text: "A scroll-driven interaction where a circular spotlight mask grows to reveal colorful UI content underneath a dark overlay." },
-  "058": { title: "Testimonial", text: "Make the cards animate marquis in an infinite loop with alpha mask slowly." },
-  "059": { title: "Dynamic Data Display", text: "Numbers are displayed in large font with a count-up animation, triggering a dynamic increase effect when scrolling into the viewport — suitable for data display sections or statistical information areas." },
-  "060": { title: "GSAP Horizontal Scroll", text: "Create a horizontal scroll animation using GSAP ScrollTrigger. Layout: Instead of full-screen slides, I want a continuous horizontal text flow — imagine a single, very long sentence. Structure: Use a single flex container so items flow naturally next to each other with variable gaps. Content: The sentence is 'In every bottle, discover the undeniable Real Magic of sharing pure Refreshment that brings us Together'. Vibe: It should feel like reading a really long ticker tape, not flipping through a slide deck." },
-  "061": { title: "Image Trail", text: "A premium minimalist showcase for a high-end image trail animation effect. Features multiple animation variants (lerp-based movement, scaling, brightness shifts, 3D rotations) with a clean, editorial aesthetic. Source: ReactBits" },
-  "062": { title: "Sticky Content Switch", text: "A split-screen section where the left-side heading remains sticky and updates dynamically as associated images scroll on the right side. Uses GSAP ScrollTrigger for precise synchronization." },
-  "063": { title: "Text Slidedown Animation", text: "Add a vertical text clip slide-down animation letter by letter." },
-  "064": { title: "Text Blur Animation", text: "H3 heading component styled with Tailwind CSS. Includes responsive font sizing, tight letter tracking, and smooth color transitions — ideal for hero banners, section headers. Create a complex animation that fades in, slides up, and reduces blur for each letter." },
-  "065": { title: "Text Fading Animation", text: "Responsive oversized heading with fade text effect. Features fluid typography that scales with viewport size. Create a text animation that slides in with a clipping mask effect." },
-  "066": { title: "Scroll Animation", text: "Help me implement this scroll animation component, as i scroll one of shape center, become bigger and connect to all other smaller shapes." },
-  "067": { title: "Hover Reveal Effect", text: "Source: https://x.com/emilylambert/status/2005113433780617713" },
-  "068": { title: "Rotating Logos", text: "Logo display UI" },
-  "069": { title: "\"Parallax Tilt\" Grid", text: "A 3-column image grid with independent scroll speeds and 3D tilt effects on scroll." },
-  "070": { title: "Pricing Comparison Table", text: "A detailed, pixel-perfect pricing comparison table replicating the Mixpanel pricing page. Features sticky headers, collapsible sections (Usage, Analytics), tiered columns (Free, Growth, Enterprise), and extensive feature lists with status indicators (check, cross, text)." },
-  "071": { title: "ClickUp Pricing Calculator", text: "A cost savings calculator section comparing app spending vs ClickUp. Features an interactive app selection grid, user count input, and dynamic cost breakdown with a distinctive gradient border design." },
-  "072": { title: "Pricing Comparison Table (Mixpanel Style)", text: "A detailed, pixel-perfect pricing comparison table replicating the Mixpanel pricing page. Features sticky headers, collapsible sections (Usage, Analytics), tiered columns (Free, Growth, Enterprise), and extensive feature lists with status indicators (check, cross, text). Purple gradient curtain background." }
-};
-
-function togglePrompt(btn) {
-  btn.closest('.prompt-section').classList.toggle('open');
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.card-num').forEach(numEl => {
-    const num = numEl.textContent.trim();
-    const data = PROMPTS[num];
-    if (!data) return;
-
-    const cardBody = numEl.closest('.card-body');
-    if (!cardBody) return;
-
-    const section = document.createElement('div');
-    section.className = 'prompt-section';
-    section.innerHTML = `
-      <button class="prompt-toggle" onclick="togglePrompt(this)" title="Toggle prompt">
-        <span>View Original Prompt</span>
-        <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M5 12h14"/>
-        </svg>
+  <!-- ─── Filters Bar ──────────────────────────────────────────────────── -->
+  <div class="filters-bar" role="navigation" aria-label="Filter by category">
+    <div class="filters-inner">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">
+        All <span class="btn-count">72</span>
       </button>
-      <div class="prompt-content">${data.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}<br><span class="prompt-source">↗ superdesign.dev/library</span></div>
-    `;
-    cardBody.appendChild(section);
-  });
-});
-</script>
+      <button class="filter-btn" data-filter="design" onclick="setFilter('design', this)">
+        Design Systems <span class="btn-count">47</span>
+      </button>
+      <button class="filter-btn" data-filter="pricing" onclick="setFilter('pricing', this)">
+        Pricing <span class="btn-count">6</span>
+      </button>
+      <button class="filter-btn" data-filter="component" onclick="setFilter('component', this)">
+        Components <span class="btn-count">19</span>
+      </button>
+      <div class="filters-spacer"></div>
+      <span class="result-count" id="result-count">72 sites</span>
+    </div>
+  </div>
+
+  <!-- ─── Grid ─────────────────────────────────────────────────────────── -->
+  <main class="main">
+    <div class="grid" id="grid" role="list" aria-label="Site gallery"></div>
+  </main>
+
+  <!-- ─── Footer ───────────────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer">
+      <span class="footer-left">LOOKBOOK / 72 LANDING PAGE SITES</span>
+      <span class="footer-right">Click any card to open the site in a new tab</span>
+    </div>
+  </footer>
+
+  <script>
+    /* ─── Data ─────────────────────────────────────────────────────────── */
+    const SITES = [
+      { num:"001", folder:"01-high-contrast", title:"High Contrast Landing Page", product:"FORM.STUDIO", cat:"design", tags:["swiss","editorial","monochrome"], prompt:"A high-contrast Swiss-style minimalist design system utilizing brutalist typography and editorial layouts. Characterized by a neutral palette of off-whites, deep blacks, and monochromatic grays, this style emphasizes rhythmic patterns through stacked text 'echo' effects and asymmetrical grids. Ideal for luxury travel, architecture portfolios, high-end fashion, and premium editorial content where typography acts as the primary visual driver." },
+      { num:"002", folder:"02-brutalist-ecommerce", title:"Brutalist E-commerce Page", product:"SOLSTICE", cat:"design", tags:["brutalist","ecommerce","fashion"], prompt:"A brutalist editorial e-commerce style guide inspired by poster-campaign aesthetics. Characterized by massive grotesque typography, soft-blurred gradient forms in red-orange tones (#DB4A2B, #F8A348), and a warm cream background (#E4E2DD). Optimized for high-end fashion brands that want a 'poster-first' digital presence. Features scroll-triggered entrance animations, mix-blend-mode interactions, and a clean, borderless grid structure." },
+      { num:"003", folder:"03-brutalist-style-ecommerce", title:"Brutalist Style Ecommerce Page", product:"SEASON 04", cat:"design", tags:["brutalist","dark","neon"], prompt:"A brutalist editorial design system for high-fashion, streetwear, or luxury brands. Raw industrial aesthetic with massive typography. Key elements include a noise-grain texture overlay, a monochromatic palette with burnt orange and neon green accents (#31EF07), and asymmetrical layout grids. Uses 'Clash Grotesk' for aggressive impact." },
+      { num:"004", folder:"04-saas-landing-developer-tool", title:"SaaS Landing for Developer Tool", product:"GRID.SH", cat:"design", tags:["saas","developer","modernist"], prompt:"A bold modernist design system inspired by exhibition poster aesthetics and technical documentation. High-contrast cream and cobalt (#1533CC) color palette, oversized aggressive typography, and a rigid 12-column grid layout with 1px border dividers. No rounded corners, vertical labeling system in a dedicated left-hand grid column." },
+      { num:"005", folder:"05-superdesign-editorial-waitlist", title:"Editorial Waitlist", product:"ATELIER", cat:"design", tags:["editorial","waitlist","dark"], prompt:"Editorial waiting list landing page with a cinematic, high-fashion aesthetic. Deep matte #181818 background, warm beige #EBDCC4 typography, and a brutalist yet refined grid. Oversized edge-to-edge display type, subtle noise textures, and a layered text depth effect. Invite-only exclusivity aesthetic." },
+      { num:"006", folder:"06-luxury-design-system", title:"Luxury Design System", product:"MAISON DUVAL", cat:"design", tags:["luxury","editorial","hospitality"], prompt:"A refined editorial-style design system with dusty rose and charcoal palette, staggered grid layouts. Glassmorphism navigation bar, grayscale-to-color image transitions, massive bold headlines paired with hyper-minimalist utility text. Optimized for high-end luxury services and boutique hospitality." },
+      { num:"007", folder:"07-lumina-saas", title:"Lumina SaaS Landing Page", product:"LUMINA", cat:"design", tags:["neo-brutalist","creator","yellow"], prompt:"A high-energy Neo-Brutalist B2C SaaS design. Bold #ffe17c yellow primary, heavy 2px black borders, zero-blur hard shadows. Cabinet Grotesk for display typography. Bento-style grids, marquee animations, and playful asymmetric card shapes. Ideal for creator economy and fintech." },
+      { num:"008", folder:"08-bold-editorial-style", title:"Bold Editorial Style", product:"PULSE DESIGN", cat:"design", tags:["editorial","bold","saas"], prompt:"A high-contrast editorial-style SaaS landing page. Anton display typography, golden yellow (#ffe17c) and deep charcoal (#171e19). Structured bento-box feature blocks with aggressive visual hierarchy. Grid pattern overlays. Suitable for high-velocity startups and design tools." },
+      { num:"009", folder:"09-bold-editorial-design-style", title:"Bold Editorial Design Style", product:"VAULT STUDIO", cat:"design", tags:["editorial","agency","dark"], prompt:"A premium bold editorial design system. High-contrast brutalist typography, dark navy and sage color palette. Anton display headers, custom crosshair cursor, floating ambient gradients, asymmetric masonry layouts. Mix-blend-mode navigation and grayscale-to-color image transitions." },
+      { num:"010", folder:"10-super-shampoo", title:"High-Conversion E-commerce", product:"OURA HAIR", cat:"design", tags:["ecommerce","d2c","beauty"], prompt:"Premium high-conversion e-commerce guide for D2C beauty brands. Clinical luxury aesthetic: sage green (#E2E8E4), off-white beige, deep charcoal. Scarcity-driven promo bars, trust badge grids, comparison tables, sticky mobile Add to Cart bar." },
+      { num:"011", folder:"11-archive-form", title:"Archive & Form", product:"ARCHIV", cat:"design", tags:["editorial","furniture","minimal"], prompt:"An editorial museum-grade furniture catalog. Warm minimalist off-white and charcoal, Zodiak serif and General Sans pairing. Layout mimics high-end print magazines with asymmetric grids, thin architectural borders, generous negative space, and index-style navigation." },
+      { num:"012", folder:"12-laboratory-skincare", title:"Laboratory Skincare", product:"LAB.01", cat:"design", tags:["clinical","beauty","data"], prompt:"A warm academic, methodical design system inspired by research journals and clinical lab notebooks. Grid-based disciplined layout, off-whites and warm grays. Tabular data presentation, formula sheets, Supplement Facts panels, and a 'Protocol' approach to content organization." },
+      { num:"013", folder:"13-terroir-wine", title:"TERROIR Natural Wine Boutique", product:"TERROIR", cat:"design", tags:["dark","editorial","beverage"], prompt:"A high-end dark-mode editorial design system inspired by boutique natural wine tasting rooms. Charcoal, burgundy, and sage palette, anchored by Cormorant Garamond serif and Manrope. Generous whitespace, subtle grain textures, museum-like atmosphere." },
+      { num:"014", folder:"14-aura-regimen-studio", title:"Aura Regimen Studio", product:"AURA", cat:"design", tags:["wellness","ecommerce","bento"], prompt:"A calm, deliberately designed wellness e-commerce landing page. Bento-grid regimen selector, detailed supplement protocol sections with Supplement Facts panels, visual usage timeline, and high-transparency quality modules. Shop-ready but pressure-free user experience." },
+      { num:"015", folder:"15-aura-audio-showroom", title:"Product Showroom Flow", product:"AURA AUDIO", cat:"design", tags:["product","electronics","dark"], prompt:"A product-first electronics landing page built around a Showroom Flow layout — product theater followed by guided model selection, scenario-based feature explanations, lightweight comparison, and a confident close. Best suited for consumer electronics with multiple configurations." },
+      { num:"016", folder:"16-header-hero-refinement", title:"Header & Hero Refinement", product:"CONCRETE MATTER", cat:"design", tags:["brutalist","streetwear","industrial"], prompt:"A brutalist streetwear design system. High-contrast neutral palette (concrete and ink), asymmetric layouts. Fixed mix-blend header, grainy texture overlay, 'broken' grid for product displays. Horizontal scrolling components, masonry-style social proof, grayscale-to-color hover effects." },
+      { num:"017", folder:"17-mosaic-grid-architecture", title:"Mosaic Grid Architecture", product:"BLUEPRINT", cat:"design", tags:["b2b","technical","grid"], prompt:"An architectural technical-blueprint style design system. Forest green (#1A3C2B) and light-gray paper (#F7F7F5) palette. Space Grotesk and JetBrains Mono. Bento grid layouts and 2D flat wireframe aesthetics with zero shadows." },
+      { num:"018", folder:"18-futuristic-saas", title:"Futuristic SaaS Landing Page", product:"AETHON", cat:"design", tags:["ai","glassmorphism","saas"], prompt:"A modern atmospheric SaaS design system. High-contrast blend of dark mode hero sections and light mode content areas. Glassmorphism, sophisticated serif-sans typography pairing, and ethereal glows. Emphasis on depth through backdrop blurs and subtle 1px borders." },
+      { num:"019", folder:"19-aura-os-launch", title:"Launch Manifesto", product:"AURA OS", cat:"design", tags:["manifesto","editorial","dark"], prompt:"An editorial typography-heavy design system mimicking a high-end magazine or manifesto. High-contrast serif and grotesk font pairings, asymmetric layouts, and a sophisticated dark-mode palette with cream accents. For high-end product launches and literary-focused platforms." },
+      { num:"020", folder:"20-gen-z-social-app", title:"Gen-Z Social App", product:"FREQ", cat:"design", tags:["gen-z","neo-brutalist","social"], prompt:"A high-energy Gen-Z-inspired design system with Neo-Brutalist aesthetic. High-saturation colors: acid green (#ccff00), vibrant purple (#7000ff), hot pink (#ff0099). Heavy black borders, hard shadows, oversized typography, and intentional layout chaos with tilted elements." },
+      { num:"021", folder:"21-softly-wellness", title:"Digital Wellness App", product:"SOFTLY", cat:"design", tags:["wellness","soft","gen-z"], prompt:"A soft-aesthetic Gen-Z oriented design system for wellness, meditation, and journaling. Warm off-white foundation (#FDFCF8) with coral, sage, and lavender pastels. Grain-textured overlays, Outfit and handwriting font mix, floating organic shapes, and breathing room." },
+      { num:"022", folder:"22-enterprise-admin-platform", title:"Enterprise Admin Platform", product:"SENTINEL", cat:"design", tags:["enterprise","b2b","dashboard"], prompt:"Professional high-trust landing page design for corporate B2B SaaS. Muted corporate palette with deep slates and technical blues. High-fidelity dashboard preview, KPI count-up animations, glassmorphism navigation bar. For cybersecurity and infrastructure tools." },
+      { num:"023", folder:"23-chrome-extension", title:"Chrome Extension Landing", product:"TABFLOW", cat:"design", tags:["developer","extension","technical"], prompt:"A browser-native developer tool aesthetic. Light-neutral base with vibrant cyan (#06B6D4) accent, mimicking Chrome DevTools layout. Inter and JetBrains Mono. High-density utility-focused layout with scroll-triggered panel reveals and simulated interactive environments." },
+      { num:"024", folder:"24-premium-dark-b2b", title:"Premium Dark B2B Service", product:"OBSIDIAN AUTO", cat:"design", tags:["dark","luxury","b2b"], prompt:"Production-grade high-contrast dark-mode luxury landing page. Ultra-dark backgrounds (#121212, #0a0a0a) with crimson (#e11d48) accents. Dark luxury brutalism with glassmorphism headers, before-after portfolio showcases, ROI badges, and testimonial grids." },
+      { num:"025", folder:"25-neon-velocity-countdown", title:"Neon Velocity Countdown", product:"VELOCITY", cat:"design", tags:["dark","neon","countdown"], prompt:"A high-velocity futuristic dark-mode design system. Laser Green and Navy Black palette, Plus Jakarta Sans and Geist Mono. Bento-grid structure, countdown timer, fluid typography, and scroll-triggered reveal animations. Conveying speed, precision, and cutting-edge innovation." },
+      { num:"026", folder:"26-minimalist-beta-capture", title:"Minimalist Beta Capture", product:"CIPHER", cat:"design", tags:["waitlist","editorial","dark"], prompt:"An 'Editorial Brutalist' style guide for SaaS waitlists. Dark-mode palette (#080808), DM Serif Display and Geist Mono, sophisticated glassmorphism. Bento-grid structure at 92vw width with oversized hero typography, silver-metallic gradient system." },
+      { num:"027", folder:"27-disruptor-beta-launch", title:"Disruptor Beta Launch", product:"VOLT", cat:"design", tags:["neo-brutalist","fintech","launch"], prompt:"A high-impact Neo-Brutalist design system for product launches. Dark base (#121212) with Volt accents (#CCFF00). Sticker-style rotated elements, massive display type, solid 8px offsets (Neo-shadows), and vertical navigation elements." },
+      { num:"028", folder:"28-architectural-type-system", title:"Architectural Type System", product:"AXIS ARCHITECTURE", cat:"design", tags:["swiss","monochrome","architecture"], prompt:"Architectural design system rooted in Swiss Modernism and Brutalist minimalism. Monochrome palette, massive Inter Tight display typography, rigid 0.5px hairline grid. JetBrains Mono metadata, engineering-first aesthetic, noise overlay." },
+      { num:"029", folder:"29-neural-noir", title:"Neural Noir Interface", product:"NEURAL", cat:"design", tags:["ai","noir","dark"], prompt:"A high-end futuristic aesthetic with tech-noir atmosphere. Deep dark backgrounds (#0a0a0a) with gold and bronze accents (#a78b71, #e8d5b7). Glassmorphism, neural network-inspired SVG connection lines, bento-grid layout. Playfair Display serif and Inter contrast." },
+      { num:"030", folder:"30-cinematic-style", title:"Cinematic Style", product:"FRAME", cat:"design", tags:["cinematic","3d","neon"], prompt:"A Cinematic design system with deep-space dark backgrounds, sophisticated 3D CSS transforms, and bold editorial typography. Signature 3D rolodex cube hero section, glassmorphism elements, mix-blend-difference navigation, vibrant neon gradients (cyan to pink)." },
+      { num:"031", folder:"31-nature-inspired", title:"Nature Inspired", product:"GROVE", cat:"design", tags:["organic","wellness","green"], prompt:"An Organic Brutalist design system for wellness, sustainable CPG, and eco-friendly lifestyle brands. Deep forest greens and earthy sages. Anton display and Inter. Bento-adjacent rounded grids with ultra-rounded corners up to 5rem, film grain noise overlay." },
+      { num:"032", folder:"32-midnight-editorial-v1", title:"Midnight Editorial v1", product:"MIDNIGHT STUDIO", cat:"design", tags:["editorial","agency","dark"], prompt:"Ultra-modern dark aesthetic. Deep black backgrounds (#050505), massive Satoshi typography, striking coral (#FF6B50) accents. Designed for high-end agencies that prioritize storytelling and visual drama. Custom ring cursor with mix-blend-mode." },
+      { num:"033", folder:"33-bold-editorial-studio", title:"Bold Editorial Studio", product:"EDIT", cat:"design", tags:["editorial","monochrome","studio"], prompt:"High-impact minimalist design system. Massive typography up to 12vw, strict monochromatic palette, sophisticated micro-interactions. Custom cursor logic, fluid marquee animations. Mix-blend-mode navigation and staggered text reveals for premium curated feel." },
+      { num:"034", folder:"34-midnight-editorial-v2", title:"Midnight Editorial v2", product:"MERIDIAN", cat:"design", tags:["fintech","luxury","dark"], prompt:"A midnight-themed editorial design system for premium portfolios and luxury brand storytelling. Oversized Clash Display typography, deep #050505 background, mix-blend-mode interactions. Smooth reveals, atmospheric glows, brutalist yet refined whitespace hierarchy." },
+      { num:"035", folder:"35-cinematic-noir", title:"Cinematic Noir", product:"NOIR MAISON", cat:"design", tags:["cinematic","fashion","dark"], prompt:"A Cinematic Noir design system with dramatic dark-mode aesthetics, high-contrast editorial typography, and immersive scroll-driven parallax. Grain overlays, radial gradients with warm tints, Cormorant Garamond serif. Brutalist-scale headings blur digital and cinematic." },
+      { num:"036", folder:"36-kinetic-orange", title:"Kinetic Orange", product:"KINETIC", cat:"design", tags:["brutalist","orange","agency"], prompt:"A high-energy brutalist design system. Kinetic Orange (#FF4D00) and black palette. Bold oversized editorial typography, Space Mono technical accents, marquees and rotating elements. Loud, confident brand presence for agencies and fintech." },
+      { num:"037", folder:"37-glassmorphism-style", title:"Glassmorphism", product:"OBSIDIAN", cat:"design", tags:["glassmorphism","ai","dark"], prompt:"High-tech glassmorphism design system. Neon lime accents, deep obsidian surfaces, architectural grid patterns and organic glowing gradients. JetBrains Mono developer-centric feel, Space Grotesk editorial headings. Floating shell layout." },
+      { num:"038", folder:"38-red-noir", title:"Red Noir", product:"REDLINE", cat:"design", tags:["security","ai","dark"], prompt:"A bold dark-themed landing page with high-contrast red accents, glassmorphism, and smooth scroll animations. Designed for AI and tech products with a futuristic aesthetic. Threat dashboard mockup." },
+      { num:"039", folder:"39-warm-industrial-gray", title:"Warm Industrial Gray", product:"CONCRETE.AI", cat:"design", tags:["industrial","ai","warm"], prompt:"A sophisticated warm industrial aesthetic blending brutalist grid structures with editorial typography. Warm concrete gray and rich charcoal accented by electric blue. Heavy grotesque sans-serifs and elegant serif italics. Film grain noise, structural grid-line overlays." },
+      { num:"040", folder:"40-neo-brutalism", title:"Neo-Brutalism", product:"ACID.WORKS", cat:"design", tags:["neo-brutalist","acid","yellow"], prompt:"A high-impact Neo-Brutalist design system with Acid aesthetics. Off-white, deep black, and neon yellow (#f5e642). Non-blurred shadows, thick borders, bento grids, oversized display text, and dynamic marquee components. Loud digital-first brand identity." },
+      { num:"041", folder:"41-dark-avant-garde", title:"Dark Avant-Garde", product:"APEX", cat:"design", tags:["avant-garde","dark","masterclass"], prompt:"Dark avant-garde 'Digital Naturalism' design system. Deep charcoal surfaces with acid green accents. Editorial serif typography, Brutalist elements like serrated edges, skewed tab navigation, and grainy noise overlays. Bold technical yet organic aesthetic." },
+      { num:"042", folder:"42-cyber-serif", title:"Cyber Serif", product:"EMERALD", cat:"design", tags:["cyber","fintech","dark"], prompt:"A Cyber Serif aesthetic blending classical editorial typography with futuristic tech elements. Deep #050505 palette, neon emerald (#10b981), glassmorphism. Playfair Display serif headlines. WebGL-inspired mesh gradients, spotlight hover cards." },
+      { num:"043", folder:"43-red-sun", title:"Red Sun", product:"SOLARA", cat:"design", tags:["coral","editorial","saas"], prompt:"A sophisticated editorial-style design system. High-contrast Coral and Ink palette. Instrument Serif and Manrope pairing. Bento-grid layouts, glassmorphism navigation, scroll-triggered animations with subtle rotations, and soft ambient background blurs." },
+      { num:"044", folder:"44-clean-fluid", title:"Clean Fluid", product:"CLAUDE LIGHT", cat:"design", tags:["minimal","fluid","luxury"], prompt:"Editorial design system blending luxury serif typography with technical monospace accents. Fluid premium ease animations, cream and dark charcoal palette (#fcfbf9, #171717), organic curved transitions. Mesh gradient backgrounds and a signature concave wave section transition." },
+      { num:"045", folder:"45-glassmorphism-card", title:"Glassmorphism Card", product:"GLASS", cat:"design", tags:["glassmorphism","portfolio","dark"], prompt:"Premium high-tech glassmorphism design system. Deep translucent layers, dark-to-light transitions, editorial typography. Heavy background blurs, grain textures, emerald accents. Bento-grid layouts and fluid animations for SaaS and AI platforms." },
+      { num:"046", folder:"46-tech-editorial", title:"Tech Editorial", product:"EDITORIAL.AI", cat:"design", tags:["editorial","paper","ai"], prompt:"A Tech Editorial aesthetic merging brutalist precision with classic editorial sophistication. Muted paper-like color palette (#f7f6f2), structured grid-line system. Playfair Display and Space Mono pairing. Scroll-triggered text reveals, glassmorphism navigation, scan-line animations." },
+      { num:"047", folder:"47-synapse", title:"Synapse", product:"SYNAPSE", cat:"design", tags:["neural","ai","purple"], prompt:"A high-performance neural dark mode design system. Deep black (#030303), violet (#8B5CF6) and cyan (#06B6D4) accents. Instrument Serif and Inter. Glassmorphism, animated mesh gradients, shimmer text effects. For Fintech, AI, Cybersecurity, and Web3 verticals." },
+      { num:"048", folder:"48-mixpanel-pricing", title:"Mixpanel Pricing Style", product:"PRISM", cat:"pricing", tags:["pricing","analytics","purple"], prompt:"A pixel-perfect recreation of the Mixpanel pricing section. Distinctive purple gradient curtain background, interactive pricing cards, and a dynamic usage estimator slider. Monthly/annual billing toggle and three-tier card layout." },
+      { num:"049", folder:"49-single-pricing", title:"Single Pricing", product:"STACKR", cat:"pricing", tags:["pricing","minimal","fintech"], prompt:"A clean two-column pricing section with a flat fee highlight and feature list. Mimics the AngelList SPV pricing design. Confidence through simplicity — one price, categorized feature checklist." },
+      { num:"050", folder:"50-pricing-saas-framer", title:"Pricing — SaaS / Framer Motion", product:"ORBIT", cat:"pricing", tags:["pricing","saas","glassmorphism"], prompt:"A high-conversion pricing section with a toggle for monthly/annual billing. Three tiers with a highlighted Pro plan, glassmorphism effects, and smooth animations. Dark background with blue accent for SaaS and digital products." },
+      { num:"051", folder:"51-bento-grid", title:"Bento Grid", product:"PANEL", cat:"component", tags:["bento","interactive","dashboard"], prompt:"A high-end minimalist bento grid component with advanced interactive effects including spotlight, border glow, particles (stars), tilt, and magnetism. Designed for modern dashboards and landing pages." },
+      { num:"052", folder:"52-stacking-cards", title:"Stacking Cards Effect", product:"STACK", cat:"component", tags:["scroll","cards","portfolio"], prompt:"A portfolio section where cards stack sticky at the top as the user scrolls, creating a deck-of-cards effect using CSS position:sticky with increasing top offsets." },
+      { num:"053", folder:"53-neon-velocity", title:"Neon Velocity", product:"LAUNCH.DEV", cat:"component", tags:["neon","terminal","dark"], prompt:"High-velocity futuristic dark-mode design. Neon green #00FF87 on navy-black. Animated terminal deploy sequence. High-velocity aesthetic, brutalist bold type, Geist Mono throughout." },
+      { num:"054", folder:"54-circular-gallery", title:"Circular Gallery", product:"ORBIT STUDIO", cat:"component", tags:["gallery","circular","animation"], prompt:"A high-end circular gallery with smooth scroll and elegant typography. JavaScript-driven orbit with depth-based scale and opacity. Ideal for immersive storytelling or creative portfolios." },
+      { num:"055", folder:"55-aurora-background", title:"Aurora Background", product:"AURORA", cat:"component", tags:["animation","aurora","ambient"], prompt:"A smooth flowing gradient animation that simulates the northern lights. Multi-layer CSS radial gradients with mix-blend-mode:screen animating independently. The aurora IS the hero." },
+      { num:"056", folder:"56-exploded-view", title:"Exploded View Assembly", product:"ASSEMBLE", cat:"component", tags:["animation","interactive","scroll"], prompt:"A scroll-driven animation where a central product or UI element explodes into its constituent parts and then reassembles into a new layout. Perfect for 'how it works' or feature breakdown sections." },
+      { num:"057", folder:"57-spotlight-mask", title:"Spotlight Mask", product:"SPOTLIGHT", cat:"component", tags:["mask","interactive","scroll"], prompt:"A mouse-following spotlight interaction — a circular mask reveals colorful UI content underneath a dark overlay. The cursor controls what's revealed." },
+      { num:"058", folder:"58-testimonial-marquee", title:"Testimonial Marquee", product:"CHORUS", cat:"component", tags:["marquee","testimonial","animation"], prompt:"Two-row infinite CSS marquee with opposite scroll directions and gradient alpha edge fades. An endless loop of testimonial cards with smooth momentum." },
+      { num:"059", folder:"59-dynamic-data-display", title:"Dynamic Data Display", product:"METRIC", cat:"component", tags:["counter","animation","data"], prompt:"Numbers displayed in large font with count-up animations triggered by IntersectionObserver on scroll. Suitable for data display sections and statistical information areas." },
+      { num:"060", folder:"60-gsap-horizontal-scroll", title:"Horizontal Scroll Ticker", product:"REAL MAGIC", cat:"component", tags:["horizontal","marquee","scroll"], prompt:"A continuous horizontal text flow — a single very long sentence flowing endlessly like a ticker tape. Content: 'In every bottle, discover the undeniable Real Magic of sharing pure Refreshment that brings us Together'." },
+      { num:"061", folder:"61-image-trail", title:"Image Trail", product:"TRACE", cat:"component", tags:["cursor","trail","interactive"], prompt:"A mouse-following image trail — portrait photo cards appear and fade as the cursor moves across the hero area. Multiple cards at different rotations with a lerp-based movement effect." },
+      { num:"062", folder:"62-sticky-content-switch", title:"Sticky Content Switch", product:"FEATURE", cat:"component", tags:["sticky","scroll","split"], prompt:"A split-screen section where the left-side heading remains sticky and updates dynamically as associated feature blocks scroll on the right side via IntersectionObserver." },
+      { num:"063", folder:"63-text-slidedown-animation", title:"Text Slidedown Animation", product:"REVEAL", cat:"component", tags:["text","animation","clip-path"], prompt:"A vertical text clip slide-down animation letter by letter. JavaScript splits headline text into individual span elements, each animating with a clip-path reveal and staggered delay." },
+      { num:"064", folder:"64-text-blur-animation", title:"Text Blur Animation", product:"CLARITY TYPE", cat:"component", tags:["text","blur","animation"], prompt:"A complex animation that fades in, slides up, and reduces blur for each letter individually. Staggered per-letter blur-to-sharp reveal using CSS transitions." },
+      { num:"065", folder:"65-text-fading-animation", title:"Text Fading Animation", product:"FADE.STUDIO", cat:"component", tags:["text","clip-path","animation"], prompt:"Responsive oversized heading with a text animation that slides in with a clipping mask effect. Each line of text clips upward from below using overflow:hidden wrappers." },
+      { num:"066", folder:"66-scroll-animation", title:"Scroll Animation — Shape Connect", product:"CONNECT", cat:"component", tags:["canvas","scroll","nodes"], prompt:"As the user scrolls, a central shape grows and connecting lines draw outward to satellite shapes. Canvas 2D scroll-driven node graph with progressive line drawing." },
+      { num:"067", folder:"67-hover-reveal-effect", title:"Hover Reveal Effect", product:"REVEAL.CO", cat:"component", tags:["hover","reveal","cursor"], prompt:"Portfolio rows reveal a hidden image or content on hover. CSS ::before clip-path or scale reveal with custom mix-blend-mode cursor." },
+      { num:"068", folder:"68-rotating-logos", title:"Rotating Logos", product:"CONNECT.IO", cat:"component", tags:["logos","rotation","css"], prompt:"Two counter-rotating CSS orbit rings with partner logos positioned around them. Each logo node counter-rotates so text stays upright despite the ring's animation." },
+      { num:"069", folder:"69-parallax-tilt-grid", title:"Parallax Tilt Grid", product:"PARALLAX", cat:"component", tags:["parallax","3d","grid"], prompt:"A 3-column image grid with independent scroll speeds per column and CSS 3D rotateX/Y tilt effects on hover via mousemove event listeners." },
+      { num:"070", folder:"70-saas-pricing-comparison", title:"Pricing Comparison Table", product:"CANVAS", cat:"pricing", tags:["pricing","comparison","table"], prompt:"A detailed pricing comparison table with sticky tier headers, collapsible sections, tiered columns (Free, Growth, Enterprise), and extensive feature lists with status indicators." },
+      { num:"071", folder:"71-clickup-pricing-calculator", title:"Pricing Calculator", product:"UNIFIED", cat:"pricing", tags:["calculator","interactive","roi"], prompt:"A cost savings calculator comparing app spending vs a unified platform. Interactive app selection grid, user count slider, and dynamic cost breakdown showing live savings." },
+      { num:"072", folder:"72-mixpanel-pricing-comparison", title:"Mixpanel-Style Comparison", product:"INSIGHT", cat:"pricing", tags:["pricing","purple","comparison"], prompt:"A detailed pricing comparison table with sticky headers, collapsible sections, tiered columns, and purple gradient curtain background. Billing toggle and FAQ accordion." }
+    ];
+
+    /* ─── Helpers ──────────────────────────────────────────────────────── */
+    function esc(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    const SVG_ARROW = `<svg class="overlay-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7,7 17,7 17,17"/></svg>`;
+
+    const SVG_CHEVRON = `<svg class="toggle-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6,9 12,15 18,9"/></svg>`;
+
+    /* ─── Card Renderer ────────────────────────────────────────────────── */
+    function renderCard(site) {
+      const tags = site.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('');
+      return `
+        <article class="card" role="listitem" onclick="openSite('${esc(site.folder)}')" aria-label="${esc(site.title)}">
+          <div class="card-img-wrapper">
+            <img
+              src="thumbnails/${esc(site.folder)}.jpg"
+              alt="${esc(site.title)} preview"
+              loading="lazy"
+              width="600"
+              height="200"
+            />
+            <div class="card-overlay" aria-hidden="true">
+              <span class="overlay-title">${esc(site.title)}</span>
+              ${SVG_ARROW}
+            </div>
+          </div>
+          <div class="card-meta">
+            <span class="card-num">${esc(site.num)}</span>
+            <h3 class="card-title">${esc(site.title)}</h3>
+            <span class="card-product">${esc(site.product)}</span>
+            <div class="card-tags">${tags}</div>
+          </div>
+          <div class="card-footer">
+            <button
+              class="prompt-toggle"
+              onclick="event.stopPropagation(); togglePrompt(this)"
+              aria-expanded="false"
+            >
+              ${SVG_CHEVRON}
+              View Prompt
+            </button>
+            <div class="prompt-body" hidden>${esc(site.prompt)}</div>
+          </div>
+        </article>`;
+    }
+
+    /* ─── Section Divider ──────────────────────────────────────────────── */
+    function renderDivider(label, desc, count) {
+      return `
+        <div class="section-divider" aria-hidden="true">
+          <span class="section-num">${String(count).padStart(2, '0')}</span>
+          <div class="section-info">
+            <span class="section-label">Category</span>
+            <h2 class="section-title">${label}</h2>
+            <p class="section-desc">${desc}</p>
+          </div>
+        </div>`;
+    }
+
+    /* ─── Render ───────────────────────────────────────────────────────── */
+    const SECTIONS = [
+      {
+        key:   'design',
+        label: 'Design Systems',
+        desc:  'Complete landing page design systems, style guides, and visual identities'
+      },
+      {
+        key:   'pricing',
+        label: 'Pricing',
+        desc:  'Pricing sections, billing toggles, calculators, and comparison tables'
+      },
+      {
+        key:   'component',
+        label: 'Components & Interactions',
+        desc:  'Standalone UI components, animations, and interaction patterns'
+      }
+    ];
+
+    let activeFilter = 'all';
+
+    function render(filter) {
+      const grid = document.getElementById('grid');
+      let html = '';
+      let visibleCount = 0;
+
+      if (filter === 'all') {
+        for (const section of SECTIONS) {
+          const items = SITES.filter(s => s.cat === section.key);
+          if (!items.length) continue;
+          html += renderDivider(section.label, section.desc, items.length);
+          html += items.map(renderCard).join('');
+          visibleCount += items.length;
+        }
+      } else {
+        const items = SITES.filter(s => s.cat === filter);
+        html += items.map(renderCard).join('');
+        visibleCount = items.length;
+      }
+
+      if (!visibleCount) {
+        html = `<div class="no-results">No sites in this category.</div>`;
+      }
+
+      grid.innerHTML = html;
+      document.getElementById('result-count').textContent =
+        visibleCount === 72 ? '72 sites' : `${visibleCount} sites`;
+    }
+
+    /* ─── Filter Handler ───────────────────────────────────────────────── */
+    function setFilter(filter, btn) {
+      if (activeFilter === filter) return;
+      activeFilter = filter;
+
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.toggle('active', b === btn);
+      });
+
+      render(filter);
+    }
+
+    /* ─── Prompt Toggle ────────────────────────────────────────────────── */
+    function togglePrompt(btn) {
+      const body = btn.nextElementSibling;
+      const isOpen = !body.hidden;
+
+      body.hidden = isOpen;
+      btn.classList.toggle('is-open', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    /* ─── Open Site ────────────────────────────────────────────────────── */
+    function openSite(folder) {
+      window.open('sites/' + folder + '/index.html', '_blank', 'noopener');
+    }
+
+    /* ─── Init ─────────────────────────────────────────────────────────── */
+    render('all');
+  </script>
 
 </body>
 </html>
