@@ -1,6 +1,7 @@
 import Dexie from 'dexie'
 
-export const db = new Dexie('EchoApp')
+// v2 — forces fresh seed with corrected relative asset paths
+export const db = new Dexie('EchoApp_v2')
 
 db.version(1).stores({
   users:     '++id, handle',

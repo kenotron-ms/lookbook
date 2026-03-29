@@ -10,7 +10,7 @@
     "verified": false,
     "followers": 1847,
     "following": 312,
-    "avatar": "/avatars/user-00.jpg",
+    "avatar": "./avatars/user-00.jpg",
     "bannerColor": "linear-gradient(135deg, #6366f1, #8b5cf6)",
     "postCount": 127,
     "isCurrentUser": true
@@ -26,7 +26,7 @@
     "verified": true,
     "followers": 8400000,
     "following": 48,
-    "avatar": "/avatars/user-01.jpg",
+    "avatar": "./avatars/user-01.jpg",
     "bannerColor": "linear-gradient(135deg, #4338ca, #6366f1)",
     "postCount": 3241
   },
@@ -41,7 +41,7 @@
     "verified": true,
     "followers": 142000,
     "following": 891,
-    "avatar": "/avatars/user-02.jpg",
+    "avatar": "./avatars/user-02.jpg",
     "bannerColor": "linear-gradient(135deg, #0f172a, #1e3a5f)",
     "postCount": 2184
   },
@@ -56,7 +56,7 @@
     "verified": true,
     "followers": 387000,
     "following": 1204,
-    "avatar": "/avatars/user-03.jpg",
+    "avatar": "./avatars/user-03.jpg",
     "bannerColor": "linear-gradient(135deg, #1a1a2e, #16213e)",
     "postCount": 5820
   },
@@ -71,7 +71,7 @@
     "verified": true,
     "followers": 89400,
     "following": 543,
-    "avatar": "/avatars/user-04.jpg",
+    "avatar": "./avatars/user-04.jpg",
     "bannerColor": "linear-gradient(135deg, #7c3aed, #db2777)",
     "postCount": 1738
   },
@@ -86,7 +86,7 @@
     "verified": false,
     "followers": 28700,
     "following": 412,
-    "avatar": "/avatars/user-05.jpg",
+    "avatar": "./avatars/user-05.jpg",
     "bannerColor": "linear-gradient(135deg, #0f4c75, #1b262c)",
     "postCount": 3102
   },
@@ -101,7 +101,7 @@
     "verified": true,
     "followers": 211000,
     "following": 2847,
-    "avatar": "/avatars/user-06.jpg",
+    "avatar": "./avatars/user-06.jpg",
     "bannerColor": "linear-gradient(135deg, #1a0533, #340147)",
     "postCount": 8940
   },
@@ -116,7 +116,7 @@
     "verified": false,
     "followers": 41200,
     "following": 738,
-    "avatar": "/avatars/user-07.jpg",
+    "avatar": "./avatars/user-07.jpg",
     "bannerColor": "linear-gradient(135deg, #065f46, #134e4a)",
     "postCount": 4231
   },
@@ -131,7 +131,7 @@
     "verified": false,
     "followers": 19800,
     "following": 302,
-    "avatar": "/avatars/user-08.jpg",
+    "avatar": "./avatars/user-08.jpg",
     "bannerColor": "linear-gradient(135deg, #1e293b, #0f172a)",
     "postCount": 1547
   },
@@ -146,7 +146,7 @@
     "verified": false,
     "followers": 67300,
     "following": 1821,
-    "avatar": "/avatars/user-09.jpg",
+    "avatar": "./avatars/user-09.jpg",
     "bannerColor": "linear-gradient(135deg, #431407, #7c2d12)",
     "postCount": 6712
   },
@@ -161,7 +161,7 @@
     "verified": false,
     "followers": 34100,
     "following": 621,
-    "avatar": "/avatars/user-10.jpg",
+    "avatar": "./avatars/user-10.jpg",
     "bannerColor": "linear-gradient(135deg, #164e63, #0c4a6e)",
     "postCount": 2891
   },
@@ -176,7 +176,7 @@
     "verified": false,
     "followers": 55600,
     "following": 891,
-    "avatar": "/avatars/user-11.jpg",
+    "avatar": "./avatars/user-11.jpg",
     "bannerColor": "linear-gradient(135deg, #14532d, #052e16)",
     "postCount": 4892
   },
@@ -191,7 +191,7 @@
     "verified": false,
     "followers": 28900,
     "following": 1042,
-    "avatar": "/avatars/user-12.jpg",
+    "avatar": "./avatars/user-12.jpg",
     "bannerColor": "linear-gradient(135deg, #4c1d95, #7c3aed)",
     "postCount": 2134
   },
@@ -206,7 +206,7 @@
     "verified": true,
     "followers": 73400,
     "following": 2103,
-    "avatar": "/avatars/user-13.jpg",
+    "avatar": "./avatars/user-13.jpg",
     "bannerColor": "linear-gradient(135deg, #7f1d1d, #991b1b)",
     "postCount": 9201
   },
@@ -221,7 +221,7 @@
     "verified": false,
     "followers": 44200,
     "following": 678,
-    "avatar": "/avatars/user-14.jpg",
+    "avatar": "./avatars/user-14.jpg",
     "bannerColor": "linear-gradient(135deg, #0c1445, #1e1b4b)",
     "postCount": 3281
   },
@@ -236,7 +236,7 @@
     "verified": true,
     "followers": 98700,
     "following": 3421,
-    "avatar": "/avatars/user-15.jpg",
+    "avatar": "./avatars/user-15.jpg",
     "bannerColor": "linear-gradient(135deg, #f97316, #ea580c)",
     "postCount": 11280
   },
@@ -251,7 +251,7 @@
     "verified": false,
     "followers": 22300,
     "following": 812,
-    "avatar": "/avatars/user-16.jpg",
+    "avatar": "./avatars/user-16.jpg",
     "bannerColor": "linear-gradient(135deg, #1f2937, #111827)",
     "postCount": 1923
   },
@@ -266,7 +266,7 @@
     "verified": true,
     "followers": 421000,
     "following": 892,
-    "avatar": "/avatars/user-17.jpg",
+    "avatar": "./avatars/user-17.jpg",
     "bannerColor": "linear-gradient(135deg, #1e3a5f, #1e40af)",
     "postCount": 4102
   },
@@ -281,7 +281,7 @@
     "verified": false,
     "followers": 61800,
     "following": 1247,
-    "avatar": "/avatars/user-18.jpg",
+    "avatar": "./avatars/user-18.jpg",
     "bannerColor": "linear-gradient(135deg, #831843, #be185d)",
     "postCount": 3841
   },
@@ -296,7 +296,7 @@
     "verified": true,
     "followers": 312000,
     "following": 421,
-    "avatar": "/avatars/user-19.jpg",
+    "avatar": "./avatars/user-19.jpg",
     "bannerColor": "linear-gradient(135deg, #0f0f0f, #1a1a1a)",
     "postCount": 2841
   },
@@ -311,7 +311,7 @@
     "verified": false,
     "followers": 38400,
     "following": 2891,
-    "avatar": "/avatars/user-20.jpg",
+    "avatar": "./avatars/user-20.jpg",
     "bannerColor": "linear-gradient(135deg, #14532d, #166534)",
     "postCount": 5123
   },
@@ -326,7 +326,7 @@
     "verified": false,
     "followers": 14700,
     "following": 923,
-    "avatar": "/avatars/user-21.jpg",
+    "avatar": "./avatars/user-21.jpg",
     "bannerColor": "linear-gradient(135deg, #312e81, #1e1b4b)",
     "postCount": 2341
   },
@@ -341,7 +341,7 @@
     "verified": false,
     "followers": 22900,
     "following": 541,
-    "avatar": "/avatars/user-22.jpg",
+    "avatar": "./avatars/user-22.jpg",
     "bannerColor": "linear-gradient(135deg, #0c4a6e, #075985)",
     "postCount": 1891
   },
@@ -356,7 +356,7 @@
     "verified": false,
     "followers": 31200,
     "following": 1124,
-    "avatar": "/avatars/user-23.jpg",
+    "avatar": "./avatars/user-23.jpg",
     "bannerColor": "linear-gradient(135deg, #1c1917, #292524)",
     "postCount": 3012
   },
@@ -371,7 +371,7 @@
     "verified": false,
     "followers": 18200,
     "following": 1783,
-    "avatar": "/avatars/user-24.jpg",
+    "avatar": "./avatars/user-24.jpg",
     "bannerColor": "linear-gradient(135deg, #7f1d1d, #be123c)",
     "postCount": 2789
   },
@@ -386,7 +386,7 @@
     "verified": false,
     "followers": 11400,
     "following": 687,
-    "avatar": "/avatars/user-25.jpg",
+    "avatar": "./avatars/user-25.jpg",
     "bannerColor": "linear-gradient(135deg, #134e4a, #0f766e)",
     "postCount": 1421
   }

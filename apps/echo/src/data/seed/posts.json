@@ -8,7 +8,7 @@
     "echoes": 6701,
     "replies": 1089,
     "views": 1241000,
-    "mediaUrl": "/post-images/pi-01.jpg",
+    "mediaUrl": "./post-images/pi-01.jpg",
     "parentId": null,
     "bookmarks": 2341
   },
@@ -73,7 +73,7 @@
     "echoes": 3412,
     "replies": 891,
     "views": 312000,
-    "mediaUrl": "/post-images/pi-02.jpg",
+    "mediaUrl": "./post-images/pi-02.jpg",
     "parentId": null,
     "bookmarks": 2134
   },
@@ -190,7 +190,7 @@
     "echoes": 4120,
     "replies": 712,
     "views": 598000,
-    "mediaUrl": "/post-images/pi-03.jpg",
+    "mediaUrl": "./post-images/pi-03.jpg",
     "parentId": null,
     "bookmarks": 2891
   },
@@ -229,7 +229,7 @@
     "echoes": 1823,
     "replies": 412,
     "views": 189000,
-    "mediaUrl": "/post-images/pi-04.jpg",
+    "mediaUrl": "./post-images/pi-04.jpg",
     "parentId": null,
     "bookmarks": 891
   },
@@ -346,7 +346,7 @@
     "echoes": 4821,
     "replies": 891,
     "views": 512000,
-    "mediaUrl": "/post-images/pi-05.jpg",
+    "mediaUrl": "./post-images/pi-05.jpg",
     "parentId": null,
     "bookmarks": 2891
   },
@@ -385,7 +385,7 @@
     "echoes": 1823,
     "replies": 412,
     "views": 189000,
-    "mediaUrl": "/post-images/pi-06.jpg",
+    "mediaUrl": "./post-images/pi-06.jpg",
     "parentId": null,
     "bookmarks": 891
   },
@@ -450,7 +450,7 @@
     "echoes": 1823,
     "replies": 412,
     "views": 189000,
-    "mediaUrl": "/post-images/pi-07.jpg",
+    "mediaUrl": "./post-images/pi-07.jpg",
     "parentId": null,
     "bookmarks": 1421
   },
@@ -476,7 +476,7 @@
     "echoes": 7823,
     "replies": 1234,
     "views": 1400000,
-    "mediaUrl": "/post-images/pi-08.jpg",
+    "mediaUrl": "./post-images/pi-08.jpg",
     "parentId": null,
     "bookmarks": 4821
   },
@@ -541,7 +541,7 @@
     "echoes": 4120,
     "replies": 712,
     "views": 589000,
-    "mediaUrl": "/post-images/pi-09.jpg",
+    "mediaUrl": "./post-images/pi-09.jpg",
     "parentId": null,
     "bookmarks": 2341
   },
@@ -619,7 +619,7 @@
     "echoes": 7823,
     "replies": 1234,
     "views": 1800000,
-    "mediaUrl": "/post-images/pi-10.jpg",
+    "mediaUrl": "./post-images/pi-10.jpg",
     "parentId": null,
     "bookmarks": 4891
   },
@@ -801,7 +801,7 @@
     "echoes": 891,
     "replies": 412,
     "views": 67000,
-    "mediaUrl": "/post-images/pi-11.jpg",
+    "mediaUrl": "./post-images/pi-11.jpg",
     "parentId": null,
     "bookmarks": 234
   },
@@ -866,7 +866,7 @@
     "echoes": 4821,
     "replies": 891,
     "views": 891000,
-    "mediaUrl": "/post-images/pi-12.jpg",
+    "mediaUrl": "./post-images/pi-12.jpg",
     "parentId": null,
     "bookmarks": 2891
   },
