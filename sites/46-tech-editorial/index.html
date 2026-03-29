@@ -1,734 +1,780 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EDITORIAL.AI — Where Knowledge Meets Intelligence</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDITORIAL.AI — AI Research Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  <style>
+    :root {
+      --paper: #f7f6f2;
+      --ink: #1c1c1c;
+      --accent: #3d7068;
+      --line: #e5e4de;
+      --ghost: #b4b4b4;
+      --easing: cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-:root{
-  --paper:#f7f6f2;
-  --paper2:#f0ede6;
-  --ink:#111111;
-  --muted:#888;
-  --border:#ddd9d0;
-  --accent:#1a1a2e;
-  --red:#c0392b;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html{scroll-behavior:smooth}
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
 
-body{
-  background:var(--paper);
-  color:var(--ink);
-  font-family:'Space Mono',monospace;
-  font-size:13px;
-  line-height:1.6;
-  overflow-x:hidden;
-}
+    /* ── Fixed Background Grid ── */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+      opacity: 0.55;
+    }
 
-/* Grid-line overlay */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size:60px 60px;
-  pointer-events:none;z-index:0;
-  opacity:.35;
-}
+    /* Vertical guide lines */
+    .bg-guides {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-guides::before,
+    .bg-guides::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: var(--line);
+      opacity: 0.7;
+    }
+    .bg-guides::before { left: 25%; }
+    .bg-guides::after { right: 25%; }
+    .bg-guides-mid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-guides-mid::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: var(--line);
+      opacity: 0.7;
+    }
 
-/* ── NAV (glassmorphism) ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:0 48px;
-  height:64px;
-  display:flex;align-items:center;
-  background:rgba(247,246,242,.88);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-}
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: padding 0.5s var(--easing), background 0.5s var(--easing), border-color 0.5s var(--easing);
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      padding: 16px 48px;
+      background: rgba(247, 246, 242, 0.85);
+      backdrop-filter: blur(18px);
+      border-bottom-color: var(--line);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-logo-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .nav-logo-bars span {
+      display: block;
+      height: 1px;
+      background: var(--ink);
+    }
+    .nav-logo-bars span:nth-child(1) { width: 24px; }
+    .nav-logo-bars span:nth-child(2) { width: 32px; }
+    .nav-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--ink);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--paper);
+      background: var(--ink);
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--accent); }
 
-.nav-logo{
-  font-family:'Playfair Display',serif;
-  font-size:20px;font-weight:700;letter-spacing:.02em;
-  color:var(--ink);text-decoration:none;margin-right:48px;
-}
-.nav-logo span{color:var(--red)}
+    /* ── Scan-Line Animation ── */
+    @keyframes scan-line {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
+    .scan-line-bar {
+      position: relative;
+      height: 2px;
+      background: var(--line);
+      overflow: hidden;
+    }
+    .scan-line-bar::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 40%;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: scan-line 2s cubic-bezier(0.8, 0, 0.2, 1) infinite;
+    }
 
-.nav-links{display:flex;align-items:center;gap:28px}
-.nav-links a{
-  font-family:'Space Mono',monospace;
-  font-size:11px;letter-spacing:.08em;
-  color:var(--muted);text-decoration:none;
-  transition:color .2s;
-}
-.nav-links a:hover{color:var(--ink)}
+    /* ── CTA Button ── */
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      padding: 16px 32px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: letter-spacing 0.5s var(--easing);
+    }
+    .btn-primary:hover { letter-spacing: 0.4em; }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.12);
+      transform: translateY(100%);
+      transition: transform 0.4s var(--easing);
+    }
+    .btn-primary:hover::before { transform: translateY(0); }
 
-.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+    .btn-ghost {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--ink);
+      background: transparent;
+      border: 1px solid var(--line);
+      padding: 16px 32px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .btn-ghost:hover { border-color: var(--ink); background: rgba(28,28,28,0.04); }
 
-.btn-ink{
-  background:var(--ink);color:var(--paper);
-  font-family:'Space Mono',monospace;
-  font-size:11px;letter-spacing:.1em;
-  padding:9px 20px;border:none;cursor:pointer;
-  text-decoration:none;display:inline-block;
-  transition:background .2s,transform .15s;
-}
-.btn-ink:hover{background:#333;transform:translateY(-1px)}
+    /* ── Hero ── */
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(56px, 9vw, 128px);
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--ghost);
+    }
 
-.btn-border{
-  background:transparent;color:var(--ink);
-  font-family:'Space Mono',monospace;
-  font-size:11px;letter-spacing:.1em;
-  padding:9px 16px;
-  border:1px solid var(--border);cursor:pointer;
-  text-decoration:none;display:inline-block;
-  transition:border-color .2s,background .2s;
-}
-.btn-border:hover{border-color:var(--ink);background:rgba(17,17,17,.04)}
+    /* Pulse badge */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .pulse-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
 
-/* ── HERO ── */
-.hero{
-  min-height:100vh;
-  padding:100px 48px 80px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:60px;
-  align-items:center;
-  position:relative;z-index:1;
-}
+    /* ── Stats ── */
+    .stat-cell {
+      padding: 40px;
+      border-right: 1px solid var(--line);
+      transition: background 0.4s var(--easing);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-cell:hover { background: #fff; }
+    .stat-icon-box {
+      width: 48px; height: 48px;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      color: var(--accent);
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--ghost);
+    }
 
-.hero-left{padding-right:40px;border-right:1px solid var(--border)}
+    /* ── Word Reveal ── */
+    .reveal-word {
+      opacity: 0.12;
+      transition: opacity 0.4s ease;
+    }
+    .reveal-word.active { opacity: 1; }
 
-.hero-tag{
-  font-family:'Space Mono',monospace;
-  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:32px;
-  display:flex;align-items:center;gap:10px;
-}
-.hero-tag::before{
-  content:'';width:24px;height:1px;background:var(--red);
-}
+    /* ── Workflow ── */
+    .step-item {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      transition: opacity 0.4s;
+    }
+    .step-item.inactive { opacity: 0.35; }
+    .step-number {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--ghost);
+      margin-bottom: 8px;
+    }
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+    }
+    .step-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s var(--easing), margin-top 0.3s;
+    }
+    .step-desc.open {
+      max-height: 120px;
+      margin-top: 12px;
+    }
 
-.hero-title{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(48px,6vw,84px);
-  font-weight:900;
-  line-height:1.0;
-  letter-spacing:-.02em;
-  margin-bottom:28px;
-}
+    /* Scan card */
+    .scan-card {
+      position: sticky;
+      top: 120px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .scan-card img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      filter: grayscale(100%);
+      opacity: 0.55;
+      mix-blend-mode: multiply;
+      display: block;
+    }
+    .scan-card-body {
+      padding: 24px;
+    }
 
-.hero-title em{
-  font-style:italic;font-weight:400;
-  color:var(--red);
-}
+    /* ── Tabs ── */
+    .tab-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      padding: 10px 24px;
+      border: 1px solid var(--line);
+      background: transparent;
+      cursor: pointer;
+      color: var(--ink);
+      opacity: 0.5;
+      transition: opacity 0.3s, background 0.3s, border-color 0.3s;
+    }
+    .tab-btn.active {
+      opacity: 1;
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
-.hero-subtitle{
-  font-family:'Space Mono',monospace;
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.8;
-  max-width:420px;
-  margin-bottom:44px;
-  letter-spacing:.02em;
-}
+    .ghost-icon {
+      position: absolute;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.04;
+      pointer-events: none;
+      color: var(--ink);
+    }
 
-.hero-actions{display:flex;gap:12px;align-items:center}
+    /* ── Form ── */
+    .form-group { margin-bottom: 28px; }
+    .form-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--ghost);
+      display: block;
+      margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-input:focus { border-bottom-color: var(--accent); }
+    .form-input::placeholder { color: var(--ghost); font-size: 11px; font-family: 'Space Mono', monospace; letter-spacing: 0.1em; }
 
-.hero-stats{
-  display:flex;gap:0;margin-top:60px;
-  border-top:1px solid var(--border);
-}
-.hero-stat{
-  flex:1;padding:20px 0;
-  border-right:1px solid var(--border);
-}
-.hero-stat:last-child{border-right:none}
-.stat-num{
-  font-family:'Playfair Display',serif;
-  font-size:32px;font-weight:700;
-  color:var(--ink);line-height:1;
-}
-.stat-label{
-  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--muted);margin-top:4px;
-}
+    /* ── Section divider ── */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--line);
+    }
 
-/* Hero right */
-.hero-right{position:relative}
+    /* ── Footer ── */
+    .footer-mono {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--ghost);
+    }
 
-/* Scan-line animation */
-.scan-container{
-  position:relative;overflow:hidden;
-  border:1px solid var(--border);
-  background:var(--paper2);
-}
-.scan-line{
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--red),transparent);
-  animation:scan 3s linear infinite;
-  opacity:.6;
-  z-index:2;
-}
-@keyframes scan{
-  0%{top:-2px;opacity:0}
-  5%{opacity:.6}
-  95%{opacity:.6}
-  100%{top:100%;opacity:0}
-}
+    /* ── Scroll reveal ── */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s var(--easing), transform 0.8s var(--easing);
+    }
+    .reveal-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-.document-preview{
-  padding:32px;
-  position:relative;z-index:1;
-}
-.doc-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:24px;
-  padding-bottom:16px;
-  border-bottom:1px solid var(--border);
-}
-.doc-title{
-  font-family:'Playfair Display',serif;
-  font-size:18px;font-weight:700;
-}
-.doc-status{
-  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--red);
-  border:1px solid var(--red);
-  padding:3px 8px;
-}
-
-.doc-line{
-  height:10px;background:var(--border);border-radius:2px;
-  margin-bottom:8px;
-}
-.doc-line.short{width:60%}
-.doc-line.medium{width:80%}
-
-.doc-tags{
-  display:flex;gap:6px;margin-top:20px;margin-bottom:20px;
-}
-.doc-tag{
-  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
-  padding:3px 8px;
-  border:1px solid var(--border);
-  color:var(--muted);
-}
-
-.doc-ai-note{
-  background:rgba(192,57,43,.05);
-  border-left:2px solid var(--red);
-  padding:12px 14px;
-  font-size:11px;color:var(--ink);
-  line-height:1.6;
-}
-
-/* ── FEATURES SECTION ── */
-.features{
-  padding:100px 48px;
-  background:var(--ink);
-  color:var(--paper);
-  position:relative;z-index:1;
-}
-
-.features::before{
-  content:'';
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(247,246,242,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(247,246,242,.04) 1px, transparent 1px);
-  background-size:60px 60px;
-  pointer-events:none;
-}
-
-.features-header{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:60px;margin-bottom:60px;
-}
-.features-header h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(36px,4vw,56px);font-weight:900;
-  line-height:1.05;letter-spacing:-.02em;
-  color:var(--paper);
-}
-.features-header p{
-  font-size:12px;color:rgba(247,246,242,.4);
-  line-height:1.8;letter-spacing:.04em;
-  align-self:flex-end;
-}
-
-.features-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:rgba(247,246,242,.08);
-  border:1px solid rgba(247,246,242,.08);
-}
-.f-card{
-  background:var(--ink);
-  padding:40px 32px;
-  border:1px solid rgba(247,246,242,.08);
-  transition:background .2s;
-}
-.f-card:hover{background:#1a1a1a}
-
-.f-num{
-  font-family:'Space Mono',monospace;
-  font-size:10px;letter-spacing:.2em;color:var(--red);
-  margin-bottom:20px;
-}
-.f-title{
-  font-family:'Playfair Display',serif;
-  font-size:22px;font-weight:700;
-  margin-bottom:12px;line-height:1.2;
-}
-.f-desc{
-  font-size:11px;color:rgba(247,246,242,.4);
-  line-height:1.8;letter-spacing:.03em;
-}
-
-/* ── RESEARCH FEED ── */
-.research{
-  padding:100px 48px;
-  position:relative;z-index:1;
-}
-
-.research-grid{
-  display:grid;grid-template-columns:2fr 1fr;
-  gap:60px;margin-top:60px;
-}
-
-.research-list{
-  display:flex;flex-direction:column;gap:0;
-}
-.research-item{
-  display:flex;gap:20px;
-  padding:24px 0;
-  border-bottom:1px solid var(--border);
-  cursor:pointer;
-  transition:background .2s;
-}
-.research-item:hover{background:rgba(17,17,17,.02)}
-.ri-num{
-  font-family:'Space Mono',monospace;
-  font-size:11px;color:var(--muted);
-  flex-shrink:0;width:28px;
-}
-.ri-title{
-  font-family:'Playfair Display',serif;
-  font-size:18px;font-weight:700;
-  margin-bottom:4px;line-height:1.2;
-}
-.ri-meta{
-  font-size:10px;letter-spacing:.1em;color:var(--muted);
-}
-
-.research-sidebar{
-  border-left:1px solid var(--border);
-  padding-left:40px;
-}
-.sidebar-label{
-  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:20px;
-}
-.topic-pill{
-  display:inline-block;
-  padding:5px 12px;
-  border:1px solid var(--border);
-  font-size:11px;color:var(--ink);
-  margin:0 4px 8px 0;
-  cursor:pointer;
-  transition:background .2s,border-color .2s;
-}
-.topic-pill:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-
-/* ── TESTIMONIALS ── */
-.testimonials{
-  padding:100px 48px;
-  background:var(--paper2);
-  position:relative;z-index:1;
-}
-
-.testi-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:20px;margin-top:60px;
-}
-.testi-card{
-  background:var(--paper);
-  border:1px solid var(--border);
-  padding:32px;
-}
-.testi-q{
-  font-family:'Playfair Display',serif;
-  font-size:18px;font-style:italic;
-  line-height:1.55;margin-bottom:24px;
-}
-.testi-author{
-  display:flex;align-items:center;gap:10px;
-  border-top:1px solid var(--border);padding-top:20px;
-}
-.testi-av{
-  width:36px;height:36px;
-  background:var(--ink);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Playfair Display',serif;
-  font-size:14px;font-weight:700;color:var(--paper);
-}
-.testi-name{font-size:12px;font-weight:700;letter-spacing:.04em}
-.testi-role{font-size:11px;color:var(--muted)}
-
-/* ── CTA ── */
-.cta{
-  padding:140px 48px;
-  background:var(--ink);color:var(--paper);
-  text-align:center;position:relative;z-index:1;
-}
-.cta::before{
-  content:'';
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(247,246,242,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(247,246,242,.04) 1px,transparent 1px);
-  background-size:60px 60px;
-  pointer-events:none;
-}
-.cta h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(48px,7vw,88px);
-  font-weight:900;letter-spacing:-.02em;
-  line-height:1;margin-bottom:20px;position:relative;
-}
-.cta p{
-  font-size:12px;color:rgba(247,246,242,.45);
-  letter-spacing:.06em;margin-bottom:44px;position:relative;
-}
-.cta-actions{display:flex;gap:12px;justify-content:center;position:relative}
-.btn-paper{
-  background:var(--paper);color:var(--ink);
-  font-family:'Space Mono',monospace;
-  font-size:11px;letter-spacing:.12em;
-  padding:14px 36px;border:none;cursor:pointer;
-  text-decoration:none;display:inline-block;
-  transition:background .2s;
-}
-.btn-paper:hover{background:#e8e5de}
-
-/* ── FOOTER ── */
-footer{
-  padding:60px 48px 40px;
-  border-top:1px solid var(--border);
-  background:var(--paper);
-  position:relative;z-index:1;
-}
-.footer-inner{
-  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
-  gap:60px;margin-bottom:48px;
-}
-.footer-logo{
-  font-family:'Playfair Display',serif;
-  font-size:22px;font-weight:900;color:var(--ink);margin-bottom:10px;
-}
-.footer-logo span{color:var(--red)}
-.footer-desc{font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:.02em}
-.fc-title{
-  font-size:10px;font-weight:700;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--ink);margin-bottom:14px;
-}
-.fc a{display:block;font-size:11px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
-.fc a:hover{color:var(--ink)}
-.footer-bottom{
-  display:flex;justify-content:space-between;
-  padding-top:32px;border-top:1px solid var(--border);
-  font-size:11px;color:var(--muted);letter-spacing:.04em;
-}
-
-/* ── REVEAL ── */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
-.reveal.visible{opacity:1;transform:none}
-
-@media(max-width:900px){
-  .hero,.features-header,.research-grid,.footer-inner{grid-template-columns:1fr}
-  .features-grid,.testi-grid{grid-template-columns:1fr}
-  .hero-left{border-right:none;padding-right:0}
-  nav{padding:0 24px}
-}
-</style>
+    /* Content above z-index */
+    .z-content { position: relative; z-index: 10; }
+  </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">EDITORIAL<span>.AI</span></a>
-  <div class="nav-links">
-    <a href="#features">PLATFORM</a>
-    <a href="#research">RESEARCH</a>
-    <a href="#testimonials">USERS</a>
-    <a href="#pricing">PRICING</a>
-  </div>
-  <div class="nav-right">
-    <a href="#" class="btn-border">Log in</a>
-    <a href="#" class="btn-ink">Request access →</a>
-  </div>
-</nav>
+  <!-- Background Grid -->
+  <div class="bg-grid"></div>
+  <div class="bg-guides"></div>
+  <div class="bg-guides-mid"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-tag">AI Research Intelligence Platform</div>
-    <h1 class="hero-title reveal">
-      Where<br><em>knowledge</em><br>meets<br>intelligence.
-    </h1>
-    <p class="hero-subtitle reveal">
-      EDITORIAL.AI is the research platform for the intellectually rigorous. Synthesize vast domains, surface non-obvious connections, and produce insights at institutional grade.
-    </p>
-    <div class="hero-actions reveal">
-      <a href="#" class="btn-ink" style="padding:12px 28px;font-size:12px">Request early access →</a>
-      <a href="#research" class="btn-border" style="padding:12px 20px;font-size:12px">See it work</a>
+  <!-- Navigation -->
+  <nav id="main-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-bars">
+        <span></span>
+        <span></span>
+      </div>
+      <span class="nav-logo-text">EDITORIAL.AI</span>
     </div>
-    <div class="hero-stats reveal">
-      <div class="hero-stat">
-        <div class="stat-num">140M+</div>
-        <div class="stat-label">Papers indexed</div>
-      </div>
-      <div class="hero-stat">
-        <div class="stat-num" style="padding-left:16px">98.4%</div>
-        <div class="stat-label" style="padding-left:16px">Accuracy rate</div>
-      </div>
-      <div class="hero-stat">
-        <div class="stat-num" style="padding-left:16px">4.2s</div>
-        <div class="stat-label" style="padding-left:16px">Avg. synthesis</div>
-      </div>
-    </div>
-  </div>
-  <div class="hero-right reveal">
-    <div class="scan-container">
-      <div class="scan-line"></div>
-      <div class="document-preview">
-        <div class="doc-header">
-          <div class="doc-title">Research Synthesis · Draft</div>
-          <div class="doc-status">AI Processing</div>
-        </div>
-        <div class="doc-line"></div>
-        <div class="doc-line medium"></div>
-        <div class="doc-line short"></div>
-        <div class="doc-line"></div>
-        <div class="doc-line medium"></div>
-        <div class="doc-tags">
-          <div class="doc-tag">Quantum Computing</div>
-          <div class="doc-tag">2024</div>
-          <div class="doc-tag">MIT</div>
-        </div>
-        <div class="doc-line short"></div>
-        <div class="doc-line"></div>
-        <div class="doc-line medium"></div>
-        <div class="doc-ai-note">
-          // AI insight: Cross-referencing with 847 related papers. High confidence correlation detected with Stanford 2023 findings on decoherence thresholds. Recommend expanding methodology review.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    <ul class="nav-links">
+      <li><a href="#">Platform</a></li>
+      <li><a href="#">Research</a></li>
+      <li><a href="#">Enterprise</a></li>
+      <li><a href="#">Pricing</a></li>
+    </ul>
+    <a href="#access" class="nav-cta">Request Access</a>
+  </nav>
 
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="features-header">
-    <h2 class="reveal">Intelligence at<br><em style="font-style:italic;color:rgba(247,246,242,.5)">research</em> scale.</h2>
-    <p class="reveal">Built on the same infrastructure trusted by leading academic institutions and tier-1 research labs worldwide.</p>
-  </div>
-  <div class="features-grid">
-    <div class="f-card reveal">
-      <div class="f-num">// 01</div>
-      <div class="f-title">Deep Literature Synthesis</div>
-      <div class="f-desc">Indexes 140M+ papers, preprints, and reports. Synthesizes in seconds what would take a team of researchers weeks. Citation-accurate, domain-calibrated.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-num">// 02</div>
-      <div class="f-title">Non-Obvious Connections</div>
-      <div class="f-desc">The most valuable insights exist at the intersection of disciplines. EDITORIAL.AI surfaces cross-domain patterns invisible to siloed domain experts.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-num">// 03</div>
-      <div class="f-title">Institutional-Grade Output</div>
-      <div class="f-desc">Produces peer-review-quality synthesis documents with structured citations, methodology notes, and confidence scores for every claim.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-num">// 04</div>
-      <div class="f-title">Real-time Monitoring</div>
-      <div class="f-desc">Set research watches on any topic. EDITORIAL.AI surfaces new developments and alerts you when significant work challenges or extends your understanding.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-num">// 05</div>
-      <div class="f-title">Collaborative Workspaces</div>
-      <div class="f-desc">Research teams work together on shared knowledge maps. Version-controlled, with attribution tracking and peer review workflows built in.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-num">// 06</div>
-      <div class="f-title">Private & Secure</div>
-      <div class="f-desc">Your research stays yours. Air-gapped deployment options for classified research environments. Zero retention, full encryption, SOC2 certified.</div>
-    </div>
-  </div>
-</section>
+  <!-- Hero -->
+  <section class="z-content" style="padding: 180px 48px 80px; border-bottom: 1px solid var(--line);">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <!-- Badge -->
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 48px;">
+        <div class="pulse-dot"></div>
+        <span style="font-family: 'Space Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: var(--ghost);">Research Intelligence — Now in Public Beta</span>
+      </div>
 
-<!-- RESEARCH FEED -->
-<section class="research" id="research">
-  <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">// Research Feed</div>
-  <h2 class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,52px);font-weight:900;margin-top:12px;margin-bottom:0">What researchers<br>are discovering.</h2>
-  <div class="research-grid">
-    <div class="research-list">
-      <div class="research-item reveal">
-        <div class="ri-num">01</div>
-        <div>
-          <div class="ri-title">Emergent Behaviors in Large Language Models: A Systematic Review</div>
-          <div class="ri-meta">Synthesized from 842 papers · Confidence 94.2% · AI/ML</div>
+      <h1 class="hero-h1" style="margin-bottom: 48px;">
+        AI Research<br/>
+        At <em>Editorial</em><br/>
+        Precision
+      </h1>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end;">
+        <p style="font-size: 17px; line-height: 1.7; color: #555; max-width: 480px;">
+          EDITORIAL.AI transforms academic corpora, patent databases, and market signals into structured intelligence. Built for research teams who refuse to settle for surface-level analysis.
+        </p>
+        <div style="display: flex; gap: 16px; justify-content: flex-end; align-items: center;">
+          <a href="#access" class="btn-primary">
+            Request Access
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </a>
+          <a href="#platform" class="btn-ghost">View Platform</a>
         </div>
       </div>
-      <div class="research-item reveal">
-        <div class="ri-num">02</div>
-        <div>
-          <div class="ri-title">Climate-Financial Risk Integration: Cross-Sector Exposure Analysis</div>
-          <div class="ri-meta">Synthesized from 1,240 papers · Confidence 91.7% · Economics</div>
-        </div>
+
+      <!-- Scan line -->
+      <div class="scan-line-bar" style="margin-top: 64px;"></div>
+      <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+        <span style="font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--ghost);">SYS.STATUS — ONLINE</span>
+        <span style="font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--ghost);">V2.4.1 — BUILD 2024.Q4</span>
       </div>
-      <div class="research-item reveal">
-        <div class="ri-num">03</div>
-        <div>
-          <div class="ri-title">Quantum Error Correction at Scale: Progress and Remaining Barriers</div>
-          <div class="ri-meta">Synthesized from 367 papers · Confidence 96.1% · Physics</div>
+    </div>
+  </section>
+
+  <!-- Tech images strip (low opacity) -->
+  <div class="z-content" style="display: grid; grid-template-columns: repeat(4, 1fr); height: 120px; overflow: hidden; border-bottom: 1px solid var(--line);">
+    <div style="height: 120px; overflow: hidden;"><img src="../../images/tech/tech-1.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%);"></div>
+    <div style="height: 120px; overflow: hidden;"><img src="../../images/tech/tech-2.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%);"></div>
+    <div style="height: 120px; overflow: hidden;"><img src="../../images/tech/tech-3.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%);"></div>
+    <div style="height: 120px; overflow: hidden;"><img src="../../images/tech/tech-4.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%);"></div>
+  </div>
+
+  <!-- Statistics Grid -->
+  <section class="z-content" style="border-bottom: 1px solid var(--line);">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr);">
+        <div class="stat-cell reveal-on-scroll">
+          <div class="stat-icon-box"><i data-lucide="database" style="width: 20px; height: 20px;"></i></div>
+          <div class="stat-number">847M</div>
+          <div class="stat-label">Research Documents Indexed</div>
         </div>
-      </div>
-      <div class="research-item reveal">
-        <div class="ri-num">04</div>
-        <div>
-          <div class="ri-title">Microbiome-Cognitive Function Links: Longitudinal Evidence Review</div>
-          <div class="ri-meta">Synthesized from 2,180 papers · Confidence 88.4% · Neuroscience</div>
+        <div class="stat-cell reveal-on-scroll" style="transition-delay: 0.1s;">
+          <div class="stat-icon-box"><i data-lucide="zap" style="width: 20px; height: 20px;"></i></div>
+          <div class="stat-number">0.4s</div>
+          <div class="stat-label">Median Query Response Time</div>
+        </div>
+        <div class="stat-cell reveal-on-scroll" style="transition-delay: 0.2s;">
+          <div class="stat-icon-box"><i data-lucide="shield-check" style="width: 20px; height: 20px;"></i></div>
+          <div class="stat-number">99.97%</div>
+          <div class="stat-label">Citation Accuracy Rate</div>
         </div>
       </div>
     </div>
-    <div class="research-sidebar reveal">
-      <div class="sidebar-label">// Browse domains</div>
+  </section>
+
+  <!-- Word Reveal Section -->
+  <section class="z-content" id="word-reveal-section" style="padding: 120px 48px; border-bottom: 1px solid var(--line);">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="max-width: 72px; margin-bottom: 40px;">
+        <div class="section-divider"></div>
+        <span style="font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ghost); margin-top: 10px; display: block;">01 — Manifesto</span>
+      </div>
+      <p id="reveal-text" style="font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 52px); font-weight: 400; line-height: 1.3; max-width: 900px;">
+      </p>
+    </div>
+  </section>
+
+  <!-- Interactive Workflow -->
+  <section class="z-content" id="platform" style="padding: 80px 48px; border-bottom: 1px solid var(--line);">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="margin-bottom: 60px;">
+        <span style="font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ghost);">02 — Platform Intelligence</span>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 56px); font-weight: 400; margin-top: 16px; line-height: 1.1;">How the System Works</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px;">
+        <!-- Steps -->
+        <div id="steps-container">
+          <div class="step-item" data-step="0" onclick="activateStep(0)">
+            <div class="step-number">01 — INGESTION</div>
+            <div class="step-title">Corpus Acquisition</div>
+            <div class="step-desc open">Connect your research repositories, patent databases, and internal knowledge stores. EDITORIAL.AI ingests structured and unstructured documents across 140+ file formats.</div>
+          </div>
+          <div class="step-item inactive" data-step="1" onclick="activateStep(1)">
+            <div class="step-number">02 — SYNTHESIS</div>
+            <div class="step-title">Semantic Extraction</div>
+            <div class="step-desc">Multi-model extraction pipelines surface entities, relationships, and emergent themes from millions of documents simultaneously — without hallucination.</div>
+          </div>
+          <div class="step-item inactive" data-step="2" onclick="activateStep(2)">
+            <div class="step-number">03 — OUTPUT</div>
+            <div class="step-title">Structured Intelligence</div>
+            <div class="step-desc">Deliver findings as auditable research briefs, citation-traced summaries, or exportable knowledge graphs — formatted for the way your team actually works.</div>
+          </div>
+        </div>
+
+        <!-- Sticky scan card -->
+        <div>
+          <div class="scan-card">
+            <img src="../../images/tech/tech-2.jpg" alt="Platform preview" id="scan-img" />
+            <div class="scan-card-body">
+              <div class="scan-line-bar" style="margin-bottom: 16px;"></div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="scan-label" style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ghost);">STAGE 01 — CORPUS ACQUISITION</span>
+                <span style="font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent);">ACTIVE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Case Tabs -->
+  <section class="z-content" style="padding: 80px 48px; border-bottom: 1px solid var(--line);">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <span style="font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ghost);">03 — Use Cases</span>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(32px, 3.5vw, 48px); font-weight: 400; margin-top: 16px;">Built for Every Research Context</h2>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 40px; flex-wrap: wrap;">
+        <button class="tab-btn active" onclick="switchTab('pharma')">Pharma R&D</button>
+        <button class="tab-btn" onclick="switchTab('fintech')">Financial Intelligence</button>
+        <button class="tab-btn" onclick="switchTab('law')">Legal Research</button>
+        <button class="tab-btn" onclick="switchTab('policy')">Policy Analysis</button>
+      </div>
+
+      <div id="tab-pharma" class="tab-panel active">
+        <div style="border: 1px solid var(--line); padding: 56px; position: relative; overflow: hidden; min-height: 320px;">
+          <i data-lucide="flask-conical" class="ghost-icon" style="width: 240px; height: 240px;"></i>
+          <div style="position: relative; z-index: 2; max-width: 600px;">
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 16px;">Pharmaceutical Research Intelligence</h3>
+            <p style="font-size: 15px; line-height: 1.7; color: #555; margin-bottom: 32px;">Surface novel compound interactions, track competitor clinical trial pipelines, and synthesize FDA submission precedents — at a scale no research team could achieve manually.</p>
+            <div style="display: grid; grid-template-columns: repeat(3, auto); gap: 24px; border-top: 1px solid var(--line); padding-top: 28px;">
+              <div><div class="stat-label" style="margin-bottom: 4px;">Drug Interactions</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">94M+</div></div>
+              <div><div class="stat-label" style="margin-bottom: 4px;">Clinical Trials</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">480K</div></div>
+              <div><div class="stat-label" style="margin-bottom: 4px;">Patent Citations</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">2.1B</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-fintech" class="tab-panel">
+        <div style="border: 1px solid var(--line); padding: 56px; position: relative; overflow: hidden; min-height: 320px;">
+          <i data-lucide="trending-up" class="ghost-icon" style="width: 240px; height: 240px;"></i>
+          <div style="position: relative; z-index: 2; max-width: 600px;">
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 16px;">Financial Signal Intelligence</h3>
+            <p style="font-size: 15px; line-height: 1.7; color: #555; margin-bottom: 32px;">Aggregate earnings calls, regulatory filings, macro research, and alternative data into a unified intelligence layer. Identify signal before consensus forms.</p>
+            <div style="display: grid; grid-template-columns: repeat(3, auto); gap: 24px; border-top: 1px solid var(--line); padding-top: 28px;">
+              <div><div class="stat-label" style="margin-bottom: 4px;">Filings Indexed</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">18M</div></div>
+              <div><div class="stat-label" style="margin-bottom: 4px;">Data Sources</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">2,400</div></div>
+              <div><div class="stat-label" style="margin-bottom: 4px;">Update Latency</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">&lt;90s</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-law" class="tab-panel">
+        <div style="border: 1px solid var(--line); padding: 56px; position: relative; overflow: hidden; min-height: 320px;">
+          <i data-lucide="scale" class="ghost-icon" style="width: 240px; height: 240px;"></i>
+          <div style="position: relative; z-index: 2; max-width: 600px;">
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 16px;">Legal Research Synthesis</h3>
+            <p style="font-size: 15px; line-height: 1.7; color: #555; margin-bottom: 32px;">Navigate case law across jurisdictions with semantic precedent mapping, statutory cross-referencing, and opinion trend analysis that surfaces relevant decisions no keyword search would find.</p>
+            <div style="display: grid; grid-template-columns: repeat(3, auto); gap: 24px; border-top: 1px solid var(--line); padding-top: 28px;">
+              <div><div class="stat-label" style="margin-bottom: 4px;">Case Opinions</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">62M</div></div>
+              <div><div class="stat-label" style="margin-bottom: 4px;">Jurisdictions</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">180+</div></div>
+              <div><div class="stat-label" style="margin-bottom: 4px;">Avg Time Saved</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">74%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-policy" class="tab-panel">
+        <div style="border: 1px solid var(--line); padding: 56px; position: relative; overflow: hidden; min-height: 320px;">
+          <i data-lucide="landmark" class="ghost-icon" style="width: 240px; height: 240px;"></i>
+          <div style="position: relative; z-index: 2; max-width: 600px;">
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; margin-bottom: 16px;">Policy &amp; Regulatory Analysis</h3>
+            <p style="font-size: 15px; line-height: 1.7; color: #555; margin-bottom: 32px;">Track legislative developments, model regulatory impact scenarios, and synthesize multi-agency guidance into coherent policy intelligence briefs with full source traceability.</p>
+            <div style="display: grid; grid-template-columns: repeat(3, auto); gap: 24px; border-top: 1px solid var(--line); padding-top: 28px;">
+              <div><div class="stat-label" style="margin-bottom: 4px;">Regulations Tracked</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">340K</div></div>
+              <div><div class="stat-label" style="margin-bottom: 4px;">Countries</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">94</div></div>
+              <div><div class="stat-label" style="margin-bottom: 4px;">Update Cycle</div><div style="font-family: 'Playfair Display', serif; font-size: 20px;">24h</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Request Access Form -->
+  <section class="z-content" id="access" style="padding: 80px 48px; border-bottom: 1px solid var(--line);">
+    <div style="max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;">
       <div>
-        <div class="topic-pill">AI / ML</div>
-        <div class="topic-pill">Neuroscience</div>
-        <div class="topic-pill">Climate</div>
-        <div class="topic-pill">Quantum</div>
-        <div class="topic-pill">Genomics</div>
-        <div class="topic-pill">Economics</div>
-        <div class="topic-pill">Materials</div>
-        <div class="topic-pill">Biotech</div>
-        <div class="topic-pill">Physics</div>
-        <div class="topic-pill">Sociology</div>
-        <div class="topic-pill">Robotics</div>
-        <div class="topic-pill">Energy</div>
-      </div>
-      <div style="margin-top:40px;padding:20px;border:1px solid var(--border)">
-        <div class="sidebar-label" style="margin-bottom:12px">// New today</div>
-        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;line-height:1;margin-bottom:4px">18,420</div>
-        <div style="font-size:10px;color:var(--muted);letter-spacing:.1em">new papers indexed</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">// Users</div>
-  <h2 class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(36px,4vw,52px);font-weight:900;margin-top:12px">Trusted by<br><em style="font-style:italic">serious</em> researchers.</h2>
-  <div class="testi-grid">
-    <div class="testi-card reveal">
-      <p class="testi-q">"EDITORIAL.AI reduced our literature review time by 80% without sacrificing the depth that peer-reviewed work demands. It found three key connections we had missed."</p>
-      <div class="testi-author">
-        <div class="testi-av">DK</div>
-        <div>
-          <div class="testi-name">Dr. David Kim</div>
-          <div class="testi-role">Professor, MIT CSAIL</div>
+        <span style="font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ghost); display: block; margin-bottom: 24px;">04 — Access</span>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: clamp(36px, 4vw, 64px); font-weight: 400; line-height: 1.05; margin-bottom: 24px;">Request<br/><em>Access</em></h2>
+        <p style="font-size: 15px; line-height: 1.7; color: #555; max-width: 380px;">EDITORIAL.AI is currently in invite-only beta for enterprise research teams. Apply below and our team will respond within two business days.</p>
+        <div style="margin-top: 40px; padding: 24px; border: 1px solid var(--line); background: rgba(61,112,104,0.04);">
+          <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ghost); margin-bottom: 8px;">Current Access Status</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="pulse-dot"></div>
+            <span style="font-family: 'Playfair Display', serif; font-size: 16px;">Beta — 47 Seats Remaining</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="testi-card reveal">
-      <p class="testi-q">"The confidence scoring is genuinely useful — it tells you not just what the synthesis found, but how certain you should be. That epistemic honesty is rare."</p>
-      <div class="testi-author">
-        <div class="testi-av">AF</div>
-        <div>
-          <div class="testi-name">Dr. Amara Fouad</div>
-          <div class="testi-role">Senior Researcher, DeepMind</div>
+
+      <form onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" placeholder="Your full name" />
         </div>
+        <div class="form-group">
+          <label class="form-label">Institutional Email</label>
+          <input type="email" class="form-input" placeholder="name@institution.edu" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Organization</label>
+          <input type="text" class="form-input" placeholder="Company or institution" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Research Domain</label>
+          <input type="text" class="form-input" placeholder="Pharma / Finance / Legal / Policy / Other" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Intended Use Case</label>
+          <input type="text" class="form-input" placeholder="Brief description of your research needs" />
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 8px;">
+          Submit Application
+          <i data-lucide="send" style="width: 14px; height: 14px;"></i>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="z-content" style="padding: 48px; border-top: 1px solid var(--line);">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+      <div class="nav-logo">
+        <div class="nav-logo-bars"><span></span><span></span></div>
+        <span class="nav-logo-text">EDITORIAL.AI</span>
+      </div>
+      <div class="footer-mono">
+        &copy; 2024 Editorial Intelligence, Inc. — All Rights Reserved
+      </div>
+      <div style="display: flex; gap: 24px;">
+        <a href="#" class="footer-mono" style="text-decoration: none;">Privacy</a>
+        <a href="#" class="footer-mono" style="text-decoration: none;">Terms</a>
+        <a href="#" class="footer-mono" style="text-decoration: none;">Security</a>
       </div>
     </div>
-    <div class="testi-card reveal">
-      <p class="testi-q">"Our investment thesis work used to take six weeks per sector. With EDITORIAL.AI, we're at two weeks with higher-quality sourcing. It's a genuine edge."</p>
-      <div class="testi-author">
-        <div class="testi-av">RC</div>
-        <div>
-          <div class="testi-name">Robert Chen</div>
-          <div class="testi-role">Partner, Sequoia Capital</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  </footer>
 
-<!-- CTA -->
-<section class="cta" id="pricing">
-  <h2 class="reveal">Request<br><em style="font-style:italic">early access.</em></h2>
-  <p class="reveal">// Available to research teams, academic institutions, and enterprise — invitation only during beta.</p>
-  <div class="cta-actions reveal">
-    <a href="#" class="btn-paper" style="font-size:12px">Apply for access →</a>
-    <a href="#" class="btn-border" style="padding:14px 24px;font-size:11px;color:var(--paper);border-color:rgba(247,246,242,.2)">Explore pricing</a>
-  </div>
-</section>
+  <script>
+    lucide.createIcons();
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-logo">EDITORIAL<span>.AI</span></div>
-      <div class="footer-desc">The AI research intelligence platform for the intellectually rigorous. Trusted by leading academic institutions, research labs, and investment firms.</div>
-    </div>
-    <div class="fc">
-      <div class="fc-title">Platform</div>
-      <a href="#">Synthesis</a>
-      <a href="#">Research Feed</a>
-      <a href="#">API</a>
-      <a href="#">Integrations</a>
-    </div>
-    <div class="fc">
-      <div class="fc-title">Company</div>
-      <a href="#">About</a>
-      <a href="#">Research Blog</a>
-      <a href="#">Careers</a>
-      <a href="#">Press</a>
-    </div>
-    <div class="fc">
-      <div class="fc-title">Legal</div>
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Security</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2024 Editorial AI, Inc.</span>
-    <span>// where knowledge meets intelligence</span>
-  </div>
-</footer>
+    // Nav scroll behavior
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
 
-<script>
-const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
-      io.unobserve(e.target);
+    // Word reveal
+    const revealText = document.getElementById('reveal-text');
+    const words = "The research tools that shaped the last century were built for a world where information was scarce. We built EDITORIAL.AI for a world where intelligence is the constraint — not data.".split(' ');
+    revealText.innerHTML = words.map(w => `<span class="reveal-word">${w} </span>`).join('');
+
+    const spans = revealText.querySelectorAll('.reveal-word');
+    const section = document.getElementById('word-reveal-section');
+
+    function updateWordReveal() {
+      const rect = section.getBoundingClientRect();
+      const windowH = window.innerHeight;
+      const progress = Math.max(0, Math.min(1, (windowH - rect.top) / (rect.height + windowH)));
+      const activeCount = Math.floor(progress * spans.length * 1.4);
+      spans.forEach((s, i) => s.classList.toggle('active', i < activeCount));
     }
-  });
-}, { threshold: 0.07 });
-reveals.forEach(el => io.observe(el));
-</script>
+    window.addEventListener('scroll', updateWordReveal);
+    updateWordReveal();
+
+    // Step workflow
+    const stepLabels = [
+      'STAGE 01 — CORPUS ACQUISITION',
+      'STAGE 02 — SEMANTIC EXTRACTION',
+      'STAGE 03 — INTELLIGENCE OUTPUT'
+    ];
+    const stepImages = [
+      '../../images/tech/tech-2.jpg',
+      '../../images/tech/tech-3.jpg',
+      '../../images/tech/tech-4.jpg'
+    ];
+
+    function activateStep(idx) {
+      document.querySelectorAll('.step-item').forEach((el, i) => {
+        el.classList.toggle('inactive', i !== idx);
+        el.querySelector('.step-desc').classList.toggle('open', i === idx);
+      });
+      document.getElementById('scan-label').textContent = stepLabels[idx];
+      document.getElementById('scan-img').src = stepImages[idx];
+    }
+
+    // Tabs
+    function switchTab(id) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('tab-' + id).classList.add('active');
+      lucide.createIcons();
+    }
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal-on-scroll');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => e.target.classList.toggle('visible', e.isIntersecting));
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>

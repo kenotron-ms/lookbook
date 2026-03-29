@@ -1,886 +1,779 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOIR MAISON — Where Darkness Meets Desire</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --black:   #060608;
-      --dark:    #0e0e10;
-      --panel:   #141416;
-      --border:  #222224;
-      --cream:   #e8e0d0;
-      --warm:    #c8a882;
-      --warm-d:  #a8886a;
-      --gray:    #666668;
-      --white:   #f5f2ec;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--black);
-      color: var(--cream);
-      overflow-x: hidden;
-    }
-
-    /* Grain overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.055;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 2.5rem 4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--cream);
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 3rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray);
-      text-decoration: none;
-      transition: color 0.4s;
-    }
-
-    .nav-links a:hover { color: var(--warm); }
-
-    .nav-shop {
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--warm);
-      text-decoration: none;
-      padding-bottom: 1px;
-      border-bottom: 1px solid rgba(200,168,130,0.4);
-      transition: border-color 0.3s;
-    }
-
-    .nav-shop:hover { border-color: var(--warm); }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 4rem 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-radial {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 70% 30%, rgba(200,168,130,0.07) 0%, transparent 60%),
-                  radial-gradient(ellipse at 20% 80%, rgba(200,168,130,0.04) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .hero-line {
-      position: absolute;
-      top: 0; bottom: 0;
-      left: 38%;
-      width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(200,168,130,0.12) 30%, rgba(200,168,130,0.12) 70%, transparent);
-      pointer-events: none;
-    }
-
-    .hero-kicker {
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--warm);
-      margin-bottom: 3rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .hero-kicker::before {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--warm);
-    }
-
-    .hero-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(6rem, 12vw, 16rem);
-      font-weight: 300;
-      line-height: 0.88;
-      letter-spacing: -0.02em;
-      color: var(--cream);
-    }
-
-    .hero-title em {
-      font-style: italic;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(232,224,208,0.3);
-    }
-
-    .hero-footer {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-top: 4rem;
-      padding-top: 2.5rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .hero-desc {
-      font-size: 0.88rem;
-      font-weight: 300;
-      line-height: 1.85;
-      color: var(--gray);
-      max-width: 40ch;
-    }
-
-    .hero-cta {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      color: var(--warm);
-      text-decoration: none;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      transition: gap 0.3s;
-    }
-
-    .hero-cta:hover { gap: 1.2rem; }
-    .hero-cta::after { content: '→'; font-size: 1rem; }
-
-    .hero-season {
-      text-align: right;
-    }
-
-    .season-label {
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-
-    .season-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
-      font-weight: 300;
-      font-style: italic;
-      color: var(--cream);
-      margin-top: 0.25rem;
-    }
-
-    /* COLLECTIONS */
-    .collections-section {
-      padding: 8rem 4rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .collections-inner { max-width: 1400px; margin: 0 auto; }
-
-    .section-kicker {
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--warm);
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .section-kicker::before {
-      content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: var(--warm);
-    }
-
-    .section-heading {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3rem, 7vw, 9rem);
-      font-weight: 300;
-      line-height: 0.9;
-      letter-spacing: -0.01em;
-      color: var(--cream);
-    }
-
-    .section-heading em {
-      font-style: italic;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(232,224,208,0.2);
-    }
-
-    .collections-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 4rem;
-    }
-
-    .collections-sub {
-      font-size: 0.85rem;
-      font-weight: 300;
-      color: var(--gray);
-      line-height: 1.8;
-      max-width: 35ch;
-      text-align: right;
-    }
-
-    .collections-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: 480px 320px;
-      gap: 1rem;
-    }
-
-    .coll-card {
-      position: relative;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      transition: border-color 0.5s;
-    }
-
-    .coll-card:hover { border-color: rgba(200,168,130,0.3); }
-
-    .coll-card-1 { grid-row: 1 / 3; }
-
-    .coll-bg {
-      position: absolute;
-      inset: 0;
-    }
-
-    .bg-1 { background: linear-gradient(135deg, #1a1510 0%, #0d0d0d 100%); }
-    .bg-2 { background: linear-gradient(135deg, #14100e 0%, #0a0a0a 100%); }
-    .bg-3 { background: linear-gradient(135deg, #0e1014 0%, #080810 100%); }
-    .bg-4 { background: linear-gradient(135deg, #14120e 0%, #0c0b08 100%); }
-    .bg-5 { background: linear-gradient(135deg, #100e12 0%, #0a080e 100%); }
-
-    .coll-glow {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 60% 40%, rgba(200,168,130,0.06) 0%, transparent 60%);
-    }
-
-    .coll-num {
-      position: absolute;
-      top: 2rem;
-      left: 2rem;
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      color: var(--gray);
-    }
-
-    .coll-content {
-      position: absolute;
-      bottom: 2rem;
-      left: 2rem;
-      right: 2rem;
-    }
-
-    .coll-season {
-      font-size: 0.58rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--warm);
-      margin-bottom: 0.5rem;
-    }
-
-    .coll-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.8rem;
-      font-weight: 300;
-      line-height: 1;
-      color: var(--cream);
-    }
-
-    .coll-card-1 .coll-name { font-size: 4rem; }
-
-    .coll-desc {
-      font-size: 0.78rem;
-      font-weight: 300;
-      color: var(--gray);
-      line-height: 1.6;
-      margin-top: 0.75rem;
-    }
-
-    /* PHILOSOPHY */
-    .philosophy-section {
-      padding: 8rem 4rem;
-      background: var(--dark);
-      border-top: 1px solid var(--border);
-    }
-
-    .philosophy-inner { max-width: 1400px; margin: 0 auto; }
-
-    .phil-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8rem;
-      align-items: center;
-    }
-
-    .phil-quote {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 4vw, 4.5rem);
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.3;
-      color: var(--cream);
-    }
-
-    .phil-quote cite {
-      display: block;
-      font-family: 'Montserrat', sans-serif;
-      font-style: normal;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--warm);
-      margin-top: 2rem;
-    }
-
-    .phil-pillars {
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
-
-    .pillar {
-      padding-bottom: 2.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .pillar:last-child { border-bottom: none; padding-bottom: 0; }
-
-    .pillar-num {
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      color: var(--warm);
-      margin-bottom: 0.6rem;
-    }
-
-    .pillar-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 500;
-      color: var(--cream);
-      margin-bottom: 0.5rem;
-    }
-
-    .pillar-body {
-      font-size: 0.82rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray);
-    }
-
-    /* TESTIMONIALS */
-    .testimonials-section {
-      padding: 8rem 4rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .testimonials-inner { max-width: 1400px; margin: 0 auto; }
-
-    .testimonials-header { margin-bottom: 5rem; }
-
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-    }
-
-    .t-card {
-      padding: 2.5rem;
-      border: 1px solid var(--border);
-      transition: border-color 0.4s;
-    }
-
-    .t-card:hover { border-color: rgba(200,168,130,0.25); }
-
-    .t-score {
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      color: var(--warm);
-      margin-bottom: 1.5rem;
-    }
-
-    .t-quote {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.75;
-      color: var(--cream);
-      margin-bottom: 2rem;
-    }
-
-    .t-author-name {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--cream);
-    }
-
-    .t-author-title {
-      font-size: 0.68rem;
-      font-weight: 300;
-      color: var(--gray);
-      margin-top: 0.2rem;
-    }
-
-    /* CTA */
-    .cta-section {
-      padding: 10rem 4rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-ambient {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 1000px; height: 600px;
-      background: radial-gradient(ellipse, rgba(200,168,130,0.05) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .cta-inner { position: relative; z-index: 1; }
-
-    .cta-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(5rem, 12vw, 16rem);
-      font-weight: 300;
-      line-height: 0.88;
-      color: var(--cream);
-      margin-bottom: 2rem;
-    }
-
-    .cta-title em {
-      font-style: italic;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(232,224,208,0.2);
-    }
-
-    .cta-sub {
-      font-size: 0.85rem;
-      font-weight: 300;
-      color: var(--gray);
-      max-width: 45ch;
-      margin: 0 auto 3.5rem;
-      line-height: 1.85;
-    }
-
-    .btn-warm {
-      display: inline-block;
-      background: var(--warm);
-      color: var(--black);
-      padding: 1.1rem 3.5rem;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .btn-warm:hover { background: var(--warm-d); transform: translateY(-2px); }
-
-    /* FOOTER */
-    footer {
-      background: var(--dark);
-      padding: 5rem 4rem 3rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-inner { max-width: 1400px; margin: 0 auto; }
-
-    .footer-logo-area {
-      text-align: center;
-      padding-bottom: 4rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 4rem;
-    }
-
-    .footer-maison-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 4rem;
-      font-weight: 300;
-      letter-spacing: 0.3em;
-      color: var(--cream);
-      text-transform: uppercase;
-    }
-
-    .footer-maison-sub {
-      font-size: 0.6rem;
-      font-weight: 500;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--gray);
-      margin-top: 0.5rem;
-    }
-
-    .footer-cols {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-col h4 {
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--warm);
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-    .footer-col a { font-size: 0.82rem; font-weight: 300; color: var(--gray); text-decoration: none; transition: color 0.3s; }
-    .footer-col a:hover { color: var(--cream); }
-
-    .footer-base {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-copy { font-size: 0.7rem; font-weight: 300; color: var(--gray); letter-spacing: 0.05em; }
-
-    .footer-social { display: flex; gap: 2rem; }
-    .footer-social a { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); text-decoration: none; transition: color 0.3s; }
-    .footer-social a:hover { color: var(--warm); }
-
-    /* REVEAL */
-    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s ease, transform 0.9s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 900px) {
-      nav { padding: 1.5rem; }
-      .nav-links { display: none; }
-      .hero { padding: 0 1.5rem 4rem; }
-      .collections-section, .philosophy-section, .testimonials-section, .cta-section { padding: 5rem 1.5rem; }
-      .collections-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
-      .coll-card-1 { min-height: 400px; }
-      .phil-layout { grid-template-columns: 1fr; gap: 4rem; }
-      .testimonials-grid { grid-template-columns: 1fr; }
-      .footer-cols { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
-
-<!-- inject-local -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOIR MAISON — Luxury Dark Fashion</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
-  .hero-radial {
-    background-image: url('../../images/noir/noir-1.jpg') !important;
-    background-size: cover; background-position: center; filter: brightness(0.5);
+  :root {
+    --bg: #000000;
+    --bg2: #09090b;
+    --surface: #18181b;
+    --fg: #ffffff;
+    --off-white: #e5e5e5;
+    --muted: #888888;
+    --red: #ef4444;
+    --glass-border: rgba(255,255,255,0.06);
   }
-  .bg-1 {
-    background-image: url('../../images/noir/noir-2.jpg') !important;
-    background-size: cover; background-position: center; filter: brightness(0.5);
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--off-white);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
   }
-  .bg-2 {
-    background-image: url('../../images/noir/noir-3.jpg') !important;
-    background-size: cover; background-position: center; filter: brightness(0.5);
+  /* Grain overlay — mix-blend-overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.15;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
   }
-  .bg-3 {
-    background-image: url('../../images/noir/noir-4.jpg') !important;
-    background-size: cover; background-position: center; filter: brightness(0.5);
+  /* Selection */
+  ::selection { background: var(--red); color: #fff; }
+  /* Cormorant */
+  .corm {
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
   }
-  .bg-4 {
-    background-image: url('../../images/noir/noir-5.jpg') !important;
-    background-size: cover; background-position: center; filter: brightness(0.5);
+  .corm-italic {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
   }
-  .bg-5 {
-    background-image: url('../../images/noir/noir-1.jpg') !important;
-    background-size: cover; background-position: center; filter: brightness(0.5);
+  /* Nav — mix-blend-mode:difference */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+    height: 72px;
+    mix-blend-mode: difference;
   }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .nav-links { display: flex; gap: 40px; }
+  .nav-links a {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; }
+  .nav-action {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 9px 18px;
+    cursor: pointer;
+  }
+  /* Hero — full bleed cinematic */
+  .hero {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+  /* Warm radial background tint */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(139,69,69,0.35) 0%, rgba(20,20,20,0.75) 55%, rgba(0,0,0,0.95) 100%);
+    z-index: 1;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-bg img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    filter: brightness(0.55) contrast(1.15);
+    transform: scale(1.05);
+    animation: slow-zoom 20s ease-out forwards;
+  }
+  @keyframes slow-zoom {
+    from { transform: scale(1.12); }
+    to { transform: scale(1.0); }
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 60px 80px;
+    width: 100%;
+  }
+  .hero-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 24px;
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11vw;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+    color: var(--fg);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+  .hero-h1 em { font-style: italic; font-weight: 300; color: rgba(255,255,255,0.75); }
+  .hero-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 28px;
+    border-top: 1px solid var(--glass-border);
+  }
+  .hero-strip-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.55);
+    max-width: 400px;
+  }
+  .hero-btns { display: flex; gap: 12px; }
+  .btn-white-outline {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 13px 24px;
+    cursor: pointer;
+    transition: border-color 0.3s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-white-outline:hover { border-color: rgba(255,255,255,0.7); }
+  .btn-white-fill {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--fg);
+    border: 1px solid var(--fg);
+    padding: 13px 24px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-white-fill:hover { opacity: 0.88; }
+  /* Scroll cue */
+  .scroll-cue {
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4));
+    animation: sc 2s ease-in-out infinite;
+  }
+  @keyframes sc { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+  /* Collections */
+  .collections { padding: 100px 60px; border-bottom: 1px solid var(--glass-border); }
+  .collections-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+  }
+  .collections-h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(56px, 8vw, 110px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: var(--fg);
+  }
+  /* Collection grid — asymmetric */
+  .coll-grid {
+    display: grid;
+    grid-template-columns: 0.7fr 1fr 0.9fr;
+    gap: 2px;
+    height: 680px;
+  }
+  .coll-item {
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+  .coll-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.75) contrast(1.1);
+    transition: filter 0.7s, transform 0.7s;
+  }
+  .coll-item:hover img { filter: brightness(0.9) contrast(1.05); transform: scale(1.04); }
+  .coll-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .coll-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 28px;
+  }
+  .coll-season {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .coll-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--fg);
+    line-height: 1.1;
+  }
+  /* Editorial section */
+  .editorial {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .ed-image {
+    height: 700px;
+    overflow: hidden;
+    position: relative;
+  }
+  .ed-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.6) contrast(1.2);
+    display: block;
+    transition: transform 0.8s;
+  }
+  .ed-image:hover img { transform: scale(1.04); }
+  .ed-text {
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid var(--glass-border);
+  }
+  .ed-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .ed-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 0.95;
+    color: var(--fg);
+    margin-bottom: 32px;
+  }
+  .ed-title em { font-style: italic; font-weight: 300; }
+  .ed-body {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 40px;
+  }
+  /* Manifesto section */
+  .manifesto {
+    padding: 140px 60px;
+    text-align: center;
+    border-bottom: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+  }
+  .manifesto::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(139,69,69,0.2) 0%, transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .manifesto-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(60px, 9vw, 120px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: var(--fg);
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+  .manifesto-title em { font-style: italic; font-weight: 300; }
+  .manifesto-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.55);
+    max-width: 700px;
+    margin: 0 auto 48px;
+    position: relative;
+    z-index: 1;
+  }
+  /* Lookbook strip */
+  .lookbook {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .lbook-item {
+    position: relative;
+    overflow: hidden;
+    height: 480px;
+    cursor: default;
+  }
+  .lbook-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) contrast(1.1) grayscale(20%);
+    display: block;
+    transition: filter 0.6s, transform 0.6s;
+  }
+  .lbook-item:hover img { filter: brightness(0.9) grayscale(0%); transform: scale(1.04); }
+  /* Atelier info */
+  .atelier {
+    padding: 100px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .at-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: var(--fg);
+    margin-bottom: 32px;
+  }
+  .at-title em { font-style: italic; font-weight: 300; }
+  .at-body { font-size: 15px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.5); margin-bottom: 40px; }
+  .at-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 32px 0;
+    border-top: 1px solid var(--glass-border);
+  }
+  .at-fact-n {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--fg);
+  }
+  .at-fact-l {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .at-img {
+    height: 640px;
+    overflow: hidden;
+  }
+  .at-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.65) contrast(1.15);
+    display: block;
+    transition: transform 0.7s;
+  }
+  .at-img:hover img { transform: scale(1.03); }
+  /* CTA */
+  .cta {
+    padding: 140px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse, rgba(139,69,69,0.15) 0%, transparent 70%);
+    filter: blur(80px);
+  }
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(72px, 11vw, 140px);
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    color: var(--fg);
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-sub {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.45);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    position: relative;
+    z-index: 1;
+  }
+  /* Footer */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--glass-border);
+    padding: 80px 60px 48px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 60px;
+    position: relative;
+    z-index: 2;
+  }
+  footer .f-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-bottom: 16px;
+  }
+  footer .f-desc { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+  footer h6 {
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  footer ul a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: color 0.3s;
+    letter-spacing: 0.03em;
+  }
+  footer ul a:hover { color: var(--fg); }
+  .footer-bottom {
+    background: var(--bg2);
+    border-top: 1px solid var(--glass-border);
+    padding: 24px 60px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+  }
+  .footer-bottom p { font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 0.15em; text-transform: uppercase; }
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  /* Parallax hero scale */
+  .hero-bg-inner { will-change: transform; }
 </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">NOIR MAISON</a>
-    <ul class="nav-links">
-      <li><a href="#collections">Collections</a></li>
-      <li><a href="#about">Maison</a></li>
-      <li><a href="#stockists">Stockists</a></li>
-    </ul>
-    <a href="#cta" class="nav-shop">Shop Now</a>
-  </nav>
+<!-- Nav — mix-blend-mode:difference -->
+<nav>
+  <div class="nav-logo">Noir Maison</div>
+  <div class="nav-links">
+    <a href="#collections">Collections</a>
+    <a href="#editorial">Editorial</a>
+    <a href="#atelier">Atelier</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="nav-action">Explore SS 2025</button>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-radial"></div>
-    <div class="hero-line"></div>
-    <div class="hero-kicker">Haute Couture · Paris · SS 2025</div>
-    <h1 class="hero-title">
-      WHERE<br>
-      <em>DARKNESS</em><br>
-      MEETS<br>
-      <em>DESIRE</em>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="../../images/noir/noir-1.jpg" alt="Noir Maison campaign" class="hero-bg-inner">
+  </div>
+  <div class="scroll-cue">
+    <div style="font-size:8px;font-weight:600;letter-spacing:0.35em;text-transform:uppercase;color:rgba(255,255,255,0.3);writing-mode:vertical-lr;">Descend</div>
+    <div class="scroll-line"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Noir Maison / Paris — Since 2009</div>
+    <h1 class="hero-h1">
+      Dressed<br>
+      in <em>absolute</em><br>
+      dark.
     </h1>
-    <div class="hero-footer">
-      <p class="hero-desc">Noir Maison is a luxury fashion house built on the conviction that true elegance lives in shadow and restraint — where desire is expressed through absence, not excess.</p>
-      <a href="#collections" class="hero-cta">Explore Collection</a>
-      <div class="hero-season">
-        <div class="season-label">Current Season</div>
-        <div class="season-name">Ombre Profond</div>
+    <div class="hero-strip">
+      <p class="hero-strip-desc">Luxury fashion built on restraint. No seasonal overproduction. Four collections per year. Each piece designed to outlast the decade it was made in.</p>
+      <div class="hero-btns">
+        <button class="btn-white-outline">View lookbook</button>
+        <button class="btn-white-fill">Shop SS 2025 <i data-lucide="arrow-right" style="width:13px;height:13px;"></i></button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- COLLECTIONS -->
-  <section class="collections-section" id="collections">
-    <div class="collections-inner">
-      <div class="collections-header reveal">
-        <div>
-          <div class="section-kicker">SS 2025 Collections</div>
-          <h2 class="section-heading">The<br><em>Darkness</em><br>Line</h2>
-        </div>
-        <p class="collections-sub">Five collections. One vision. The continuum of dark as creative language — from deepest night to the luminance of first shadow.</p>
-      </div>
-      <div class="collections-grid">
-        <div class="coll-card coll-card-1">
-          <div class="coll-bg bg-1"></div>
-          <div class="coll-glow"></div>
-          <div class="coll-num">01</div>
-          <div class="coll-content">
-            <div class="coll-season">Signature · 2025</div>
-            <div class="coll-name">Ombre<br>Profond</div>
-            <div class="coll-desc">The centrepiece collection — 24 pieces exploring the gradient of obsidian to indigo, rendered in hand-dyed silk organza and brushed wool.</div>
-          </div>
-        </div>
-        <div class="coll-card">
-          <div class="coll-bg bg-2"></div>
-          <div class="coll-num">02</div>
-          <div class="coll-content">
-            <div class="coll-season">Evening</div>
-            <div class="coll-name">Nuit<br>Éternelle</div>
-          </div>
-        </div>
-        <div class="coll-card">
-          <div class="coll-bg bg-3"></div>
-          <div class="coll-num">03</div>
-          <div class="coll-content">
-            <div class="coll-season">Accessories</div>
-            <div class="coll-name">Soie<br>Noire</div>
-          </div>
-        </div>
-        <div class="coll-card">
-          <div class="coll-bg bg-4"></div>
-          <div class="coll-num">04</div>
-          <div class="coll-content">
-            <div class="coll-season">Couture</div>
-            <div class="coll-name">Cendres</div>
-          </div>
-        </div>
-        <div class="coll-card">
-          <div class="coll-bg bg-5"></div>
-          <div class="coll-num">05</div>
-          <div class="coll-content">
-            <div class="coll-season">Archive</div>
-            <div class="coll-name">Minuit</div>
-          </div>
-        </div>
+<!-- Collections -->
+<section class="collections" id="collections">
+  <div class="collections-header">
+    <div>
+      <div style="font-size:9px;font-weight:600;letter-spacing:0.4em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;" class="reveal">Current Seasons</div>
+      <h2 class="collections-h2 reveal" style="transition-delay:0.05s;">The<br>Archive</h2>
+    </div>
+    <button class="btn-white-outline reveal" style="transition-delay:0.1s;">View all collections <i data-lucide="arrow-right" style="width:13px;height:13px;"></i></button>
+  </div>
+  <div class="coll-grid reveal" style="transition-delay:0.15s;">
+    <div class="coll-item">
+      <img src="../../images/noir/noir-2.jpg" alt="Void — SS 2025">
+      <div class="coll-overlay"></div>
+      <div class="coll-info">
+        <div class="coll-season">SS 2025</div>
+        <div class="coll-name">Void</div>
       </div>
     </div>
-  </section>
-
-  <!-- PHILOSOPHY -->
-  <section class="philosophy-section" id="about">
-    <div class="philosophy-inner">
-      <div class="phil-layout">
-        <div class="reveal">
-          <div class="section-kicker" style="margin-bottom:3rem">Maison Philosophy</div>
-          <blockquote class="phil-quote">
-            "Darkness is not the absence of light. It is its own sovereign presence — the canvas on which all desire is painted."
-            <cite>— Isabeau Leclair, Creative Director</cite>
-          </blockquote>
-        </div>
-        <div class="phil-pillars reveal" style="transition-delay:0.15s">
-          <div class="pillar">
-            <div class="pillar-num">I</div>
-            <div class="pillar-title">Restraint as Luxury</div>
-            <div class="pillar-body">True luxury is the confidence to leave space. Every seam, every cut, every absence of ornament is a deliberate statement of authority.</div>
-          </div>
-          <div class="pillar">
-            <div class="pillar-num">II</div>
-            <div class="pillar-title">Obsidian Craftsmanship</div>
-            <div class="pillar-body">Each piece is produced in our Paris atelier by artisans trained in traditional haute couture construction — a process that can take over 200 hours per garment.</div>
-          </div>
-          <div class="pillar">
-            <div class="pillar-num">III</div>
-            <div class="pillar-title">Singular Materials</div>
-            <div class="pillar-body">We source only materials with provenance: Japanese shadow-dyed silks, Scottish midnight wool, and Italian matte-finish leathers that develop character over decades of wear.</div>
-          </div>
-        </div>
+    <div class="coll-item">
+      <img src="../../images/noir/noir-3.jpg" alt="Penumbra — AW 2024">
+      <div class="coll-overlay"></div>
+      <div class="coll-info">
+        <div class="coll-season">AW 2024</div>
+        <div class="coll-name">Penumbra</div>
       </div>
     </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials-section">
-    <div class="testimonials-inner">
-      <div class="testimonials-header reveal">
-        <div class="section-kicker">Press & Patrons</div>
-        <h2 class="section-heading">In Their<br><em>Words</em></h2>
-      </div>
-      <div class="testimonials-grid">
-        <div class="t-card reveal">
-          <div class="t-score">★★★★★</div>
-          <p class="t-quote">"Noir Maison has achieved something rare in contemporary fashion: a completely coherent aesthetic universe. To wear it is to inhabit a particular quality of darkness — refined, desirable, irreducibly chic."</p>
-          <div class="t-author-name">Vogue Paris</div>
-          <div class="t-author-title">SS 2025 Review</div>
-        </div>
-        <div class="t-card reveal" style="transition-delay:0.1s">
-          <div class="t-score">★★★★★</div>
-          <p class="t-quote">"I own three pieces from Ombre Profond. They are the most worn clothes in my wardrobe. The construction is extraordinary — I have never felt so beautifully invisible and so completely seen at the same time."</p>
-          <div class="t-author-name">Margot Delacroix</div>
-          <div class="t-author-title">Collector, Geneva</div>
-        </div>
-        <div class="t-card reveal" style="transition-delay:0.2s">
-          <div class="t-score">★★★★★</div>
-          <p class="t-quote">"What Leclair understands, that most contemporary designers have forgotten, is that the body does not need adornment — it needs architecture. Noir Maison builds cathedrals for the human form."</p>
-          <div class="t-author-name">The Financial Times</div>
-          <div class="t-author-title">How To Spend It</div>
-        </div>
+    <div class="coll-item">
+      <img src="../../images/noir/noir-4.jpg" alt="Vigil — SS 2024">
+      <div class="coll-overlay"></div>
+      <div class="coll-info">
+        <div class="coll-season">SS 2024</div>
+        <div class="coll-name">Vigil</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CTA -->
-  <section class="cta-section" id="cta">
-    <div class="cta-ambient"></div>
-    <div class="cta-inner reveal">
-      <div class="section-kicker" style="justify-content:center;margin-bottom:2rem">Private Access</div>
-      <h2 class="cta-title">
-        Enter the<br><em>Darkness</em>
-      </h2>
-      <p class="cta-sub">Noir Maison is available by appointment in Paris, Tokyo, and New York — and through our private e-maison for existing clients.</p>
-      <a href="#" class="btn-warm">Request an Appointment</a>
+<!-- Editorial split -->
+<section class="editorial" id="editorial">
+  <div class="ed-image">
+    <img src="../../images/noir/noir-5.jpg" alt="Noir Maison editorial">
+  </div>
+  <div class="ed-text">
+    <div>
+      <div class="ed-label reveal">Editorial — Spring 2025</div>
+      <h2 class="ed-title reveal" style="transition-delay:0.05s;">Restraint<br>as <em>luxury</em></h2>
+      <p class="ed-body reveal" style="transition-delay:0.1s;">The Void collection begins with absence. We removed every element that wasn't structurally necessary — every button that could be hidden, every seam that could be internal, every surface pattern that served aesthetics but not construction. What remained was the collection.</p>
+      <p class="ed-body reveal" style="transition-delay:0.15s;">Each piece is produced in a run of forty. No exceptions. When a run sells, the piece is retired to the archive. This isn't a scarcity tactic — it is a discipline against overproduction.</p>
     </div>
-  </section>
+    <div style="display:flex;gap:12px;" class="reveal" style="transition-delay:0.2s;">
+      <button class="btn-white-fill">Explore Void SS 2025</button>
+      <button class="btn-white-outline">Read the design notes</button>
+    </div>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-area">
-        <div class="footer-maison-logo">NOIR MAISON</div>
-        <div class="footer-maison-sub">Paris · Tokyo · New York · Est. 2018</div>
+<!-- Lookbook strip -->
+<div class="lookbook">
+  <div class="lbook-item">
+    <img src="../../images/noir/noir-1.jpg" alt="Lookbook 01">
+  </div>
+  <div class="lbook-item">
+    <img src="../../images/noir/noir-2.jpg" alt="Lookbook 02">
+  </div>
+  <div class="lbook-item">
+    <img src="../../images/noir/noir-3.jpg" alt="Lookbook 03">
+  </div>
+  <div class="lbook-item">
+    <img src="../../images/noir/noir-4.jpg" alt="Lookbook 04">
+  </div>
+  <div class="lbook-item">
+    <img src="../../images/noir/noir-5.jpg" alt="Lookbook 05">
+  </div>
+</div>
+
+<!-- Manifesto -->
+<div class="manifesto">
+  <h2 class="manifesto-title reveal">
+    Dark<br>is not<br><em>absence.</em>
+  </h2>
+  <p class="manifesto-body reveal" style="transition-delay:0.1s;">"Darkness is the ground against which all significance appears. We build in dark so that what we leave visible is already edited — already chosen, already earned."</p>
+  <button class="btn-white-outline reveal" style="transition-delay:0.2s;">Read the Noir Maison manifesto</button>
+</div>
+
+<!-- Atelier -->
+<section class="atelier" id="atelier">
+  <div class="reveal">
+    <div style="font-size:9px;font-weight:600;letter-spacing:0.4em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;">The Atelier</div>
+    <h2 class="at-title">Built in <em>Paris.</em><br>Finished<br>by hand.</h2>
+    <p class="at-body">Noir Maison operates a single atelier in the 11th arrondissement. Forty-three artisans. Every garment made and finished on premises — no subcontracting, no offshore production, no exceptions.</p>
+    <p class="at-body">We produce forty pieces per style per season. This is not marketing — it is the number the atelier can produce at the standard we set in 2009.</p>
+    <div class="at-facts">
+      <div>
+        <div class="at-fact-n">43</div>
+        <div class="at-fact-l">Artisans, Paris atelier</div>
       </div>
-      <div class="footer-cols">
-        <div class="footer-col">
-          <h4>Collections</h4>
-          <ul>
-            <li><a href="#">Ombre Profond</a></li>
-            <li><a href="#">Nuit Éternelle</a></li>
-            <li><a href="#">Soie Noire</a></li>
-            <li><a href="#">Archive</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Maison</h4>
-          <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Atelier</a></li>
-            <li><a href="#">Creative Director</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Services</h4>
-          <ul>
-            <li><a href="#">Bespoke</a></li>
-            <li><a href="#">Alterations</a></li>
-            <li><a href="#">Private Sales</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Contact</h4>
-          <ul>
-            <li><a href="#">Paris Atelier</a></li>
-            <li><a href="#">Press Enquiries</a></li>
-            <li><a href="#">Wholesale</a></li>
-          </ul>
-        </div>
+      <div>
+        <div class="at-fact-n">40</div>
+        <div class="at-fact-l">Pieces per style per season</div>
       </div>
-      <div class="footer-base">
-        <p class="footer-copy">© 2025 Noir Maison S.A.S. All rights reserved. Paris, France.</p>
-        <div class="footer-social">
-          <a href="#">Instagram</a>
-          <a href="#">Pinterest</a>
-          <a href="#">WeChat</a>
-        </div>
+      <div>
+        <div class="at-fact-n">16yr</div>
+        <div class="at-fact-l">Single atelier, unchanged</div>
+      </div>
+      <div>
+        <div class="at-fact-n">4</div>
+        <div class="at-fact-l">Collections per year, no more</div>
       </div>
     </div>
-  </footer>
+    <button class="btn-white-outline" style="margin-top:16px;">Visit the atelier</button>
+  </div>
+  <div class="at-img reveal" style="transition-delay:0.15s;">
+    <img src="../../images/noir/noir-5.jpg" alt="Noir Maison Paris atelier">
+  </div>
+</section>
 
-  <script>
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08 });
-    reveals.forEach(el => obs.observe(el));
+<!-- CTA -->
+<section class="cta" id="contact">
+  <h2 class="cta-title reveal">
+    Enter the<br>dark.
+  </h2>
+  <p class="cta-sub reveal" style="transition-delay:0.1s;">SS 2025 Void collection. Forty pieces per style. Once they're gone, the run closes permanently.</p>
+  <div style="display:flex;gap:16px;justify-content:center;position:relative;z-index:1;" class="reveal" style="transition-delay:0.2s;">
+    <button class="btn-white-fill" style="font-size:11px;padding:15px 36px;">Shop Void SS 2025 <i data-lucide="arrow-right" style="width:13px;height:13px;"></i></button>
+    <button class="btn-white-outline" style="font-size:11px;padding:15px 36px;">Join the private list</button>
+  </div>
+</section>
 
-    // Parallax hero
-    window.addEventListener('scroll', () => {
-      const line = document.querySelector('.hero-line');
-      if (line) line.style.transform = `scaleY(${1 + window.scrollY * 0.0003})`;
-    });
-  </script>
+<!-- Footer -->
+<footer>
+  <div>
+    <div class="f-logo">Noir Maison</div>
+    <div class="f-desc">Luxury dark fashion. Paris atelier. Four collections per year. Forty pieces each. Since 2009.</div>
+  </div>
+  <div>
+    <h6>Collections</h6>
+    <ul>
+      <li><a href="#">Void — SS 2025</a></li>
+      <li><a href="#">Penumbra — AW 2024</a></li>
+      <li><a href="#">Vigil — SS 2024</a></li>
+      <li><a href="#">Archive</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>Maison</h6>
+    <ul>
+      <li><a href="#">Atelier</a></li>
+      <li><a href="#">Manifesto</a></li>
+      <li><a href="#">Press</a></li>
+      <li><a href="#">Stockists</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>Private</h6>
+    <ul>
+      <li><a href="#">Private client services</a></li>
+      <li><a href="#">Atelier appointment</a></li>
+      <li><a href="#">maison@noirmaison.fr</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>Noir Maison &copy; 2025 — Paris, France</p>
+  <p>Handcrafted. Limited. Permanent archive.</p>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  // Scroll parallax on hero bg
+  const heroBg = document.querySelector('.hero-bg-inner');
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (heroBg && scrollY < window.innerHeight) {
+      heroBg.style.transform = `scale(1.0) translateY(${scrollY * 0.25}px)`;
+    }
+  });
+
+  // Reveals
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

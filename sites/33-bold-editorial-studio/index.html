@@ -1,895 +1,743 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDIT — Less Noise, More Signal</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,400&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --black:  #0a0a0a;
-      --white:  #f8f8f6;
-      --gray-1: #e0e0dc;
-      --gray-2: #a0a09c;
-      --gray-3: #3a3a38;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Barlow', sans-serif;
-      background: var(--white);
-      color: var(--black);
-      overflow-x: hidden;
-      cursor: none;
-    }
-
-    /* Custom cursor */
-    .cursor-dot {
-      position: fixed;
-      width: 8px; height: 8px;
-      background: var(--black);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 10000;
-      transform: translate(-50%, -50%);
-      mix-blend-mode: difference;
-    }
-
-    .cursor-circle {
-      position: fixed;
-      width: 36px; height: 36px;
-      border: 1px solid var(--black);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      mix-blend-mode: difference;
-      transition: width 0.3s, height 0.3s;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 500;
-      padding: 2rem 3.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      mix-blend-mode: difference;
-    }
-
-    .nav-logo {
-      font-size: 1.4rem;
-      font-weight: 900;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--white);
-      text-decoration: none;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 3rem;
-    }
-
-    .nav-right a {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--white);
-      text-decoration: none;
-    }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 8rem 3.5rem 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-counter {
-      position: absolute;
-      top: 2.5rem;
-      right: 3.5rem;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray-2);
-      padding-top: 5rem;
-    }
-
-    .hero-title {
-      font-size: clamp(6rem, 12vw, 18rem);
-      font-weight: 900;
-      line-height: 0.85;
-      letter-spacing: -0.04em;
-      text-transform: uppercase;
-      color: var(--black);
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-title .stroke {
-      -webkit-text-stroke: 1.5px var(--black);
-      color: transparent;
-    }
-
-    .hero-title .indent {
-      padding-left: 15vw;
-    }
-
-    .hero-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--black);
-      margin: 3rem 0;
-    }
-
-    .hero-bottom {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-
-    .hero-desc {
-      font-size: 1rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray-3);
-    }
-
-    .hero-meta {
-      text-align: center;
-    }
-
-    .hero-meta-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray-2);
-      display: block;
-      margin-bottom: 0.4rem;
-    }
-
-    .hero-meta-val {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--black);
-    }
-
-    .hero-actions { text-align: right; }
-
-    .btn-fill {
-      display: inline-block;
-      background: var(--black);
-      color: var(--white);
-      padding: 1.1rem 2.8rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .btn-fill:hover { background: var(--gray-3); transform: translateY(-2px); }
-
-    /* MARQUEE */
-    .marquee-section {
-      background: var(--black);
-      overflow: hidden;
-      padding: 1rem 0;
-      border-top: 1px solid var(--gray-3);
-      border-bottom: 1px solid var(--gray-3);
-    }
-
-    .marquee-track {
-      display: flex;
-      animation: marquee 25s linear infinite;
-      white-space: nowrap;
-    }
-
-    .marquee-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 2rem;
-      padding: 0 3rem;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--white);
-    }
-
-    .marquee-sep {
-      width: 4px; height: 4px;
-      border-radius: 50%;
-      background: var(--gray-2);
-    }
-
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* WORK */
-    .work-section {
-      padding: 8rem 3.5rem;
-      border-bottom: 1px solid var(--gray-1);
-    }
-
-    .work-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 5rem;
-    }
-
-    .section-tag {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray-2);
-    }
-
-    .section-title {
-      font-size: clamp(3rem, 7vw, 9rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.88;
-      text-transform: uppercase;
-    }
-
-    .section-title .stroke {
-      -webkit-text-stroke: 1.5px var(--black);
-      color: transparent;
-    }
-
-    .work-list {}
-
-    .work-row {
-      display: grid;
-      grid-template-columns: 100px 1fr 200px 120px 60px;
-      align-items: center;
-      padding: 2rem 0;
-      border-top: 1px solid var(--gray-1);
-      transition: background 0.3s;
-      cursor: pointer;
-    }
-
-    .work-row:last-child { border-bottom: 1px solid var(--gray-1); }
-
-    .work-row:hover { padding-left: 1rem; }
-
-    .work-num {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--gray-2);
-    }
-
-    .work-name {
-      font-size: clamp(1.5rem, 3vw, 3rem);
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      transition: color 0.3s;
-    }
-
-    .work-row:hover .work-name { color: var(--gray-3); }
-
-    .work-type {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray-2);
-    }
-
-    .work-year {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--gray-2);
-      text-align: center;
-    }
-
-    .work-arrow {
-      font-size: 1.2rem;
-      font-weight: 900;
-      text-align: right;
-      transition: transform 0.3s;
-    }
-
-    .work-row:hover .work-arrow { transform: translate(4px, -4px); }
-
-    /* PHILOSOPHY */
-    .phil-section {
-      padding: 8rem 3.5rem;
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .phil-inner { max-width: 1200px; margin: 0 auto; }
-
-    .phil-tag { color: var(--gray-2); }
-
-    .phil-title {
-      font-size: clamp(3rem, 7vw, 9rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.88;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 5rem;
-    }
-
-    .phil-title .stroke {
-      -webkit-text-stroke: 1px rgba(255,255,255,0.3);
-      color: transparent;
-    }
-
-    .phil-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--gray-3);
-      border: 1px solid var(--gray-3);
-    }
-
-    .phil-cell {
-      background: var(--black);
-      padding: 3rem 2.5rem;
-      transition: background 0.3s;
-    }
-
-    .phil-cell:hover { background: #111; }
-
-    .phil-cell-num {
-      font-size: 4rem;
-      font-weight: 900;
-      color: rgba(255,255,255,0.07);
-      line-height: 1;
-      margin-bottom: 1.5rem;
-    }
-
-    .phil-cell-title {
-      font-size: 1.4rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .phil-cell-body {
-      font-size: 0.88rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray-2);
-    }
-
-    /* TESTIMONIALS */
-    .testimonials-section {
-      padding: 8rem 3.5rem;
-      border-bottom: 1px solid var(--gray-1);
-    }
-
-    .testimonials-inner { max-width: 1200px; margin: 0 auto; }
-
-    .testimonials-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      background: var(--gray-1);
-      border: 1px solid var(--gray-1);
-      margin-top: 4rem;
-    }
-
-    .t-cell {
-      background: var(--white);
-      padding: 3.5rem;
-    }
-
-    .t-quote {
-      font-size: 1.05rem;
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.85;
-      color: var(--black);
-      margin-bottom: 2.5rem;
-    }
-
-    .t-author { display: flex; align-items: center; gap: 1rem; }
-
-    .t-line { width: 30px; height: 1px; background: var(--black); }
-
-    .t-name { font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; }
-    .t-role { font-size: 0.75rem; color: var(--gray-2); margin-top: 0.2rem; }
-
-    /* NUMBERS */
-    .numbers-section {
-      padding: 6rem 3.5rem;
-      background: var(--black);
-    }
-
-    .numbers-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--gray-3);
-    }
-
-    .num-cell {
-      background: var(--black);
-      padding: 3rem 2.5rem;
-    }
-
-    .num-val {
-      font-size: 5rem;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      line-height: 1;
-      color: var(--white);
-    }
-
-    .num-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gray-2);
-      margin-top: 0.5rem;
-    }
-
-    /* CTA */
-    .cta-section {
-      padding: 8rem 3.5rem;
-      background: var(--white);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-bg-text {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 25vw;
-      font-weight: 900;
-      color: rgba(0,0,0,0.03);
-      pointer-events: none;
-      letter-spacing: -0.05em;
-      user-select: none;
-    }
-
-    .cta-inner { position: relative; z-index: 1; }
-
-    .cta-title {
-      font-size: clamp(4rem, 10vw, 13rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 0.85;
-      text-transform: uppercase;
-      margin-bottom: 3rem;
-    }
-
-    .cta-title .stroke {
-      -webkit-text-stroke: 1.5px var(--black);
-      color: transparent;
-    }
-
-    .cta-sub {
-      font-size: 1rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray-2);
-      max-width: 40ch;
-      margin: 0 auto 3rem;
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--black);
-      color: var(--white);
-      padding: 4rem 3.5rem 3rem;
-    }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      padding-bottom: 3rem;
-      border-bottom: 1px solid var(--gray-3);
-      margin-bottom: 2rem;
-    }
-
-    .f-logo {
-      font-size: 3rem;
-      font-weight: 900;
-      letter-spacing: 0.2em;
-      color: var(--white);
-    }
-
-    .f-tagline {
-      font-size: 0.85rem;
-      font-weight: 300;
-      color: var(--gray-2);
-      line-height: 1.7;
-      margin-top: 1rem;
-      max-width: 28ch;
-    }
-
-    .f-col h4 {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray-2);
-      margin-bottom: 1.5rem;
-    }
-
-    .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-
-    .f-col a {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.6);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .f-col a:hover { color: var(--white); }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .f-copy { font-size: 0.75rem; color: var(--gray-2); }
-
-    .f-social { display: flex; gap: 2rem; }
-
-    .f-social a {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gray-2);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .f-social a:hover { color: var(--white); }
-
-    /* REVEAL */
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 900px) {
-      nav { padding: 1.5rem; }
-      .hero { padding: 7rem 1.5rem 4rem; }
-      .hero-bottom { grid-template-columns: 1fr; }
-      .work-section, .phil-section, .testimonials-section, .cta-section { padding: 5rem 1.5rem; }
-      .work-row { grid-template-columns: 60px 1fr 60px; }
-      .work-type, .work-year { display: none; }
-      .phil-grid { grid-template-columns: 1fr; }
-      .testimonials-grid { grid-template-columns: 1fr; }
-      .numbers-inner { grid-template-columns: 1fr 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDIT — High-Signal Design Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #000000;
+    --fg-muted: #525252;
+    --fg-tertiary: #737373;
+    --border: rgba(0,0,0,0.1);
+    --footer-bg: #0a0a0a;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  ::selection { background: #000; color: #fff; }
+  /* Custom cursor — difference blend */
+  #cursor {
+    position: fixed;
+    width: 32px; height: 32px;
+    border: 1px solid #000;
+    background: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    mix-blend-mode: difference;
+    transition: width 0.3s cubic-bezier(0.16,1,0.3,1), height 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  #cursor.expanded { width: 80px; height: 80px; }
+  /* Nav — mix-blend-mode:difference */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    mix-blend-mode: difference;
+  }
+  .nav-logo {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 0.5; }
+  .nav-cta {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 9px 18px;
+    cursor: none;
+  }
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 60px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  /* Staggered text reveal wrapper */
+  .reveal-wrap { overflow: hidden; }
+  .reveal-text {
+    display: block;
+    transform: translateY(100%);
+    transition: transform 1s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal-text.visible { transform: translateY(0); }
+  .hero-h1 {
+    font-size: 12vw;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-bottom: 40px;
+  }
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  .hero-desc {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--fg-muted);
+    max-width: 500px;
+    letter-spacing: -0.01em;
+  }
+  .hero-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    text-align: right;
+  }
+  .hero-meta-label {
+    font-family: monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--fg-tertiary);
+  }
+  /* Marquee */
+  .marquee-strip {
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    background: var(--fg);
+  }
+  .marquee-inner {
+    display: inline-flex;
+    gap: 40px;
+    white-space: nowrap;
+    animation: marquee 22s linear infinite;
+  }
+  .marquee-strip:hover .marquee-inner { animation-play-state: paused; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .m-item {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+  .m-slash { color: rgba(255,255,255,0.2); }
+  /* Projects — asymmetrical containers */
+  .projects { padding: 80px 48px; }
+  .proj-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+  }
+  .proj-h2 {
+    font-size: clamp(48px, 6vw, 84px);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+  /* Asymmetric project layout */
+  .proj-layout {
+    display: grid;
+    grid-template-columns: 1.6fr 0.8fr 1fr;
+    grid-template-rows: 420px 300px;
+    gap: 20px;
+  }
+  .proj-item {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    background: #f5f5f5;
+  }
+  /* Asymmetric radius — no uniform rounding */
+  .proj-item:nth-child(1) { border-radius: 0 24px 0 0; grid-row: 1 / 3; }
+  .proj-item:nth-child(2) { border-radius: 0; }
+  .proj-item:nth-child(3) { border-radius: 24px 0 0 0; }
+  .proj-item:nth-child(4) { border-radius: 0 0 0 24px; }
+  .proj-item:nth-child(5) { border-radius: 0; }
+
+  .proj-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(100%);
+    transition: filter 0.7s, transform 0.7s;
+  }
+  .proj-item:hover img { filter: grayscale(0%); transform: scale(1.05); }
+  .proj-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 24px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    color: #fff;
+    transform: translateY(8px);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .proj-item:hover .proj-info { transform: translateY(0); }
+  .proj-cat {
+    font-family: monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+  .proj-name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  /* Statement section */
+  .statement {
+    padding: 100px 48px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .statement-pre {
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-tertiary);
+    margin-bottom: 32px;
+  }
+  .statement-text {
+    font-size: clamp(28px, 4vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    color: var(--fg);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  /* Process section */
+  .process {
+    padding: 100px 48px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 0.8fr 1.5fr;
+    gap: 100px;
+  }
+  .process-left {}
+  .process-h2 {
+    font-size: clamp(40px, 5.5vw, 80px);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    line-height: 0.9;
+    margin-bottom: 32px;
+  }
+  .process-body {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--fg-muted);
+    letter-spacing: -0.01em;
+  }
+  .process-steps { display: flex; flex-direction: column; }
+  .step {
+    display: flex;
+    gap: 40px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: none;
+    transition: gap 0.3s;
+  }
+  .step:first-child { border-top: 1px solid var(--border); }
+  .step:hover { gap: 56px; }
+  .step-num {
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--fg-tertiary);
+    min-width: 32px;
+    padding-top: 4px;
+  }
+  .step-content {}
+  .step-name {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .step-desc {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--fg-muted);
+    letter-spacing: -0.01em;
+  }
+  /* Client list */
+  .clients {
+    padding: 80px 48px;
+    border-top: 1px solid var(--border);
+  }
+  .clients-pre {
+    font-family: monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-tertiary);
+    margin-bottom: 40px;
+  }
+  .client-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .client-item {
+    padding: 32px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    cursor: none;
+    transition: background 0.3s;
+  }
+  .client-item:hover { background: var(--fg); color: var(--bg); }
+  .client-item:hover .client-cat { color: rgba(255,255,255,0.5); }
+  .client-item:nth-child(4n) { border-right: none; }
+  .client-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .client-cat {
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg-tertiary);
+    transition: color 0.3s;
+  }
+  /* CTA */
+  .cta {
+    padding: 120px 48px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .cta-h2 {
+    font-size: clamp(60px, 9vw, 130px);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    line-height: 0.88;
+  }
+  .cta-right { display: flex; flex-direction: column; gap: 24px; }
+  .cta-body { font-size: 16px; font-weight: 300; line-height: 1.7; color: var(--fg-muted); letter-spacing: -0.01em; }
+  .btn-black {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--fg);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: none;
+    cursor: none;
+    transition: opacity 0.3s;
+    width: fit-content;
+  }
+  .btn-black:hover { opacity: 0.8; }
+  .btn-outline-b {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--fg);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: 1px solid var(--fg);
+    cursor: none;
+    transition: background 0.3s, color 0.3s;
+    width: fit-content;
+  }
+  .btn-outline-b:hover { background: var(--fg); color: var(--bg); }
+  /* Footer */
+  footer {
+    background: var(--footer-bg);
+    color: #fff;
+    padding: 80px 48px 40px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 60px;
+  }
+  footer .f-brand {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  footer .f-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; }
+  footer h6 {
+    font-family: monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 20px;
+  }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  footer ul a { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.3s; }
+  footer ul a:hover { color: #fff; }
+  .footer-bottom {
+    background: var(--footer-bg);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.25); letter-spacing: 0.1em; font-family: monospace; }
+  /* Reveal */
+  .reveal { opacity: 0; transition: opacity 1s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; }
+</style>
 </head>
 <body>
-  <div class="cursor-dot" id="dot"></div>
-  <div class="cursor-circle" id="circle"></div>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">EDIT</a>
-    <div class="nav-right">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </nav>
+<!-- Custom cursor — difference blend -->
+<div id="cursor"></div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-counter">Selected Work 2019–2025</div>
-    <h1 class="hero-title">
-      LESS<br>
-      <span class="stroke indent">NOISE</span><br>
-      MORE<br>
-      <span class="stroke indent">SIGNAL</span>
-    </h1>
-    <div class="hero-divider"></div>
-    <div class="hero-bottom">
-      <p class="hero-desc">EDIT is a design studio that believes the best creative work is defined by what you leave out. We build brands, digital experiences, and campaigns with surgical precision.</p>
-      <div class="hero-meta">
-        <span class="hero-meta-label">Est.</span>
-        <div class="hero-meta-val">2019</div>
-        <span class="hero-meta-label" style="margin-top:1.5rem">Global Studio</span>
-        <div class="hero-meta-val">NYC</div>
-      </div>
-      <div class="hero-actions">
-        <a href="#work" class="btn-fill">View Work</a>
-      </div>
-    </div>
-  </section>
+<!-- Nav — mix-blend-mode:difference -->
+<nav>
+  <div class="nav-logo">Edit</div>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#process">Process</a>
+    <a href="#clients">Clients</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="nav-cta">Open a project</button>
+</nav>
 
-  <!-- MARQUEE -->
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <span class="marquee-item"><span class="marquee-sep"></span>Brand Identity</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Digital Design</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Art Direction</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Motion Graphics</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Creative Strategy</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>UX/UI</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Brand Identity</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Digital Design</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Art Direction</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Motion Graphics</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>Creative Strategy</span>
-      <span class="marquee-item"><span class="marquee-sep"></span>UX/UI</span>
+<!-- Hero — staggered text reveals -->
+<section class="hero">
+  <div style="margin-bottom:auto;padding-top:120px;">
+    <div style="font-family:monospace;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:32px;">High-Signal Design Studio / London</div>
+  </div>
+  <div style="margin-bottom:40px;">
+    <div class="reveal-wrap"><span class="reveal-text" id="r1">EDIT</span></div>
+  </div>
+  <h1 class="hero-h1">
+    <div class="reveal-wrap"><span class="reveal-text" id="r2">Design</span></div>
+    <div class="reveal-wrap"><span class="reveal-text" id="r3">that holds.</span></div>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc reveal" id="r4">We build brands that work harder than most. Strategic, visual, and positioned against the noise. For founders, teams, and causes with something worth saying.</p>
+    <div class="hero-meta reveal" id="r5">
+      <div class="hero-meta-label">Est. 2019 / London</div>
+      <div class="hero-meta-label">200+ projects delivered</div>
+      <div class="hero-meta-label">12 disciplines, 1 studio</div>
     </div>
   </div>
+</section>
 
-  <!-- WORK -->
-  <section class="work-section" id="work">
-    <div class="work-header reveal">
-      <div>
-        <div class="section-tag">Selected Projects</div>
-        <h2 class="section-title">THE<br><span class="stroke">WORK</span></h2>
-      </div>
-      <a href="#" class="btn-fill">Full Archive</a>
-    </div>
-    <div class="work-list">
-      <div class="work-row">
-        <div class="work-num">001</div>
-        <div class="work-name">Meridian Bank</div>
-        <div class="work-type">Brand Identity · Web</div>
-        <div class="work-year">2025</div>
-        <div class="work-arrow">↗</div>
-      </div>
-      <div class="work-row">
-        <div class="work-num">002</div>
-        <div class="work-name">Aether Fashion</div>
-        <div class="work-type">Campaign · Motion</div>
-        <div class="work-year">2024</div>
-        <div class="work-arrow">↗</div>
-      </div>
-      <div class="work-row">
-        <div class="work-num">003</div>
-        <div class="work-name">Carto AI</div>
-        <div class="work-type">Product · UX/UI</div>
-        <div class="work-year">2024</div>
-        <div class="work-arrow">↗</div>
-      </div>
-      <div class="work-row">
-        <div class="work-num">004</div>
-        <div class="work-name">Volta Energy</div>
-        <div class="work-type">Identity · Packaging</div>
-        <div class="work-year">2023</div>
-        <div class="work-arrow">↗</div>
-      </div>
-      <div class="work-row">
-        <div class="work-num">005</div>
-        <div class="work-name">Studio Palermo</div>
-        <div class="work-type">Art Direction · Print</div>
-        <div class="work-year">2023</div>
-        <div class="work-arrow">↗</div>
-      </div>
-    </div>
-  </section>
+<!-- Marquee -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="m-item">Brand Identity</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Digital Design</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Motion Direction</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Art Direction</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Editorial Systems</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Strategy</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Brand Identity</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Digital Design</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Motion Direction</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Art Direction</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Editorial Systems</span>
+    <span class="m-slash">/</span>
+    <span class="m-item">Strategy</span>
+    <span class="m-slash">/</span>
+  </div>
+</div>
 
-  <!-- PHILOSOPHY -->
-  <section class="phil-section" id="about">
-    <div class="phil-inner">
-      <div class="section-tag phil-tag" style="margin-bottom:1.5rem">Design Philosophy</div>
-      <h2 class="phil-title reveal">
-        THE<br><span class="stroke">EDIT</span><br>PRINCIPLE
-      </h2>
-      <div class="phil-grid">
-        <div class="phil-cell">
-          <div class="phil-cell-num">01</div>
-          <div class="phil-cell-title">Remove First</div>
-          <div class="phil-cell-body">Every design decision starts with a question: what can we take away? The best signal emerges from the most deliberate subtraction. Complexity is easy. Clarity takes courage.</div>
-        </div>
-        <div class="phil-cell">
-          <div class="phil-cell-num">02</div>
-          <div class="phil-cell-title">Type as Image</div>
-          <div class="phil-cell-body">We treat typography not as a vessel for words, but as a primary visual element. Scale, weight, and spacing are as expressive as any photograph or illustration.</div>
-        </div>
-        <div class="phil-cell">
-          <div class="phil-cell-num">03</div>
-          <div class="phil-cell-title">System Thinking</div>
-          <div class="phil-cell-body">We design systems, not screens. Every component, every color, every rule is part of a cohesive language that scales across every surface — print, digital, and in-between.</div>
-        </div>
+<!-- Projects — asymmetric grid -->
+<section class="projects" id="work">
+  <div class="proj-header">
+    <div>
+      <div style="font-family:monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:14px;" class="reveal">Selected work / 2024–2025</div>
+      <h2 class="proj-h2 reveal" style="transition-delay:0.05s;">Recent<br>Projects</h2>
+    </div>
+    <button class="btn-black reveal" style="transition-delay:0.1s;">View full archive <i data-lucide="arrow-right" style="width:13px;height:13px;"></i></button>
+  </div>
+  <div class="proj-layout reveal" style="transition-delay:0.15s;">
+    <div class="proj-item">
+      <img src="../../images/creative/creative-1.jpg" alt="Forma Brand Identity">
+      <div class="proj-info">
+        <div class="proj-cat">Identity / B2B SaaS</div>
+        <div class="proj-name">Forma Systems</div>
       </div>
     </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials-section">
-    <div class="testimonials-inner">
-      <div class="section-tag">Client Perspective</div>
-      <h2 class="section-title reveal">WHAT<br><span class="stroke">THEY SAY</span></h2>
-      <div class="testimonials-grid">
-        <div class="t-cell reveal">
-          <p class="t-quote">"EDIT gave us exactly what their name promises. They stripped away everything extraneous and left us with a brand so clear it practically speaks for itself. Three years later, it still feels ahead of the curve."</p>
-          <div class="t-author">
-            <div class="t-line"></div>
-            <div>
-              <div class="t-name">Marcus Webb</div>
-              <div class="t-role">CEO, Carto AI</div>
-            </div>
-          </div>
-        </div>
-        <div class="t-cell reveal" style="transition-delay:0.1s">
-          <p class="t-quote">"What surprised me was how much they pushed back. They refused to add what we asked for unless it served the idea. That level of design conviction is extraordinarily rare — and it made all the difference."</p>
-          <div class="t-author">
-            <div class="t-line"></div>
-            <div>
-              <div class="t-name">Irena Solberg</div>
-              <div class="t-role">Brand Director, Aether Fashion</div>
-            </div>
-          </div>
-        </div>
-        <div class="t-cell reveal" style="transition-delay:0.15s">
-          <p class="t-quote">"Our old brand felt like noise. After EDIT, we feel like a signal. Our sales team says the rebrand is the single biggest conversion driver we've ever had. The work speaks for itself."</p>
-          <div class="t-author">
-            <div class="t-line"></div>
-            <div>
-              <div class="t-name">Priya Nair</div>
-              <div class="t-role">CMO, Meridian Bank</div>
-            </div>
-          </div>
-        </div>
-        <div class="t-cell reveal" style="transition-delay:0.2s">
-          <p class="t-quote">"I've worked with studios across London and New York. EDIT is the only one that understood immediately that good design doesn't call attention to itself — it calls attention to the idea it serves."</p>
-          <div class="t-author">
-            <div class="t-line"></div>
-            <div>
-              <div class="t-name">Finn Larsson</div>
-              <div class="t-role">Founder, Studio Palermo</div>
-            </div>
-          </div>
-        </div>
+    <div class="proj-item">
+      <img src="../../images/creative/creative-2.jpg" alt="Vessel Campaign">
+      <div class="proj-info">
+        <div class="proj-cat">Campaign / Lifestyle</div>
+        <div class="proj-name">Vessel 2025</div>
       </div>
     </div>
-  </section>
-
-  <!-- NUMBERS -->
-  <div class="numbers-section">
-    <div class="numbers-inner">
-      <div class="num-cell reveal">
-        <div class="num-val">6+</div>
-        <div class="num-label">Years Running</div>
+    <div class="proj-item">
+      <img src="../../images/creative/creative-3.jpg" alt="Depth Editorial">
+      <div class="proj-info">
+        <div class="proj-cat">Editorial / Culture</div>
+        <div class="proj-name">Depth Journal</div>
       </div>
-      <div class="num-cell reveal" style="transition-delay:0.1s">
-        <div class="num-val">80+</div>
-        <div class="num-label">Projects Shipped</div>
+    </div>
+    <div class="proj-item">
+      <img src="../../images/creative/creative-4.jpg" alt="Pale Motion">
+      <div class="proj-info">
+        <div class="proj-cat">Motion / Fashion</div>
+        <div class="proj-name">Pale Motion</div>
       </div>
-      <div class="num-cell reveal" style="transition-delay:0.2s">
-        <div class="num-val">12</div>
-        <div class="num-label">Awwwards</div>
-      </div>
-      <div class="num-cell reveal" style="transition-delay:0.3s">
-        <div class="num-val">4</div>
-        <div class="num-label">Core Team</div>
+    </div>
+    <div class="proj-item">
+      <img src="../../images/creative/creative-5.jpg" alt="Signal Identity">
+      <div class="proj-info">
+        <div class="proj-cat">Identity / Tech</div>
+        <div class="proj-name">Signal Labs</div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- CTA -->
-  <section class="cta-section" id="contact">
-    <div class="cta-bg-text">EDIT</div>
-    <div class="cta-inner reveal">
-      <h2 class="cta-title">START<br><span class="stroke">EDITING</span></h2>
-      <p class="cta-sub">We take a limited number of projects each season. If you're ready to get serious about design, so are we.</p>
-      <a href="mailto:hello@editstudio.co" class="btn-fill">Get In Touch</a>
-    </div>
-  </section>
+<!-- Statement -->
+<div class="statement">
+  <div class="statement-pre reveal">What we believe</div>
+  <p class="statement-text reveal" style="transition-delay:0.1s;">Design is an argument. Every decision is either for or against clarity. We are for it — always. Most studios hedge. We don't.</p>
+</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-top">
-      <div>
-        <div class="f-logo">EDIT</div>
-        <p class="f-tagline">Less noise. More signal. A design studio for brands that know what they stand for.</p>
-      </div>
-      <div class="f-col">
-        <h4>Studio</h4>
-        <ul>
-          <li><a href="#">Work</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Process</a></li>
-        </ul>
-      </div>
-      <div class="f-col">
-        <h4>Services</h4>
-        <ul>
-          <li><a href="#">Brand Identity</a></li>
-          <li><a href="#">Digital Design</a></li>
-          <li><a href="#">Art Direction</a></li>
-        </ul>
-      </div>
-      <div class="f-col">
-        <h4>Social</h4>
-        <ul>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Dribbble</a></li>
-          <li><a href="#">Behance</a></li>
-        </ul>
+<!-- Process -->
+<section class="process" id="process">
+  <div class="process-left">
+    <div style="font-family:monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:16px;" class="reveal">How we work</div>
+    <h2 class="process-h2 reveal" style="transition-delay:0.05s;">The<br>Edit<br>Method</h2>
+    <p class="process-body reveal" style="transition-delay:0.1s;">Four stages. No retainers padded with billable hours. You get the thinking and the making without the agency bloat in between.</p>
+  </div>
+  <div class="process-steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <div class="step-name">Audit</div>
+        <div class="step-desc">We examine what you have, what it says, and where the signal is buried under the noise. Hard truths early save expensive corrections late.</div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p class="f-copy">© 2025 EDIT Studio. New York City.</p>
-      <div class="f-social">
-        <a href="#">IG</a>
-        <a href="#">DR</a>
-        <a href="#">LI</a>
+    <div class="step reveal" style="transition-delay:0.05s;">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <div class="step-name">Position</div>
+        <div class="step-desc">Strategy before style. We define what you stand for in a way that holds across every surface — not a tag-line exercise but a structural decision.</div>
       </div>
     </div>
-  </footer>
+    <div class="step reveal" style="transition-delay:0.1s;">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <div class="step-name">Build</div>
+        <div class="step-desc">Identity systems, digital products, campaigns, editorial direction. We make the work without farming it to contractors.</div>
+      </div>
+    </div>
+    <div class="step reveal" style="transition-delay:0.15s;">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <div class="step-name">Hand off</div>
+        <div class="step-desc">Complete documentation, usage guidelines, and a system your team can operate without us. Independence is the deliverable.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <script>
-    const dot = document.getElementById('dot');
-    const circle = document.getElementById('circle');
-    let mx = 0, my = 0, cx = 0, cy = 0;
+<!-- Clients -->
+<section class="clients" id="clients">
+  <div class="clients-pre reveal">Selected clients</div>
+  <div class="client-grid">
+    <div class="client-item reveal">
+      <div class="client-name">Forma Systems</div>
+      <div class="client-cat">B2B SaaS / 2025</div>
+    </div>
+    <div class="client-item reveal" style="transition-delay:0.05s;">
+      <div class="client-name">Vessel Health</div>
+      <div class="client-cat">Wellness / 2024</div>
+    </div>
+    <div class="client-item reveal" style="transition-delay:0.1s;">
+      <div class="client-name">Signal Labs</div>
+      <div class="client-cat">Deep Tech / 2025</div>
+    </div>
+    <div class="client-item reveal" style="transition-delay:0.15s;">
+      <div class="client-name">Depth Journal</div>
+      <div class="client-cat">Media / 2024</div>
+    </div>
+    <div class="client-item reveal">
+      <div class="client-name">Pale Motion</div>
+      <div class="client-cat">Fashion / 2025</div>
+    </div>
+    <div class="client-item reveal" style="transition-delay:0.05s;">
+      <div class="client-name">Kestrel Fund</div>
+      <div class="client-cat">Fintech / 2024</div>
+    </div>
+    <div class="client-item reveal" style="transition-delay:0.1s;">
+      <div class="client-name">Civic Index</div>
+      <div class="client-cat">Nonprofit / 2025</div>
+    </div>
+    <div class="client-item reveal" style="transition-delay:0.15s;">
+      <div class="client-name">Prism Films</div>
+      <div class="client-cat">Production / 2024</div>
+    </div>
+  </div>
+</section>
 
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      dot.style.left = mx + 'px';
-      dot.style.top = my + 'px';
-    });
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div>
+    <div style="font-family:monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--fg-tertiary);margin-bottom:20px;" class="reveal">New project</div>
+    <h2 class="cta-h2 reveal" style="transition-delay:0.05s;">Start a<br>project.</h2>
+  </div>
+  <div class="cta-right reveal" style="transition-delay:0.15s;">
+    <p class="cta-body">We take projects where we can make a genuine difference. Tell us what you're building — we'll tell you whether we're the right studio for it.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <button class="btn-black">Submit your brief <i data-lucide="arrow-right" style="width:13px;height:13px;"></i></button>
+      <button class="btn-outline-b">hello@edit.studio</button>
+    </div>
+    <div style="padding-top:24px;border-top:1px solid var(--border);">
+      <div class="hero-meta-label" style="color:var(--fg-tertiary);">London — available globally</div>
+    </div>
+  </div>
+</section>
 
-    function tick() {
-      cx += (mx - cx) * 0.1;
-      cy += (my - cy) * 0.1;
-      circle.style.left = cx + 'px';
-      circle.style.top = cy + 'px';
-      requestAnimationFrame(tick);
-    }
-    tick();
+<!-- Footer -->
+<footer>
+  <div>
+    <div class="f-brand">Edit Studio</div>
+    <div class="f-desc">High-signal design studio. London. Building brands that work harder than most since 2019.</div>
+  </div>
+  <div>
+    <h6>Work</h6>
+    <ul>
+      <li><a href="#">Selected Projects</a></li>
+      <li><a href="#">Identity</a></li>
+      <li><a href="#">Digital</a></li>
+      <li><a href="#">Motion</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>Studio</h6>
+    <ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Process</a></li>
+      <li><a href="#">Journal</a></li>
+      <li><a href="#">Clients</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>Contact</h6>
+    <ul>
+      <li><a href="#">hello@edit.studio</a></li>
+      <li><a href="#">+44 20 7946 0202</a></li>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">LinkedIn</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>Edit Studio &copy; 2025 — All rights reserved</p>
+  <p>Design without noise</p>
+</div>
 
-    document.querySelectorAll('a, .work-row').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        circle.style.width = '56px';
-        circle.style.height = '56px';
-      });
-      el.addEventListener('mouseleave', () => {
-        circle.style.width = '36px';
-        circle.style.height = '36px';
-      });
-    });
+<script>
+  lucide.createIcons();
 
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08 });
-    reveals.forEach(el => obs.observe(el));
-  </script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  let cx = 0, cy = 0;
+  document.addEventListener('mousemove', e => {
+    cx = e.clientX; cy = e.clientY;
+    cursor.style.left = cx + 'px';
+    cursor.style.top = cy + 'px';
+  });
+  document.querySelectorAll('a, button, .proj-item, .step, .client-item').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
+  });
+
+  // Staggered hero text reveals
+  const delays = { r1: 100, r2: 250, r3: 400, r4: 550, r5: 600 };
+  Object.entries(delays).forEach(([id, delay]) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('visible');
+    }, delay);
+  });
+
+  // General reveals on scroll
+  const reveals = document.querySelectorAll('.reveal:not([id^="r"])');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

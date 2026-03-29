@@ -1,558 +1,565 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CANVAS — Project Management SaaS Pricing</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CANVAS — Project Management SaaS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #0f0f10;
+      --mid: rgba(15,15,16,0.5);
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --border: rgba(15,15,16,0.08);
+      --surface: #f9f9fa;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ── Sticky tier header ── */
+    .tier-header {
+      position: sticky;
+      top: 64px; /* below nav */
+      z-index: 30;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
 
-  :root {
-    --bg: #f7f7f5;
-    --white: #ffffff;
-    --dark: #111111;
-    --accent: #5b4ff5;
-    --accent-light: rgba(91,79,245,0.08);
-    --green: #16a34a;
-    --red: #dc2626;
-    --border: rgba(17,17,17,0.08);
-    --muted: rgba(17,17,17,0.45);
-    --card: #ffffff;
-    --free-col: #f9f9f7;
-    --growth-col: #f5f3ff;
-    --enterprise-col: #fff;
-  }
+    /* ── Section collapsible ── */
+    .section-body {
+      overflow: hidden;
+      transition: height 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .section-body.collapsed { height: 0; }
 
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--dark); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    .section-toggle-icon {
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .section-toggle-icon.open { transform: rotate(180deg); }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 52px;
-    background: rgba(247,247,245,0.92); backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: var(--dark); text-decoration: none; }
-  .logo em { color: var(--accent); font-style: normal; }
-  .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--dark); }
-  .nav-group { display: flex; gap: 10px; }
-  .nav-login { font-size: 13px; font-weight: 600; color: var(--dark); text-decoration: none; padding: 9px 18px; border: 1px solid var(--border); border-radius: 8px; transition: border-color 0.2s; }
-  .nav-login:hover { border-color: rgba(17,17,17,0.2); }
-  .nav-cta { font-size: 13px; font-weight: 700; color: #fff; background: var(--accent); padding: 9px 18px; border-radius: 8px; text-decoration: none; transition: opacity 0.2s; }
-  .nav-cta:hover { opacity: 0.88; }
+    /* ── Feature rows ── */
+    .feature-row {
+      display: grid;
+      grid-template-columns: minmax(260px,2fr) 1fr 1fr 1fr;
+      gap: 0;
+      align-items: center;
+      min-height: 52px;
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      transition: background 0.2s;
+    }
+    .feature-row:hover { background: var(--surface); }
+    .feature-row:last-child { border-bottom: none; }
 
-  /* ── HERO ── */
-  .hero { padding: 140px 52px 80px; text-align: center; border-bottom: 1px solid var(--border); }
-  .hero-chip {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--accent-light); border: 1px solid rgba(91,79,245,0.2);
-    border-radius: 40px; padding: 7px 16px; margin-bottom: 32px;
-    font-size: 12px; font-weight: 700; color: var(--accent);
-    opacity: 0; animation: up 0.6s ease 0.2s forwards;
-  }
-  .hero-title { font-size: clamp(44px, 7vw, 80px); font-weight: 800; letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 20px; opacity: 0; animation: up 0.7s ease 0.4s forwards; }
-  .hero-sub { font-size: 18px; font-weight: 400; color: var(--muted); max-width: 500px; margin: 0 auto 40px; line-height: 1.65; opacity: 0; animation: up 0.7s ease 0.6s forwards; }
-  .billing-toggle {
-    display: inline-flex; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 4px;
-    margin-bottom: 0; gap: 4px; opacity: 0; animation: up 0.7s ease 0.8s forwards;
-  }
-  .toggle-btn {
-    font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: 7px;
-    border: none; cursor: pointer; background: transparent; color: var(--muted);
-    transition: background 0.2s, color 0.2s;
-  }
-  .toggle-btn.active { background: var(--accent); color: #fff; }
-  .toggle-save {
-    font-size: 11px; font-weight: 700; color: var(--green);
-    background: rgba(22,163,74,0.1); padding: 2px 8px; border-radius: 20px;
-    margin-left: 2px; align-self: center;
-  }
+    /* ── Tier columns ── */
+    .tier-col { text-align: center; padding: 0 1rem; }
+    .tier-col.highlight { background: rgba(37,99,235,0.04); }
 
-  @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* ── Status indicators ── */
+    .check-icon { color: #16a34a; }
+    .cross-icon { color: #d1d5db; }
+    .addon-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.68rem; padding: 2px 8px;
+      background: #fef9c3; color: #a16207;
+      letter-spacing: 0.04em;
+      border: 1px solid #fde68a;
+    }
+    .limited-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.68rem; padding: 2px 8px;
+      background: #f3f4f6; color: #6b7280;
+      border: 1px solid var(--border);
+    }
 
-  /* ── PRICING CARDS (top) ── */
-  .pricing-cards {
-    padding: 60px 52px 0;
-    max-width: 1200px; margin: 0 auto;
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
-  }
-  .pricing-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 36px;
-    position: relative; transition: box-shadow 0.3s;
-  }
-  .pricing-card.featured {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(91,79,245,0.08), 0 16px 48px rgba(91,79,245,0.12);
-  }
-  .popular-badge {
-    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-    background: var(--accent); color: #fff;
-    font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
-    padding: 4px 14px; border-radius: 20px; white-space: nowrap;
-    text-transform: uppercase;
-  }
-  .plan-name { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
-  .plan-price { font-size: 52px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
-  .plan-price sup { font-size: 24px; font-weight: 600; vertical-align: top; margin-top: 10px; display: inline-block; }
-  .plan-price .period { font-size: 15px; font-weight: 400; color: var(--muted); letter-spacing: 0; }
-  .plan-desc { font-size: 13px; color: var(--muted); margin: 14px 0 28px; line-height: 1.6; }
-  .plan-cta {
-    display: block; text-align: center;
-    font-size: 14px; font-weight: 700; padding: 13px;
-    border-radius: 10px; text-decoration: none; transition: all 0.2s;
-    margin-bottom: 28px;
-  }
-  .plan-cta.solid { background: var(--accent); color: #fff; }
-  .plan-cta.solid:hover { opacity: 0.88; transform: translateY(-1px); }
-  .plan-cta.outline { border: 1px solid var(--border); color: var(--dark); }
-  .plan-cta.outline:hover { border-color: var(--accent); color: var(--accent); }
-  .plan-highlights { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .plan-highlights li { font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
-  .plan-highlights li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    /* ── Billing toggle ── */
+    .toggle-track {
+      width: 44px; height: 24px;
+      border-radius: 99px;
+      background: var(--border);
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle-track.on { background: var(--accent); }
+    .toggle-thumb {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .toggle-track.on .toggle-thumb { transform: translateX(20px); }
 
-  /* ── COMPARISON TABLE ── */
-  .comparison { padding: 80px 0 120px; }
-  .comparison-inner { max-width: 1200px; margin: 0 auto; padding: 0 52px; }
-  .comparison-title { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
-  .comparison-sub { font-size: 15px; color: var(--muted); margin-bottom: 48px; }
+    /* ── Plan highlight badge ── */
+    .plan-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.6rem;
+      padding: 2px 8px;
+      letter-spacing: 0.08em;
+    }
 
-  /* Sticky header */
-  .table-wrap { position: relative; overflow: visible; }
-  .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-  .compare-table thead th {
-    background: var(--bg); position: sticky; top: 68px; z-index: 50;
-    font-size: 13px; font-weight: 700; padding: 14px 20px;
-    border-bottom: 2px solid var(--border);
-    text-align: center;
-  }
-  .compare-table thead th:first-child { text-align: left; width: 34%; }
-  .th-free { background: var(--free-col) !important; }
-  .th-growth { background: var(--growth-col) !important; color: var(--accent); }
-  .th-enterprise { background: var(--enterprise-col) !important; }
+    /* ── Section header row ── */
+    .section-header-row {
+      display: grid;
+      grid-template-columns: minmax(260px,2fr) 1fr 1fr 1fr;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .section-header-row:hover { background: #f0f0f2; }
+    .section-title-cell {
+      padding: 0.875rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-  /* Section headers */
-  .section-row td {
-    padding: 28px 20px 10px;
-    font-size: 11px; font-weight: 800; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--muted);
-    background: var(--bg);
-    cursor: pointer; user-select: none;
-  }
-  .section-row td:first-child { display: flex; align-items: center; gap: 8px; }
-  .section-toggle { transition: transform 0.25s; }
-  .section-row.collapsed .section-toggle { transform: rotate(-90deg); }
+    /* ── Nav ── */
+    nav a { font-size: 0.8rem; color: rgba(15,15,16,0.45); transition: color 0.2s; }
+    nav a:hover { color: var(--ink); }
 
-  /* Feature rows */
-  .feature-row td {
-    padding: 12px 20px; font-size: 13px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-  .feature-row td:first-child { font-weight: 500; color: var(--dark); }
-  .feature-row td:not(:first-child) { text-align: center; }
-  .feature-row.hidden { display: none; }
-  .feature-row:hover td { background: rgba(91,79,245,0.02); }
+    /* ── Clip/fade ── */
+    .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.is-visible { opacity: 1; transform: none; }
 
-  .check { color: var(--green); font-size: 16px; font-weight: 700; }
-  .cross { color: var(--red); font-size: 16px; }
-  .val { font-size: 13px; font-weight: 600; color: var(--dark); }
-  .val-muted { font-size: 12px; color: var(--muted); }
+    /* ── Price display ── */
+    .price-amount { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.05em; line-height: 1; }
+    .price-note { font-size: 0.72rem; color: var(--mid); margin-top: 2px; }
 
-  /* ── FEATURES GRID ── */
-  .features-section { padding: 100px 52px; border-top: 1px solid var(--border); background: var(--dark); color: #fff; }
-  .fs-inner { max-width: 1200px; margin: 0 auto; }
-  .fs-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-  .fs-title { font-size: clamp(32px, 4.5vw, 52px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 56px; }
-  .fs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); }
-  .fs-card { background: var(--dark); padding: 36px; transition: background 0.3s; }
-  .fs-card:hover { background: #1a1a1a; }
-  .fs-icon { width: 44px; height: 44px; background: rgba(91,79,245,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-  .fs-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
-  .fs-name { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
-  .fs-desc { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.45); }
+    /* ── Info tooltip ── */
+    .has-info { position: relative; }
+    .has-info:hover .info-tip {
+      opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    .info-tip {
+      position: absolute; left: 24px; top: 50%; transform: translateY(-50%) translateY(-4px);
+      background: var(--ink); color: #fff;
+      font-size: 0.7rem; padding: 6px 10px;
+      width: 200px; z-index: 50;
+      opacity: 0; visibility: hidden;
+      transition: all 0.2s; pointer-events: none;
+      white-space: normal; line-height: 1.4;
+    }
 
-  /* ── TESTIMONIALS ── */
-  .testimonials { padding: 100px 52px; max-width: 1200px; margin: 0 auto; }
-  .t-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-  .t-title { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 48px; }
-  .t-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .t-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: border-color 0.3s, transform 0.3s; }
-  .t-card:hover { border-color: var(--accent); transform: translateY(-4px); }
-  .t-stars { font-size: 13px; color: #f59e0b; margin-bottom: 14px; }
-  .t-text { font-size: 14px; line-height: 1.75; color: var(--muted); margin-bottom: 24px; font-style: italic; }
-  .t-by { display: flex; gap: 12px; align-items: center; }
-  .t-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
-  .t-name { font-size: 13px; font-weight: 700; }
-  .t-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-  /* ── FAQ ── */
-  .faq { padding: 80px 52px; border-top: 1px solid var(--border); }
-  .faq-inner { max-width: 760px; margin: 0 auto; }
-  .faq-title { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 40px; }
-  .faq-item { border-bottom: 1px solid var(--border); }
-  .faq-q { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; cursor: pointer; font-size: 15px; font-weight: 600; gap: 20px; }
-  .faq-icon { flex-shrink: 0; width: 24px; height: 24px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.25s; }
-  .faq-icon svg { width: 12px; height: 12px; stroke: var(--accent); fill: none; stroke-width: 2.5; }
-  .faq-item.open .faq-icon { transform: rotate(45deg); }
-  .faq-a { font-size: 14px; line-height: 1.75; color: var(--muted); max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s; }
-  .faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
-
-  /* ── CTA ── */
-  .cta { padding: 100px 52px; text-align: center; background: linear-gradient(135deg, rgba(91,79,245,0.06), rgba(91,79,245,0.01)); border-top: 1px solid var(--border); }
-  .cta h2 { font-size: clamp(40px, 6vw, 68px); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; }
-  .cta h2 em { color: var(--accent); font-style: normal; }
-  .cta p { font-size: 17px; color: var(--muted); max-width: 440px; margin: 0 auto 40px; line-height: 1.65; }
-  .cta-btns { display: flex; gap: 14px; justify-content: center; }
-
-  /* ── FOOTER ── */
-  footer { background: var(--dark); color: #fff; padding: 40px 52px; }
-  .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  .footer-logo { font-size: 16px; font-weight: 800; letter-spacing: -0.03em; text-decoration: none; color: #fff; }
-  .footer-logo em { color: var(--accent); font-style: normal; }
-  .footer-nav { display: flex; gap: 28px; list-style: none; }
-  .footer-nav a { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
-  .footer-nav a:hover { color: #fff; }
-  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
-</style>
+    /* ── Hero ── */
+    .hero-section { background: linear-gradient(180deg, #f8faff 0%, #fff 100%); border-bottom: 1px solid var(--border); }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="#" class="logo">CANVAS<em>.</em></a>
-  <ul class="nav-links">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#enterprise">Enterprise</a></li>
-    <li><a href="#">Docs</a></li>
-  </ul>
-  <div class="nav-group">
-    <a href="#" class="nav-login">Sign in</a>
-    <a href="#" class="nav-cta">Start Free →</a>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="pricing">
-  <div class="hero-chip">💡 Annual billing saves up to 40%</div>
-  <h1 class="hero-title">Simple pricing,<br/>serious power</h1>
-  <p class="hero-sub">Start free. Scale as you grow. Every plan includes unlimited projects, real-time collaboration, and world-class support.</p>
-  <div class="billing-toggle">
-    <button class="toggle-btn active" id="monthlyBtn" onclick="setBilling('monthly')">Monthly</button>
-    <button class="toggle-btn" id="annualBtn" onclick="setBilling('annual')">
-      Annual <span class="toggle-save">Save 40%</span>
-    </button>
-  </div>
-</section>
-
-<!-- PRICING CARDS -->
-<div class="pricing-cards">
-  <div class="pricing-card">
-    <p class="plan-name">Free</p>
-    <p class="plan-price"><sup>$</sup>0<span class="period">/mo</span></p>
-    <p class="plan-desc">Perfect for individuals and small teams just getting started with project management.</p>
-    <a href="#" class="plan-cta outline">Get Started Free</a>
-    <ul class="plan-highlights">
-      <li>Up to 3 projects</li>
-      <li>5 team members</li>
-      <li>Basic task management</li>
-      <li>100MB file storage</li>
-      <li>Community support</li>
-    </ul>
-  </div>
-  <div class="pricing-card featured">
-    <div class="popular-badge">Most Popular</div>
-    <p class="plan-name">Growth</p>
-    <p class="plan-price" id="growthPrice"><sup>$</sup>29<span class="period">/mo per seat</span></p>
-    <p class="plan-desc">For growing teams that need automation, analytics, and deeper integrations.</p>
-    <a href="#" class="plan-cta solid">Start Growth Trial</a>
-    <ul class="plan-highlights">
-      <li>Unlimited projects</li>
-      <li>Unlimited members</li>
-      <li>Advanced automation</li>
-      <li>25GB file storage</li>
-      <li>Priority email support</li>
-      <li>Analytics dashboard</li>
-    </ul>
-  </div>
-  <div class="pricing-card">
-    <p class="plan-name">Enterprise</p>
-    <p class="plan-price">Custom</p>
-    <p class="plan-desc">For organizations that need advanced security, compliance, and dedicated support.</p>
-    <a href="#" class="plan-cta outline">Contact Sales</a>
-    <ul class="plan-highlights">
-      <li>Everything in Growth</li>
-      <li>SSO / SAML 2.0</li>
-      <li>Advanced security</li>
-      <li>Unlimited storage</li>
-      <li>Dedicated CSM</li>
-      <li>SLA guarantee</li>
-    </ul>
-  </div>
-</div>
-
-<!-- COMPARISON TABLE -->
-<section class="comparison">
-  <div class="comparison-inner">
-    <h2 class="comparison-title">Full feature comparison</h2>
-    <p class="comparison-sub">Click any section header to expand or collapse that group.</p>
-
-    <div class="table-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th class="th-free">Free</th>
-            <th class="th-growth">Growth</th>
-            <th class="th-enterprise">Enterprise</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <!-- Projects & Workspace -->
-          <tr class="section-row" data-section="projects">
-            <td colspan="4"><span class="section-toggle">▼</span> Projects &amp; Workspace</td>
-          </tr>
-          <tr class="feature-row" data-section="projects"><td>Active projects</td><td><span class="val">3</span></td><td><span class="val">Unlimited</span></td><td><span class="val">Unlimited</span></td></tr>
-          <tr class="feature-row" data-section="projects"><td>Team members</td><td><span class="val">5</span></td><td><span class="val">Unlimited</span></td><td><span class="val">Unlimited</span></td></tr>
-          <tr class="feature-row" data-section="projects"><td>Workspaces</td><td><span class="val">1</span></td><td><span class="val">5</span></td><td><span class="val">Unlimited</span></td></tr>
-          <tr class="feature-row" data-section="projects"><td>Guest access</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="projects"><td>Project templates</td><td><span class="val">10 templates</span></td><td><span class="val">100+ templates</span></td><td><span class="val">Custom + library</span></td></tr>
-
-          <!-- Task Management -->
-          <tr class="section-row" data-section="tasks">
-            <td colspan="4"><span class="section-toggle">▼</span> Task Management</td>
-          </tr>
-          <tr class="feature-row" data-section="tasks"><td>Task creation &amp; assignment</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="tasks"><td>Subtasks &amp; dependencies</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="tasks"><td>Custom fields</td><td><span class="cross">✕</span></td><td><span class="val">Up to 20</span></td><td><span class="val">Unlimited</span></td></tr>
-          <tr class="feature-row" data-section="tasks"><td>Recurring tasks</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="tasks"><td>Time tracking</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="tasks"><td>Milestones</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-
-          <!-- Views -->
-          <tr class="section-row" data-section="views">
-            <td colspan="4"><span class="section-toggle">▼</span> Views &amp; Layouts</td>
-          </tr>
-          <tr class="feature-row" data-section="views"><td>List view</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="views"><td>Board (Kanban) view</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="views"><td>Gantt timeline</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="views"><td>Calendar view</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="views"><td>Table / spreadsheet view</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="views"><td>Workload view</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
-
-          <!-- Automation -->
-          <tr class="section-row" data-section="automation">
-            <td colspan="4"><span class="section-toggle">▼</span> Automation &amp; Integrations</td>
-          </tr>
-          <tr class="feature-row" data-section="automation"><td>Automation rules</td><td><span class="cross">✕</span></td><td><span class="val">50/month</span></td><td><span class="val">Unlimited</span></td></tr>
-          <tr class="feature-row" data-section="automation"><td>Native integrations</td><td><span class="val">5 apps</span></td><td><span class="val">40+ apps</span></td><td><span class="val">100+ apps</span></td></tr>
-          <tr class="feature-row" data-section="automation"><td>Zapier / Make</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="automation"><td>Webhooks</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="automation"><td>API access</td><td><span class="cross">✕</span></td><td><span class="val">Read + Write</span></td><td><span class="val">Full + admin</span></td></tr>
-          <tr class="feature-row" data-section="automation"><td>Custom integrations (developer)</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
-
-          <!-- Analytics -->
-          <tr class="section-row" data-section="analytics">
-            <td colspan="4"><span class="section-toggle">▼</span> Reporting &amp; Analytics</td>
-          </tr>
-          <tr class="feature-row" data-section="analytics"><td>Basic dashboards</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="analytics"><td>Advanced reporting</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="analytics"><td>Custom report builder</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="analytics"><td>Export to CSV/PDF</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="analytics"><td>Velocity &amp; capacity metrics</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-
-          <!-- Security -->
-          <tr class="section-row" data-section="security">
-            <td colspan="4"><span class="section-toggle">▼</span> Security &amp; Compliance</td>
-          </tr>
-          <tr class="feature-row" data-section="security"><td>SSO (Google, GitHub)</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="security"><td>SAML 2.0 / SCIM</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="security"><td>2FA enforcement</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="security"><td>Audit logs</td><td><span class="cross">✕</span></td><td><span class="val">30 days</span></td><td><span class="val">Unlimited</span></td></tr>
-          <tr class="feature-row" data-section="security"><td>Data residency (EU / US)</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="security"><td>SOC 2 Type II</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
-
-          <!-- Support -->
-          <tr class="section-row" data-section="support">
-            <td colspan="4"><span class="section-toggle">▼</span> Support</td>
-          </tr>
-          <tr class="feature-row" data-section="support"><td>Help center access</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="support"><td>Email support</td><td><span class="val-muted">48h response</span></td><td><span class="val">Priority 8h</span></td><td><span class="val">Priority 2h</span></td></tr>
-          <tr class="feature-row" data-section="support"><td>Live chat</td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="support"><td>Dedicated CSM</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="support"><td>SLA guarantee</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="check">✓</span></td></tr>
-          <tr class="feature-row" data-section="support"><td>Onboarding &amp; training</td><td><span class="cross">✕</span></td><td><span class="val">Self-serve</span></td><td><span class="val">White-glove</span></td></tr>
-        </tbody>
-      </table>
+<!-- ══ NAV ══ -->
+<header class="fixed top-0 left-0 right-0 z-50 h-16 px-6 flex items-center justify-between" style="background: rgba(255,255,255,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);">
+  <div class="flex items-center gap-2">
+    <div style="width:24px;height:24px;background:var(--accent);display:flex;align-items:center;justify-content:center;">
+      <i data-lucide="layout-grid" style="width:14px;height:14px;color:#fff;"></i>
     </div>
+    <span class="font-semibold text-sm tracking-tight">CANVAS</span>
   </div>
-</section>
+  <nav class="hidden md:flex items-center gap-8">
+    <a href="#">Product</a>
+    <a href="#">Teams</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#">Enterprise</a>
+  </nav>
+  <div class="flex items-center gap-3">
+    <a href="#" class="text-sm" style="color:rgba(15,15,16,0.45);">Sign in</a>
+    <a href="#" class="text-sm px-5 py-2 font-medium transition-all hover:opacity-85" style="background:var(--accent);color:#fff;">
+      Start for Free
+    </a>
+  </div>
+</header>
 
-<!-- FEATURES -->
-<section class="features-section" id="features">
-  <div class="fs-inner">
-    <p class="fs-label">Platform Power</p>
-    <h2 class="fs-title">Built for the teams<br/>that build everything</h2>
-    <div class="fs-grid">
-      <div class="fs-card">
-        <div class="fs-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
-        <h3 class="fs-name">Kanban & Gantt</h3>
-        <p class="fs-desc">Visualize work in the view that fits your team — board, list, timeline, or calendar. Switch instantly with zero data loss.</p>
+<!-- ══ HERO / PRICING HEADER ══ -->
+<section id="pricing" class="hero-section pt-28 pb-16 px-6 text-center">
+  <div class="max-w-3xl mx-auto">
+    <div class="fade-up inline-flex items-center gap-2 px-3 py-1.5 mb-6 text-xs font-medium" style="background:var(--accent-light);color:var(--accent);border:1px solid rgba(37,99,235,0.15);">
+      <i data-lucide="zap" style="width:12px;height:12px;"></i>
+      Transparent pricing — no seat minimums
+    </div>
+    <h1 class="fade-up font-bold mb-4" style="font-size:clamp(32px,5vw,60px);letter-spacing:-0.04em;line-height:1.1;">
+      The plan for every team<br>that ships on time.
+    </h1>
+    <p class="fade-up text-sm mb-10 leading-relaxed" style="color:var(--mid);max-width:44ch;margin-left:auto;margin-right:auto;">
+      Canvas replaces your sprawling toolchain with one intelligent workspace. Choose your tier below — upgrade or downgrade at any point.
+    </p>
+
+    <!-- Billing toggle -->
+    <div class="fade-up flex items-center justify-center gap-4 mb-12">
+      <span class="text-sm font-medium" id="bill-monthly-label">Monthly</span>
+      <div class="toggle-track on" id="billing-toggle" onclick="toggleBilling()">
+        <div class="toggle-thumb"></div>
       </div>
-      <div class="fs-card">
-        <div class="fs-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-        <h3 class="fs-name">Automation Engine</h3>
-        <p class="fs-desc">50+ trigger-action combinations. When status changes, assign automatically. When due date passes, notify the right person.</p>
+      <span class="text-sm font-medium" id="bill-annual-label" style="color:var(--accent);">Annual</span>
+      <span class="text-xs px-2 py-0.5 font-medium" style="background:var(--accent-light);color:var(--accent);">Save 20%</span>
+    </div>
+
+    <!-- Tier cards row -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left mb-6 fade-up">
+
+      <!-- Free -->
+      <div class="p-6 border" style="border-color:var(--border);">
+        <p class="mono text-xs mb-2" style="color:var(--mid);letter-spacing:0.1em;">FREE</p>
+        <p class="price-amount" id="price-free">$0</p>
+        <p class="price-note">Forever free — no credit card</p>
+        <ul class="mt-5 space-y-2 text-xs mb-6" style="color:var(--mid);">
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> Up to 5 members</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> 3 active projects</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> Basic reporting</li>
+        </ul>
+        <a href="#" class="block text-center text-sm py-2.5 border font-medium transition-all hover:bg-gray-50" style="border-color:var(--border);">
+          Create Free Workspace
+        </a>
       </div>
-      <div class="fs-card">
-        <div class="fs-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
-        <h3 class="fs-name">Analytics & Reports</h3>
-        <p class="fs-desc">Velocity trends, capacity planning, and custom dashboards. Know before your stakeholders ask.</p>
+
+      <!-- Growth (highlighted) -->
+      <div class="p-6 border relative" style="border-color:var(--accent);">
+        <div class="plan-badge absolute -top-3 left-1/2 -translate-x-1/2">MOST POPULAR</div>
+        <p class="mono text-xs mb-2" style="color:var(--accent);letter-spacing:0.1em;">GROWTH</p>
+        <p class="price-amount" id="price-growth">$14</p>
+        <p class="price-note" id="note-growth">per member / month, billed annually</p>
+        <ul class="mt-5 space-y-2 text-xs mb-6" style="color:var(--mid);">
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> Unlimited members</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> Unlimited projects</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> Advanced analytics</li>
+        </ul>
+        <a href="#" class="block text-center text-sm py-2.5 font-medium transition-all hover:opacity-85" style="background:var(--accent);color:#fff;">
+          Activate Growth Plan
+        </a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="p-6 border" style="border-color:var(--border);">
+        <p class="mono text-xs mb-2" style="color:var(--mid);letter-spacing:0.1em;">ENTERPRISE</p>
+        <p class="price-amount" id="price-enterprise">Custom</p>
+        <p class="price-note">Negotiated annually</p>
+        <ul class="mt-5 space-y-2 text-xs mb-6" style="color:var(--mid);">
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> Dedicated SLA</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> SSO + SCIM</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:12px;height:12px;color:#16a34a;"></i> Custom integrations</li>
+        </ul>
+        <a href="#" class="block text-center text-sm py-2.5 border font-medium transition-all hover:bg-gray-50" style="border-color:var(--border);">
+          Talk to Our Team
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <p class="t-label">Social Proof</p>
-  <h2 class="t-title">Teams love Canvas</h2>
-  <div class="t-grid">
-    <div class="t-card">
-      <p class="t-stars">★★★★★</p>
-      <p class="t-text">"Switched from Jira 8 months ago. Our sprint planning time went from 3 hours to 45 minutes. The Gantt view alone is worth the price."</p>
-      <div class="t-by">
-        <div class="t-av" style="background:#5b4ff5;">PL</div>
-        <div><p class="t-name">Priya Larson</p><p class="t-role">Eng Manager, Vertex Systems</p></div>
+<!-- ══ COMPARISON TABLE ══ -->
+<section class="px-4 pb-24">
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Sticky column headers -->
+    <div class="tier-header">
+      <div class="feature-row" style="min-height: 64px;">
+        <div class="text-sm font-semibold" style="padding-left:0;">Compare all features</div>
+        <div class="tier-col text-center">
+          <p class="font-semibold text-sm">Free</p>
+          <p class="mono text-xs mt-0.5" style="color:var(--mid);">$0</p>
+        </div>
+        <div class="tier-col text-center" style="background:rgba(37,99,235,0.04);">
+          <p class="font-semibold text-sm" style="color:var(--accent);">Growth</p>
+          <p class="mono text-xs mt-0.5" style="color:var(--accent);" id="sticky-price-growth">$14/mo</p>
+        </div>
+        <div class="tier-col text-center">
+          <p class="font-semibold text-sm">Enterprise</p>
+          <p class="mono text-xs mt-0.5" style="color:var(--mid);">Custom</p>
+        </div>
       </div>
     </div>
-    <div class="t-card">
-      <p class="t-stars">★★★★★</p>
-      <p class="t-text">"The Growth plan pricing is genuinely fair for what you get. We've tried everything and Canvas has the best feature-to-cost ratio in the market."</p>
-      <div class="t-by">
-        <div class="t-av" style="background:#16a34a;">BW</div>
-        <div><p class="t-name">Ben Walsh</p><p class="t-role">COO, Nova Collective</p></div>
+
+    <!-- ── SECTION 1: Usage ── -->
+    <div class="section-block">
+      <div class="section-header-row" onclick="toggleSection('usage')">
+        <div class="section-title-cell">
+          <i data-lucide="bar-chart-2" style="width:14px;height:14px;color:var(--accent);"></i>
+          Usage
+          <i data-lucide="chevron-down" class="section-toggle-icon open ml-auto" id="icon-usage" style="width:14px;height:14px;color:var(--mid);"></i>
+        </div>
+        <div></div><div></div><div></div>
+      </div>
+      <div class="section-body" id="body-usage">
+        <div class="feature-row"><div class="flex items-center gap-1.5 text-sm">Members</div><div class="tier-col text-sm" style="color:var(--mid);">Up to 5</div><div class="tier-col text-sm highlight" style="color:var(--ink);font-weight:500;">Unlimited</div><div class="tier-col text-sm" style="color:var(--ink);font-weight:500;">Unlimited</div></div>
+        <div class="feature-row"><div class="text-sm">Active Projects</div><div class="tier-col text-sm" style="color:var(--mid);">3</div><div class="tier-col text-sm highlight font-medium">Unlimited</div><div class="tier-col text-sm font-medium">Unlimited</div></div>
+        <div class="feature-row"><div class="text-sm">Storage</div><div class="tier-col text-sm" style="color:var(--mid);">1 GB</div><div class="tier-col text-sm highlight font-medium">250 GB</div><div class="tier-col text-sm font-medium">5 TB</div></div>
+        <div class="feature-row"><div class="text-sm">API requests / month</div><div class="tier-col text-sm" style="color:var(--mid);">10K</div><div class="tier-col text-sm highlight font-medium">1M</div><div class="tier-col text-sm font-medium">Unlimited</div></div>
+        <div class="feature-row"><div class="text-sm">Activity history</div><div class="tier-col text-sm" style="color:var(--mid);">30 days</div><div class="tier-col text-sm highlight font-medium">1 year</div><div class="tier-col text-sm font-medium">Unlimited</div></div>
       </div>
     </div>
-    <div class="t-card">
-      <p class="t-stars">★★★★★</p>
-      <p class="t-text">"Enterprise support is the real deal. Our CSM set up a custom workflow for our agency billing process in the first week. Exceptional."</p>
-      <div class="t-by">
-        <div class="t-av" style="background:#dc2626;">SR</div>
-        <div><p class="t-name">Sofia Rodriguez</p><p class="t-role">Operations Lead, Apex Agency</p></div>
+
+    <!-- ── SECTION 2: Work Management ── -->
+    <div class="section-block">
+      <div class="section-header-row" onclick="toggleSection('work')">
+        <div class="section-title-cell">
+          <i data-lucide="layout" style="width:14px;height:14px;color:var(--accent);"></i>
+          Work Management
+          <i data-lucide="chevron-down" class="section-toggle-icon open ml-auto" id="icon-work" style="width:14px;height:14px;color:var(--mid);"></i>
+        </div>
+        <div></div><div></div><div></div>
       </div>
+      <div class="section-body" id="body-work">
+        <div class="feature-row"><div class="text-sm">Kanban boards</div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">List &amp; Table views</div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Gantt / Timeline</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Workload view</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Custom fields</div><div class="tier-col"><span class="limited-badge">5 fields</span></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Task dependencies</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Recurring tasks</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 3: Collaboration ── -->
+    <div class="section-block">
+      <div class="section-header-row" onclick="toggleSection('collab')">
+        <div class="section-title-cell">
+          <i data-lucide="users" style="width:14px;height:14px;color:var(--accent);"></i>
+          Collaboration
+          <i data-lucide="chevron-down" class="section-toggle-icon open ml-auto" id="icon-collab" style="width:14px;height:14px;color:var(--mid);"></i>
+        </div>
+        <div></div><div></div><div></div>
+      </div>
+      <div class="section-body" id="body-collab">
+        <div class="feature-row"><div class="text-sm">Comments &amp; mentions</div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Guest access</div><div class="tier-col"><span class="limited-badge">2 guests</span></div><div class="tier-col highlight font-medium text-sm">Unlimited</div><div class="tier-col font-medium text-sm">Unlimited</div></div>
+        <div class="feature-row"><div class="text-sm">Role-based permissions</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Approval workflows</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 4: Analytics ── -->
+    <div class="section-block">
+      <div class="section-header-row" onclick="toggleSection('analytics')">
+        <div class="section-title-cell">
+          <i data-lucide="trending-up" style="width:14px;height:14px;color:var(--accent);"></i>
+          Analytics &amp; Reporting
+          <i data-lucide="chevron-down" class="section-toggle-icon open ml-auto" id="icon-analytics" style="width:14px;height:14px;color:var(--mid);"></i>
+        </div>
+        <div></div><div></div><div></div>
+      </div>
+      <div class="section-body" id="body-analytics">
+        <div class="feature-row"><div class="text-sm">Basic dashboards</div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Custom report builder</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Velocity &amp; burndown</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Executive portfolio reporting</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">CSV &amp; PDF exports</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 5: Automations ── -->
+    <div class="section-block">
+      <div class="section-header-row" onclick="toggleSection('automations')">
+        <div class="section-title-cell">
+          <i data-lucide="zap" style="width:14px;height:14px;color:var(--accent);"></i>
+          Automations
+          <i data-lucide="chevron-down" class="section-toggle-icon open ml-auto" id="icon-automations" style="width:14px;height:14px;color:var(--mid);"></i>
+        </div>
+        <div></div><div></div><div></div>
+      </div>
+      <div class="section-body" id="body-automations">
+        <div class="feature-row"><div class="text-sm">Automation actions / month</div><div class="tier-col text-sm" style="color:var(--mid);">100</div><div class="tier-col text-sm highlight font-medium">25,000</div><div class="tier-col text-sm font-medium">Unlimited</div></div>
+        <div class="feature-row"><div class="text-sm">Trigger-based rules</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Cross-project automations</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">AI task suggestions</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><span class="addon-badge">Add-on</span></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 6: Integrations ── -->
+    <div class="section-block">
+      <div class="section-header-row" onclick="toggleSection('integrations')">
+        <div class="section-title-cell">
+          <i data-lucide="plug" style="width:14px;height:14px;color:var(--accent);"></i>
+          Integrations
+          <i data-lucide="chevron-down" class="section-toggle-icon open ml-auto" id="icon-integrations" style="width:14px;height:14px;color:var(--mid);"></i>
+        </div>
+        <div></div><div></div><div></div>
+      </div>
+      <div class="section-body" id="body-integrations">
+        <div class="feature-row"><div class="text-sm">Slack &amp; Teams</div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">GitHub &amp; GitLab</div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Salesforce</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">REST API + Webhooks</div><div class="tier-col"><span class="limited-badge">Read-only</span></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Custom integrations (iPaaS)</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+      </div>
+    </div>
+
+    <!-- ── SECTION 7: Security ── -->
+    <div class="section-block">
+      <div class="section-header-row" onclick="toggleSection('security')">
+        <div class="section-title-cell">
+          <i data-lucide="shield" style="width:14px;height:14px;color:var(--accent);"></i>
+          Security &amp; Compliance
+          <i data-lucide="chevron-down" class="section-toggle-icon open ml-auto" id="icon-security" style="width:14px;height:14px;color:var(--mid);"></i>
+        </div>
+        <div></div><div></div><div></div>
+      </div>
+      <div class="section-body" id="body-security">
+        <div class="feature-row"><div class="text-sm">SOC 2 Type II</div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">SSO (SAML 2.0)</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">SCIM provisioning</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+        <div class="feature-row"><div class="text-sm">Audit log</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><span class="limited-badge">30 days</span></div><div class="tier-col"><span class="font-medium text-sm">Unlimited</span></div></div>
+        <div class="feature-row"><div class="text-sm">Data residency (EU/US)</div><div class="tier-col"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col highlight"><i data-lucide="x" class="cross-icon mx-auto" style="width:16px;height:16px;"></i></div><div class="tier-col"><i data-lucide="check" class="check-icon mx-auto" style="width:16px;height:16px;"></i></div></div>
+      </div>
+    </div>
+
+    <!-- Bottom CTA row -->
+    <div class="feature-row mt-2" style="border:none; min-height:80px; background:var(--surface);">
+      <div></div>
+      <div class="tier-col">
+        <a href="#" class="text-sm py-2.5 px-5 border font-medium block text-center transition-all hover:bg-gray-100" style="border-color:var(--border);">
+          Create Free Workspace
+        </a>
+      </div>
+      <div class="tier-col highlight">
+        <a href="#" class="text-sm py-2.5 px-5 font-medium block text-center transition-all hover:opacity-85" style="background:var(--accent);color:#fff;">
+          Activate Growth Plan
+        </a>
+      </div>
+      <div class="tier-col">
+        <a href="#" class="text-sm py-2.5 px-5 border font-medium block text-center transition-all hover:bg-gray-100" style="border-color:var(--border);">
+          Talk to Our Team
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="py-16 px-6" style="border-top:1px solid var(--border);background:var(--surface);">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="font-bold text-2xl mb-10" style="letter-spacing:-0.03em;">Common questions</h2>
+    <div class="space-y-0">
+      <details class="group" style="border-top:1px solid var(--border);">
+        <summary class="flex justify-between items-center py-4 cursor-pointer font-medium text-sm list-none">
+          Can I change plans at any time?
+          <i data-lucide="chevron-down" style="width:16px;height:16px;color:var(--mid);transition:transform 0.3s;" class="group-open:rotate-180"></i>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed" style="color:var(--mid);">Yes. Upgrades take effect immediately and are prorated. Downgrades take effect at the next billing cycle. No cancellation penalties.</p>
+      </details>
+      <details class="group" style="border-top:1px solid var(--border);">
+        <summary class="flex justify-between items-center py-4 cursor-pointer font-medium text-sm list-none">
+          What counts as a "member"?
+          <i data-lucide="chevron-down" style="width:16px;height:16px;color:var(--mid);transition:transform 0.3s;" class="group-open:rotate-180"></i>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed" style="color:var(--mid);">Any user with a full account who can create and edit tasks. Guest users (view-only) do not count toward your member limit on any plan.</p>
+      </details>
+      <details class="group" style="border-top:1px solid var(--border);">
+        <summary class="flex justify-between items-center py-4 cursor-pointer font-medium text-sm list-none">
+          Is there a non-profit or educational discount?
+          <i data-lucide="chevron-down" style="width:16px;height:16px;color:var(--mid);transition:transform 0.3s;" class="group-open:rotate-180"></i>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed" style="color:var(--mid);">Yes — registered nonprofits and accredited educational institutions qualify for 40% off any paid plan. Email billing@canvas.so with documentation.</p>
+      </details>
+      <details class="group" style="border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+        <summary class="flex justify-between items-center py-4 cursor-pointer font-medium text-sm list-none">
+          How does the Enterprise negotiation work?
+          <i data-lucide="chevron-down" style="width:16px;height:16px;color:var(--mid);transition:transform 0.3s;" class="group-open:rotate-180"></i>
+        </summary>
+        <p class="pb-4 text-sm leading-relaxed" style="color:var(--mid);">We start with a 30-minute discovery call, model out your anticipated usage, and return a fixed annual quote within 5 business days. No surprise overages — ever.</p>
+      </details>
     </div>
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="faq">
-  <div class="faq-inner">
-    <h2 class="faq-title">Frequently asked questions</h2>
-    <div class="faq-item">
-      <div class="faq-q">Can I switch plans at any time?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
-      <p class="faq-a">Yes — upgrade or downgrade at any time. Upgrades take effect immediately. Downgrades apply at the end of your billing cycle. No lock-in, no penalties.</p>
+<!-- ══ FOOTER ══ -->
+<footer class="py-12 px-6 border-t" style="border-color:var(--border);">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="flex items-center gap-2">
+      <div style="width:20px;height:20px;background:var(--accent);display:flex;align-items:center;justify-content:center;">
+        <i data-lucide="layout-grid" style="width:11px;height:11px;color:#fff;"></i>
+      </div>
+      <span class="font-semibold text-sm">CANVAS</span>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">Is there a free trial for paid plans?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
-      <p class="faq-a">Every paid plan includes a 14-day free trial with no credit card required. You get full access to all features in your chosen plan during the trial period.</p>
+    <div class="flex gap-6">
+      <a href="#" class="text-xs transition-colors hover:text-black" style="color:var(--mid);">Privacy</a>
+      <a href="#" class="text-xs transition-colors hover:text-black" style="color:var(--mid);">Terms</a>
+      <a href="#" class="text-xs transition-colors hover:text-black" style="color:var(--mid);">Security</a>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">How does per-seat pricing work?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
-      <p class="faq-a">A seat is any user who can actively create, edit, or manage projects. Guests (view-only) don't count toward your seat count. You only pay for active seats.</p>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">What happens to my data if I downgrade?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
-      <p class="faq-a">Your data is always yours. If you downgrade, features beyond your plan's limits are locked (not deleted). Upgrade again to regain full access instantly.</p>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Do you offer nonprofit or startup discounts?<div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
-      <p class="faq-a">Yes! Registered nonprofits get 50% off any plan. Startups in our accelerator program may qualify for extended free access. Contact us to learn more.</p>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta">
-  <h2>Start free.<br/><em>Scale with confidence.</em></h2>
-  <p>Join 25,000+ teams already using Canvas to ship better work, faster.</p>
-  <div class="cta-btns">
-    <a href="#" class="nav-cta" style="font-size:15px;padding:15px 36px;border-radius:10px;text-decoration:none;">Start Free Trial →</a>
-    <a href="#" class="nav-login" style="font-size:15px;padding:15px 36px;border-radius:10px;text-decoration:none;">Talk to Sales</a>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <a href="#" class="footer-logo">CANVAS<em>.</em></a>
-    <ul class="footer-nav">
-      <li><a href="#">Features</a></li>
-      <li><a href="#">Pricing</a></li>
-      <li><a href="#">Enterprise</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Status</a></li>
-    </ul>
-    <p class="footer-copy">© 2024 Canvas Inc.</p>
+    <p class="mono text-xs" style="color:rgba(15,15,16,0.2);">&copy; 2025 Canvas Software Inc.</p>
   </div>
 </footer>
 
 <script>
-  // Billing toggle
-  function setBilling(mode) {
-    document.getElementById('monthlyBtn').classList.toggle('active', mode === 'monthly');
-    document.getElementById('annualBtn').classList.toggle('active', mode === 'annual');
-    const priceEl = document.getElementById('growthPrice');
-    if (mode === 'annual') {
-      priceEl.innerHTML = '<sup>$</sup>17<span class="period">/mo per seat</span>';
+  // ── Billing toggle ──
+  let isAnnual = true;
+  const prices = {
+    growth: { monthly: 18, annual: 14 },
+  };
+
+  function toggleBilling() {
+    isAnnual = !isAnnual;
+    const track = document.getElementById('billing-toggle');
+    track.classList.toggle('on', isAnnual);
+
+    const gLabel = document.getElementById('bill-annual-label');
+    const mLabel = document.getElementById('bill-monthly-label');
+    gLabel.style.color = isAnnual ? 'var(--accent)' : 'inherit';
+    mLabel.style.color = isAnnual ? 'inherit' : 'var(--accent)';
+
+    const gPrice = isAnnual ? prices.growth.annual : prices.growth.monthly;
+    document.getElementById('price-growth').textContent = '$' + gPrice;
+    document.getElementById('note-growth').textContent = isAnnual
+      ? 'per member / month, billed annually'
+      : 'per member / month, billed monthly';
+    document.getElementById('sticky-price-growth').textContent = '$' + gPrice + '/mo';
+  }
+
+  // ── Section collapse ──
+  function toggleSection(id) {
+    const body = document.getElementById('body-' + id);
+    const icon = document.getElementById('icon-' + id);
+    const isOpen = !body.classList.contains('collapsed');
+    if (isOpen) {
+      body.style.height = body.scrollHeight + 'px';
+      requestAnimationFrame(() => {
+        body.style.height = body.scrollHeight + 'px';
+        requestAnimationFrame(() => { body.style.height = '0'; body.classList.add('collapsed'); });
+      });
+      icon.classList.remove('open');
     } else {
-      priceEl.innerHTML = '<sup>$</sup>29<span class="period">/mo per seat</span>';
+      body.classList.remove('collapsed');
+      body.style.height = '0';
+      requestAnimationFrame(() => { body.style.height = body.scrollHeight + 'px'; });
+      setTimeout(() => { body.style.height = ''; }, 420);
+      icon.classList.add('open');
     }
   }
 
-  // Collapsible table sections
-  document.querySelectorAll('.section-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const section = row.dataset.section;
-      const isCollapsed = row.classList.toggle('collapsed');
-      document.querySelectorAll(`.feature-row[data-section="${section}"]`).forEach(r => {
-        r.classList.toggle('hidden', isCollapsed);
-      });
-    });
-  });
-
-  // FAQ accordion
-  document.querySelectorAll('.faq-q').forEach(q => {
-    q.addEventListener('click', () => {
-      const item = q.parentElement;
-      const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-      if (!wasOpen) item.classList.add('open');
-    });
-  });
-
-  // Scroll reveal
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
-      }
-    });
+  // ── Fade up ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
   }, { threshold: 0.1 });
-  document.querySelectorAll('.pricing-card, .t-card, .fs-card').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = `opacity 0.6s ease ${i * 0.08}s, transform 0.6s ease ${i * 0.08}s`;
-    io.observe(el);
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+  document.querySelectorAll('.fade-up').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-visible');
   });
+
+  lucide.createIcons();
 </script>
 </body>
 </html>

@@ -1,638 +1,596 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CLARITY TYPE — Premium Font Foundry</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
-
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --cream: #faf8f3;
-    --ink: #0e0d0b;
-    --mid: #f0ede6;
-    --accent: #c8a96e;
-    --border: rgba(14,13,11,0.1);
-    --muted: rgba(14,13,11,0.42);
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--cream);
-    color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 22px 56px;
-    background: rgba(250,248,243,0.88);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px; font-weight: 600; letter-spacing: 0.08em;
-    color: var(--ink); text-decoration: none;
-  }
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a {
-    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
-    color: var(--muted); text-decoration: none; text-transform: uppercase;
-    transition: color 0.25s;
-  }
-  .nav-links a:hover { color: var(--ink); }
-  .nav-cta {
-    background: var(--ink); color: var(--cream);
-    font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
-    padding: 10px 24px; border-radius: 2px;
-    text-decoration: none; text-transform: uppercase;
-    transition: background 0.25s;
-  }
-  .nav-cta:hover { background: var(--accent); }
-
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 130px 56px 80px;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-  }
-  .hero-tag {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.25em;
-    text-transform: uppercase; color: var(--accent);
-    margin-bottom: 48px;
-    opacity: 0; animation: fade 0.6s ease 0.2s forwards;
-  }
-
-  /* ── BLUR-TO-SHARP LETTER ANIMATION ── */
-  .blur-headline {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(60px, 10vw, 140px);
-    font-weight: 300; line-height: 1.0;
-    letter-spacing: -0.02em;
-    margin-bottom: 0;
-    display: block;
-  }
-  .blur-line { display: block; overflow: visible; margin-bottom: 0.04em; }
-  .blur-char {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(28px);
-    filter: blur(12px);
-    animation: blurReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  .blur-char.space-char { display: inline-block; width: 0.28em; }
-
-  @keyframes blurReveal {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clarity Type — Premium Font Foundry</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0d0d0d;
+      --paper: #f5f2ee;
+      --warm: #c8b89a;
+      --accent: #2b2016;
     }
-  }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
 
-  .hero-italic {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic; font-weight: 300;
-    color: var(--accent);
-  }
+    /* ── Letter blur animation ── */
+    .blur-text-wrap .letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(12px);
+      transition:
+        opacity 0.55s cubic-bezier(0.22,1,0.36,1),
+        transform 0.55s cubic-bezier(0.22,1,0.36,1),
+        filter 0.55s cubic-bezier(0.22,1,0.36,1);
+    }
+    .blur-text-wrap.is-visible .letter { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .blur-text-wrap .space { display: inline-block; width: 0.28em; }
 
-  .hero-divider {
-    width: 1px; height: 64px; background: var(--border);
-    margin: 48px auto;
-    opacity: 0; animation: fade 0.6s ease 2s forwards;
-  }
-  .hero-sub {
-    font-size: 16px; font-weight: 300; line-height: 1.8;
-    color: var(--muted); max-width: 480px;
-    opacity: 0; animation: fade 0.6s ease 2.1s forwards;
-  }
-  .hero-actions {
-    display: flex; gap: 16px; margin-top: 48px;
-    opacity: 0; animation: fade 0.6s ease 2.3s forwards;
-  }
-  .btn-dark {
-    background: var(--ink); color: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
-    padding: 15px 36px; border-radius: 2px;
-    text-decoration: none; text-transform: uppercase;
-    transition: background 0.25s, transform 0.2s;
-  }
-  .btn-dark:hover { background: var(--accent); transform: translateY(-2px); }
-  .btn-outline {
-    border: 1px solid var(--border); color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
-    padding: 15px 36px; border-radius: 2px;
-    text-decoration: none; text-transform: uppercase;
-    transition: border-color 0.25s, background 0.25s;
-  }
-  .btn-outline:hover { border-color: var(--ink); background: rgba(14,13,11,0.04); }
+    /* ── Hero logotype rule ── */
+    .logotype { font-family: 'DM Serif Display', serif; }
+    .mono { font-family: 'DM Mono', monospace; }
 
-  @keyframes fade {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+    /* ── Marquee ── */
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
 
-  /* ── TYPE SPECIMENS ── */
-  .specimens {
-    padding: 100px 56px;
-    border-bottom: 1px solid var(--border);
-  }
-  .specimens-inner { max-width: 1200px; margin: 0 auto; }
-  .section-label {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--accent);
-    margin-bottom: 16px;
-  }
-  .specimens-header {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-bottom: 64px;
-    padding-bottom: 32px; border-bottom: 1px solid var(--border);
-  }
-  .specimens-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(40px, 5vw, 60px); font-weight: 300;
-    letter-spacing: -0.01em; line-height: 1.1;
-  }
-  .specimens-sub {
-    font-size: 14px; color: var(--muted); max-width: 260px;
-    line-height: 1.7; font-weight: 300;
-  }
-  .specimen-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-  .specimen-card {
-    background: var(--cream);
-    padding: 56px 48px;
-    transition: background 0.3s;
-    position: relative; overflow: hidden;
-  }
-  .specimen-card:hover { background: var(--mid); }
-  .specimen-label {
-    font-size: 10px; font-weight: 600; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--muted);
-    margin-bottom: 32px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .specimen-label::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
-  }
-  .specimen-type {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300; line-height: 1.15;
-    letter-spacing: -0.01em;
-  }
-  .specimen-info {
-    margin-top: 24px;
-    font-size: 12px; color: var(--muted); font-weight: 300;
-  }
+    /* ── Specimen grid ── */
+    .specimen-card {
+      border: 1px solid rgba(13,13,13,0.12);
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .specimen-card:hover { border-color: var(--ink); }
 
-  /* ── FEATURES ── */
-  .features {
-    padding: 100px 56px;
-    background: var(--ink); color: var(--cream);
-    border-top: 1px solid rgba(255,255,255,0.05);
-  }
-  .features-inner { max-width: 1200px; margin: 0 auto; }
-  .features-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.06);
-    margin-top: 64px;
-  }
-  .feat {
-    background: var(--ink); padding: 48px 36px;
-    transition: background 0.3s;
-  }
-  .feat:hover { background: #191815; }
-  .feat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 48px; font-weight: 300;
-    color: rgba(200,169,110,0.25); margin-bottom: 24px;
-    line-height: 1;
-  }
-  .feat-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px; font-weight: 400;
-    margin-bottom: 14px;
-  }
-  .feat-desc {
-    font-size: 13px; line-height: 1.8;
-    color: rgba(250,248,243,0.45); font-weight: 300;
-  }
+    /* ── Nav ── */
+    nav a { position: relative; }
+    nav a::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--ink);
+      transition: width 0.3s ease;
+    }
+    nav a:hover::after { width: 100%; }
 
-  /* ── PRICING / LICENSING ── */
-  .licensing {
-    padding: 100px 56px;
-    border-bottom: 1px solid var(--border);
-  }
-  .licensing-inner { max-width: 1200px; margin: 0 auto; }
-  .license-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-    margin-top: 64px;
-  }
-  .license-card {
-    border: 1px solid var(--border); padding: 40px;
-    border-radius: 4px;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  .license-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 20px 60px rgba(200,169,110,0.08);
-  }
-  .license-card.featured {
-    border-color: var(--ink); background: var(--ink); color: var(--cream);
-  }
-  .license-tier {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--accent);
-    margin-bottom: 16px;
-  }
-  .license-price {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 56px; font-weight: 300; line-height: 1;
-    margin-bottom: 8px;
-  }
-  .license-period {
-    font-size: 13px; font-weight: 300; margin-bottom: 32px;
-  }
-  .license-features { list-style: none; margin-bottom: 36px; }
-  .license-features li {
-    font-size: 13px; font-weight: 300; padding: 10px 0;
-    border-bottom: 1px solid;
-    display: flex; gap: 12px; align-items: center;
-  }
-  .license-card:not(.featured) .license-features li { border-color: var(--border); }
-  .license-card.featured .license-features li { border-color: rgba(255,255,255,0.08); }
-  .license-features li::before { content: '—'; color: var(--accent); flex-shrink: 0; }
-  .license-btn {
-    display: block; text-align: center;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; text-decoration: none;
-    padding: 14px; border-radius: 2px; border: 1px solid;
-    transition: background 0.25s;
-  }
-  .license-card:not(.featured) .license-btn {
-    border-color: var(--ink); color: var(--ink);
-  }
-  .license-card:not(.featured) .license-btn:hover { background: var(--ink); color: var(--cream); }
-  .license-card.featured .license-btn {
-    border-color: var(--accent); color: var(--accent);
-  }
-  .license-card.featured .license-btn:hover { background: var(--accent); color: var(--ink); }
+    /* ── Reveal line ── */
+    .reveal-line {
+      overflow: hidden;
+    }
+    .reveal-line-inner {
+      transform: translateY(100%);
+      transition: transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .is-visible .reveal-line-inner { transform: translateY(0); }
 
-  /* ── TESTIMONIALS ── */
-  .testimonials {
-    padding: 100px 56px;
-    background: var(--mid);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .testimonials-inner { max-width: 1200px; margin: 0 auto; }
-  .testi-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-    margin-top: 64px;
-  }
-  .testi {
-    background: var(--cream); padding: 36px;
-    border: 1px solid var(--border);
-    transition: transform 0.3s;
-  }
-  .testi:hover { transform: translateY(-4px); }
-  .testi-quote {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; font-style: italic; font-weight: 300;
-    line-height: 1.65; color: var(--ink); margin-bottom: 28px;
-  }
-  .testi-meta { display: flex; align-items: center; gap: 14px; }
-  .testi-dot { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); }
-  .testi-name { font-size: 13px; font-weight: 600; }
-  .testi-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    /* ── Section divider ── */
+    .serif-divider { font-family: 'DM Serif Display', serif; font-size: clamp(80px, 14vw, 180px); line-height: 0.88; letter-spacing: -0.04em; }
 
-  /* ── CTA ── */
-  .cta {
-    padding: 120px 56px; text-align: center;
-  }
-  .cta-headline {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(52px, 8vw, 100px); font-weight: 300;
-    line-height: 1.0; letter-spacing: -0.02em;
-    margin-bottom: 32px;
-  }
-  .cta-headline em { color: var(--accent); font-style: italic; }
-  .cta-sub {
-    font-size: 16px; font-weight: 300; color: var(--muted);
-    max-width: 420px; margin: 0 auto 48px; line-height: 1.7;
-  }
+    /* ── Pricing card ── */
+    .plan-card {
+      border: 1px solid rgba(13,13,13,0.14);
+      padding: 2.5rem 2rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
 
-  /* ── FOOTER ── */
-  footer {
-    background: var(--ink); color: var(--cream);
-    padding: 48px 56px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-  .footer-inner {
-    max-width: 1200px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .footer-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px; font-weight: 600; letter-spacing: 0.08em;
-    color: var(--cream); text-decoration: none;
-  }
-  .footer-links { display: flex; gap: 32px; list-style: none; }
-  .footer-links a {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
-    text-transform: uppercase; color: rgba(250,248,243,0.35);
-    text-decoration: none; transition: color 0.25s;
-  }
-  .footer-links a:hover { color: var(--cream); }
-  .footer-copy { font-size: 11px; color: rgba(250,248,243,0.2); }
-</style>
+    /* ── Scroll fade in ── */
+    .fade-up { opacity: 0; transform: translateY(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Cursor dot ── */
+    #cursor {
+      position: fixed; width: 10px; height: 10px;
+      border-radius: 50%; background: var(--ink);
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s ease, width 0.25s ease, height 0.25s ease, background 0.25s;
+      mix-blend-mode: multiply;
+    }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="#" class="nav-logo">CLARITY TYPE</a>
-  <ul class="nav-links">
-    <li><a href="#typefaces">Typefaces</a></li>
-    <li><a href="#specimens">Specimens</a></li>
-    <li><a href="#licensing">Licensing</a></li>
-    <li><a href="#about">About</a></li>
-  </ul>
-  <a href="#licensing" class="nav-cta">Buy Fonts</a>
-</nav>
+<!-- Custom cursor -->
+<div id="cursor"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <p class="hero-tag">Premium Font Foundry · Est. 2018</p>
-  <!-- Blur-to-sharp letter-by-letter animation -->
-  <h1 class="blur-headline" id="hero-headline" aria-label="Where Clarity Begins"></h1>
-  <div class="hero-divider"></div>
-  <p class="hero-sub">A curated collection of editorial typefaces built for precision, beauty, and the spaces between letters that make language breathe.</p>
-  <div class="hero-actions">
-    <a href="#typefaces" class="btn-dark">Explore Typefaces</a>
-    <a href="#specimens" class="btn-outline">View Specimens</a>
-  </div>
-</section>
+<!-- ══ NAV ══ -->
+<header class="fixed top-0 left-0 right-0 z-50 px-8 py-5 flex items-center justify-between"
+  style="background: rgba(245,242,238,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(13,13,13,0.08);">
+  <a href="#" class="logotype text-xl tracking-tight" style="letter-spacing: -0.03em;">Clarity Type</a>
+  <nav class="hidden md:flex items-center gap-8 text-sm" style="color: #555;">
+    <a href="#typefaces" class="hover:text-black transition-colors">Typefaces</a>
+    <a href="#specimen" class="hover:text-black transition-colors">Specimen</a>
+    <a href="#process" class="hover:text-black transition-colors">Process</a>
+    <a href="#pricing" class="hover:text-black transition-colors">Licensing</a>
+  </nav>
+  <a href="#pricing" class="text-sm px-5 py-2 border border-current transition-all hover:bg-black hover:text-white" style="letter-spacing: 0.04em;">Acquire a License</a>
+</header>
 
-<!-- SPECIMENS -->
-<section class="specimens" id="specimens">
-  <div class="specimens-inner">
-    <div class="specimens-header">
-      <div>
-        <p class="section-label">Type Specimens</p>
-        <h2 class="specimens-title">Letters at<br/>their finest</h2>
-      </div>
-      <p class="specimens-sub">Each typeface is refined over months of optical corrections, kerning pairs, and language support testing.</p>
+<!-- ══ HERO ══ -->
+<section class="min-h-screen pt-28 pb-20 px-8 flex flex-col justify-between" style="border-bottom: 1px solid rgba(13,13,13,0.1);">
+  <div class="max-w-7xl mx-auto w-full">
+
+    <!-- Eyebrow -->
+    <div class="flex items-center gap-3 mb-12 fade-up">
+      <span class="mono text-xs" style="color: #888; letter-spacing: 0.12em;">EST. 2019 — BERLIN</span>
+      <span style="width:48px; height:1px; background: #bbb; display:inline-block;"></span>
+      <span class="mono text-xs" style="color: #888; letter-spacing: 0.08em;">INDEPENDENT FOUNDRY</span>
     </div>
-    <div class="specimen-grid">
-      <div class="specimen-card">
-        <p class="specimen-label">Clarity Serif — Display</p>
-        <p class="specimen-type" style="font-size: 72px; font-family: 'Cormorant Garamond', serif; font-weight: 300;">Aa Bb Cc</p>
-        <p class="specimen-info">Clarity Serif · 8 weights · 320 glyphs · OpenType features</p>
-      </div>
-      <div class="specimen-card">
-        <p class="specimen-label">Clarity Sans — Text</p>
-        <p class="specimen-type" style="font-size: 52px; font-family: 'DM Sans', sans-serif; font-weight: 300;">Aa Bb Cc</p>
-        <p class="specimen-info">Clarity Sans · 6 weights · 280 glyphs · Variable axis</p>
-      </div>
-      <div class="specimen-card">
-        <p class="specimen-label">Italic Specimen</p>
-        <p class="specimen-type" style="font-size: 64px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; color: #c8a96e;">Poetry</p>
-        <p class="specimen-info">True italics · Custom swash alternates · Ligature sets</p>
-      </div>
-      <div class="specimen-card">
-        <p class="specimen-label">Numerals & Punctuation</p>
-        <p class="specimen-type" style="font-size: 56px; font-family: 'Cormorant Garamond', serif; font-weight: 300;">0123 &amp;!?</p>
-        <p class="specimen-info">Tabular & proportional figures · Oldstyle numerals</p>
+
+    <!-- Main headline — blur-text animation -->
+    <div class="mb-8">
+      <h1 class="logotype blur-text-wrap" id="hero-h1"
+        style="font-size: clamp(56px, 11vw, 148px); line-height: 0.9; letter-spacing: -0.04em; color: var(--ink);">
+        Type That<br>Thinks In<br><em>Silence.</em>
+      </h1>
+    </div>
+
+    <!-- Sub copy -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <p class="fade-up max-w-md text-base leading-relaxed" style="color: #555;">
+        Clarity Type crafts typefaces for editorial systems, identity programs, and digital interfaces
+        where every character carries deliberate weight. No decorative excess — only precision.
+      </p>
+      <div class="fade-up flex items-center gap-4">
+        <a href="#typefaces" class="mono text-xs px-6 py-3 bg-black text-white hover:bg-neutral-800 transition-colors" style="letter-spacing: 0.08em;">
+          Browse Catalogue
+        </a>
+        <a href="#specimen" class="mono text-xs px-6 py-3 border border-current hover:bg-black hover:text-white transition-colors" style="letter-spacing: 0.08em;">
+          View Specimen
+        </a>
       </div>
     </div>
   </div>
-</section>
 
-<!-- FEATURES -->
-<section class="features" id="about">
-  <div class="features-inner">
+  <!-- Bottom stat strip -->
+  <div class="max-w-7xl mx-auto w-full mt-16 pt-8 border-t border-neutral-200 grid grid-cols-2 md:grid-cols-4 gap-4 fade-up">
     <div>
-      <p class="section-label" style="color: var(--accent);">The Foundry Difference</p>
-      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 5vw, 60px); font-weight: 300; margin-top: 12px; letter-spacing: -0.01em; color: var(--cream);">Craft without<br/>compromise</h2>
+      <p class="logotype text-4xl" style="letter-spacing: -0.03em;">24</p>
+      <p class="mono text-xs mt-1" style="color: #888; letter-spacing: 0.06em;">Typeface Families</p>
     </div>
-    <div class="features-grid">
-      <div class="feat">
-        <div class="feat-num">I</div>
-        <h3 class="feat-title">Optical Corrections</h3>
-        <p class="feat-desc">Every weight is individually drawn — not interpolated. Optical sizes are hand-tuned for display, text, and caption use.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-num">II</div>
-        <h3 class="feat-title">Language Coverage</h3>
-        <p class="feat-desc">Latin Extended, Cyrillic, and Greek in every family. Over 400 glyphs per weight with full diacritic support.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-num">III</div>
-        <h3 class="feat-title">Variable Font Technology</h3>
-        <p class="feat-desc">Continuous axes for weight and optical size. One file, infinite variations — perfectly tuned for the web.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-num">IV</div>
-        <h3 class="feat-title">OpenType Features</h3>
-        <p class="feat-desc">Ligatures, alternates, swashes, small caps, superior/inferior figures, fractions, and ordinals built in.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-num">V</div>
-        <h3 class="feat-title">Web Performance</h3>
-        <p class="feat-desc">WOFF2-optimized files, subset generation tools, and subsetting guidance for lightning-fast web delivery.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-num">VI</div>
-        <h3 class="feat-title">Lifetime Updates</h3>
-        <p class="feat-desc">Your license includes all future updates. Glyphs added, bugs fixed, and new language support — always free.</p>
-      </div>
+    <div>
+      <p class="logotype text-4xl" style="letter-spacing: -0.03em;">380+</p>
+      <p class="mono text-xs mt-1" style="color: #888; letter-spacing: 0.06em;">Glyphs Per Family</p>
+    </div>
+    <div>
+      <p class="logotype text-4xl" style="letter-spacing: -0.03em;">6</p>
+      <p class="mono text-xs mt-1" style="color: #888; letter-spacing: 0.06em;">Weight Axes</p>
+    </div>
+    <div>
+      <p class="logotype text-4xl" style="letter-spacing: -0.03em;">11k</p>
+      <p class="mono text-xs mt-1" style="color: #888; letter-spacing: 0.06em;">Active Licenses</p>
     </div>
   </div>
 </section>
 
-<!-- LICENSING -->
-<section class="licensing" id="licensing">
-  <div class="licensing-inner">
-    <p class="section-label">Licensing</p>
-    <h2 class="specimens-title" style="margin-top: 12px;">Simple, clear pricing</h2>
-    <div class="license-grid">
-      <div class="license-card">
-        <p class="license-tier">Studio</p>
-        <p class="license-price">$149</p>
-        <p class="license-period">per typeface family, one-time</p>
-        <ul class="license-features">
-          <li>Up to 5 users</li>
-          <li>Web & print use</li>
-          <li>3 weights included</li>
-          <li>Desktop license</li>
-          <li>Email support</li>
-        </ul>
-        <a href="#" class="license-btn">Purchase Studio</a>
-      </div>
-      <div class="license-card featured">
-        <p class="license-tier">Agency</p>
-        <p class="license-price">$399</p>
-        <p class="license-period">per typeface family, one-time</p>
-        <ul class="license-features">
-          <li>Unlimited users</li>
-          <li>All platforms & media</li>
-          <li>All weights & styles</li>
-          <li>App & ePub license</li>
-          <li>Priority support</li>
-        </ul>
-        <a href="#" class="license-btn">Purchase Agency</a>
-      </div>
-      <div class="license-card">
-        <p class="license-tier">Enterprise</p>
-        <p class="license-price">Custom</p>
-        <p class="license-period">volume & broadcast licensing</p>
-        <ul class="license-features">
-          <li>OEM embedding</li>
-          <li>Broadcast & film</li>
-          <li>Exclusive modifications</li>
-          <li>Dedicated account</li>
-          <li>SLA & invoicing</li>
-        </ul>
-        <a href="#" class="license-btn">Contact Us</a>
-      </div>
+<!-- ══ MARQUEE ══ -->
+<div class="py-5 overflow-hidden border-b" style="border-color: rgba(13,13,13,0.1); background: var(--ink);">
+  <div class="marquee-track">
+    <div class="flex items-center gap-12 pr-12">
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Neue Klarheit</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">DISPLAY SERIF</span>
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Klare Grotesk</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">VARIABLE SANS</span>
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Feuer Mono</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">EDITORIAL MONO</span>
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Stille Condensed</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">CONDENSED SLAB</span>
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Licht Sans</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">GEOMETRIC</span>
+      <span style="display:inline-block; width: 3rem;"></span>
+    </div>
+    <!-- Duplicate for seamless loop -->
+    <div class="flex items-center gap-12 pr-12" aria-hidden="true">
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Neue Klarheit</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">DISPLAY SERIF</span>
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Klare Grotesk</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">VARIABLE SANS</span>
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Feuer Mono</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">EDITORIAL MONO</span>
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Stille Condensed</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">CONDENSED SLAB</span>
+      <span class="logotype italic text-white text-xl whitespace-nowrap">Licht Sans</span>
+      <span class="mono text-xs text-neutral-400 whitespace-nowrap" style="letter-spacing: 0.12em;">GEOMETRIC</span>
+      <span style="display:inline-block; width: 3rem;"></span>
     </div>
   </div>
-</section>
+</div>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="testimonials-inner">
-    <p class="section-label">In Their Words</p>
-    <h2 class="specimens-title" style="margin-top: 12px;">Designers love<br/>Clarity Type</h2>
-    <div class="testi-grid">
-      <div class="testi">
-        <p class="testi-quote">"The Clarity Serif family is the most beautifully spaced typeface I've used in 15 years of editorial design. It just works at every size."</p>
-        <div class="testi-meta">
-          <div class="testi-dot"></div>
-          <div>
-            <p class="testi-name">Emilia Voss</p>
-            <p class="testi-role">Art Director, Forma Magazine</p>
+<!-- ══ TYPEFACES ══ -->
+<section id="typefaces" class="py-24 px-8 border-b" style="border-color: rgba(13,13,13,0.1);">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="flex items-end justify-between mb-16">
+      <div>
+        <p class="mono text-xs mb-3 fade-up" style="color: #888; letter-spacing: 0.12em;">01 — CATALOGUE</p>
+        <h2 class="logotype fade-up blur-text-wrap" id="sec1-h2"
+          style="font-size: clamp(36px, 6vw, 80px); line-height: 1; letter-spacing: -0.03em;">
+          Current Releases
+        </h2>
+      </div>
+      <a href="#" class="hidden md:block mono text-xs underline underline-offset-4 fade-up" style="color: #888;">View all 24 families</a>
+    </div>
+
+    <!-- Typeface rows -->
+    <div class="space-y-0">
+
+      <!-- Row 1 -->
+      <div class="specimen-card group cursor-pointer" style="padding: 2.5rem 0;">
+        <div class="grid grid-cols-12 gap-4 items-center px-6">
+          <div class="col-span-1 mono text-xs" style="color: #aaa;">01</div>
+          <div class="col-span-4">
+            <p class="font-semibold text-sm mb-0.5">Neue Klarheit</p>
+            <p class="mono text-xs" style="color: #888;">Display Serif · 6 weights · Variable</p>
+          </div>
+          <div class="col-span-5 overflow-hidden">
+            <p class="logotype transition-transform duration-300 group-hover:scale-105 origin-left"
+              style="font-size: clamp(28px, 4vw, 56px); letter-spacing: -0.04em; line-height: 1;">
+              Klarheit
+            </p>
+          </div>
+          <div class="col-span-2 flex justify-end">
+            <span class="mono text-xs px-3 py-1 border" style="border-color: rgba(13,13,13,0.18);">€ 490</span>
           </div>
         </div>
       </div>
-      <div class="testi">
-        <p class="testi-quote">"Finally a foundry that thinks about variable fonts from day one. The performance on web projects is exceptional — no layout shift, no FOUT."</p>
-        <div class="testi-meta">
-          <div class="testi-dot" style="background: #0e0d0b;"></div>
-          <div>
-            <p class="testi-name">Lukas Hoffmann</p>
-            <p class="testi-role">Type Director, Studio FLNR</p>
+
+      <!-- Row 2 -->
+      <div class="specimen-card group cursor-pointer" style="padding: 2.5rem 0; background: var(--ink);">
+        <div class="grid grid-cols-12 gap-4 items-center px-6">
+          <div class="col-span-1 mono text-xs" style="color: #666;">02</div>
+          <div class="col-span-4">
+            <p class="font-semibold text-sm mb-0.5 text-white">Klare Grotesk</p>
+            <p class="mono text-xs" style="color: #888;">Geometric Sans · 9 weights · Variable</p>
+          </div>
+          <div class="col-span-5 overflow-hidden">
+            <p class="text-white transition-transform duration-300 group-hover:scale-105 origin-left"
+              style="font-family: 'Inter', sans-serif; font-size: clamp(28px, 4vw, 56px); letter-spacing: -0.06em; line-height: 1; font-weight: 700;">
+              Grotesk
+            </p>
+          </div>
+          <div class="col-span-2 flex justify-end">
+            <span class="mono text-xs px-3 py-1 border border-neutral-700 text-neutral-300">€ 380</span>
           </div>
         </div>
       </div>
-      <div class="testi">
-        <p class="testi-quote">"The italic swashes alone justify the price. This is type that has personality without being decorative for decoration's sake."</p>
-        <div class="testi-meta">
-          <div class="testi-dot" style="background: #8b6f4e;"></div>
-          <div>
-            <p class="testi-name">Priya Anand</p>
-            <p class="testi-role">Brand Designer, Meridian Co.</p>
+
+      <!-- Row 3 -->
+      <div class="specimen-card group cursor-pointer" style="padding: 2.5rem 0;">
+        <div class="grid grid-cols-12 gap-4 items-center px-6">
+          <div class="col-span-1 mono text-xs" style="color: #aaa;">03</div>
+          <div class="col-span-4">
+            <p class="font-semibold text-sm mb-0.5">Feuer Mono</p>
+            <p class="mono text-xs" style="color: #888;">Editorial Mono · 4 weights</p>
           </div>
+          <div class="col-span-5 overflow-hidden">
+            <p class="mono transition-transform duration-300 group-hover:scale-105 origin-left"
+              style="font-size: clamp(20px, 3vw, 40px); letter-spacing: -0.02em; line-height: 1; font-weight: 300;">
+              FEUER_MONO.01
+            </p>
+          </div>
+          <div class="col-span-2 flex justify-end">
+            <span class="mono text-xs px-3 py-1 border" style="border-color: rgba(13,13,13,0.18);">€ 290</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="specimen-card group cursor-pointer" style="padding: 2.5rem 0;">
+        <div class="grid grid-cols-12 gap-4 items-center px-6">
+          <div class="col-span-1 mono text-xs" style="color: #aaa;">04</div>
+          <div class="col-span-4">
+            <p class="font-semibold text-sm mb-0.5">Stille Condensed</p>
+            <p class="mono text-xs" style="color: #888;">Condensed Slab · 5 weights</p>
+          </div>
+          <div class="col-span-5 overflow-hidden">
+            <p class="logotype italic transition-transform duration-300 group-hover:scale-105 origin-left"
+              style="font-size: clamp(32px, 5vw, 68px); letter-spacing: -0.02em; line-height: 1;">
+              STILLE
+            </p>
+          </div>
+          <div class="col-span-2 flex justify-end">
+            <span class="mono text-xs px-3 py-1 border" style="border-color: rgba(13,13,13,0.18);">€ 420</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SPECIMEN ══ -->
+<section id="specimen" class="py-24 px-8 border-b" style="border-color: rgba(13,13,13,0.1); background: #0d0d0d; color: #f5f2ee;">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="mb-16">
+      <p class="mono text-xs mb-3 fade-up" style="color: #555; letter-spacing: 0.12em;">02 — SPECIMEN</p>
+      <h2 class="logotype fade-up blur-text-wrap" id="spec-h2"
+        style="font-size: clamp(36px, 6vw, 80px); line-height: 1; letter-spacing: -0.03em; color: #f5f2ee;">
+        Weight Studies
+      </h2>
+    </div>
+
+    <!-- Weight ramp -->
+    <div class="mb-16 space-y-2">
+      <div class="reveal-line fade-up" style="border-top: 1px solid rgba(245,242,238,0.08); padding-top: 1rem;">
+        <p class="logotype" style="font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.04em; font-weight: 100; opacity: 0.25; line-height: 1;">
+          Ultralight
+        </p>
+      </div>
+      <div class="reveal-line fade-up" style="border-top: 1px solid rgba(245,242,238,0.08); padding-top: 1rem;">
+        <p class="logotype" style="font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.04em; font-weight: 300; opacity: 0.45; line-height: 1;">
+          Light
+        </p>
+      </div>
+      <div class="reveal-line fade-up" style="border-top: 1px solid rgba(245,242,238,0.08); padding-top: 1rem;">
+        <p class="logotype" style="font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.04em; font-weight: 400; opacity: 0.65; line-height: 1;">
+          Regular
+        </p>
+      </div>
+      <div class="reveal-line fade-up" style="border-top: 1px solid rgba(245,242,238,0.08); padding-top: 1rem;">
+        <p class="logotype" style="font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.04em; font-weight: 600; opacity: 0.85; line-height: 1;">
+          Semibold
+        </p>
+      </div>
+      <div class="reveal-line fade-up" style="border-top: 1px solid rgba(245,242,238,0.08); padding-top: 1rem;">
+        <p class="logotype" style="font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.04em; font-weight: 900; opacity: 1; line-height: 1;">
+          Black
+        </p>
+      </div>
+    </div>
+
+    <!-- Glyph grid -->
+    <div class="grid grid-cols-6 md:grid-cols-12 gap-px" style="border: 1px solid rgba(245,242,238,0.08);">
+      <div class="col-span-6 md:col-span-6 p-8" style="border-right: 1px solid rgba(245,242,238,0.08);">
+        <p class="logotype fade-up" style="font-size: clamp(28px, 5vw, 64px); line-height: 1.4; letter-spacing: -0.02em; color: rgba(245,242,238,0.9);">
+          AaBbCcDdEeFfGgHhIiJjKkLlMm
+          NnOoPpQqRrSsTtUuVvWwXxYyZz
+        </p>
+      </div>
+      <div class="col-span-6 md:col-span-6 p-8 flex flex-col justify-between">
+        <p class="logotype italic fade-up" style="font-size: clamp(28px, 5vw, 64px); line-height: 1.4; letter-spacing: -0.02em; color: rgba(245,242,238,0.9);">
+          0123456789
+          .,;:!?&@#
+        </p>
+        <div class="mt-6">
+          <p class="mono text-xs fade-up" style="color: #555; letter-spacing: 0.1em;">NEUE KLARHEIT — CHARACTER SET</p>
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta">
-  <h2 class="cta-headline">Type with<br/><em>intention.</em></h2>
-  <p class="cta-sub">Every letter matters. Start with fonts built for the way the world reads now — and will read tomorrow.</p>
-  <div style="display:flex; gap:16px; justify-content:center;">
-    <a href="#licensing" class="btn-dark">Browse Typefaces</a>
-    <a href="#specimens" class="btn-outline">View Specimens</a>
+<!-- ══ PROCESS ══ -->
+<section id="process" class="py-24 px-8 border-b" style="border-color: rgba(13,13,13,0.1);">
+  <div class="max-w-7xl mx-auto">
+
+    <p class="mono text-xs mb-3 fade-up" style="color: #888; letter-spacing: 0.12em;">03 — APPROACH</p>
+    <h2 class="logotype fade-up blur-text-wrap" id="proc-h2"
+      style="font-size: clamp(36px, 6vw, 80px); line-height: 1; letter-spacing: -0.03em; max-width: 14ch;">
+      Drawn by hand.<br>Refined by code.
+    </h2>
+
+    <div class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-px" style="border: 1px solid rgba(13,13,13,0.1);">
+
+      <div class="p-10 fade-up" style="border-right: 1px solid rgba(13,13,13,0.1); border-bottom: 1px solid rgba(13,13,13,0.1);">
+        <p class="mono text-xs mb-6" style="color: #aaa; letter-spacing: 0.1em;">PHASE 01</p>
+        <h3 class="logotype text-3xl mb-4" style="letter-spacing: -0.03em;">Concept & Proportion</h3>
+        <p class="text-sm leading-relaxed" style="color: #666; max-width: 40ch;">
+          Every typeface begins on paper. We study historical models, optical illusions inherent in letterforms, and the specific medium the type will inhabit before a single bezier curve is drawn.
+        </p>
+      </div>
+
+      <div class="p-10 fade-up" style="border-bottom: 1px solid rgba(13,13,13,0.1);">
+        <p class="mono text-xs mb-6" style="color: #aaa; letter-spacing: 0.1em;">PHASE 02</p>
+        <h3 class="logotype text-3xl mb-4" style="letter-spacing: -0.03em;">Spacing & Rhythm</h3>
+        <p class="text-sm leading-relaxed" style="color: #666; max-width: 40ch;">
+          Spacing is not adjusted after drawing — it is designed simultaneously. The negative space between letters is as deliberate as the strokes themselves. Kerning is tested in editorial context, not isolation.
+        </p>
+      </div>
+
+      <div class="p-10 fade-up" style="border-right: 1px solid rgba(13,13,13,0.1);">
+        <p class="mono text-xs mb-6" style="color: #aaa; letter-spacing: 0.1em;">PHASE 03</p>
+        <h3 class="logotype text-3xl mb-4" style="letter-spacing: -0.03em;">Hinting & Production</h3>
+        <p class="text-sm leading-relaxed" style="color: #666; max-width: 40ch;">
+          Variable font axes are engineered for smooth interpolation across the entire weight range. Screen rendering is validated at 14px, 16px, and 32px across both macOS and Windows rendering engines.
+        </p>
+      </div>
+
+      <div class="p-10 fade-up">
+        <p class="mono text-xs mb-6" style="color: #aaa; letter-spacing: 0.1em;">PHASE 04</p>
+        <h3 class="logotype text-3xl mb-4" style="letter-spacing: -0.03em;">Release & Support</h3>
+        <p class="text-sm leading-relaxed" style="color: #666; max-width: 40ch;">
+          Each family ships with a 40-page specimen PDF, implementation guidelines, and direct access to our studio for custom licensing and modification requests within 30 days of purchase.
+        </p>
+      </div>
+
+    </div>
+
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <a href="#" class="footer-logo">CLARITY TYPE</a>
-    <ul class="footer-links">
-      <li><a href="#">Typefaces</a></li>
-      <li><a href="#">Licensing</a></li>
-      <li><a href="#">Specimens</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-    <p class="footer-copy">© 2024 Clarity Type Foundry</p>
+<!-- ══ EDITORIAL PULLQUOTE ══ -->
+<section class="py-28 px-8 border-b overflow-hidden" style="border-color: rgba(13,13,13,0.1); background: var(--ink);">
+  <div class="max-w-7xl mx-auto">
+    <blockquote class="logotype fade-up"
+      style="font-size: clamp(28px, 5.5vw, 80px); line-height: 1.1; letter-spacing: -0.04em; color: #f5f2ee; max-width: 22ch;">
+      "Type is the voice of the page — before any word is read, the reader hears its tone."
+    </blockquote>
+    <p class="mono text-xs mt-10 fade-up" style="color: #555; letter-spacing: 0.1em;">— Clarity Type Studio Brief, 2024</p>
+  </div>
+</section>
+
+<!-- ══ LICENSING ══ -->
+<section id="pricing" class="py-24 px-8 border-b" style="border-color: rgba(13,13,13,0.1);">
+  <div class="max-w-7xl mx-auto">
+
+    <p class="mono text-xs mb-3 fade-up" style="color: #888; letter-spacing: 0.12em;">04 — LICENSING</p>
+    <h2 class="logotype fade-up blur-text-wrap" id="lic-h2"
+      style="font-size: clamp(36px, 6vw, 80px); line-height: 1; letter-spacing: -0.03em;">
+      One price.<br>Perpetual use.
+    </h2>
+    <p class="mt-6 mb-16 text-sm leading-relaxed fade-up" style="color: #666; max-width: 60ch;">
+      No subscriptions. No annual renewals. No per-pageview fees. Pay once, use for the life of the project — in print, digital, and app environments.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Studio -->
+      <div class="plan-card fade-up">
+        <div>
+          <p class="mono text-xs mb-2" style="color: #888; letter-spacing: 0.1em;">STUDIO</p>
+          <p class="logotype text-5xl" style="letter-spacing: -0.04em;">€ 290</p>
+          <p class="text-xs mt-1" style="color: #aaa;">per typeface family</p>
+        </div>
+        <ul class="space-y-3 text-sm" style="color: #555;">
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#0d0d0d;"></i> Up to 3 users</li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#0d0d0d;"></i> Print &amp; editorial</li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#0d0d0d;"></i> One digital domain</li>
+          <li class="flex items-start gap-2"><i data-lucide="minus" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#bbb;"></i> <span style="color:#bbb;">App embedding</span></li>
+          <li class="flex items-start gap-2"><i data-lucide="minus" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#bbb;"></i> <span style="color:#bbb;">Broadcast rights</span></li>
+        </ul>
+        <a href="#" class="block text-center text-sm py-3 border border-current hover:bg-black hover:text-white transition-colors" style="letter-spacing: 0.04em;">Purchase Studio License</a>
+      </div>
+
+      <!-- Professional -->
+      <div class="plan-card fade-up" style="background: var(--ink); border-color: var(--ink); color: #f5f2ee;">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <p class="mono text-xs" style="color: #888; letter-spacing: 0.1em;">PROFESSIONAL</p>
+            <span class="mono text-xs px-2 py-0.5" style="background: rgba(245,242,238,0.12); color: #ccc; letter-spacing: 0.06em;">POPULAR</span>
+          </div>
+          <p class="logotype text-5xl" style="letter-spacing: -0.04em;">€ 690</p>
+          <p class="text-xs mt-1" style="color: #666;">per typeface family</p>
+        </div>
+        <ul class="space-y-3 text-sm" style="color: #aaa;">
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#f5f2ee;"></i> <span style="color:#f5f2ee;">Unlimited users</span></li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#f5f2ee;"></i> <span style="color:#f5f2ee;">Print &amp; editorial</span></li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#f5f2ee;"></i> <span style="color:#f5f2ee;">5 digital domains</span></li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#f5f2ee;"></i> <span style="color:#f5f2ee;">App embedding</span></li>
+          <li class="flex items-start gap-2"><i data-lucide="minus" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#555;"></i> Broadcast rights</li>
+        </ul>
+        <a href="#" class="block text-center text-sm py-3" style="background: #f5f2ee; color: var(--ink); letter-spacing: 0.04em;">Purchase Professional License</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="plan-card fade-up">
+        <div>
+          <p class="mono text-xs mb-2" style="color: #888; letter-spacing: 0.1em;">ENTERPRISE</p>
+          <p class="logotype text-5xl" style="letter-spacing: -0.04em;">Custom</p>
+          <p class="text-xs mt-1" style="color: #aaa;">studio negotiated</p>
+        </div>
+        <ul class="space-y-3 text-sm" style="color: #555;">
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#0d0d0d;"></i> Unlimited users</li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#0d0d0d;"></i> Unlimited domains</li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#0d0d0d;"></i> App embedding</li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#0d0d0d;"></i> Broadcast rights</li>
+          <li class="flex items-start gap-2"><i data-lucide="check" style="width:14px; height:14px; min-width:14px; margin-top:2px; color:#0d0d0d;"></i> Glyph modification rights</li>
+        </ul>
+        <a href="mailto:studio@claritytype.com" class="block text-center text-sm py-3 border border-current hover:bg-black hover:text-white transition-colors" style="letter-spacing: 0.04em;">Contact the Studio</a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="py-16 px-8">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+    <div>
+      <p class="logotype text-3xl mb-2" style="letter-spacing: -0.03em;">Clarity Type</p>
+      <p class="mono text-xs" style="color: #aaa; letter-spacing: 0.08em;">Berlin — Est. 2019</p>
+    </div>
+    <div class="flex flex-col md:flex-row gap-8 text-sm" style="color: #888;">
+      <a href="mailto:studio@claritytype.com" class="hover:text-black transition-colors">studio@claritytype.com</a>
+      <a href="#" class="hover:text-black transition-colors">Instagram</a>
+      <a href="#" class="hover:text-black transition-colors">Are.na</a>
+    </div>
+    <p class="mono text-xs" style="color: #bbb; letter-spacing: 0.06em;">&copy; 2025 Clarity Type. All rights reserved.</p>
   </div>
 </footer>
 
 <script>
-  // Blur-to-sharp letter-by-letter animation
-  const lines = [
-    { text: 'Where', italic: false },
-    { text: 'Clarity', italic: true },
-    { text: 'Begins.', italic: false }
-  ];
-
-  const container = document.getElementById('hero-headline');
-  let globalDelay = 0.4;
-
-  lines.forEach(lineData => {
-    const lineEl = document.createElement('span');
-    lineEl.className = 'blur-line';
-
-    [...lineData.text].forEach(ch => {
-      if (ch === ' ') {
-        const sp = document.createElement('span');
-        sp.className = 'blur-char space-char';
-        sp.innerHTML = '&nbsp;';
-        lineEl.appendChild(sp);
-        globalDelay += 0.03;
-        return;
-      }
-      const charEl = document.createElement('span');
-      charEl.className = 'blur-char' + (lineData.italic ? ' hero-italic' : '');
-      charEl.textContent = ch;
-      charEl.style.animationDelay = globalDelay + 's';
-      globalDelay += 0.06;
-      lineEl.appendChild(charEl);
-    });
-
-    container.appendChild(lineEl);
-    globalDelay += 0.1;
+  // ── Custom cursor ──
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width = '28px'; cursor.style.height = '28px'; cursor.style.background = 'transparent'; cursor.style.border = '1.5px solid #0d0d0d'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; cursor.style.background = '#0d0d0d'; cursor.style.border = 'none'; });
   });
 
-  // Scroll animations
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
+  // ── Split text into letter spans ──
+  function splitLetters(el) {
+    const html = el.innerHTML;
+    // Split on characters, preserving <br> and <em>
+    const nodes = [];
+    const parts = html.split(/(<br\s*\/?>|<em>.*?<\/em>|\s)/gi);
+    let result = '';
+    let delay = 0;
+    for (const part of parts) {
+      if (!part) continue;
+      if (/^<br/i.test(part)) {
+        result += part;
+      } else if (/^<em>/i.test(part)) {
+        // Extract text inside <em>
+        const inner = part.replace(/<\/?em>/gi, '');
+        let innerSpans = '';
+        for (const ch of inner) {
+          if (ch === ' ') { innerSpans += '<span class="space"></span>'; } 
+          else { innerSpans += `<span class="letter" style="transition-delay:${delay * 38}ms">${ch}</span>`; delay++; }
+        }
+        result += `<em>${innerSpans}</em>`;
+      } else if (/^\s+$/.test(part)) {
+        result += '<span class="space"></span>';
+      } else {
+        for (const ch of part) {
+          if (ch === ' ') { result += '<span class="space"></span>'; }
+          else { result += `<span class="letter" style="transition-delay:${delay * 38}ms">${ch}</span>`; delay++; }
+        }
+      }
+    }
+    el.innerHTML = result;
+  }
+
+  // Split all blur-text-wrap elements
+  document.querySelectorAll('.blur-text-wrap').forEach(splitLetters);
+
+  // ── IntersectionObserver for all animated elements ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
       }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.15 });
 
-  document.querySelectorAll('.specimen-card, .feat, .license-card, .testi').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = `opacity 0.65s ease ${i * 0.07}s, transform 0.65s ease ${i * 0.07}s`;
-    io.observe(el);
+  document.querySelectorAll('.blur-text-wrap, .fade-up, .reveal-line').forEach(el => observer.observe(el));
+
+  // Trigger hero immediately
+  requestAnimationFrame(() => {
+    document.getElementById('hero-h1').classList.add('is-visible');
   });
+
+  lucide.createIcons();
 </script>
 </body>
 </html>

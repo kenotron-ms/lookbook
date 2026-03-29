@@ -1,1090 +1,634 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ACID.WORKS — Design Without Apology</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,700&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --yellow:  #f5e642;
-      --black:   #0d0d0d;
-      --white:   #f5f3ed;
-      --off:     #f0eee8;
-      --border:  3px solid var(--black);
-      --shadow:  5px 5px 0px var(--black);
-      --shadow-lg: 8px 8px 0px var(--black);
-      --shadow-y: 5px 5px 0px var(--yellow);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Archivo', sans-serif;
-      background: var(--off);
-      color: var(--black);
-      overflow-x: hidden;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: var(--yellow);
-      border-bottom: var(--border);
-      padding: 0 2.5rem;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-logo {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: 0.05em;
-      color: var(--black);
-      text-decoration: none;
-    }
-
-    .nav-center {
-      display: flex;
-      gap: 0;
-    }
-
-    .nav-center a {
-      display: flex;
-      align-items: center;
-      padding: 0 1.2rem;
-      height: 64px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--black);
-      text-decoration: none;
-      border-left: var(--border);
-      transition: background 0.2s;
-    }
-
-    .nav-center a:hover { background: rgba(0,0,0,0.08); }
-
-    .nav-cta {
-      background: var(--black);
-      color: var(--yellow);
-      padding: 0 1.5rem;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      font-size: 0.72rem;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .nav-cta:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-lg); }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      padding: 64px 0 0;
-      display: flex;
-      flex-direction: column;
-      background: var(--off);
-      border-bottom: var(--border);
-    }
-
-    .hero-top {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border-bottom: var(--border);
-    }
-
-    .hero-left {
-      padding: 4rem 2.5rem;
-      border-right: var(--border);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: var(--black);
-      color: var(--yellow);
-      padding: 0.3rem 0.75rem;
-      font-size: 0.62rem;
-      font-weight: 900;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      border: 2px solid var(--black);
-      align-self: flex-start;
-      margin-bottom: 3rem;
-    }
-
-    .hero-title {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: clamp(6rem, 12vw, 17rem);
-      line-height: 0.82;
-      letter-spacing: -0.04em;
-      text-transform: uppercase;
-      color: var(--black);
-    }
-
-    .hero-title .yellow-line {
-      color: transparent;
-      -webkit-text-stroke: 3px var(--black);
-    }
-
-    .hero-title .yellow-fill { color: var(--yellow); -webkit-text-stroke: 0; }
-
-    .hero-meta {
-      margin-top: 3rem;
-      display: flex;
-      gap: 2.5rem;
-    }
-
-    .hm-val {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 2.8rem;
-      line-height: 1;
-      color: var(--black);
-    }
-
-    .hm-label {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--black);
-      opacity: 0.5;
-      margin-top: 0.2rem;
-    }
-
-    .hero-right {
-      background: var(--yellow);
-      padding: 4rem 2.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .hero-right-tag {
-      font-size: 0.6rem;
-      font-weight: 900;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--black);
-      opacity: 0.5;
-    }
-
-    .hero-right-quote {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: clamp(2rem, 4vw, 5rem);
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      text-transform: uppercase;
-      color: var(--black);
-    }
-
-    .hero-right-quote em {
-      font-style: italic;
-      font-family: 'Archivo', sans-serif;
-      font-weight: 900;
-    }
-
-    .hero-right-desc {
-      font-size: 0.88rem;
-      font-weight: 400;
-      line-height: 1.7;
-      color: rgba(13,13,13,0.65);
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 1rem;
-      background: var(--black);
-      color: var(--yellow);
-      padding: 1rem 2rem;
-      font-size: 0.78rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-      align-self: flex-start;
-    }
-
-    .hero-cta:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lg); }
-
-    /* MARQUEE */
-    .marquee-section {
-      background: var(--black);
-      border-bottom: var(--border);
-      overflow: hidden;
-      padding: 0.8rem 0;
-    }
-
-    .marquee-track {
-      display: flex;
-      animation: marquee 20s linear infinite;
-      white-space: nowrap;
-    }
-
-    .marquee-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 2rem;
-      padding: 0 2.5rem;
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--yellow);
-    }
-
-    .m-dot { width: 8px; height: 8px; background: var(--yellow); }
-
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* BENTO GRID */
-    .bento-section {
-      padding: 3rem 2.5rem;
-      border-bottom: var(--border);
-    }
-
-    .bento-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 2.5rem;
-    }
-
-    .section-tag {
-      font-size: 0.6rem;
-      font-weight: 900;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--black);
-      opacity: 0.45;
-      margin-bottom: 0.5rem;
-    }
-
-    .section-title {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: clamp(3rem, 7vw, 8rem);
-      line-height: 0.85;
-      letter-spacing: -0.04em;
-      text-transform: uppercase;
-      color: var(--black);
-    }
-
-    .section-title .yellow { color: var(--yellow); }
-    .section-title .stroke { -webkit-text-stroke: 2.5px var(--black); color: transparent; }
-
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-auto-rows: 260px;
-      gap: 0;
-      background: var(--black);
-      border: var(--border);
-    }
-
-    .bento-cell {
-      border: var(--border);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      margin: -1.5px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.2s;
-    }
-
-    .bento-cell:hover { z-index: 2; }
-
-    .bc-a { grid-column: 1 / 5; background: var(--yellow); }
-    .bc-b { grid-column: 5 / 9; background: var(--off); }
-    .bc-c { grid-column: 9 / 13; background: var(--black); color: var(--yellow); }
-    .bc-d { grid-column: 1 / 7; background: var(--off); grid-row: 2; }
-    .bc-e { grid-column: 7 / 13; background: var(--yellow); grid-row: 2; }
-
-    .bc-tag {
-      font-size: 0.55rem;
-      font-weight: 900;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      opacity: 0.5;
-    }
-
-    .bc-title {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: clamp(1.5rem, 3vw, 2.8rem);
-      line-height: 0.9;
-      letter-spacing: -0.03em;
-      text-transform: uppercase;
-    }
-
-    .bc-body {
-      font-size: 0.78rem;
-      font-weight: 400;
-      line-height: 1.7;
-      opacity: 0.65;
-      margin-top: 0.75rem;
-    }
-
-    .bc-num {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 8rem;
-      line-height: 1;
-      letter-spacing: -0.05em;
-      opacity: 0.08;
-      position: absolute;
-      bottom: -1rem;
-      right: 0.5rem;
-      pointer-events: none;
-    }
-
-    /* WORK LIST */
-    .work-section {
-      padding: 3rem 2.5rem;
-      border-bottom: var(--border);
-    }
-
-    .work-inner { }
-
-    .work-list {
-      border: var(--border);
-      background: var(--black);
-    }
-
-    .work-row {
-      display: grid;
-      grid-template-columns: 60px 1fr 180px 100px 50px;
-      align-items: center;
-      padding: 1.5rem 2rem;
-      border-bottom: 2px solid #222;
-      background: var(--off);
-      transition: background 0.2s, transform 0.2s;
-      cursor: pointer;
-    }
-
-    .work-row:last-child { border-bottom: none; }
-
-    .work-row:hover {
-      background: var(--yellow);
-      transform: translateX(6px);
-    }
-
-    .w-num {
-      font-size: 0.6rem;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      color: var(--black);
-      opacity: 0.35;
-    }
-
-    .w-name {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: clamp(1.2rem, 2.5vw, 2.2rem);
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      color: var(--black);
-    }
-
-    .w-type {
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--black);
-      opacity: 0.4;
-    }
-
-    .w-year {
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--black);
-      opacity: 0.35;
-    }
-
-    .w-arrow { font-size: 1.3rem; font-weight: 900; color: var(--black); text-align: right; }
-
-    /* MANIFESTO */
-    .manifesto-section {
-      background: var(--black);
-      padding: 5rem 2.5rem;
-      border-bottom: var(--border);
-    }
-
-    .manifesto-inner { max-width: 1400px; margin: 0 auto; }
-
-    .manifesto-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      background: var(--black);
-      border: var(--border);
-    }
-
-    .man-cell {
-      padding: 3rem 2.5rem;
-      border-right: 2px solid #222;
-      transition: background 0.2s;
-    }
-
-    .man-cell:last-child { border-right: none; }
-    .man-cell:hover { background: #111; }
-
-    .man-num {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 5rem;
-      color: rgba(245,230,66,0.08);
-      line-height: 1;
-      margin-bottom: 1.5rem;
-    }
-
-    .man-title {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 1.5rem;
-      text-transform: uppercase;
-      letter-spacing: -0.01em;
-      color: var(--yellow);
-      margin-bottom: 1rem;
-    }
-
-    .man-body {
-      font-size: 0.82rem;
-      font-weight: 400;
-      line-height: 1.8;
-      color: rgba(245,243,237,0.5);
-    }
-
-    /* TESTIMONIALS */
-    .testimonials-section {
-      padding: 3rem 2.5rem;
-      border-bottom: var(--border);
-    }
-
-    .testi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      background: var(--black);
-      border: var(--border);
-      margin-top: 2.5rem;
-    }
-
-    .t-cell {
-      background: var(--off);
-      padding: 2.5rem;
-      border-right: var(--border);
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .t-cell:last-child { border-right: none; }
-    .t-cell:hover { background: var(--yellow); transform: translate(-3px, -3px); box-shadow: var(--shadow); z-index: 1; position: relative; }
-
-    .t-score {
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      color: var(--black);
-      margin-bottom: 1.5rem;
-    }
-
-    .t-text {
-      font-size: 0.88rem;
-      font-weight: 400;
-      line-height: 1.8;
-      color: var(--black);
-      margin-bottom: 2rem;
-      font-style: italic;
-    }
-
-    .t-author-name {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--black);
-    }
-
-    .t-author-role {
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--black);
-      opacity: 0.45;
-      margin-top: 0.2rem;
-    }
-
-    /* NUMBERS */
-    .numbers-section {
-      background: var(--yellow);
-      border-bottom: var(--border);
-    }
-
-    .numbers-inner {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    .num-cell {
-      padding: 3.5rem 2.5rem;
-      border-right: var(--border);
-      transition: background 0.2s;
-    }
-
-    .num-cell:last-child { border-right: none; }
-    .num-cell:hover { background: rgba(0,0,0,0.05); }
-
-    .num-val {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 5rem;
-      line-height: 1;
-      letter-spacing: -0.04em;
-      color: var(--black);
-    }
-
-    .num-label {
-      font-size: 0.62rem;
-      font-weight: 900;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--black);
-      opacity: 0.5;
-      margin-top: 0.5rem;
-    }
-
-    /* CTA */
-    .cta-section {
-      background: var(--black);
-      padding: 7rem 2.5rem;
-      text-align: center;
-      border-bottom: var(--border);
-    }
-
-    .cta-inner { max-width: 900px; margin: 0 auto; }
-
-    .cta-top-tag {
-      display: inline-block;
-      background: var(--yellow);
-      color: var(--black);
-      padding: 0.3rem 0.75rem;
-      font-size: 0.6rem;
-      font-weight: 900;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      margin-bottom: 3rem;
-    }
-
-    .cta-title {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: clamp(5rem, 13vw, 18rem);
-      line-height: 0.82;
-      letter-spacing: -0.04em;
-      text-transform: uppercase;
-      color: var(--off);
-      margin-bottom: 2.5rem;
-    }
-
-    .cta-title .yellow-fill { color: var(--yellow); }
-    .cta-title .stroke { -webkit-text-stroke: 3px var(--off); color: transparent; }
-
-    .cta-sub {
-      font-size: 0.9rem;
-      font-weight: 400;
-      line-height: 1.8;
-      color: rgba(245,243,237,0.45);
-      max-width: 42ch;
-      margin: 0 auto 3rem;
-    }
-
-    .cta-btn {
-      display: inline-block;
-      background: var(--yellow);
-      color: var(--black);
-      padding: 1.2rem 3.5rem;
-      font-size: 0.85rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: var(--border);
-      box-shadow: 6px 6px 0px var(--yellow);
-      border-color: var(--yellow);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .cta-btn:hover { transform: translate(-4px, -4px); box-shadow: 10px 10px 0px rgba(245,230,66,0.5); }
-
-    /* FOOTER */
-    footer {
-      background: var(--black);
-      padding: 4rem 2.5rem 2.5rem;
-    }
-
-    .footer-inner { }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 0;
-      background: #111;
-      border: var(--border);
-      margin-bottom: 2rem;
-    }
-
-    .footer-brand {
-      padding: 2.5rem;
-      border-right: var(--border);
-    }
-
-    .f-logo {
-      font-family: 'Archivo Black', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 0.04em;
-      color: var(--yellow);
-      margin-bottom: 1rem;
-    }
-
-    .f-tagline {
-      font-size: 0.72rem;
-      font-weight: 400;
-      color: rgba(245,243,237,0.4);
-      line-height: 1.7;
-      max-width: 28ch;
-    }
-
-    .footer-col {
-      padding: 2.5rem;
-      border-right: var(--border);
-    }
-
-    .footer-col:last-child { border-right: none; }
-
-    .footer-col h4 {
-      font-size: 0.55rem;
-      font-weight: 900;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--yellow);
-      margin-bottom: 1.5rem;
-      opacity: 0.7;
-    }
-
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-
-    .footer-col a {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: rgba(245,243,237,0.4);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-col a:hover { color: var(--yellow); }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .f-copy {
-      font-size: 0.62rem;
-      font-weight: 500;
-      color: rgba(245,243,237,0.2);
-    }
-
-    .f-social { display: flex; gap: 0; }
-
-    .f-social a {
-      display: inline-block;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.6rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(245,243,237,0.25);
-      text-decoration: none;
-      border: 1px solid rgba(245,243,237,0.1);
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .f-social a:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
-
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 900px) {
-      nav { padding: 0 1.5rem; }
-      .nav-center { display: none; }
-      .hero-top { grid-template-columns: 1fr; }
-      .hero-right { display: none; }
-      .hero-left { padding: 3rem 1.5rem; }
-      .bento-section, .work-section, .manifesto-section, .testimonials-section, .cta-section { padding: 2.5rem 1.5rem; }
-      .bento-grid { grid-template-columns: 1fr 1fr; }
-      .bc-a, .bc-b, .bc-c { grid-column: span 1; }
-      .bc-d, .bc-e { grid-column: span 2; }
-      .work-row { grid-template-columns: 40px 1fr 40px; }
-      .w-type, .w-year { display: none; }
-      .manifesto-grid { grid-template-columns: 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .t-cell { border-right: none; border-bottom: var(--border); }
-      .numbers-inner { grid-template-columns: 1fr 1fr; }
-      .num-cell { border-bottom: var(--border); }
-      .footer-top { grid-template-columns: 1fr; }
-      .footer-brand, .footer-col { border-right: none; border-bottom: var(--border); }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACID.WORKS — Digital-First Creative Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8F4E8;
+    --ink: #09090B;
+    --acid: #f5e642;
+    --border: 3px solid #09090B;
+    --shadow: 5px 5px 0px #09090B;
+    --dela: 'Dela Gothic One', sans-serif;
+    --grotesk: 'Space Grotesk', sans-serif;
+    --mono: 'Space Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--grotesk);
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 20px; height: 20px;
+    background: var(--acid);
+    border: 2px solid var(--ink);
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s;
+    mix-blend-mode: multiply;
+  }
+
+  /* Noise overlay */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 9998;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg);
+    border-bottom: var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-family: var(--dela);
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    text-decoration: none; color: var(--ink);
+    display: flex; align-items: center; gap: 0;
+  }
+  .logo-dot { color: var(--acid); }
+
+  .nav-links { display: flex; gap: 0; list-style: none; }
+  .nav-links a {
+    font-family: var(--mono); font-size: 0.62rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink); text-decoration: none;
+    padding: 8px 18px;
+    border-left: 1px solid rgba(9,9,11,0.15);
+    transition: background 0.15s;
+  }
+  .nav-links a:hover { background: var(--acid); }
+  .nav-links li:last-child a { border-right: 1px solid rgba(9,9,11,0.15); }
+
+  .btn-acid {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    background: var(--acid); color: var(--ink);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    font-family: var(--mono); font-size: 0.65rem;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    text-decoration: none; cursor: none;
+    transition: all 0.12s;
+  }
+  .btn-acid:hover { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+  .btn-acid:active { transform: translate(5px, 5px); box-shadow: none; }
+  .btn-acid svg { width: 12px; height: 12px; }
+
+  .btn-ink {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px;
+    background: var(--ink); color: var(--bg);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    font-family: var(--mono); font-size: 0.65rem;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    text-decoration: none; cursor: none;
+    transition: all 0.12s;
+  }
+  .btn-ink:hover { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+  .btn-ink:active { transform: translate(5px, 5px); box-shadow: none; }
+  .btn-ink svg { width: 12px; height: 12px; }
+
+  /* HERO */
+  .hero {
+    display: grid; grid-template-columns: 1fr 400px;
+    border-bottom: var(--border);
+  }
+  .hero-left {
+    padding: 60px 2.5rem;
+    border-right: var(--border);
+  }
+  .hero-right {
+    padding: 60px 2rem;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--bg);
+    padding: 5px 12px;
+    font-family: var(--mono); font-size: 0.6rem;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-bottom: 24px;
+  }
+  .hero-h1 {
+    font-family: var(--dela);
+    font-size: clamp(52px, 8vw, 120px);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    margin-bottom: 0;
+    text-transform: uppercase;
+  }
+  .hero-h1 .acid-text { color: var(--acid); -webkit-text-stroke: 2px var(--ink); }
+
+  .glitch-wrap { position: relative; display: inline-block; }
+  .glitch-wrap:hover .hero-h1 { animation: glitch 0.3s step-end 3; }
+  @keyframes glitch {
+    0%   { transform: translate(0); }
+    20%  { transform: translate(-2px, 2px); }
+    40%  { transform: translate(2px, -2px); }
+    60%  { transform: translate(-2px, -1px); }
+    80%  { transform: translate(2px, 1px); }
+    100% { transform: translate(0); }
+  }
+
+  .hero-sub {
+    font-size: 15px; font-weight: 400;
+    color: rgba(9,9,11,0.55); line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .hero-count {
+    font-family: var(--dela);
+    font-size: 64px; line-height: 1; color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .hero-count-label {
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.2em;
+    color: rgba(9,9,11,0.4);
+  }
+
+  /* IMAGE BENTO CARD */
+  .hero-img-card {
+    border: var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-top: 0;
+  }
+  .hero-img-card img {
+    width: 100%; aspect-ratio: 4/3;
+    object-fit: cover;
+    filter: contrast(1.1) saturate(0.85);
+    display: block;
+  }
+  .card-footer {
+    background: var(--acid);
+    border-top: var(--border);
+    padding: 10px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink);
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    border-bottom: var(--border);
+    background: var(--ink);
+    overflow: hidden; padding: 14px 0;
+  }
+  .marquee-track {
+    display: flex; gap: 0;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    display: flex; align-items: center; gap: 20px;
+    padding: 0 28px;
+    font-family: var(--dela); font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--bg); flex-shrink: 0;
+  }
+  .marquee-sep { color: var(--acid); font-size: 16px; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* BENTO GRID */
+  .bento { display: grid; grid-template-columns: repeat(12, 1fr); }
+
+  .b-cell {
+    border-right: var(--border);
+    border-bottom: var(--border);
+    padding: 32px 28px;
+    position: relative; overflow: hidden;
+    transition: background 0.15s;
+  }
+  .b-cell:hover { background: var(--acid); }
+  .b-cell.span-4 { grid-column: span 4; }
+  .b-cell.span-6 { grid-column: span 6; }
+  .b-cell.span-3 { grid-column: span 3; }
+  .b-cell.span-9 { grid-column: span 9; }
+  .b-cell.span-12 { grid-column: span 12; border-right: none; }
+  .b-cell.no-border-r { border-right: none; }
+  .b-cell.ink-bg { background: var(--ink); color: var(--bg); }
+  .b-cell.ink-bg:hover { background: #1a1a1d; }
+  .b-cell.acid-bg { background: var(--acid); }
+  .b-cell.acid-bg:hover { background: #e8d72e; }
+
+  .cell-num {
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.2em;
+    color: rgba(9,9,11,0.3); margin-bottom: 16px;
+  }
+  .cell-num.inv { color: rgba(248,244,232,0.3); }
+
+  .cell-icon {
+    width: 48px; height: 48px;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px; background: var(--bg);
+  }
+  .cell-icon svg { width: 20px; height: 20px; }
+  .cell-icon.inv { background: var(--ink); color: var(--bg); border-color: rgba(248,244,232,0.3); box-shadow: 3px 3px 0 rgba(248,244,232,0.2); }
+
+  .cell-title {
+    font-family: var(--dela); font-size: 18px;
+    line-height: 1.1; margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .cell-body { font-size: 13px; color: rgba(9,9,11,0.5); line-height: 1.55; }
+  .cell-body.inv { color: rgba(248,244,232,0.45); }
+
+  /* Big display number */
+  .big-num {
+    font-family: var(--dela); font-size: clamp(60px,7vw,100px);
+    line-height: 0.9; letter-spacing: -0.02em;
+  }
+
+  /* Image cells */
+  .b-cell-img { padding: 0; }
+  .b-cell-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: contrast(1.15) saturate(0.7);
+    display: block;
+  }
+
+  /* Pricing section */
+  .pricing { display: grid; grid-template-columns: repeat(3,1fr); border-top: var(--border); }
+  .p-card {
+    padding: 40px 32px;
+    border-right: var(--border);
+    position: relative;
+  }
+  .p-card:last-child { border-right: none; }
+  .p-card.featured { background: var(--acid); }
+  .p-tier {
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.2em;
+    color: rgba(9,9,11,0.4); margin-bottom: 20px;
+  }
+  .p-num {
+    font-family: var(--dela); font-size: 52px; line-height: 1;
+    letter-spacing: -0.03em; margin-bottom: 4px;
+  }
+  .p-period { font-family: var(--mono); font-size: 10px; color: rgba(9,9,11,0.4); margin-bottom: 24px; }
+  .p-line {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 8px 0; border-top: 1px solid rgba(9,9,11,0.1);
+    font-size: 12px; font-family: var(--mono); color: rgba(9,9,11,0.6);
+  }
+  .p-line svg { width: 12px; height: 12px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Process steps */
+  .process { display: grid; grid-template-columns: repeat(4,1fr); border-top: var(--border); }
+  .proc-step {
+    padding: 40px 28px;
+    border-right: var(--border);
+    position: relative;
+  }
+  .proc-step:last-child { border-right: none; }
+  .proc-num {
+    font-family: var(--dela); font-size: 48px;
+    line-height: 1; color: var(--acid);
+    -webkit-text-stroke: 2px var(--ink);
+    margin-bottom: 16px;
+  }
+  .proc-title { font-family: var(--dela); font-size: 16px; text-transform: uppercase; margin-bottom: 10px; }
+  .proc-body { font-family: var(--mono); font-size: 11px; color: rgba(9,9,11,0.45); line-height: 1.6; }
+
+  /* CTA */
+  .cta-section {
+    padding: 80px 2.5rem;
+    border-top: var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 40px; flex-wrap: wrap;
+    background: var(--ink); color: var(--bg);
+  }
+  .cta-h2 {
+    font-family: var(--dela); font-size: clamp(36px,5vw,72px);
+    text-transform: uppercase; line-height: 0.92; letter-spacing: -0.02em;
+  }
+  .cta-h2 .acid { color: var(--acid); }
+
+  /* Footer */
+  footer {
+    border-top: var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 2rem; flex-wrap: wrap; gap: 16px;
+    background: var(--bg);
+  }
+  .f-logo { font-family: var(--dela); font-size: 14px; text-decoration: none; color: var(--ink); }
+  .f-links { display: flex; gap: 0; }
+  .f-links a {
+    font-family: var(--mono); font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.15em; color: rgba(9,9,11,0.35); text-decoration: none;
+    padding: 6px 16px; border-right: 1px solid rgba(9,9,11,0.12);
+    transition: color 0.15s;
+  }
+  .f-links a:first-child { border-left: 1px solid rgba(9,9,11,0.12); }
+  .f-links a:hover { color: var(--ink); }
+
+  /* Floating card */
+  .float-card {
+    position: fixed; bottom: 24px; right: 24px; z-index: 500;
+    background: var(--acid);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    padding: 12px 20px;
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    cursor: none;
+  }
+  .float-card svg { width: 12px; height: 12px; }
+
+  @media(max-width:900px) {
+    .hero { grid-template-columns:1fr; }
+    .bento { grid-template-columns:1fr; }
+    .pricing { grid-template-columns:1fr; }
+    .process { grid-template-columns:1fr 1fr; }
+    nav { padding:0 1rem; }
+    .nav-links { display:none; }
+    .b-cell.span-4,.b-cell.span-6,.b-cell.span-3,.b-cell.span-9 { grid-column:span 12; }
+    body { cursor: auto; }
+    .cursor { display: none; }
+  }
+</style>
 </head>
 <body>
+<div class="cursor" id="cursor"></div>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">ACID.WORKS</a>
-    <div class="nav-center">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#blog">Blog</a>
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">ACID<span class="logo-dot">.</span>WORKS</a>
+  <ul class="nav-links">
+    <li><a href="#">Work</a></li>
+    <li><a href="#">Platform</a></li>
+    <li><a href="#">Collective</a></li>
+    <li><a href="#">Manifesto</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <a href="#" class="btn-acid">
+    <i data-lucide="zap"></i>
+    Claim Your Studio
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">
+      <i data-lucide="radio" style="width:10px;height:10px;"></i>
+      Digital-first creative platform — Now live
     </div>
-    <a href="#cta" class="nav-cta">Start a Project →</a>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-top">
-      <div class="hero-left">
-        <div class="hero-badge">Neo-Brutalist Design Studio · NYC</div>
-        <h1 class="hero-title">
-          DESIGN<br>
-          <span class="yellow-fill">WITHOUT</span><br>
-          <span class="yellow-line">APOLOGY</span>
-        </h1>
-        <div class="hero-meta">
-          <div>
-            <div class="hm-val">200+</div>
-            <div class="hm-label">Projects</div>
-          </div>
-          <div>
-            <div class="hm-val">8</div>
-            <div class="hm-label">Years Running</div>
-          </div>
-          <div>
-            <div class="hm-val">LOUD</div>
-            <div class="hm-label">Always</div>
-          </div>
-        </div>
-      </div>
-      <div class="hero-right">
-        <div class="hero-right-tag">// Our Approach</div>
-        <blockquote class="hero-right-quote">
-          WE BUILD<br>THINGS<br><em>THAT DEMAND</em><br>ATTENTION
-        </blockquote>
-        <p class="hero-right-desc">Acid.Works is a neo-brutalist design studio that refuses comfortable choices. We build brand identities, digital experiences, and creative campaigns for companies that have something to say — and say it loudly.</p>
-        <a href="#work" class="hero-cta">See Our Work →</a>
-      </div>
+    <div class="glitch-wrap">
+      <h1 class="hero-h1">
+        MAKE<br>
+        <span class="acid-text">LOUD</span><br>
+        WORK.
+      </h1>
     </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <span class="marquee-item"><span class="m-dot"></span>Brand Identity</span>
-      <span class="marquee-item"><span class="m-dot"></span>Web Design</span>
-      <span class="marquee-item"><span class="m-dot"></span>Art Direction</span>
-      <span class="marquee-item"><span class="m-dot"></span>Motion Graphics</span>
-      <span class="marquee-item"><span class="m-dot"></span>Creative Strategy</span>
-      <span class="marquee-item"><span class="m-dot"></span>Packaging</span>
-      <span class="marquee-item"><span class="m-dot"></span>Brand Identity</span>
-      <span class="marquee-item"><span class="m-dot"></span>Web Design</span>
-      <span class="marquee-item"><span class="m-dot"></span>Art Direction</span>
-      <span class="marquee-item"><span class="m-dot"></span>Motion Graphics</span>
-      <span class="marquee-item"><span class="m-dot"></span>Creative Strategy</span>
-      <span class="marquee-item"><span class="m-dot"></span>Packaging</span>
+    <p class="hero-sub" style="margin-top:28px;">
+      ACID.WORKS is the platform for designers who refuse to ship generic output. Portfolio, client tools, and creative collaboration — built unapologetically for the loud creative class.
+    </p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="#" class="btn-acid">
+        <i data-lucide="arrow-up-right"></i>
+        Build Your Portfolio
+      </a>
+      <a href="#" class="btn-ink">
+        <i data-lucide="layers"></i>
+        Browse the Work
+      </a>
     </div>
   </div>
-
-  <!-- BENTO -->
-  <section class="bento-section" id="services">
-    <div class="bento-header reveal">
-      <div>
-        <div class="section-tag">Services / What We Do</div>
-        <h2 class="section-title">OUR <span class="stroke">LOUD</span><br><span class="yellow">CRAFT</span></h2>
-      </div>
-      <a href="#cta" class="nav-cta" style="top:0">Work With Us →</a>
+  <div class="hero-right">
+    <div>
+      <div class="hero-count">2,840</div>
+      <div class="hero-count-label">Active creators publishing weekly</div>
     </div>
-    <div class="bento-grid">
-      <div class="bento-cell bc-a">
-        <div>
-          <div class="bc-tag">01 / Brand</div>
-        </div>
-        <div>
-          <div class="bc-title">Brand<br>Identity</div>
-          <div class="bc-body">System-level brand work that scales without losing its edge. From naming to full visual identity.</div>
-        </div>
-        <div class="bc-num">01</div>
-      </div>
-      <div class="bento-cell bc-b">
-        <div>
-          <div class="bc-tag">02 / Digital</div>
-        </div>
-        <div>
-          <div class="bc-title">Web<br>Design</div>
-          <div class="bc-body">Websites that convert because they surprise. Built with intention and built to perform.</div>
-        </div>
-        <div class="bc-num">02</div>
-      </div>
-      <div class="bento-cell bc-c">
-        <div>
-          <div class="bc-tag" style="color:rgba(245,230,66,0.4)">03 / Motion</div>
-        </div>
-        <div>
-          <div class="bc-title" style="color:var(--yellow)">Motion<br>Design</div>
-          <div class="bc-body" style="color:rgba(245,230,66,0.5)">Animation, brand films, and motion systems that move with your brand's energy.</div>
-        </div>
-        <div class="bc-num" style="color:rgba(245,230,66,0.08)">03</div>
-      </div>
-      <div class="bento-cell bc-d">
-        <div>
-          <div class="bc-tag">04 / Art Direction</div>
-        </div>
-        <div>
-          <div class="bc-title">Art<br>Direction</div>
-          <div class="bc-body">Campaign concepting, photography direction, and visual storytelling for brands ready to take creative risk.</div>
-        </div>
-        <div class="bc-num">04</div>
-      </div>
-      <div class="bento-cell bc-e">
-        <div>
-          <div class="bc-tag">05 / Packaging</div>
-        </div>
-        <div>
-          <div class="bc-title">Packaging<br>Design</div>
-          <div class="bc-body">Shelves are competitive. We make packaging that wins from three feet away, and holds your attention up close.</div>
-        </div>
-        <div class="bc-num">05</div>
+    <div class="hero-img-card">
+      <img src="../../images/creative/creative-1.jpg" alt="Creative work">
+      <div class="card-footer">
+        <span>Latest drop — Studio Kato</span>
+        <i data-lucide="external-link" style="width:11px;height:11px;"></i>
       </div>
     </div>
-  </section>
-
-  <!-- WORK LIST -->
-  <section class="work-section" id="work">
-    <div class="bento-header reveal">
-      <div>
-        <div class="section-tag">Selected Projects / 2019–2025</div>
-        <h2 class="section-title">THE <span class="yellow">WORK</span></h2>
-      </div>
-    </div>
-    <div class="work-list">
-      <div class="work-row">
-        <div class="w-num">001</div>
-        <div class="w-name">Flux Finance</div>
-        <div class="w-type">Brand Identity · Web</div>
-        <div class="w-year">2025</div>
-        <div class="w-arrow">↗</div>
-      </div>
-      <div class="work-row">
-        <div class="w-num">002</div>
-        <div class="w-name">Strike Energy</div>
-        <div class="w-type">Packaging · Campaign</div>
-        <div class="w-year">2025</div>
-        <div class="w-arrow">↗</div>
-      </div>
-      <div class="work-row">
-        <div class="w-num">003</div>
-        <div class="w-name">Maxim Label</div>
-        <div class="w-type">Art Direction · Motion</div>
-        <div class="w-year">2024</div>
-        <div class="w-arrow">↗</div>
-      </div>
-      <div class="work-row">
-        <div class="w-num">004</div>
-        <div class="w-name">BLOC Platform</div>
-        <div class="w-type">Web Design · Product</div>
-        <div class="w-year">2024</div>
-        <div class="w-arrow">↗</div>
-      </div>
-      <div class="work-row">
-        <div class="w-num">005</div>
-        <div class="w-name">Raw Collective</div>
-        <div class="w-type">Brand Identity · Print</div>
-        <div class="w-year">2023</div>
-        <div class="w-arrow">↗</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MANIFESTO -->
-  <section class="manifesto-section">
-    <div class="manifesto-inner">
-      <div class="bento-header reveal" style="padding:0 0 2.5rem 0">
-        <div>
-          <div class="section-tag" style="color:rgba(245,230,66,0.4)">Our Beliefs</div>
-          <h2 class="section-title" style="color:var(--off)">THE <span style="color:var(--yellow)">ACID</span><br>MANIFESTO</h2>
-        </div>
-      </div>
-      <div class="manifesto-grid">
-        <div class="man-cell reveal">
-          <div class="man-num">I</div>
-          <div class="man-title">Comfort is the Enemy</div>
-          <div class="man-body">Safe design is invisible design. We refuse the comfortable default in every decision — typeface, color, layout, copy. If it doesn't feel slightly dangerous, we haven't pushed far enough.</div>
-        </div>
-        <div class="man-cell reveal" style="transition-delay:0.1s">
-          <div class="man-num">II</div>
-          <div class="man-title">System Over Surface</div>
-          <div class="man-body">Aesthetics without logic is decoration. We build brand systems where every visual decision connects to a clear idea. The noise is intentional. The grid is structural. The boldness has architecture.</div>
-        </div>
-        <div class="man-cell reveal" style="transition-delay:0.2s">
-          <div class="man-num">III</div>
-          <div class="man-title">Loud is a Strategy</div>
-          <div class="man-body">In a world of beige brands, volume is a competitive advantage. We help companies find their loudest true voice — then turn it up until the right people can't ignore it and the wrong ones look away.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials-section">
-    <div class="bento-header reveal">
-      <div>
-        <div class="section-tag">Client Reactions</div>
-        <h2 class="section-title">THEY <span class="stroke">SAID</span> IT</h2>
-      </div>
-    </div>
-    <div class="testi-grid">
-      <div class="t-cell reveal">
-        <div class="t-score">★★★★★</div>
-        <p class="t-text">"Acid.Works gave us a brand that our competitors are genuinely scared of. Not because of size — because of clarity and conviction. We walked into every room differently after the rebrand."</p>
-        <div class="t-author-name">Maya Torres</div>
-        <div class="t-author-role">CEO, Strike Energy</div>
-      </div>
-      <div class="t-cell reveal" style="transition-delay:0.1s">
-        <div class="t-score">★★★★★</div>
-        <p class="t-text">"They pushed back hard on three of our ideas. Every time they were right. The final work was more us than anything we could have imagined. That's a rare thing to say about an outside studio."</p>
-        <div class="t-author-name">Kwame Asante</div>
-        <div class="t-author-role">Creative Director, Maxim Label</div>
-      </div>
-      <div class="t-cell reveal" style="transition-delay:0.2s">
-        <div class="t-score">★★★★★</div>
-        <p class="t-text">"Our website used to be forgettable. Now it's the first thing we show investors. Acid.Works built us something that makes people lean forward. The conversion rate went up 55% in the first month."</p>
-        <div class="t-author-name">Fatima Osei</div>
-        <div class="t-author-role">Founder, BLOC Platform</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NUMBERS -->
-  <div class="numbers-section">
-    <div class="numbers-inner">
-      <div class="num-cell reveal">
-        <div class="num-val">8+</div>
-        <div class="num-label">Years of Loud</div>
-      </div>
-      <div class="num-cell reveal" style="transition-delay:0.1s">
-        <div class="num-val">200+</div>
-        <div class="num-label">Brands Built</div>
-      </div>
-      <div class="num-cell reveal" style="transition-delay:0.2s">
-        <div class="num-val">22</div>
-        <div class="num-label">Industry Awards</div>
-      </div>
-      <div class="num-cell reveal" style="transition-delay:0.3s">
-        <div class="num-val">0</div>
-        <div class="num-label">Boring Brands Made</div>
+    <div>
+      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(9,9,11,0.35);margin-bottom:6px;">This week's top category</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:var(--ink);color:var(--bg);padding:5px 10px;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;">Motion</span>
+        <span style="border:1px solid rgba(9,9,11,0.2);padding:5px 10px;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;">Identity</span>
+        <span style="border:1px solid rgba(9,9,11,0.2);padding:5px 10px;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;">Spatial</span>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- CTA -->
-  <section class="cta-section" id="cta">
-    <div class="cta-inner reveal">
-      <div class="cta-top-tag">Let's Make Some Noise</div>
-      <h2 class="cta-title">
-        GET<br>
-        <span class="yellow-fill">LOUD</span>
-      </h2>
-      <p class="cta-sub">We take on a limited number of projects per quarter. If you're ready to stop being forgettable, tell us about what you're building.</p>
-      <a href="mailto:loud@acid.works" class="cta-btn">START A PROJECT →</a>
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">ACID.WORKS<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">PORTFOLIO BUILDER<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">CLIENT HUB<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">CREATOR COLLECTIVE<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">NO TEMPLATES<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">NO FILLER<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">NO COMPROMISE<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">ACID.WORKS<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">PORTFOLIO BUILDER<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">CLIENT HUB<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">CREATOR COLLECTIVE<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">NO TEMPLATES<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">NO FILLER<span class="marquee-sep">/</span></div>
+    <div class="marquee-item">NO COMPROMISE<span class="marquee-sep">/</span></div>
+  </div>
+</div>
+
+<!-- BENTO FEATURES -->
+<div style="border-bottom:var(--border);">
+  <div class="bento">
+    <!-- Row 1 -->
+    <div class="b-cell span-4 b-cell-img" style="min-height:280px;border-left:var(--border);">
+      <img src="../../images/creative/creative-2.jpg" alt="Creative portfolio">
     </div>
-  </section>
+    <div class="b-cell span-4" style="min-height:280px;">
+      <div class="cell-num">01</div>
+      <div class="cell-icon"><i data-lucide="layout-dashboard"></i></div>
+      <div class="cell-title">Portfolio that doesn't look like everyone else's</div>
+      <div class="cell-body">Block-based layouts with zero template constraints. Every portfolio built on ACID.WORKS looks like its creator made it, not a SaaS company.</div>
+    </div>
+    <div class="b-cell span-4 acid-bg no-border-r" style="min-height:280px;">
+      <div class="cell-num">02</div>
+      <div class="cell-icon"><i data-lucide="users"></i></div>
+      <div class="cell-title">Client hub with contracts & invoicing</div>
+      <div class="cell-body">Full client lifecycle in one place: briefs, approvals, revisions, contracts, payments. No more 6-tool Franken-stack.</div>
+    </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <div class="f-logo">ACID.WORKS</div>
-          <p class="f-tagline">Neo-brutalist design studio. Loud brands, bold experiences, zero apologies. NYC.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Services</h4>
-          <ul>
-            <li><a href="#">Brand Identity</a></li>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Motion Design</a></li>
-            <li><a href="#">Art Direction</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Studio</h4>
-          <ul>
-            <li><a href="#">Work</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Process</a></li>
-            <li><a href="#">Careers</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Find Us</h4>
-          <ul>
-            <li><a href="#">Instagram</a></li>
-            <li><a href="#">Twitter</a></li>
-            <li><a href="#">Behance</a></li>
-            <li><a href="#">Are.na</a></li>
-          </ul>
+    <!-- Row 2 -->
+    <div class="b-cell span-6 ink-bg" style="min-height:260px;border-left:var(--border);">
+      <div class="cell-num inv">03</div>
+      <div class="cell-icon inv"><i data-lucide="globe"></i></div>
+      <div class="cell-title" style="color:var(--bg);">Your custom domain. Your rules.</div>
+      <div class="cell-body inv">Publish to your own domain in 90 seconds. We handle the SSL, the CDN, and the uptime. You own every pixel.</div>
+    </div>
+    <div class="b-cell span-3" style="min-height:260px;">
+      <div class="big-num" style="color:var(--acid);-webkit-text-stroke:2px var(--ink);">28k</div>
+      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.18em;color:rgba(9,9,11,0.35);margin-top:8px;">Portfolios live on the platform</div>
+    </div>
+    <div class="b-cell span-3 no-border-r" style="min-height:260px;">
+      <div class="cell-num">04</div>
+      <div class="cell-icon"><i data-lucide="bell"></i></div>
+      <div class="cell-title">Real-time visitor analytics</div>
+      <div class="cell-body">See who's looking at your work, where they came from, how long they stayed. No vanity metrics — just signal.</div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="b-cell span-9" style="border-left:var(--border);">
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+        <div>
+          <div class="cell-num">05</div>
+          <div class="cell-title" style="font-size:24px;">Collective: sell access to<br>your process, not just the output.</div>
+          <div class="cell-body" style="max-width:500px;margin-top:8px;">Create members-only content — case studies, process breakdowns, design systems, custom brushes. Gate it. Monetize it. ACID.WORKS handles distribution and payments.</div>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p class="f-copy">© 2025 Acid.Works LLC. New York City. All rights reserved.</p>
-        <div class="f-social">
-          <a href="#">IG</a>
-          <a href="#">TW</a>
-          <a href="#">BE</a>
-        </div>
-      </div>
     </div>
-  </footer>
+    <div class="b-cell span-3 acid-bg no-border-r">
+      <div class="cell-num">Metric</div>
+      <div class="big-num">$4.2M</div>
+      <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(9,9,11,0.5);margin-top:6px;">Paid to creators last year</div>
+    </div>
+  </div>
+</div>
 
-  <script>
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.06 });
-    reveals.forEach(el => obs.observe(el));
-  </script>
+<!-- PROCESS -->
+<div class="process">
+  <div class="proc-step" style="border-left:var(--border);">
+    <div class="proc-num">01</div>
+    <div class="proc-title">Claim your handle</div>
+    <div class="proc-body">acidworks.io/@yourname is yours. No underscores, no dashes, no numerals. The handle is part of the identity.</div>
+  </div>
+  <div class="proc-step">
+    <div class="proc-num">02</div>
+    <div class="proc-title">Build your blocks</div>
+    <div class="proc-body">Drop in work with our block editor. Every element is draggable, resizable, and composable — no locked grids.</div>
+  </div>
+  <div class="proc-step">
+    <div class="proc-num">03</div>
+    <div class="proc-title">Configure your domain</div>
+    <div class="proc-body">Point your DNS, click activate. Your portfolio is live at your domain in under 90 seconds. We handle everything else.</div>
+  </div>
+  <div class="proc-step" style="border-right:none;">
+    <div class="proc-num">04</div>
+    <div class="proc-title">Ship and earn</div>
+    <div class="proc-body">Gate your process, offer client packages, take commissions. Your portfolio becomes your full creative business.</div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="pricing">
+  <div class="p-card" style="border-left:var(--border);">
+    <div class="p-tier">Base</div>
+    <div class="p-num">Free</div>
+    <div class="p-period">Forever — no credit card required</div>
+    <a href="#" class="btn-ink" style="margin-bottom:20px;width:100%;justify-content:center;font-size:12px;">Stake Your Claim</a>
+    <div class="p-line"><i data-lucide="check"></i> 1 portfolio site</div>
+    <div class="p-line"><i data-lucide="check"></i> ACID.WORKS subdomain</div>
+    <div class="p-line"><i data-lucide="check"></i> 10 project blocks</div>
+    <div class="p-line"><i data-lucide="check"></i> Contact form</div>
+  </div>
+  <div class="p-card featured">
+    <div class="p-tier">Studio — Most Chosen</div>
+    <div class="p-num">$16</div>
+    <div class="p-period">per month · billed annually</div>
+    <a href="#" class="btn-ink" style="margin-bottom:20px;width:100%;justify-content:center;font-size:12px;">Open Your Studio</a>
+    <div class="p-line"><i data-lucide="check"></i> Custom domain + SSL</div>
+    <div class="p-line"><i data-lucide="check"></i> Unlimited project blocks</div>
+    <div class="p-line"><i data-lucide="check"></i> Client hub + contracts</div>
+    <div class="p-line"><i data-lucide="check"></i> Collective publishing</div>
+    <div class="p-line"><i data-lucide="check"></i> Analytics dashboard</div>
+  </div>
+  <div class="p-card" style="border-right:var(--border);">
+    <div class="p-tier">Agency</div>
+    <div class="p-num">$64</div>
+    <div class="p-period">per month · up to 6 members</div>
+    <a href="#" class="btn-acid" style="margin-bottom:20px;width:100%;justify-content:center;font-size:12px;">Build Your Collective</a>
+    <div class="p-line"><i data-lucide="check"></i> Everything in Studio</div>
+    <div class="p-line"><i data-lucide="check"></i> 6 team member seats</div>
+    <div class="p-line"><i data-lucide="check"></i> Shared client workspace</div>
+    <div class="p-line"><i data-lucide="check"></i> White-label client portal</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div>
+    <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:rgba(248,244,232,0.25);margin-bottom:12px;">Your work is too loud to stay quiet</div>
+    <h2 class="cta-h2">
+      STOP HIDING<br>
+      IN <span class="acid">BEHANCE.</span>
+    </h2>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <a href="#" class="btn-acid" style="font-size:13px;padding:14px 28px;">
+      <i data-lucide="zap"></i>
+      Claim Your Free Studio Now
+    </a>
+    <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(248,244,232,0.25);text-align:center;">No card. No pitch. Just your work.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="f-logo">ACID<span style="color:var(--acid)">.</span>WORKS</a>
+  <div class="f-links">
+    <a href="#">Work</a>
+    <a href="#">Platform</a>
+    <a href="#">Collective</a>
+    <a href="#">Blog</a>
+    <a href="#">Careers</a>
+  </div>
+  <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(9,9,11,0.25);">&copy; 2026 ACID.WORKS Inc.</div>
+</footer>
+
+<script>
+  lucide.createIcons();
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  // Glitch on logo hover
+  const glitchWrap = document.querySelector('.glitch-wrap');
+  if(glitchWrap) {
+    glitchWrap.addEventListener('mouseenter', () => {
+      glitchWrap.querySelector('.hero-h1').style.animation = 'none';
+      setTimeout(() => { glitchWrap.querySelector('.hero-h1').style.animation = ''; }, 0);
+    });
+  }
+</script>
 </body>
 </html>

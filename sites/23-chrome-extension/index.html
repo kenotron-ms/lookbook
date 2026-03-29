@@ -3,809 +3,1191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TABFLOW — Supercharge Your Browser Workflow</title>
+<title>TABFLOW &mdash; Browser Productivity Extension</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #F4F5F7;
-  --surface: #FFFFFF;
-  --surface-raised: #FAFAFA;
-  --border: #E5E7EB;
-  --border-strong: #D1D5DB;
-  --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
-  --cyan: #06B6D4;
-  --cyan-dark: #0891B2;
-  --cyan-light: #CFFAFE;
-  --cyan-subtle: #ECFEFF;
-  --green: #10B981;
-  --purple: #8B5CF6;
-  --orange: #F59E0B;
-  --mono: 'JetBrains Mono', monospace;
-}
-
-html { scroll-behavior: smooth; }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); overflow-x: hidden; }
-
-/* ── NAV (Chrome DevTools-like top bar) ────────────────────── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-  background: var(--surface); border-bottom: 1px solid var(--border);
-  height: 56px; display: flex; align-items: center;
-  padding: 0 24px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-
-.nav-logo {
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 700; font-size: 0.95rem; color: var(--text-primary);
-  margin-right: 32px;
-}
-
-.nav-logo-dot {
-  width: 22px; height: 22px; border-radius: 6px;
-  background: linear-gradient(135deg, var(--cyan) 0%, #7C3AED 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.65rem; color: white; font-weight: 700;
-}
-
-.nav-tabs { display: flex; gap: 0; flex: 1; }
-
-.nav-tab {
-  padding: 0 18px; height: 56px; line-height: 56px;
-  font-size: 0.82rem; font-weight: 500; color: var(--text-muted);
-  text-decoration: none; border-bottom: 2px solid transparent;
-  transition: all 0.15s; white-space: nowrap;
-}
-
-.nav-tab:hover { color: var(--text-primary); }
-.nav-tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
-
-.nav-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
-
-.chrome-badge {
-  display: flex; align-items: center; gap: 6px;
-  padding: 5px 12px; border-radius: 6px; background: var(--bg);
-  border: 1px solid var(--border); font-family: var(--mono); font-size: 0.68rem;
-  color: var(--text-secondary); font-weight: 500;
-}
-
-.btn-add-chrome {
-  display: flex; align-items: center; gap: 6px;
-  padding: 8px 16px; background: var(--cyan); border: none; border-radius: 6px;
-  font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600;
-  color: white; cursor: pointer; transition: all 0.15s; text-decoration: none;
-}
-
-.btn-add-chrome:hover { background: var(--cyan-dark); }
-
-/* ── BROWSER CHROME BAND ───────────────────────────────────── */
-.browser-band {
-  margin-top: 56px;
-  background: #DEE1E6;
-  padding: 8px 24px 0;
-  display: flex; align-items: flex-end; gap: 2px;
-}
-
-.browser-tab {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 16px 10px;
-  border-radius: 8px 8px 0 0;
-  font-size: 0.75rem; font-weight: 500; color: #374151;
-  white-space: nowrap;
-}
-
-.browser-tab.active { background: var(--bg); color: var(--text-primary); }
-.browser-tab.inactive { background: #C8CBD0; color: #6B7280; }
-
-.tab-icon { font-size: 0.85rem; }
-.tab-close { margin-left: 6px; color: #9CA3AF; font-size: 0.7rem; cursor: pointer; }
-
-/* ── HERO ──────────────────────────────────────────────────── */
-.hero {
-  background: var(--bg);
-  padding: 60px 24px 48px;
-}
-
-.hero-inner { max-width: 1100px; margin: 0 auto; }
-
-.hero-grid {
-  display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: center;
-}
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 4px 12px; background: var(--cyan-subtle); border: 1px solid rgba(6,182,212,0.25);
-  border-radius: 4px; font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
-  color: var(--cyan-dark); text-transform: uppercase; letter-spacing: 0.5px;
-  margin-bottom: 20px;
-}
-
-.hero-rating { color: var(--cyan); margin-left: 4px; }
-
-.hero-title {
-  font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 700;
-  color: var(--text-primary); letter-spacing: -1.5px; line-height: 1.1;
-  margin-bottom: 16px;
-}
-
-.hero-title code {
-  font-family: var(--mono); font-size: 0.85em; color: var(--cyan);
-  background: var(--cyan-subtle); padding: 2px 8px; border-radius: 4px;
-  border: 1px solid rgba(6,182,212,0.2); letter-spacing: 0;
-}
-
-.hero-sub {
-  font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;
-  margin-bottom: 32px; max-width: 420px;
-}
-
-.hero-cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
-
-.hero-btn-primary {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 12px 22px; background: var(--cyan); border-radius: 8px;
-  font-size: 0.875rem; font-weight: 600; color: white; text-decoration: none;
-  border: none; cursor: pointer; font-family: 'Inter', sans-serif;
-  transition: all 0.15s; box-shadow: 0 2px 8px rgba(6,182,212,0.3);
-}
-
-.hero-btn-primary:hover { background: var(--cyan-dark); box-shadow: 0 4px 12px rgba(6,182,212,0.4); }
-
-.hero-btn-secondary {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 12px 18px; background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
-  text-decoration: none; transition: all 0.15s;
-}
-
-.hero-btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
-
-.hero-meta { display: flex; gap: 20px; flex-wrap: wrap; }
-
-.meta-item {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.78rem; color: var(--text-muted); font-weight: 500;
-  font-family: var(--mono);
-}
-
-/* Extension popup preview */
-.ext-popup-wrapper {
-  position: relative;
-}
-
-.ext-popup {
-  background: var(--surface); border-radius: 12px; overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px var(--border);
-  width: 100%; max-width: 420px; margin-left: auto;
-}
-
-.popup-header {
-  background: #1F2937; padding: 10px 16px;
-  display: flex; align-items: center; gap: 8px;
-}
-
-.popup-dots { display: flex; gap: 5px; }
-.popup-dot { width: 10px; height: 10px; border-radius: 50%; }
-
-.popup-url {
-  flex: 1; background: rgba(255,255,255,0.08); border-radius: 4px;
-  padding: 4px 10px; font-family: var(--mono); font-size: 0.68rem;
-  color: rgba(255,255,255,0.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-
-.popup-ext-icon { font-size: 1rem; }
-
-.popup-body { padding: 0; }
-
-.popup-section {
-  padding: 14px 16px; border-bottom: 1px solid var(--border);
-}
-
-.popup-section:last-child { border-bottom: none; }
-
-.popup-section-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.popup-section-title {
-  font-family: var(--mono); font-size: 0.65rem; font-weight: 600;
-  color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;
-}
-
-.popup-count {
-  background: var(--cyan); color: white; font-size: 0.6rem; font-weight: 700;
-  padding: 1px 6px; border-radius: 100px; font-family: var(--mono);
-}
-
-.tab-list { display: flex; flex-direction: column; gap: 6px; }
-
-.tab-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 6px 8px; border-radius: 6px; cursor: pointer;
-  background: var(--surface-raised); border: 1px solid var(--border);
-  transition: border-color 0.15s;
-}
-
-.tab-item:hover { border-color: var(--cyan); }
-.tab-item.active-tab { border-color: rgba(6,182,212,0.4); background: var(--cyan-subtle); }
-
-.tab-favicon { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; font-size: 0.7rem; }
-.tab-title { font-size: 0.72rem; color: var(--text-primary); font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tab-domain { font-family: var(--mono); font-size: 0.62rem; color: var(--text-muted); }
-
-.cmd-input-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 12px; background: var(--bg); border-radius: 8px;
-  border: 1px solid var(--border); margin-bottom: 8px;
-}
-
-.cmd-prefix { font-family: var(--mono); font-size: 0.75rem; color: var(--cyan); font-weight: 600; }
-.cmd-input { flex: 1; font-family: var(--mono); font-size: 0.72rem; color: var(--text-primary); background: transparent; border: none; outline: none; }
-.cmd-kbd { padding: 2px 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; font-size: 0.6rem; font-family: var(--mono); color: var(--text-muted); }
-
-.session-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-
-.session-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 4px 10px; border-radius: 100px; font-size: 0.68rem; font-weight: 500;
-  font-family: var(--mono); border: 1px solid;
-  cursor: pointer; transition: all 0.15s;
-}
-
-/* ── COMMAND PANEL DEMO ─────────────────────────────────────── */
-.terminal-section {
-  background: #111827; padding: 60px 24px;
-}
-
-.terminal-inner { max-width: 1100px; margin: 0 auto; }
-
-.terminal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 40px; flex-wrap: wrap; gap: 20px;
-}
-
-.terminal-header h2 { font-size: 1.8rem; font-weight: 700; color: white; letter-spacing: -0.5px; }
-.terminal-header p { font-size: 0.88rem; color: #6B7280; max-width: 400px; margin-top: 4px; }
-
-.terminal-window {
-  background: #0D1117; border-radius: 10px; overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
-}
-
-.terminal-top {
-  background: #1C1C1E; padding: 10px 16px;
-  display: flex; align-items: center; gap: 8px;
-}
-
-.t-dots { display: flex; gap: 6px; }
-.t-dot { width: 11px; height: 11px; border-radius: 50%; }
-
-.t-title { font-family: var(--mono); font-size: 0.72rem; color: #6B7280; margin-left: 8px; }
-
-.terminal-body { padding: 20px 24px; font-family: var(--mono); font-size: 0.8rem; line-height: 1.9; }
-
-.t-line { display: flex; gap: 10px; }
-.t-prompt { color: var(--cyan); flex-shrink: 0; }
-.t-cmd { color: #E2E8F0; }
-.t-out { color: #6B7280; padding-left: 20px; }
-.t-success { color: var(--green); padding-left: 20px; }
-.t-cyan { color: var(--cyan); }
-.t-purple { color: #A78BFA; }
-.t-orange { color: #F59E0B; }
-.t-cursor { display: inline-block; width: 8px; height: 14px; background: var(--cyan); margin-left: 2px; animation: blink 1s step-end infinite; }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-/* ── FEATURES GRID ──────────────────────────────────────────── */
-.features-section { padding: 80px 24px; }
-.features-inner { max-width: 1100px; margin: 0 auto; }
-
-.feat-label { font-family: var(--mono); font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--cyan); margin-bottom: 12px; }
-
-.feat-heading { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--text-primary); letter-spacing: -1px; margin-bottom: 48px; }
-.feat-heading span { color: var(--text-muted); font-weight: 400; }
-
-.feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-.feat-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-  padding: 28px 24px; transition: border-color 0.2s, box-shadow 0.2s;
-  opacity: 0; transform: translateY(16px);
-}
-
-.feat-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.4s, transform 0.4s, border-color 0.2s, box-shadow 0.2s; }
-
-.feat-card:hover { border-color: var(--cyan); box-shadow: 0 0 0 1px rgba(6,182,212,0.2), 0 4px 16px rgba(6,182,212,0.08); }
-
-.feat-card-icon {
-  width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; margin-bottom: 16px;
-  background: var(--bg); border: 1px solid var(--border);
-}
-
-.feat-card h3 { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
-.feat-card p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.65; }
-
-.feat-mono-tag {
-  display: inline-block; margin-top: 12px; font-family: var(--mono);
-  font-size: 0.62rem; color: var(--text-muted); background: var(--bg);
-  padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border);
-}
-
-/* ── TESTIMONIALS ───────────────────────────────────────────── */
-.review-section { background: var(--surface); padding: 80px 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.review-inner { max-width: 1100px; margin: 0 auto; }
-
-.review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
-
-.review-card {
-  background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
-  padding: 24px; opacity: 0; transform: translateY(16px);
-}
-
-.review-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s; }
-
-.review-stars { color: var(--cyan); font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 12px; }
-.review-text { font-size: 0.83rem; color: var(--text-primary); line-height: 1.7; margin-bottom: 16px; }
-
-.review-author { display: flex; align-items: center; gap: 10px; }
-.review-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: var(--cyan); font-family: var(--mono); }
-.review-name { font-size: 0.78rem; font-weight: 600; color: var(--text-primary); }
-.review-role { font-size: 0.68rem; color: var(--text-muted); font-family: var(--mono); }
-
-/* ── PRICING ────────────────────────────────────────────────── */
-.pricing-section { padding: 80px 24px; }
-.pricing-inner { max-width: 800px; margin: 0 auto; }
-
-.pricing-header { text-align: center; margin-bottom: 48px; }
-.pricing-header h2 { font-size: 2rem; font-weight: 700; color: var(--text-primary); letter-spacing: -0.8px; margin-bottom: 8px; }
-.pricing-header p { font-size: 0.88rem; color: var(--text-secondary); }
-
-.pricing-toggle {
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  margin-bottom: 40px;
-}
-
-.pricing-toggle span { font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); }
-.pricing-toggle span.active-plan { color: var(--text-primary); }
-
-.toggle-switch { width: 40px; height: 22px; background: var(--cyan); border-radius: 100px; position: relative; cursor: pointer; }
-.toggle-knob { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: white; transition: left 0.2s; }
-
-.pricing-save { background: var(--cyan-subtle); border: 1px solid rgba(6,182,212,0.25); color: var(--cyan); font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 100px; font-family: var(--mono); }
-
-.pricing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-
-.price-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 32px 28px;
-}
-
-.price-card.pro { border-color: var(--cyan); box-shadow: 0 0 0 1px rgba(6,182,212,0.2); }
-
-.price-name { font-family: var(--mono); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
-.price-card.pro .price-name { color: var(--cyan); }
-
-.price-amount { font-size: 2.8rem; font-weight: 700; letter-spacing: -1.5px; color: var(--text-primary); margin-bottom: 4px; }
-.price-amount span { font-size: 1rem; font-weight: 400; color: var(--text-muted); letter-spacing: 0; }
-
-.price-desc { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 24px; }
-
-.price-features { list-style: none; margin-bottom: 28px; }
-.price-features li { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-secondary); padding: 6px 0; border-bottom: 1px solid var(--border); }
-.price-features li::before { content: '→'; color: var(--cyan); font-family: var(--mono); font-size: 0.7rem; flex-shrink: 0; }
-
-.price-btn {
-  display: block; text-align: center; padding: 12px; border-radius: 8px;
-  font-size: 0.875rem; font-weight: 600; text-decoration: none;
-  transition: all 0.15s; font-family: 'Inter', sans-serif; border: 1px solid;
-  cursor: pointer;
-}
-
-.price-btn-outline { background: transparent; border-color: var(--border); color: var(--text-primary); }
-.price-btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
-.price-btn-solid { background: var(--cyan); border-color: var(--cyan); color: white; }
-.price-btn-solid:hover { background: var(--cyan-dark); }
-
-/* ── CTA ────────────────────────────────────────────────────── */
-.cta-section { background: #111827; padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
-.cta-section::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center top, rgba(6,182,212,0.12) 0%, transparent 60%); pointer-events: none; }
-.cta-inner { max-width: 560px; margin: 0 auto; position: relative; z-index: 1; }
-.cta-mono-label { font-family: var(--mono); font-size: 0.7rem; color: var(--cyan); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; }
-.cta-title { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; color: white; letter-spacing: -1px; margin-bottom: 12px; }
-.cta-sub { font-size: 0.9rem; color: #6B7280; line-height: 1.7; margin-bottom: 32px; }
-.cta-install { display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; background: var(--cyan); border-radius: 8px; font-size: 0.9rem; font-weight: 600; color: white; text-decoration: none; transition: all 0.2s; box-shadow: 0 4px 16px rgba(6,182,212,0.3); }
-.cta-install:hover { background: var(--cyan-dark); transform: translateY(-2px); }
-.cta-version { font-family: var(--mono); font-size: 0.68rem; color: #6B7280; margin-top: 14px; }
-
-/* ── FOOTER ─────────────────────────────────────────────────── */
-footer { background: #0D1117; border-top: 1px solid rgba(255,255,255,0.06); padding: 48px 24px 24px; }
-.footer-inner { max-width: 1100px; margin: 0 auto; }
-.footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; }
-.footer-brand { max-width: 240px; }
-.footer-brand-title { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: white; margin-bottom: 8px; }
-.footer-brand p { font-size: 0.78rem; color: #6B7280; line-height: 1.6; }
-.footer-links-row { display: flex; gap: 48px; }
-.footer-col h4 { font-family: var(--mono); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #6B7280; margin-bottom: 14px; }
-.footer-col a { display: block; font-size: 0.8rem; color: #9CA3AF; text-decoration: none; margin-bottom: 8px; transition: color 0.15s; }
-.footer-col a:hover { color: var(--cyan); }
-.footer-bottom { display: flex; justify-content: space-between; font-size: 0.72rem; color: #4B5563; flex-wrap: wrap; gap: 8px; }
-.footer-bottom a { color: #4B5563; text-decoration: none; }
-
-@media (max-width: 900px) {
-  nav { padding: 0 16px; }
-  .nav-tabs { display: none; }
-  .hero { padding: 40px 16px; }
-  .hero-grid { grid-template-columns: 1fr; }
-  .ext-popup { max-width: 100%; }
-  .feat-grid, .review-grid { grid-template-columns: 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; }
-  .terminal-section, .features-section, .review-section, .pricing-section, .cta-section { padding: 48px 16px; }
-  footer { padding: 40px 16px 20px; }
-  .footer-top { flex-direction: column; }
-  .footer-links-row { flex-wrap: wrap; gap: 24px; }
-}
+  :root {
+    --bg: #f3f4f6;
+    --panel: #ffffff;
+    --border: #e5e7eb;
+    --border-dark: #d1d5db;
+    --cyan: #06B6D4;
+    --cyan-light: rgba(6,182,212,0.08);
+    --cyan-border: rgba(6,182,212,0.3);
+    --text: #111827;
+    --text-muted: #6b7280;
+    --text-faint: #9ca3af;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Grid bg */
+  .grid-bg {
+    background-image: linear-gradient(rgba(229,231,235,0.3) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(229,231,235,0.3) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Panel shadow */
+  .panel-shadow { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.06); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
+
+  /* Slide-up reveal */
+  .slide-up {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+  }
+  .slide-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ========== BROWSER CHROME FRAME ========== */
+  .browser-frame {
+    background: #e8eaed;
+    border: 1px solid #c0c4cc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+  }
+
+  /* Tab bar */
+  .browser-tab-bar {
+    background: #dde0e6;
+    padding: 8px 12px 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .browser-traffic {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 0 8px 8px 0;
+  }
+  .btl {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .browser-tab {
+    background: var(--bg);
+    border-radius: 8px 8px 0 0;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 160px;
+    max-width: 200px;
+  }
+  .browser-tab.active { background: var(--panel); }
+  .browser-tab-favicon {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    background: var(--cyan);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .browser-tab-favicon i { width: 8px; height: 8px; color: white; }
+  .browser-tab-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+  .browser-tab:not(.active) .browser-tab-title { color: var(--text-muted); }
+  .browser-tab-close {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, background 0.15s;
+  }
+  .browser-tab:hover .browser-tab-close { opacity: 1; background: rgba(0,0,0,0.1); }
+  .browser-tab-close i { width: 8px; height: 8px; color: var(--text-muted); }
+  .browser-tab-new {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 0;
+    align-self: center;
+  }
+  .browser-tab-new i { width: 14px; height: 14px; color: var(--text-muted); }
+
+  /* Address bar */
+  .browser-address-bar {
+    background: var(--panel);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .browser-nav-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .browser-nav-btn:hover { background: var(--bg); }
+  .browser-nav-btn i { width: 14px; height: 14px; color: var(--text-muted); }
+  .browser-url-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    cursor: text;
+  }
+  .browser-url-field i { width: 12px; height: 12px; color: var(--cyan); }
+  .browser-url-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    flex: 1;
+  }
+  .browser-url-text span { color: var(--text); }
+  .browser-ext-icons {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .ext-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .ext-icon:hover { background: var(--bg); }
+  .ext-icon i { width: 14px; height: 14px; color: var(--text-muted); }
+  .ext-icon.active { background: var(--cyan-light); border: 1px solid var(--cyan-border); }
+  .ext-icon.active i { color: var(--cyan); }
+
+  /* Browser content area (two-panel layout) */
+  .browser-content {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: 420px;
+    background: var(--bg);
+  }
+
+  /* TABFLOW sidebar panel */
+  .tabflow-panel {
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .tabflow-header {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tabflow-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tabflow-logo-mark {
+    width: 20px;
+    height: 20px;
+    background: var(--cyan);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tabflow-logo-mark i { width: 10px; height: 10px; color: white; }
+  .tabflow-logo-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .tabflow-header-actions {
+    display: flex;
+    gap: 2px;
+  }
+  .tf-action {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .tf-action:hover { background: var(--bg); }
+  .tf-action i { width: 12px; height: 12px; color: var(--text-muted); }
+  .tabflow-search {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+  }
+  .tabflow-search i { width: 12px; height: 12px; color: var(--text-faint); }
+  .tabflow-search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    placeholder-color: var(--text-faint);
+  }
+  .tabflow-search input::placeholder { color: var(--text-faint); }
+  .tabflow-section-label {
+    padding: 8px 12px 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .tabflow-tab-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .tabflow-tab-item:hover { background: var(--bg); }
+  .tabflow-tab-item.active { background: var(--cyan-light); }
+  .tabflow-tab-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--cyan);
+  }
+  .tabflow-fav {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .tabflow-tab-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+  .tabflow-tab-item.active .tabflow-tab-title { color: var(--cyan); }
+  .tabflow-tab-domain {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+  .tabflow-group {
+    margin: 4px 0 2px;
+    padding: 3px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tabflow-group-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .tabflow-group-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* Main page content */
+  .browser-page {
+    overflow-y: auto;
+    padding: 0;
+    background: var(--bg);
+    grid-bg: true;
+  }
+  .page-content-inner {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .page-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .page-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .page-card-title i { width: 12px; height: 12px; color: var(--cyan); }
+
+  /* ========== MARKETING CONTENT ========== */
+  .marketing-nav {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2.5rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .mkt-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mkt-logo-mark {
+    width: 24px;
+    height: 24px;
+    background: var(--cyan);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mkt-logo-mark i { width: 12px; height: 12px; color: white; }
+  .mkt-logo-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .mkt-nav-links { display: flex; gap: 1.5rem; align-items: center; }
+  .mkt-nav-links a {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mkt-nav-links a:hover { color: var(--cyan); }
+  .mkt-nav-btn {
+    padding: 0.375rem 0.875rem;
+    background: var(--cyan);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    transition: background 0.2s;
+  }
+  .mkt-nav-btn:hover { background: #0891b2; }
+
+  /* Hero */
+  .mkt-hero {
+    padding: 5rem 2.5rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .mkt-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    background: var(--cyan-light);
+    border: 1px solid var(--cyan-border);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  .mkt-hero-eyebrow i { width: 10px; height: 10px; }
+  .mkt-hero-title {
+    font-size: clamp(1.75rem, 3.5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .mkt-hero-title span { color: var(--cyan); }
+  .mkt-hero-body {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    max-width: 440px;
+  }
+  .mkt-hero-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .mkt-btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.625rem 1.25rem;
+    background: var(--cyan);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .mkt-btn-primary:hover { background: #0891b2; }
+  .mkt-btn-primary i { width: 14px; height: 14px; }
+  .mkt-btn-secondary {
+    padding: 0.625rem 1.25rem;
+    background: var(--panel);
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+  .mkt-btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+  .mkt-hero-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .mkt-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .mkt-stat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .mkt-stat-lbl {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+  .mkt-stat-sep { width: 1px; background: var(--border); align-self: stretch; }
+
+  /* Features section */
+  .features-outer {
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2.5rem;
+  }
+  .features-inner { max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 3rem;
+    max-width: 500px;
+  }
+  .feat-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .feat-card {
+    background: var(--panel);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+  .feat-card:hover { background: #fafbfc; }
+  .feat-card.wide { grid-column: span 1; }
+  .feat-card.tall { grid-row: span 2; }
+  .feat-card-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 1rem;
+    color: var(--cyan);
+  }
+  .feat-card-icon i { width: 16px; height: 16px; }
+  .feat-card-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .feat-card-desc {
+    font-size: 0.825rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .feat-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 0.875rem;
+    padding: 3px 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .feat-shortcut i { width: 10px; height: 10px; color: var(--cyan); }
+
+  /* Commands section */
+  .commands-section {
+    padding: 5rem 2.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .commands-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .command-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .command-card-header {
+    padding: 12px 16px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .command-card-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .command-card-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cmd-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .cmd-row:hover { background: var(--bg); }
+  .cmd-name {
+    font-size: 0.825rem;
+    color: var(--text);
+  }
+  .cmd-key {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+  .kbd {
+    display: inline-block;
+    padding: 1px 6px;
+    background: var(--bg);
+    border: 1px solid var(--border-dark);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .cmd-sep {
+    font-size: 10px;
+    color: var(--text-faint);
+  }
+
+  /* Stats row */
+  .stats-row {
+    background: var(--deep, #151e2e);
+    padding: 4rem 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat-col {
+    padding: 0 2rem;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-col:last-child { border-right: none; }
+  .stat-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: -0.03em;
+  }
+  .stat-desc {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.5;
+  }
+
+  /* Install CTA */
+  .install-section {
+    padding: 5rem 2.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+  .install-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 0.5rem;
+  }
+  .install-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 0.875rem;
+  }
+  .install-sub {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 420px;
+  }
+  .install-actions { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-end; }
+  .install-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1.5rem;
+    background: var(--text);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .install-btn:hover { background: #1f2937; }
+  .install-btn i { width: 16px; height: 16px; }
+  .install-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    text-align: right;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+  }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--cyan); }
+
+  @media (max-width: 768px) {
+    .mkt-hero { grid-template-columns: 1fr; }
+    .feat-grid { grid-template-columns: 1fr; }
+    .commands-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .install-section { grid-template-columns: 1fr; }
+    .install-actions { align-items: flex-start; }
+    .browser-content { grid-template-columns: 1fr; height: auto; }
+    .tabflow-panel { display: none; }
+  }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">
-    <div class="nav-logo-dot">T</div>
-    TABFLOW
+<!-- ===== MARKETING NAV ===== -->
+<nav class="marketing-nav">
+  <div class="mkt-logo">
+    <div class="mkt-logo-mark"><i data-lucide="layers"></i></div>
+    <span class="mkt-logo-name">TABFLOW</span>
   </div>
-  <div class="nav-tabs">
-    <a href="#" class="nav-tab active">Overview</a>
-    <a href="#" class="nav-tab">Features</a>
-    <a href="#" class="nav-tab">Commands</a>
-    <a href="#" class="nav-tab">Changelog</a>
-    <a href="#" class="nav-tab">Docs</a>
-    <a href="#" class="nav-tab">Pricing</a>
+  <div class="mkt-nav-links">
+    <a href="#">Features</a>
+    <a href="#">Commands</a>
+    <a href="#">Changelog</a>
+    <a href="#">Docs</a>
   </div>
-  <div class="nav-right">
-    <div class="chrome-badge">v2.4.1 · Chrome 120+</div>
-    <a href="#" class="btn-add-chrome">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
-      Add to Chrome
-    </a>
-  </div>
+  <button class="mkt-nav-btn">Add to Chrome &mdash; Free</button>
 </nav>
 
-<!-- BROWSER BAND -->
-<div class="browser-band">
-  <div class="browser-tab active"><div class="tab-icon">🔵</div> TabFlow Dashboard <div class="tab-close">×</div></div>
-  <div class="browser-tab inactive"><div class="tab-icon">📄</div> GitHub: main.ts <div class="tab-close">×</div></div>
-  <div class="browser-tab inactive"><div class="tab-icon">💬</div> Slack – #dev-team <div class="tab-close">×</div></div>
-  <div class="browser-tab inactive"><div class="tab-icon">📊</div> Linear – Backlog <div class="tab-close">×</div></div>
-  <div class="browser-tab inactive" style="padding: 8px 12px 10px; font-size:1rem;">+</div>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-grid">
-      <div>
-        <div class="hero-badge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          4.9<span class="hero-rating">★</span> · 68,000+ Active Users
-        </div>
-        <h1 class="hero-title">
-          Your browser,<br>
-          <code>supercharged.</code>
-        </h1>
-        <p class="hero-sub">TABFLOW gives you a command palette, session manager, smart tab grouping, and developer shortcuts — all in one lightweight extension. Press <kbd style="font-family:var(--mono);font-size:0.85em;background:#E5E7EB;padding:1px 5px;border-radius:3px;">⌘K</kbd> and never leave your keyboard again.</p>
-        <div class="hero-cta-row">
-          <a href="#" class="hero-btn-primary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
-            Add to Chrome — It's Free
-          </a>
-          <a href="#" class="hero-btn-secondary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none"/></svg>
-            Watch Demo
-          </a>
-        </div>
-        <div class="hero-meta">
-          <div class="meta-item">⚡ 12kb install</div>
-          <div class="meta-item">🔒 No data collection</div>
-          <div class="meta-item">⌨ 40+ shortcuts</div>
-          <div class="meta-item">🔄 Sync across devices</div>
-        </div>
+<!-- ===== HERO ===== -->
+<section class="mkt-hero grid-bg">
+  <div class="slide-up">
+    <div class="mkt-hero-eyebrow">
+      <i data-lucide="zap"></i>
+      v2.4.1 &mdash; Chrome + Firefox + Arc
+    </div>
+    <h1 class="mkt-hero-title">Your browser has<br><span>41 open tabs.</span><br>TABFLOW tames them.</h1>
+    <p class="mkt-hero-body">Session management, tab groups, quick-access command bar, and automatic tab hibernation &mdash; all from one keyboard shortcut. Built for people who actually use their browser as a workspace.</p>
+    <div class="mkt-hero-actions">
+      <a href="#" class="mkt-btn-primary">
+        <i data-lucide="chrome"></i>
+        Add to Chrome
+      </a>
+      <a href="#browser-preview" class="mkt-btn-secondary">See it in action</a>
+    </div>
+    <div class="mkt-hero-stats">
+      <div class="mkt-stat">
+        <span class="mkt-stat-val">127K</span>
+        <span class="mkt-stat-lbl">Active installs</span>
       </div>
-      <div class="ext-popup-wrapper">
-        <div class="ext-popup">
-          <div class="popup-header">
-            <div class="popup-dots">
-              <div class="popup-dot" style="background:#FF5F57;"></div>
-              <div class="popup-dot" style="background:#FFBD2E;"></div>
-              <div class="popup-dot" style="background:#28C840;"></div>
-            </div>
-            <div class="popup-url">https://github.com/tabflow/core/blob/main/src/index.ts</div>
-            <div class="popup-ext-icon">⚡</div>
-          </div>
-          <div class="popup-body">
-            <div class="popup-section">
-              <div class="cmd-input-row">
-                <div class="cmd-prefix">⌘</div>
-                <div class="cmd-input">Search tabs, history, commands...</div>
-                <div class="cmd-kbd">K</div>
-              </div>
-            </div>
-            <div class="popup-section">
-              <div class="popup-section-header">
-                <div class="popup-section-title">// open tabs</div>
-                <div class="popup-count">17</div>
-              </div>
-              <div class="tab-list">
-                <div class="tab-item active-tab">
-                  <div class="tab-favicon">📄</div>
-                  <div class="tab-title">TabFlow — Supercharge Your Browser</div>
-                  <div class="tab-domain">tabflow.dev</div>
-                </div>
-                <div class="tab-item">
-                  <div class="tab-favicon">🐙</div>
-                  <div class="tab-title">core/src/index.ts · GitHub</div>
-                  <div class="tab-domain">github.com</div>
-                </div>
-                <div class="tab-item">
-                  <div class="tab-favicon">📊</div>
-                  <div class="tab-title">Linear – Sprint 22 Backlog</div>
-                  <div class="tab-domain">linear.app</div>
-                </div>
-                <div class="tab-item">
-                  <div class="tab-favicon">💬</div>
-                  <div class="tab-title">Slack · #dev-team (3 new)</div>
-                  <div class="tab-domain">slack.com</div>
-                </div>
-              </div>
-            </div>
-            <div class="popup-section">
-              <div class="popup-section-title" style="margin-bottom:10px;">// sessions</div>
-              <div class="session-pills">
-                <div class="session-pill" style="background:#ECFEFF;border-color:rgba(6,182,212,0.3);color:#0891B2;">⚡ Dev Work</div>
-                <div class="session-pill" style="background:#F3F4F6;border-color:#E5E7EB;color:#6B7280;">📚 Research</div>
-                <div class="session-pill" style="background:#F5F3FF;border-color:rgba(139,92,246,0.3);color:#7C3AED;">🎨 Design</div>
-                <div class="session-pill" style="background:#FFF3CD;border-color:rgba(245,158,11,0.3);color:#D97706;">+ Save</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="mkt-stat-sep"></div>
+      <div class="mkt-stat">
+        <span class="mkt-stat-val">4.8</span>
+        <span class="mkt-stat-lbl">Chrome store rating</span>
+      </div>
+      <div class="mkt-stat-sep"></div>
+      <div class="mkt-stat">
+        <span class="mkt-stat-val">0ms</span>
+        <span class="mkt-stat-lbl">Background CPU usage</span>
       </div>
     </div>
   </div>
-</section>
 
-<!-- TERMINAL SECTION -->
-<section class="terminal-section">
-  <div class="terminal-inner">
-    <div class="terminal-header">
-      <div>
-        <h2>40+ power commands</h2>
-        <p>Everything you need, accessible from the keyboard. No mouse required.</p>
-      </div>
-      <a href="#" style="font-family:var(--mono);font-size:0.75rem;color:var(--cyan);text-decoration:none;">View all commands →</a>
-    </div>
-    <div class="terminal-window">
-      <div class="terminal-top">
-        <div class="t-dots">
-          <div class="t-dot" style="background:#FF5F57;"></div>
-          <div class="t-dot" style="background:#FFBD2E;"></div>
-          <div class="t-dot" style="background:#28C840;"></div>
+  <!-- Browser preview -->
+  <div class="slide-up" style="transition-delay:0.15s" id="browser-preview">
+    <div class="browser-frame">
+      <!-- Tab bar -->
+      <div class="browser-tab-bar">
+        <div class="browser-traffic">
+          <div class="btl" style="background:#ff5f57"></div>
+          <div class="btl" style="background:#febc2e"></div>
+          <div class="btl" style="background:#28c840"></div>
         </div>
-        <div class="t-title">tabflow — command palette</div>
+        <div class="browser-tab active">
+          <div class="browser-tab-favicon"><i data-lucide="layers"></i></div>
+          <span class="browser-tab-title">TABFLOW Dashboard</span>
+          <div class="browser-tab-close"><i data-lucide="x"></i></div>
+        </div>
+        <div class="browser-tab">
+          <div class="browser-tab-favicon" style="background:#6366f1"></div>
+          <span class="browser-tab-title">Linear &mdash; Issues</span>
+          <div class="browser-tab-close"><i data-lucide="x"></i></div>
+        </div>
+        <div class="browser-tab">
+          <div class="browser-tab-favicon" style="background:#0ea5e9"></div>
+          <span class="browser-tab-title">Figma &mdash; Design...</span>
+          <div class="browser-tab-close"><i data-lucide="x"></i></div>
+        </div>
+        <div class="browser-tab-new"><i data-lucide="plus"></i></div>
       </div>
-      <div class="terminal-body">
-        <div class="t-line"><span class="t-prompt">❯</span> <span class="t-cmd"><span class="t-cyan">tf</span> session save <span class="t-orange">"dev-sprint-22"</span></span></div>
-        <div class="t-line"><span class="t-out"></span><span class="t-success">✓ Saved 17 tabs → "dev-sprint-22" session</span></div>
-        <br>
-        <div class="t-line"><span class="t-prompt">❯</span> <span class="t-cmd"><span class="t-cyan">tf</span> group <span class="t-purple">--by-domain</span></span></div>
-        <div class="t-line"><span class="t-out"></span><span class="t-out">→ Grouped: github.com (4), notion.so (2), slack.com (3)...</span></div>
-        <div class="t-line"><span class="t-out"></span><span class="t-success">✓ 9 tab groups created</span></div>
-        <br>
-        <div class="t-line"><span class="t-prompt">❯</span> <span class="t-cmd"><span class="t-cyan">tf</span> find <span class="t-orange">"linear backlog"</span></span></div>
-        <div class="t-line"><span class="t-out"></span><span class="t-out">→ Found 1 match: Linear – Sprint 22 (tab #14)</span></div>
-        <div class="t-line"><span class="t-out"></span><span class="t-success">✓ Switched to tab</span></div>
-        <br>
-        <div class="t-line"><span class="t-prompt">❯</span> <span class="t-cmd"><span class="t-cyan">tf</span> close <span class="t-purple">--duplicates</span></span></div>
-        <div class="t-line"><span class="t-out"></span><span class="t-success">✓ Closed 3 duplicate tabs</span></div>
-        <br>
-        <div class="t-line"><span class="t-prompt">❯</span> <span class="t-cmd"><span class="t-cursor"></span></span></div>
+      <!-- Address bar -->
+      <div class="browser-address-bar">
+        <div class="browser-nav-btn"><i data-lucide="chevron-left"></i></div>
+        <div class="browser-nav-btn"><i data-lucide="chevron-right"></i></div>
+        <div class="browser-nav-btn"><i data-lucide="rotate-cw"></i></div>
+        <div class="browser-url-field">
+          <i data-lucide="lock"></i>
+          <span class="browser-url-text"><span>tabflow.dev</span>/dashboard</span>
+        </div>
+        <div class="browser-ext-icons">
+          <div class="ext-icon active"><i data-lucide="layers"></i></div>
+          <div class="ext-icon"><i data-lucide="bookmark"></i></div>
+          <div class="ext-icon"><i data-lucide="grid"></i></div>
+          <div class="ext-icon"><i data-lucide="more-horizontal"></i></div>
+        </div>
+      </div>
+      <!-- Content: TABFLOW panel + page -->
+      <div class="browser-content">
+        <!-- TABFLOW sidebar -->
+        <div class="tabflow-panel">
+          <div class="tabflow-header">
+            <div class="tabflow-logo">
+              <div class="tabflow-logo-mark"><i data-lucide="layers"></i></div>
+              <span class="tabflow-logo-name">TABFLOW</span>
+            </div>
+            <div class="tabflow-header-actions">
+              <div class="tf-action"><i data-lucide="plus"></i></div>
+              <div class="tf-action"><i data-lucide="settings"></i></div>
+            </div>
+          </div>
+          <div class="tabflow-search">
+            <i data-lucide="search"></i>
+            <input type="text" placeholder="Search tabs, history...">
+          </div>
+          <!-- Sessions -->
+          <span class="tabflow-section-label">Sessions</span>
+          <div class="tabflow-group">
+            <div class="tabflow-group-dot" style="background:#06B6D4"></div>
+            <span class="tabflow-group-name">Work</span>
+          </div>
+          <div class="tabflow-tab-item active">
+            <div class="tabflow-fav" style="background:#06B6D4;border-radius:3px"></div>
+            <span class="tabflow-tab-title">TABFLOW Dashboard</span>
+            <span class="tabflow-tab-domain">tabflow.dev</span>
+          </div>
+          <div class="tabflow-tab-item">
+            <div class="tabflow-fav" style="background:#6366f1;border-radius:3px"></div>
+            <span class="tabflow-tab-title">Linear &mdash; Issues</span>
+            <span class="tabflow-tab-domain">linear.app</span>
+          </div>
+          <div class="tabflow-tab-item">
+            <div class="tabflow-fav" style="background:#0ea5e9;border-radius:3px"></div>
+            <span class="tabflow-tab-title">Figma &mdash; Design</span>
+            <span class="tabflow-tab-domain">figma.com</span>
+          </div>
+          <div class="tabflow-group" style="margin-top:8px">
+            <div class="tabflow-group-dot" style="background:#8b5cf6"></div>
+            <span class="tabflow-group-name">Research</span>
+          </div>
+          <div class="tabflow-tab-item">
+            <div class="tabflow-fav" style="background:#ef4444;border-radius:3px"></div>
+            <span class="tabflow-tab-title">MDN Web Docs</span>
+            <span class="tabflow-tab-domain">developer.moz...</span>
+          </div>
+          <div class="tabflow-tab-item">
+            <div class="tabflow-fav" style="background:#f59e0b;border-radius:3px"></div>
+            <span class="tabflow-tab-title">Tailwind CSS Docs</span>
+            <span class="tabflow-tab-domain">tailwindcss.com</span>
+          </div>
+          <span class="tabflow-section-label" style="margin-top:8px">Hibernated (14)</span>
+          <div class="tabflow-tab-item" style="opacity:0.4">
+            <div class="tabflow-fav" style="background:#d1d5db;border-radius:3px"></div>
+            <span class="tabflow-tab-title">GitHub PR #2847</span>
+            <span class="tabflow-tab-domain">github.com</span>
+          </div>
+        </div>
+        <!-- Page area (stats/info) -->
+        <div class="browser-page grid-bg">
+          <div class="page-content-inner">
+            <div class="page-card">
+              <div class="page-card-title">
+                <span>Session Overview</span>
+                <i data-lucide="activity"></i>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                <div style="padding:10px;background:var(--bg);border-radius:6px">
+                  <p style="font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:600;color:var(--cyan)">14</p>
+                  <p style="font-size:10px;color:var(--text-faint);margin-top:2px">Open tabs</p>
+                </div>
+                <div style="padding:10px;background:var(--bg);border-radius:6px">
+                  <p style="font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:600;color:var(--text)">3</p>
+                  <p style="font-size:10px;color:var(--text-faint);margin-top:2px">Sessions</p>
+                </div>
+                <div style="padding:10px;background:var(--bg);border-radius:6px">
+                  <p style="font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:600;color:#16a34a">-42%</p>
+                  <p style="font-size:10px;color:var(--text-faint);margin-top:2px">Memory saved</p>
+                </div>
+              </div>
+            </div>
+            <div class="page-card">
+              <div class="page-card-title"><span>Quick Commands</span><i data-lucide="command"></i></div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:var(--cyan-light);border:1px solid var(--cyan-border);border-radius:5px">
+                  <span style="font-size:11px;font-weight:500;color:var(--cyan)">Command Bar</span>
+                  <div style="display:flex;gap:3px">
+                    <span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">K</span>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:5px">
+                  <span style="font-size:11px;color:var(--text-muted)">Save Session</span>
+                  <div style="display:flex;gap:3px">
+                    <span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8679;</span><span class="cmd-sep">+</span><span class="kbd">S</span>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:5px">
+                  <span style="font-size:11px;color:var(--text-muted)">Hibernate inactive</span>
+                  <div style="display:flex;gap:3px">
+                    <span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">H</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FEATURES -->
-<section class="features-section">
+<section class="features-outer">
   <div class="features-inner">
-    <div class="feat-label">// core features</div>
-    <h2 class="feat-heading">Built for developers. <span>Loved by everyone.</span></h2>
-    <div class="feat-grid">
-      <div class="feat-card">
-        <div class="feat-card-icon">⌨</div>
-        <h3>Universal Command Palette</h3>
-        <p>⌘K to open. Search tabs, history, bookmarks, and custom commands. Fuzzy matching, ranked by recency.</p>
-        <div class="feat-mono-tag">⌘K to activate</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-card-icon">📦</div>
-        <h3>Session Manager</h3>
-        <p>Save your current tab state as a named session. Restore in one click. Perfect for context switching.</p>
-        <div class="feat-mono-tag">tf session save</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-card-icon">🗂</div>
-        <h3>Smart Tab Groups</h3>
-        <p>Auto-group tabs by domain, topic, or custom rules. Keep your browser organized without thinking.</p>
-        <div class="feat-mono-tag">tf group --auto</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-card-icon">🔗</div>
-        <h3>Tab Link Sharing</h3>
-        <p>Share a session or group of tabs as a single shareable link. Perfect for team handoffs.</p>
-        <div class="feat-mono-tag">tf share --session</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-card-icon">🔍</div>
-        <h3>Full-Text Search</h3>
-        <p>Search the content of all open tabs in real time. Find that article you opened 2 hours ago instantly.</p>
-        <div class="feat-mono-tag">tf search --fulltext</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-card-icon">⚡</div>
-        <h3>Custom Shortcuts</h3>
-        <p>Assign any action to any keyboard shortcut. 40+ built-in actions with a scriptable API for custom ones.</p>
-        <div class="feat-mono-tag">tf shortcut bind</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- REVIEWS -->
-<section class="review-section">
-  <div class="review-inner">
-    <div class="feat-label">// chrome web store reviews</div>
-    <h2 style="font-size:1.8rem;font-weight:700;color:var(--text-primary);letter-spacing:-0.5px;">What developers are saying</h2>
-    <div class="review-grid">
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"I've installed and uninstalled every tab manager out there. TabFlow is the only one that actually stuck. The session manager alone is worth 5 stars."</p>
-        <div class="review-author">
-          <div class="review-avatar">SR</div>
-          <div>
-            <div class="review-name">Sarah R.</div>
-            <div class="review-role">@sarahdev · Senior Engineer @ Vercel</div>
+    <p class="section-eyebrow slide-up">Capabilities</p>
+    <h2 class="section-title slide-up" style="transition-delay:0.1s">A workspace layer,<br>not a tab counter.</h2>
+    <div class="feat-grid slide-up" style="transition-delay:0.2s">
+      <div class="feat-card tall" style="border-right:1px solid var(--border)">
+        <div class="feat-card-icon"><i data-lucide="command"></i></div>
+        <h3 class="feat-card-name">Universal Command Bar</h3>
+        <p class="feat-card-desc">A single keyboard shortcut opens a searchable command palette across all open tabs, saved sessions, browser history, and installed extension commands. No mouse required, ever.</p>
+        <div class="feat-shortcut"><i data-lucide="command"></i> &#8984; K anywhere</div>
+        <div style="margin-top:1.5rem;background:var(--bg);border-radius:6px;border:1px solid var(--border);overflow:hidden">
+          <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px">
+            <i data-lucide="search" style="width:12px;height:12px;color:var(--cyan)"></i>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted)">figma</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);animation:blink 1s infinite">|</span>
+          </div>
+          <div style="padding:6px">
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 8px;background:var(--cyan-light);border-radius:4px;margin-bottom:2px">
+              <div style="width:14px;height:14px;background:#0ea5e9;border-radius:2px;flex-shrink:0"></div>
+              <span style="font-size:11px;color:var(--text)">Figma &mdash; Design System v3</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:4px">
+              <div style="width:14px;height:14px;background:#6b7280;border-radius:2px;flex-shrink:0;opacity:0.4"></div>
+              <span style="font-size:11px;color:var(--text-muted)">Figma &mdash; Mobile Components</span>
+            </div>
           </div>
         </div>
       </div>
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"The ⌘K palette is incredible. It works exactly like I expect — fast, fuzzy, keyboard-first. I'm honestly surprised this doesn't come with Chrome by default."</p>
-        <div class="review-author">
-          <div class="review-avatar">MK</div>
-          <div>
-            <div class="review-name">Mike K.</div>
-            <div class="review-role">@mike_codes · Staff Eng @ Linear</div>
-          </div>
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <div class="feat-card">
+          <div class="feat-card-icon"><i data-lucide="moon"></i></div>
+          <h3 class="feat-card-name">Tab Hibernation</h3>
+          <p class="feat-card-desc">Automatically suspend inactive tabs to reclaim RAM. Zero CPU impact. Instant restore on click.</p>
+          <div class="feat-shortcut">&#8984; H &mdash; hibernate all inactive</div>
         </div>
-      </div>
-      <div class="review-card">
-        <div class="review-stars">★★★★★</div>
-        <p class="review-text">"TabFlow replaced Alfred, 1Password tab search, and Arc's space feature for me. Having it all in Chrome native is a game-changer for my workflow."</p>
-        <div class="review-author">
-          <div class="review-avatar">AT</div>
-          <div>
-            <div class="review-name">Alex T.</div>
-            <div class="review-role">@alexbuilds · Indie Developer</div>
-          </div>
+        <div class="feat-card" style="border-top:1px solid var(--border)">
+          <div class="feat-card-icon"><i data-lucide="archive"></i></div>
+          <h3 class="feat-card-name">Session Snapshots</h3>
+          <p class="feat-card-desc">Save your entire workspace state &mdash; tabs, groups, scroll positions &mdash; and restore it on any device.</p>
+          <div class="feat-shortcut">&#8984; &#8679; S &mdash; save session</div>
+        </div>
+        <div class="feat-card" style="border-top:1px solid var(--border)">
+          <div class="feat-card-icon"><i data-lucide="sidebar"></i></div>
+          <h3 class="feat-card-name">Split-View Workspace</h3>
+          <p class="feat-card-desc">Dock TABFLOW as a persistent sidebar beside any page. Your tab map, always visible, never in the way.</p>
+          <div class="feat-shortcut">&#8984; &#8997; T &mdash; toggle sidebar</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
-<section class="pricing-section">
-  <div class="pricing-inner">
-    <div class="pricing-header">
-      <h2>Simple pricing</h2>
-      <p>Free forever for core features. Pro unlocks the power user stack.</p>
-    </div>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-name">// free</div>
-        <div class="price-amount">$0 <span>forever</span></div>
-        <p class="price-desc">Everything you need to get started.</p>
-        <ul class="price-features">
-          <li>Command palette (⌘K)</li>
-          <li>Tab search & navigation</li>
-          <li>3 saved sessions</li>
-          <li>Basic tab grouping</li>
-          <li>10 custom shortcuts</li>
-        </ul>
-        <a href="#" class="price-btn price-btn-outline">Add to Chrome</a>
+<!-- Commands -->
+<section class="commands-section">
+  <p class="section-eyebrow slide-up">Keyboard Reference</p>
+  <h2 class="section-title slide-up" style="transition-delay:0.1s">The complete<br>shortcut system.</h2>
+  <div class="commands-grid slide-up" style="transition-delay:0.2s">
+    <div class="command-card">
+      <div class="command-card-header">
+        <i data-lucide="command" style="width:12px;height:12px;color:var(--cyan)"></i>
+        <span class="command-card-title">Navigation</span>
       </div>
-      <div class="price-card pro">
-        <div class="price-name">// pro</div>
-        <div class="price-amount">$6 <span>/ month</span></div>
-        <p class="price-desc">The full TabFlow experience for power users.</p>
-        <ul class="price-features">
-          <li>Everything in Free</li>
-          <li>Unlimited sessions</li>
-          <li>Full-text tab search</li>
-          <li>Smart auto-grouping</li>
-          <li>Tab link sharing</li>
-          <li>Cross-device sync</li>
-          <li>Scriptable command API</li>
-        </ul>
-        <a href="#" class="price-btn price-btn-solid">Start 14-Day Trial</a>
+      <div class="command-card-body">
+        <div class="cmd-row"><span class="cmd-name">Command Bar</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">K</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Next Tab</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8997;</span><span class="cmd-sep">+</span><span class="kbd">&#8594;</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Jump to Tab #</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">1&ndash;9</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Recently Closed</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8679;</span><span class="cmd-sep">+</span><span class="kbd">T</span></div></div>
+      </div>
+    </div>
+    <div class="command-card">
+      <div class="command-card-header">
+        <i data-lucide="layers" style="width:12px;height:12px;color:var(--cyan)"></i>
+        <span class="command-card-title">Sessions</span>
+      </div>
+      <div class="command-card-body">
+        <div class="cmd-row"><span class="cmd-name">Save Session</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8679;</span><span class="cmd-sep">+</span><span class="kbd">S</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Load Session</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8679;</span><span class="cmd-sep">+</span><span class="kbd">L</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">New Session</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8679;</span><span class="cmd-sep">+</span><span class="kbd">N</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Session Sync</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8679;</span><span class="cmd-sep">+</span><span class="kbd">Y</span></div></div>
+      </div>
+    </div>
+    <div class="command-card">
+      <div class="command-card-header">
+        <i data-lucide="moon" style="width:12px;height:12px;color:var(--cyan)"></i>
+        <span class="command-card-title">Tab Management</span>
+      </div>
+      <div class="command-card-body">
+        <div class="cmd-row"><span class="cmd-name">Hibernate Inactive</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">H</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Wake All Tabs</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8679;</span><span class="cmd-sep">+</span><span class="kbd">H</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Group Selected</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">G</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Close Duplicates</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8679;</span><span class="cmd-sep">+</span><span class="kbd">D</span></div></div>
+      </div>
+    </div>
+    <div class="command-card">
+      <div class="command-card-header">
+        <i data-lucide="sidebar" style="width:12px;height:12px;color:var(--cyan)"></i>
+        <span class="command-card-title">Sidebar</span>
+      </div>
+      <div class="command-card-body">
+        <div class="cmd-row"><span class="cmd-name">Toggle Sidebar</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8997;</span><span class="cmd-sep">+</span><span class="kbd">T</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Sidebar Width +</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8997;</span><span class="cmd-sep">+</span><span class="kbd">=</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Pin Tab to Sidebar</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">&#8997;</span><span class="cmd-sep">+</span><span class="kbd">P</span></div></div>
+        <div class="cmd-row"><span class="cmd-name">Settings</span><div class="cmd-key"><span class="kbd">&#8984;</span><span class="cmd-sep">+</span><span class="kbd">,</span></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-inner">
-    <div class="cta-mono-label">// install tabflow</div>
-    <h2 class="cta-title">Install in 10 seconds.<br>Reclaim hours every week.</h2>
-    <p class="cta-sub">68,000+ developers already use TabFlow to move faster in their browser. Join them — it's free.</p>
-    <a href="#" class="cta-install">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
-      Add TABFLOW to Chrome
+<!-- Stats row -->
+<div class="stats-row">
+  <div class="stat-col">
+    <span class="stat-mono">127K</span>
+    <span class="stat-desc">active installs across Chrome, Firefox, and Arc</span>
+  </div>
+  <div class="stat-col">
+    <span class="stat-mono">-42%</span>
+    <span class="stat-desc">average RAM reduction from tab hibernation</span>
+  </div>
+  <div class="stat-col">
+    <span class="stat-mono">0ms</span>
+    <span class="stat-desc">background CPU usage &mdash; zero idle impact</span>
+  </div>
+  <div class="stat-col">
+    <span class="stat-mono">4.8</span>
+    <span class="stat-desc">Chrome Web Store rating from 8,400+ reviews</span>
+  </div>
+</div>
+
+<!-- Install CTA -->
+<section class="install-section">
+  <div class="slide-up">
+    <p class="install-eyebrow">Install TABFLOW</p>
+    <h2 class="install-title">Your browser has been waiting for this.</h2>
+    <p class="install-sub">Free forever for core features. Teams plan at $4/user/month for session sync, audit logs, and admin controls. No account required to install.</p>
+  </div>
+  <div class="install-actions slide-up" style="transition-delay:0.15s">
+    <a href="#" class="install-btn">
+      <i data-lucide="chrome"></i>
+      Add to Chrome &mdash; Free
     </a>
-    <div class="cta-version">v2.4.1 · Chrome · Edge · Brave · Arc compatible</div>
+    <p class="install-meta">v2.4.1 &mdash; Last updated March 2026</p>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-brand-title">// TABFLOW</div>
-        <p>A browser extension built for developers who live in their browser. Lightweight, keyboard-first, private.</p>
-      </div>
-      <div class="footer-links-row">
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#">Features</a>
-          <a href="#">Pricing</a>
-          <a href="#">Changelog</a>
-          <a href="#">Roadmap</a>
-        </div>
-        <div class="footer-col">
-          <h4>Developers</h4>
-          <a href="#">Documentation</a>
-          <a href="#">API Reference</a>
-          <a href="#">GitHub</a>
-          <a href="#">Discord</a>
-        </div>
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Security</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 TABFLOW. Built with ⌘K by developers, for developers.</span>
-      <span>v2.4.1 · Chrome Web Store</span>
-    </div>
+  <div class="mkt-logo">
+    <div class="mkt-logo-mark"><i data-lucide="layers"></i></div>
+    <span class="mkt-logo-name">TABFLOW</span>
+  </div>
+  <span class="footer-mono">tabflow.dev &mdash; 2026</span>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Changelog</a>
+    <a href="#">Documentation</a>
+    <a href="#">Support</a>
   </div>
 </footer>
 
 <script>
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.feat-card, .review-card').forEach(el => obs.observe(el));
+  lucide.createIcons();
+  const slides = document.querySelectorAll('.slide-up');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, { threshold: 0.1 });
+  slides.forEach(s => obs.observe(s));
 </script>
 </body>
 </html>

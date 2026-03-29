@@ -1,522 +1,475 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STACK — Creative Portfolio Platform</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STACK — Portfolio Platform for Creatives</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --ink: #181818;
+      --dim: #888;
+      --border: #e2e0db;
+      --accent: #181818;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --snap: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+    }
 
-:root {
-  --cream: #f5f0e8;
-  --ink: #1a1612;
-  --warm: #c8a87a;
-  --warm-light: #e8d5b0;
-  --accent: #e84040;
-  --muted: #8a7a6a;
-  --surface: #ede8df;
-  --card1: #1a1612;
-  --card2: #2d2420;
-  --card3: #3d3028;
-  --card4: #4d3c30;
-  --card5: #5c4838;
-}
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 48px; height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(245,244,240,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand { font-family: 'DM Serif Display', serif; font-size: 20px; letter-spacing: -0.01em; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 13px; color: var(--dim); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      font-size: 13px; font-weight: 600; background: var(--ink); color: #fff;
+      border: none; padding: 9px 18px; border-radius: 7px; cursor: pointer;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.82; }
 
-html { scroll-behavior: smooth; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
+    /* ── Hero ── */
+    .hero-serif {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(52px, 8vw, 100px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
 
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px; height: 68px;
-  background: rgba(245,240,232,0.9); backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(26,22,18,0.08);
-}
-.nav-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 22px; letter-spacing: -1px; }
-.nav-logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 36px; list-style: none; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; }
-.nav-links a:hover { color: var(--ink); }
-.nav-cta { background: var(--ink); color: var(--cream); padding: 10px 24px; border-radius: 100px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
-.nav-cta:hover { background: var(--accent); }
+    /* ── Stacking Cards ── */
 
-/* HERO */
-.hero {
-  height: 100vh; display: flex; align-items: center;
-  padding: 0 48px; position: relative; overflow: hidden;
-}
-.hero-content { max-width: 640px; position: relative; z-index: 1; }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 28px;
-}
-.hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--warm); }
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(52px, 7vw, 88px);
-  font-weight: 900; line-height: 1.0; letter-spacing: -2px;
-  margin-bottom: 24px;
-}
-.hero h1 em { color: var(--accent); font-style: italic; }
-.hero p { font-size: 17px; line-height: 1.8; color: var(--muted); max-width: 480px; margin-bottom: 40px; }
-.hero-cta { display: flex; gap: 16px; align-items: center; }
-.btn-dark { background: var(--ink); color: var(--cream); padding: 16px 36px; border-radius: 100px; font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
-.btn-dark:hover { background: var(--accent); transform: translateY(-2px); }
-.hero-scroll { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; font-weight: 500; }
-.scroll-arrow { width: 40px; height: 40px; border: 1px solid rgba(26,22,18,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: bounce 2s ease-in-out infinite; }
-@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(4px)} }
+    /* The outer scroll container is tall enough for all the scroll-jacking */
+    #stack-section {
+      position: relative;
+    }
 
-.hero-deco {
-  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
-  width: 45%; height: 80%; opacity: 0.06;
-  font-family: 'Playfair Display', serif; font-size: 320px; font-weight: 900;
-  line-height: 1; color: var(--ink); pointer-events: none; user-select: none;
-}
+    /* Wrapper that becomes sticky to give scroll space */
+    #stack-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
 
-/* STACK SECTION */
-.stack-section { padding-top: 80px; }
-.stack-intro { text-align: center; padding: 80px 48px 40px; }
-.stack-intro .section-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 16px; }
-.stack-intro h2 { font-family: 'Playfair Display', serif; font-size: clamp(36px, 4vw, 54px); font-weight: 700; letter-spacing: -1.5px; margin-bottom: 16px; }
-.stack-intro p { color: var(--muted); font-size: 16px; max-width: 500px; margin: 0 auto; line-height: 1.7; }
+    /* Each card is sticky inside the stack-section */
+    .portfolio-card {
+      position: sticky;
+      width: 100%;
+      max-width: 900px;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      border: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
 
-/* The actual stacking cards */
-.cards-wrapper { position: relative; }
-.sticky-cards { position: sticky; top: 0; height: 100vh; overflow: hidden; }
-.card-stack {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-}
+    /* Card image side */
+    .card-img {
+      position: relative;
+      overflow: hidden;
+    }
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s var(--snap);
+    }
+    .portfolio-card:hover .card-img img { transform: scale(1.04); }
 
-.portfolio-card {
-  position: absolute;
-  width: min(720px, 92vw);
-  border-radius: 24px;
-  overflow: hidden;
-  transform-origin: top center;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.3);
-}
+    /* Card content side */
+    .card-body {
+      padding: 48px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-.scroll-spacer { height: 500vh; }
+    .card-index {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+    }
+    .card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-top: 12px;
+    }
+    .card-subtitle {
+      font-size: 14px;
+      color: var(--dim);
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+    .card-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .card-tag {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      color: var(--dim);
+      background: var(--bg);
+    }
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+      margin-top: auto;
+      align-self: flex-start;
+      transition: border-color 0.2s;
+    }
+    .card-link:hover { border-color: var(--ink); }
 
-.card-inner {
-  display: grid; grid-template-columns: 1fr 1fr; min-height: 440px;
-}
-.card-image-side {
-  position: relative; overflow: hidden; min-height: 300px;
-  display: flex; align-items: center; justify-content: center;
-}
-.card-image-bg { position: absolute; inset: 0; }
-.card-image-label {
-  position: relative; z-index: 1; text-align: center; color: rgba(255,255,255,0.9);
-}
-.card-image-label .num { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 900; line-height: 1; opacity: 0.3; }
-.card-image-label .type { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.6; margin-top: 8px; }
-.card-content-side { padding: 48px; display: flex; flex-direction: column; justify-content: space-between; }
-.card-cat { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; }
-.card-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; line-height: 1.2; margin-bottom: 16px; }
-.card-desc { font-size: 14px; line-height: 1.8; margin-bottom: 28px; }
-.card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-.card-tag { padding: 4px 12px; border-radius: 100px; font-size: 11px; font-weight: 600; }
-.card-link { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: gap 0.2s; }
-.card-link:hover { gap: 14px; }
+    /* Year badge on image */
+    .card-year {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+    }
 
-/* Card themes */
-.card-1 { background: var(--card1); color: var(--cream); }
-.card-1 .card-image-bg { background: linear-gradient(135deg, #7c6aff 0%, #e84040 100%); }
-.card-1 .card-cat { color: var(--warm); }
-.card-1 .card-desc { color: rgba(245,240,232,0.6); }
-.card-1 .card-tag { background: rgba(255,255,255,0.1); color: var(--cream); }
-.card-1 .card-link { color: var(--warm); }
+    /* Sticky stack — pure CSS position sticky approach */
+    .cards-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 80px 40px 0;
+    }
+    .card-sticky-wrapper {
+      position: sticky;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding-bottom: 20px;
+    }
+    /* Each card's top offset creates the stacking effect */
+    .card-sticky-wrapper:nth-child(1) { top: 80px; }
+    .card-sticky-wrapper:nth-child(2) { top: 96px; }
+    .card-sticky-wrapper:nth-child(3) { top: 112px; }
+    .card-sticky-wrapper:nth-child(4) { top: 128px; }
+    .card-sticky-wrapper:nth-child(5) { top: 144px; }
 
-.card-2 { background: #f0ebe0; color: var(--ink); }
-.card-2 .card-image-bg { background: linear-gradient(135deg, #00c9a7 0%, #007cf0 100%); }
-.card-2 .card-cat { color: var(--accent); }
-.card-2 .card-desc { color: var(--muted); }
-.card-2 .card-tag { background: rgba(26,22,18,0.08); color: var(--ink); }
-.card-2 .card-link { color: var(--ink); }
+    /* Scale down older cards */
+    .card-sticky-wrapper:nth-child(1) .portfolio-card { transform-origin: top center; }
+    .card-sticky-wrapper:nth-child(2) .portfolio-card { transform-origin: top center; }
 
-.card-3 { background: #1a2640; color: #e8eeff; }
-.card-3 .card-image-bg { background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%); }
-.card-3 .card-cat { color: #8aafff; }
-.card-3 .card-desc { color: rgba(232,238,255,0.6); }
-.card-3 .card-tag { background: rgba(255,255,255,0.1); color: #e8eeff; }
-.card-3 .card-link { color: #8aafff; }
-
-.card-4 { background: #2d1f0e; color: #f5e8c8; }
-.card-4 .card-image-bg { background: linear-gradient(135deg, #f7a44a 0%, #e84040 100%); }
-.card-4 .card-cat { color: var(--warm); }
-.card-4 .card-desc { color: rgba(245,232,200,0.6); }
-.card-4 .card-tag { background: rgba(255,255,255,0.1); color: #f5e8c8; }
-.card-4 .card-link { color: var(--warm); }
-
-.card-5 { background: #0d1f0d; color: #e8f5e8; }
-.card-5 .card-image-bg { background: linear-gradient(135deg, #00d464 0%, #007cf0 100%); }
-.card-5 .card-cat { color: #6ddb6d; }
-.card-5 .card-desc { color: rgba(232,245,232,0.6); }
-.card-5 .card-tag { background: rgba(255,255,255,0.1); color: #e8f5e8; }
-.card-5 .card-link { color: #6ddb6d; }
-
-/* FEATURES */
-.features-section { padding: 120px 48px; }
-.features-inner { max-width: 1100px; margin: 0 auto; }
-.features-header { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 80px; align-items: end; }
-.features-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 700; letter-spacing: -1.5px; }
-.features-header p { color: var(--muted); font-size: 16px; line-height: 1.8; }
-.features-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-.feature-item { padding: 32px; background: var(--surface); border-radius: 20px; }
-.fi-number { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--warm-light); line-height: 1; margin-bottom: 20px; }
-.feature-item h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 10px; }
-.feature-item p { font-size: 14px; line-height: 1.7; color: var(--muted); }
-
-/* TESTIMONIALS */
-.testi-section { padding: 100px 48px; background: var(--ink); color: var(--cream); }
-.testi-inner { max-width: 1100px; margin: 0 auto; }
-.testi-section .section-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--warm); margin-bottom: 16px; }
-.testi-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; letter-spacing: -1.5px; margin-bottom: 60px; }
-.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.testi-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 32px; }
-.testi-stars { color: var(--warm); font-size: 14px; margin-bottom: 16px; }
-.testi-text { font-size: 14px; line-height: 1.9; color: rgba(245,240,232,0.7); margin-bottom: 24px; }
-.testi-text strong { color: var(--cream); }
-.testi-author { display: flex; align-items: center; gap: 12px; }
-.tav { width: 38px; height: 38px; border-radius: 50%; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.tav1 { background: linear-gradient(135deg, #7c6aff, #e84040); }
-.tav2 { background: linear-gradient(135deg, #00d464, #007cf0); }
-.tav3 { background: linear-gradient(135deg, #f7a44a, #e84040); }
-.tname { font-size: 14px; font-weight: 600; }
-.trole { font-size: 12px; color: rgba(245,240,232,0.45); }
-
-/* CTA */
-.cta-section { padding: 140px 48px; text-align: center; background: var(--cream); }
-.cta-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 5vw, 68px); font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
-.cta-section h2 em { color: var(--accent); font-style: italic; }
-.cta-section p { color: var(--muted); font-size: 17px; max-width: 480px; margin: 0 auto 48px; line-height: 1.7; }
-.cta-big-btn { display: inline-block; background: var(--ink); color: var(--cream); padding: 20px 56px; border-radius: 100px; font-size: 17px; font-weight: 600; text-decoration: none; transition: all 0.3s; letter-spacing: -0.2px; }
-.cta-big-btn:hover { background: var(--accent); transform: translateY(-3px); box-shadow: 0 20px 50px rgba(232,64,64,0.3); }
-.cta-note { margin-top: 20px; font-size: 13px; color: var(--muted); }
-
-/* FOOTER */
-footer { border-top: 1px solid rgba(26,22,18,0.1); padding: 48px; }
-.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 18px; }
-.footer-logo span { color: var(--accent); }
-.footer-links { display: flex; gap: 28px; list-style: none; }
-.footer-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-.footer-links a:hover { color: var(--ink); }
-.footer-copy { font-size: 13px; color: var(--muted); }
-
-@media (max-width: 768px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .hero { padding: 0 20px; }
-  .card-inner { grid-template-columns: 1fr; }
-  .card-image-side { min-height: 180px; }
-  .features-header { grid-template-columns: 1fr; gap: 20px; }
-  .features-list, .testi-grid { grid-template-columns: 1fr; }
-  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
-}
-</style>
-
-<!-- inject-local -->
-<style>
-  .card-image-bg {
-    background-image: url('../../images/creative/creative-1.jpg') !important;
-    background-size: cover; background-position: center;
-  }
-</style>
+    /* ── Progress indicator ── */
+    .progress-dots {
+      position: fixed;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 50;
+    }
+    .progress-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.3s, transform 0.3s;
+    }
+    .progress-dot.active { background: var(--ink); transform: scale(1.4); }
+  </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">STA<span>CK</span></div>
-  <ul class="nav-links">
-    <li><a href="#">Explore</a></li>
-    <li><a href="#">Creators</a></li>
-    <li><a href="#">Pricing</a></li>
-    <li><a href="#">Blog</a></li>
-  </ul>
-  <a href="#" class="nav-cta">Create Portfolio</a>
-</nav>
-
-<section class="hero">
-  <div class="hero-deco">S</div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">Creative Portfolio Platform</div>
-    <h1>Show your<br>work like<br><em>never before</em></h1>
-    <p>STACK is a portfolio platform built for creatives who refuse to be ordinary. Present your work with cinematic scroll effects that make every piece unforgettable.</p>
-    <div class="hero-cta">
-      <a href="#" class="btn-dark">Build Your Portfolio</a>
-      <div class="hero-scroll">
-        <div class="scroll-arrow">↓</div>
-        Scroll to explore
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STACKING CARDS SECTION -->
-<section class="stack-section">
-  <div class="stack-intro">
-    <div class="section-label">Portfolio Showcase</div>
-    <h2>Your work, stacked<br>to perfection</h2>
-    <p>Scroll through a living deck of your finest projects. Each card peels back to reveal another masterpiece.</p>
-  </div>
-
-  <div class="cards-wrapper">
-    <div class="sticky-cards" id="stickyCards">
-      <div class="card-stack" id="cardStack">
-
-        <div class="portfolio-card card-5" id="pcard5" style="z-index:1">
-          <div class="card-inner">
-            <div class="card-image-side">
-              <div class="card-image-bg"></div>
-              <div class="card-image-label">
-                <div class="num">05</div>
-                <div class="type">Motion Design</div>
-              </div>
-            </div>
-            <div class="card-content-side">
-              <div>
-                <div class="card-cat">Motion Design</div>
-                <div class="card-title">Flux — Brand in Motion</div>
-                <div class="card-desc">A kinetic identity system for a fintech startup, bringing static logos to life with physics-based animation.</div>
-                <div class="card-tags">
-                  <span class="card-tag">After Effects</span>
-                  <span class="card-tag">Lottie</span>
-                  <span class="card-tag">Branding</span>
-                </div>
-              </div>
-              <a href="#" class="card-link">View Project →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="portfolio-card card-4" id="pcard4" style="z-index:2">
-          <div class="card-inner">
-            <div class="card-image-side">
-              <div class="card-image-bg"></div>
-              <div class="card-image-label">
-                <div class="num">04</div>
-                <div class="type">3D / CGI</div>
-              </div>
-            </div>
-            <div class="card-content-side">
-              <div>
-                <div class="card-cat">3D / CGI</div>
-                <div class="card-title">Ember — Product Visualization</div>
-                <div class="card-desc">Photorealistic product renders for a premium candle brand, crafted entirely in Blender with path-traced lighting.</div>
-                <div class="card-tags">
-                  <span class="card-tag">Blender</span>
-                  <span class="card-tag">Substance</span>
-                  <span class="card-tag">Compositing</span>
-                </div>
-              </div>
-              <a href="#" class="card-link">View Project →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="portfolio-card card-3" id="pcard3" style="z-index:3">
-          <div class="card-inner">
-            <div class="card-image-side">
-              <div class="card-image-bg"></div>
-              <div class="card-image-label">
-                <div class="num">03</div>
-                <div class="type">Editorial</div>
-              </div>
-            </div>
-            <div class="card-content-side">
-              <div>
-                <div class="card-cat">Editorial Design</div>
-                <div class="card-title">Axiom — Annual Report</div>
-                <div class="card-desc">An award-winning 140-page annual report for a global infrastructure company. Bold grids. Unforgettable data visualization.</div>
-                <div class="card-tags">
-                  <span class="card-tag">InDesign</span>
-                  <span class="card-tag">Data Viz</span>
-                  <span class="card-tag">Print</span>
-                </div>
-              </div>
-              <a href="#" class="card-link">View Project →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="portfolio-card card-2" id="pcard2" style="z-index:4">
-          <div class="card-inner">
-            <div class="card-image-side">
-              <div class="card-image-bg"></div>
-              <div class="card-image-label">
-                <div class="num">02</div>
-                <div class="type">UI Design</div>
-              </div>
-            </div>
-            <div class="card-content-side">
-              <div>
-                <div class="card-cat">UI / Product Design</div>
-                <div class="card-title">Cove — Wellness App</div>
-                <div class="card-desc">End-to-end product design for a mindfulness app with 800K downloads. From research sprints to pixel-perfect delivery.</div>
-                <div class="card-tags">
-                  <span class="card-tag">Figma</span>
-                  <span class="card-tag">Prototyping</span>
-                  <span class="card-tag">Research</span>
-                </div>
-              </div>
-              <a href="#" class="card-link">View Project →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="portfolio-card card-1" id="pcard1" style="z-index:5">
-          <div class="card-inner">
-            <div class="card-image-side">
-              <div class="card-image-bg"></div>
-              <div class="card-image-label">
-                <div class="num">01</div>
-                <div class="type">Branding</div>
-              </div>
-            </div>
-            <div class="card-content-side">
-              <div>
-                <div class="card-cat">Brand Identity</div>
-                <div class="card-title">Obsidian — Luxury Rebrand</div>
-                <div class="card-desc">Complete visual identity for a $4B real estate developer. A system built on restraint, precision, and the language of luxury.</div>
-                <div class="card-tags">
-                  <span class="card-tag">Brand Identity</span>
-                  <span class="card-tag">Typography</span>
-                  <span class="card-tag">Systems</span>
-                </div>
-              </div>
-              <a href="#" class="card-link">View Project →</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <div class="scroll-spacer"></div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features-section">
-  <div class="features-inner">
-    <div class="features-header">
-      <h2>Built for the work<br>that matters</h2>
-      <p>STACK gives you cinematic presentation tools, powerful customization, and analytics that tell you how your audience engages with your work.</p>
-    </div>
-    <div class="features-list">
-      <div class="feature-item">
-        <div class="fi-number">01</div>
-        <h3>Cinematic Scroll</h3>
-        <p>Stacking card effects, parallax layers, and reveal animations that make presentations feel like films.</p>
-      </div>
-      <div class="feature-item">
-        <div class="fi-number">02</div>
-        <h3>Client-Ready Share</h3>
-        <p>Password-protected client presentations with engagement analytics. Know what they looked at longest.</p>
-      </div>
-      <div class="feature-item">
-        <div class="fi-number">03</div>
-        <h3>Custom Domain</h3>
-        <p>Your portfolio lives on your domain. Fully branded, fully yours — no STACK watermark ever.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testi-section">
-  <div class="testi-inner">
-    <div class="section-label">Testimonials</div>
-    <h2>Creatives who made<br>the switch</h2>
-    <div class="testi-grid">
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"STACK's stacking card effect <strong>got me the Pentagram project</strong>. The client said the presentation itself felt like premium work."</p>
-        <div class="testi-author">
-          <div class="tav tav1">JA</div>
-          <div><div class="tname">James A.</div><div class="trole">Brand Designer, London</div></div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"I landed <strong>3 freelance clients in my first week</strong> on STACK. No other platform makes your work look this good."</p>
-        <div class="testi-author">
-          <div class="tav tav2">SL</div>
-          <div><div class="tname">Sofia L.</div><div class="trole">Motion Designer, Berlin</div></div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Finally a portfolio tool that <strong>respects the craft</strong>. The scroll effects feel native — not like a gimmick."</p>
-        <div class="testi-author">
-          <div class="tav tav3">MK</div>
-          <div><div class="tname">Maya K.</div><div class="trole">Art Director, NYC</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-  <h2>Your portfolio.<br><em>Reimagined.</em></h2>
-  <p>Join 28,000 creatives who present their work with STACK. Start free, no credit card required.</p>
-  <a href="#" class="cta-big-btn">Start Building Free</a>
-  <p class="cta-note">Free forever · Custom domain from $12/mo · No watermarks</p>
-</section>
-
-<footer>
-  <div class="footer-inner">
-    <div class="footer-logo">STA<span>CK</span></div>
-    <ul class="footer-links">
-      <li><a href="#">Privacy</a></li>
-      <li><a href="#">Terms</a></li>
-      <li><a href="#">Sitemap</a></li>
+  <!-- Nav -->
+  <nav>
+    <span class="nav-brand">STACK</span>
+    <ul class="nav-links">
+      <li><a href="#">Showcase</a></li>
+      <li><a href="#">Templates</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Careers</a></li>
     </ul>
-    <div class="footer-copy">© 2025 Stack Creative Inc.</div>
+    <a href="#" class="nav-cta">Launch Your Portfolio</a>
+  </nav>
+
+  <!-- Hero -->
+  <section style="padding: 130px 48px 80px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end;">
+    <div>
+      <div style="display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 9999px; padding: 6px 16px; margin-bottom: 32px; background: #fff;">
+        <div style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e;"></div>
+        <span style="font-size: 12px; font-weight: 500; color: var(--dim);">Trusted by 18,000 creative professionals</span>
+      </div>
+      <h1 class="hero-serif">
+        Work worth<br/>showing.
+      </h1>
+      <div style="display: flex; gap: 12px; margin-top: 36px;">
+        <a href="#" style="background: var(--ink); color: #fff; padding: 14px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Build Your Portfolio</a>
+        <a href="#" style="background: #fff; color: var(--ink); padding: 14px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--border); transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--ink)'" onmouseout="this.style.borderColor='var(--border)'">Browse Showcase</a>
+      </div>
+    </div>
+    <div>
+      <p style="font-size: 16px; line-height: 1.75; color: var(--dim); max-width: 380px; margin-bottom: 40px;">
+        STACK gives designers, photographers, and developers a beautiful, client-ready portfolio — in less time than it takes to write a brief.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <div>
+          <div style="font-family: 'DM Serif Display', serif; font-size: 32px;">18K</div>
+          <div style="font-size: 12px; color: var(--dim); margin-top: 2px;">Portfolios live</div>
+        </div>
+        <div>
+          <div style="font-family: 'DM Serif Display', serif; font-size: 32px;">4.9</div>
+          <div style="font-size: 12px; color: var(--dim); margin-top: 2px;">Average rating</div>
+        </div>
+        <div>
+          <div style="font-family: 'DM Serif Display', serif; font-size: 32px;">3x</div>
+          <div style="font-size: 12px; color: var(--dim); margin-top: 2px;">More client inquiries</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section label -->
+  <div style="padding: 40px 48px 0; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 20px;">
+    <div style="height: 1px; width: 40px; background: var(--border);"></div>
+    <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--dim);">Featured Work</span>
   </div>
-</footer>
 
-<script>
-// Stacking cards scroll effect
-const cardIds = ['pcard5','pcard4','pcard3','pcard2','pcard1'];
-const totalCards = cardIds.length;
+  <!-- Progress dots -->
+  <div class="progress-dots" id="progress-dots">
+    <div class="progress-dot active" data-card="0"></div>
+    <div class="progress-dot" data-card="1"></div>
+    <div class="progress-dot" data-card="2"></div>
+    <div class="progress-dot" data-card="3"></div>
+    <div class="progress-dot" data-card="4"></div>
+  </div>
 
-function updateCards() {
-  const wrapper = document.querySelector('.cards-wrapper');
-  const spacer = document.querySelector('.scroll-spacer');
-  const wrapperRect = wrapper.getBoundingClientRect();
-  const totalScroll = spacer.offsetHeight;
-  const scrolled = Math.max(0, -wrapperRect.top);
-  const scrollFraction = Math.min(scrolled / totalScroll, 1);
-  const cardProgress = scrollFraction * totalCards;
+  <!-- Stacking Cards Section -->
+  <div class="cards-stack" id="cards-container" style="padding-bottom: 120px;">
 
-  cardIds.forEach((id, i) => {
-    const card = document.getElementById(id);
-    const cardIndex = totalCards - 1 - i; // reversed (card1 is on top = last in array)
-    const progress = Math.max(0, Math.min(1, cardProgress - cardIndex));
+    <!-- Card 1 -->
+    <div class="card-sticky-wrapper" data-card-index="0">
+      <div class="portfolio-card">
+        <div class="card-img">
+          <img src="../../images/creative/creative-1.jpg" alt="Brand Identity — Maison Verde" />
+          <div class="card-year">2024</div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-index">01 / 05</div>
+            <h2 class="card-title">Maison Verde<br/>Brand Identity</h2>
+            <p class="card-subtitle">Full visual identity system for a Paris-based sustainable hospitality group. Wordmark, type system, collateral, and brand motion.</p>
+            <div class="card-tags">
+              <span class="card-tag">Brand Identity</span>
+              <span class="card-tag">Typography</span>
+              <span class="card-tag">Motion</span>
+            </div>
+          </div>
+          <a href="#" class="card-link">
+            View Case Study
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </a>
+        </div>
+      </div>
+    </div>
 
-    // Cards that haven't been "peeled" yet stack up
-    const stackOffset = cardIndex * 12;
-    const stackScale = 1 - cardIndex * 0.02;
+    <!-- Card 2 -->
+    <div class="card-sticky-wrapper" data-card-index="1">
+      <div class="portfolio-card">
+        <div class="card-img">
+          <img src="../../images/creative/creative-2.jpg" alt="Lumine App — UI/UX Design" />
+          <div class="card-year">2024</div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-index">02 / 05</div>
+            <h2 class="card-title">Lumine App<br/>UI/UX Design</h2>
+            <p class="card-subtitle">End-to-end product design for a mindfulness app targeting creative professionals. Research, wireframes, prototype, and handoff.</p>
+            <div class="card-tags">
+              <span class="card-tag">Product Design</span>
+              <span class="card-tag">UX Research</span>
+              <span class="card-tag">iOS</span>
+            </div>
+          </div>
+          <a href="#" class="card-link">
+            View Case Study
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </a>
+        </div>
+      </div>
+    </div>
 
-    const translateY = progress * -100 - stackOffset * (1 - progress);
-    const scale = stackScale + (1 - stackScale) * progress;
-    const rotation = -progress * 4;
+    <!-- Card 3 -->
+    <div class="card-sticky-wrapper" data-card-index="2">
+      <div class="portfolio-card">
+        <div class="card-img">
+          <img src="../../images/creative/creative-3.jpg" alt="Drift Campaign — Art Direction" />
+          <div class="card-year">2023</div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-index">03 / 05</div>
+            <h2 class="card-title">Drift Campaign<br/>Art Direction</h2>
+            <p class="card-subtitle">Art direction for Drift's global brand refresh campaign — spanning OOH, digital, and video across 12 markets.</p>
+            <div class="card-tags">
+              <span class="card-tag">Art Direction</span>
+              <span class="card-tag">Campaign</span>
+              <span class="card-tag">Global</span>
+            </div>
+          </div>
+          <a href="#" class="card-link">
+            View Case Study
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </a>
+        </div>
+      </div>
+    </div>
 
-    card.style.transform = `translateY(${translateY}%) scale(${scale}) rotate(${rotation}deg)`;
-    card.style.opacity = progress > 0.95 ? 1 - (progress - 0.95) * 20 : 1;
-  });
-}
+    <!-- Card 4 -->
+    <div class="card-sticky-wrapper" data-card-index="3">
+      <div class="portfolio-card">
+        <div class="card-img">
+          <img src="../../images/creative/creative-4.jpg" alt="Celeste — Packaging Design" />
+          <div class="card-year">2023</div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-index">04 / 05</div>
+            <h2 class="card-title">Celeste<br/>Packaging Design</h2>
+            <p class="card-subtitle">Luxury skincare packaging system for Celeste Botanicals — structural design, surface graphics, and materials specification.</p>
+            <div class="card-tags">
+              <span class="card-tag">Packaging</span>
+              <span class="card-tag">Luxury</span>
+              <span class="card-tag">Print</span>
+            </div>
+          </div>
+          <a href="#" class="card-link">
+            View Case Study
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </a>
+        </div>
+      </div>
+    </div>
 
-window.addEventListener('scroll', updateCards);
-updateCards();
-</script>
+    <!-- Card 5 -->
+    <div class="card-sticky-wrapper" data-card-index="4">
+      <div class="portfolio-card">
+        <div class="card-img">
+          <img src="../../images/creative/creative-5.jpg" alt="Signal Design System" />
+          <div class="card-year">2023</div>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-index">05 / 05</div>
+            <h2 class="card-title">Signal<br/>Design System</h2>
+            <p class="card-subtitle">Built a comprehensive design system from scratch for Signal's enterprise product suite — 800+ components, 3 themes, Figma and React.</p>
+            <div class="card-tags">
+              <span class="card-tag">Design System</span>
+              <span class="card-tag">Figma</span>
+              <span class="card-tag">React</span>
+            </div>
+          </div>
+          <a href="#" class="card-link">
+            View Case Study
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom CTA -->
+  <section style="padding: 80px 48px 100px; max-width: 900px; margin: 0 auto; text-align: center; border-top: 1px solid var(--border);">
+    <h2 style="font-family: 'DM Serif Display', serif; font-size: clamp(36px, 5vw, 64px); line-height: 1.05; margin-bottom: 20px;">Your work deserves<br/>a better home.</h2>
+    <p style="font-size: 16px; color: var(--dim); max-width: 420px; margin: 0 auto 36px; line-height: 1.65;">No template fatigue. No coding. STACK adapts to your work, not the other way around.</p>
+    <div style="display: flex; gap: 12px; justify-content: center;">
+      <a href="#" style="background: var(--ink); color: #fff; padding: 14px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none;">Launch Your Portfolio</a>
+      <a href="#" style="color: var(--dim); font-size: 14px; padding: 14px 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--dim)'">
+        Browse Showcase <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--border); padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; background: #fff;">
+    <span style="font-family: 'DM Serif Display', serif; font-size: 18px;">STACK</span>
+    <span style="font-size: 12px; color: var(--dim);">&copy; 2024 Stack Portfolio, Inc. All rights reserved.</span>
+    <div style="display: flex; gap: 20px;">
+      <a href="#" style="font-size: 12px; color: var(--dim); text-decoration: none;">Privacy</a>
+      <a href="#" style="font-size: 12px; color: var(--dim); text-decoration: none;">Terms</a>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    // ── Scroll-driven progress dots ──
+    const cardWrappers = document.querySelectorAll('.card-sticky-wrapper');
+    const dots = document.querySelectorAll('.progress-dot');
+
+    function updateDots() {
+      const vh = window.innerHeight;
+      let activeCard = 0;
+
+      cardWrappers.forEach((wrapper, idx) => {
+        const rect = wrapper.getBoundingClientRect();
+        // Card is "active" when its top is at or above 40% of viewport
+        if (rect.top <= vh * 0.4) {
+          activeCard = idx;
+        }
+      });
+
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === activeCard);
+      });
+    }
+
+    window.addEventListener('scroll', updateDots, { passive: true });
+    updateDots();
+  </script>
 </body>
 </html>

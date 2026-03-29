@@ -1,772 +1,459 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRISM — See Your Product Clearly</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRISM — Product Analytics Pricing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  <style>
+    :root {
+      --bg: #0b0216;
+      --purple-main: #7c3aed;
+      --purple-light: #a78bfa;
+      --border: rgba(255,255,255,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
 
-:root{
-  --bg:#0a0010;
-  --purple:#7c3aed;
-  --purple-light:#a78bfa;
-  --purple-pale:#ddd6fe;
-  --text:#f5f3ff;
-  --muted:#9ca3af;
-  --border:rgba(255,255,255,.1);
-  --surface:rgba(255,255,255,.05);
-  --surface2:rgba(255,255,255,.08);
-}
+    /* ── Curtain Background ── */
+    .curtain-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .curtain-base { position: absolute; inset: 0; background: var(--bg); }
+    .curtain-left-1 {
+      position: absolute; top: 0; left: 3%; width: 12%; height: 100%;
+      background: linear-gradient(to bottom, rgba(139,92,246,0.35) 0%, rgba(109,40,217,0.08) 60%, transparent 100%);
+      filter: blur(32px);
+    }
+    .curtain-left-2 {
+      position: absolute; top: 0; left: 8%; width: 7%; height: 80%;
+      background: linear-gradient(to bottom, rgba(167,139,250,0.5) 0%, rgba(139,92,246,0.12) 50%, transparent 100%);
+      filter: blur(18px);
+    }
+    .curtain-right-1 {
+      position: absolute; top: 0; right: 3%; width: 12%; height: 100%;
+      background: linear-gradient(to bottom, rgba(139,92,246,0.35) 0%, rgba(109,40,217,0.08) 60%, transparent 100%);
+      filter: blur(32px);
+    }
+    .curtain-right-2 {
+      position: absolute; top: 0; right: 8%; width: 7%; height: 80%;
+      background: linear-gradient(to bottom, rgba(167,139,250,0.5) 0%, rgba(139,92,246,0.12) 50%, transparent 100%);
+      filter: blur(18px);
+    }
+    .curtain-center {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40%; height: 70%;
+      background: linear-gradient(to bottom, rgba(124,58,237,0.06) 0%, transparent 100%);
+      filter: blur(60px);
+    }
+    .curtain-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 400px;
+      background: linear-gradient(to top, var(--bg) 0%, rgba(11,2,22,0.85) 50%, transparent 100%);
+    }
 
-html{scroll-behavior:smooth}
+    /* ── Pricing cards ── */
+    .pricing-card {
+      background: rgba(255,255,255,0.97);
+      color: #111;
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .pricing-card.highlight {
+      transform: scale(1.025);
+      box-shadow: 0 24px 64px rgba(255,255,255,0.18);
+    }
+    .pricing-card.highlight:hover {
+      transform: scale(1.025) translateY(-4px);
+    }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Inter',sans-serif;
-  font-size:15px;
-  line-height:1.6;
-  overflow-x:hidden;
-}
+    /* ── Toggle ── */
+    .toggle-track {
+      position: relative;
+      width: 44px; height: 24px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background 0.3s;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .toggle-track.on { background: var(--purple-main); }
+    .toggle-thumb {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 9999px;
+      transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .toggle-track.on .toggle-thumb { transform: translateX(20px); }
 
-/* Purple curtain background */
-.purple-curtain{
-  position:fixed;top:0;left:0;right:0;
-  height:80vh;
-  background:linear-gradient(180deg,
-    #3b0764 0%,
-    #4c1d95 20%,
-    #5b21b6 40%,
-    #4c1d95 60%,
-    rgba(10,0,16,.8) 80%,
-    transparent 100%
-  );
-  pointer-events:none;z-index:0;
-}
-.purple-curtain::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(167,139,250,.3) 0%,transparent 60%),
-    radial-gradient(ellipse 40% 40% at 20% 30%, rgba(124,58,237,.3) 0%,transparent 50%),
-    radial-gradient(ellipse 40% 40% at 80% 30%, rgba(124,58,237,.2) 0%,transparent 50%);
-}
+    /* ── Slider ── */
+    .custom-range {
+      -webkit-appearance: none;
+      width: 100%; height: 4px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.12);
+      outline: none;
+      cursor: pointer;
+    }
+    .custom-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(124,58,237,0.45);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+    .custom-range::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 0 6px rgba(124,58,237,0.6);
+    }
 
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:0 48px;
-  height:64px;
-  display:flex;align-items:center;
-  background:rgba(10,0,16,.6);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
+    /* feature list */
+    .feature-check {
+      display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: #444; line-height: 1.4; margin-bottom: 8px;
+    }
+    .check-icon { width: 16px; height: 16px; color: #7c3aed; flex-shrink: 0; margin-top: 1px; }
 
-.nav-logo{
-  font-size:20px;font-weight:800;
-  color:var(--text);text-decoration:none;
-  margin-right:auto;
-  display:flex;align-items:center;gap:8px;
-}
-.logo-prism{
-  width:24px;height:24px;
-  background:linear-gradient(135deg,#a78bfa,#7c3aed,#06b6d4);
-  clip-path:polygon(50% 0%,100% 100%,0% 100%);
-}
+    /* row dividers */
+    .card-divider { border-top: 1px solid #f0f0f0; margin: 20px 0; }
 
-.nav-links{display:flex;align-items:center;gap:28px;margin-right:32px}
-.nav-links a{
-  font-size:14px;color:rgba(245,243,255,.6);text-decoration:none;
-  transition:color .2s;
-}
-.nav-links a:hover{color:var(--text)}
+    .pill-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 13px 24px; border-radius: 9999px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      border: none; transition: opacity 0.2s, transform 0.2s;
+      text-decoration: none; width: 100%; justify-content: center;
+    }
+    .pill-btn:hover { opacity: 0.88; transform: scale(0.98); }
+    .pill-btn.dark { background: #111; color: #fff; }
+    .pill-btn.light { background: #f0f0f0; color: #111; }
 
-.btn-nav{
-  background:var(--purple);color:#fff;
-  font-size:13px;font-weight:600;
-  padding:9px 20px;border:none;border-radius:8px;
-  cursor:pointer;text-decoration:none;display:inline-block;
-  transition:background .2s,box-shadow .2s;
-}
-.btn-nav:hover{background:#6d28d9;box-shadow:0 0 20px rgba(124,58,237,.5)}
+    .z-content { position: relative; z-index: 10; }
 
-.btn-nav-ghost{
-  background:transparent;color:rgba(245,243,255,.7);
-  font-size:14px;font-weight:400;
-  padding:9px 16px;border:none;cursor:pointer;
-  text-decoration:none;display:inline-block;
-  transition:color .2s;
-}
-.btn-nav-ghost:hover{color:var(--text)}
-
-/* ── HERO ── */
-.hero{
-  min-height:100vh;
-  padding:120px 48px 80px;
-  display:flex;flex-direction:column;
-  align-items:center;text-align:center;
-  position:relative;z-index:1;
-}
-
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(167,139,250,.12);
-  border:1px solid rgba(167,139,250,.25);
-  padding:7px 16px;border-radius:100px;
-  font-size:12px;font-weight:500;
-  color:var(--purple-light);margin-bottom:32px;
-}
-
-.hero-title{
-  font-size:clamp(48px,7vw,90px);
-  font-weight:800;
-  line-height:.95;letter-spacing:-.03em;
-  max-width:800px;margin-bottom:24px;
-}
-.hero-title span{
-  background:linear-gradient(135deg,#a78bfa,#7c3aed,#06b6d4);
-  -webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.hero-sub{
-  font-size:18px;font-weight:300;
-  color:rgba(245,243,255,.55);
-  max-width:540px;line-height:1.7;margin-bottom:48px;
-}
-
-.hero-actions{display:flex;gap:14px;justify-content:center;margin-bottom:80px}
-
-.btn-primary{
-  background:linear-gradient(135deg,#7c3aed,#6d28d9);
-  color:#fff;font-size:14px;font-weight:600;
-  padding:14px 36px;border:none;border-radius:10px;
-  cursor:pointer;text-decoration:none;display:inline-block;
-  transition:box-shadow .2s,transform .15s;
-}
-.btn-primary:hover{box-shadow:0 0 30px rgba(124,58,237,.6);transform:translateY(-2px)}
-.btn-secondary{
-  background:var(--surface);color:var(--text);
-  font-size:14px;font-weight:500;
-  padding:14px 28px;
-  border:1px solid var(--border);border-radius:10px;
-  cursor:pointer;text-decoration:none;display:inline-block;
-  backdrop-filter:blur(10px);
-  transition:background .2s;
-}
-.btn-secondary:hover{background:var(--surface2)}
-
-/* Logos strip */
-.logos-strip{
-  display:flex;align-items:center;gap:40px;
-  opacity:.4;margin-bottom:80px;
-}
-.logo-placeholder{
-  font-size:14px;font-weight:600;letter-spacing:.06em;
-  color:rgba(245,243,255,.6);
-}
-
-/* ── FEATURES ── */
-.features{
-  padding:80px 48px;
-  position:relative;z-index:1;
-}
-.features-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
-  max-width:1100px;margin:0 auto;
-}
-.f-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;padding:32px;
-  backdrop-filter:blur(20px);
-  transition:border-color .25s,transform .25s;
-}
-.f-card:hover{border-color:rgba(167,139,250,.3);transform:translateY(-4px)}
-.f-icon{font-size:24px;margin-bottom:16px}
-.f-title{font-size:17px;font-weight:700;margin-bottom:8px}
-.f-desc{font-size:13px;color:var(--muted);line-height:1.7}
-
-/* ── PRICING SECTION (centerpiece) ── */
-.pricing{
-  padding:100px 48px;
-  position:relative;z-index:1;
-}
-
-.pricing-header{
-  text-align:center;margin-bottom:48px;
-}
-.pricing-header h2{
-  font-size:clamp(36px,4vw,52px);
-  font-weight:800;letter-spacing:-.02em;
-  margin-bottom:12px;
-}
-.pricing-header p{font-size:16px;color:var(--muted)}
-
-/* Toggle */
-.pricing-toggle{
-  display:flex;align-items:center;justify-content:center;
-  gap:16px;margin-bottom:48px;
-}
-.toggle-label{font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:color .2s}
-.toggle-label.active{color:var(--text)}
-
-.toggle-switch{
-  width:52px;height:28px;
-  background:rgba(124,58,237,.3);
-  border:1px solid rgba(124,58,237,.4);
-  border-radius:100px;
-  cursor:pointer;position:relative;
-  transition:background .2s;
-}
-.toggle-switch.annual{background:var(--purple)}
-.toggle-knob{
-  position:absolute;top:3px;left:3px;
-  width:20px;height:20px;border-radius:50%;
-  background:#fff;
-  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-}
-.toggle-switch.annual .toggle-knob{transform:translateX(24px)}
-
-.save-badge{
-  background:rgba(167,139,250,.15);
-  border:1px solid rgba(167,139,250,.3);
-  color:var(--purple-light);
-  font-size:12px;font-weight:600;
-  padding:4px 10px;border-radius:100px;
-  margin-left:8px;
-}
-
-/* Pricing cards */
-.pricing-cards{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:20px;max-width:1100px;margin:0 auto 60px;
-}
-
-.pricing-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border);
-  border-radius:20px;padding:36px 32px;
-  backdrop-filter:blur(20px);
-  position:relative;overflow:hidden;
-  transition:transform .25s,box-shadow .25s;
-}
-.pricing-card:hover{transform:translateY(-6px)}
-
-.pricing-card.popular{
-  background:rgba(124,58,237,.12);
-  border-color:rgba(124,58,237,.4);
-  box-shadow:0 0 0 1px rgba(124,58,237,.2),0 24px 80px rgba(124,58,237,.15);
-}
-
-.popular-badge{
-  position:absolute;top:20px;right:20px;
-  background:var(--purple);color:#fff;
-  font-size:11px;font-weight:700;letter-spacing:.06em;
-  padding:4px 12px;border-radius:100px;
-}
-
-.plan-name{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
-.pricing-card.popular .plan-name{color:var(--purple-light)}
-
-.plan-price{
-  font-size:48px;font-weight:800;letter-spacing:-.02em;
-  margin-bottom:4px;line-height:1;
-}
-.plan-price span{font-size:20px;font-weight:400;color:var(--muted)}
-.plan-period{font-size:13px;color:var(--muted);margin-bottom:24px}
-.plan-desc{font-size:14px;color:rgba(245,243,255,.6);margin-bottom:28px;line-height:1.6}
-
-.plan-cta{
-  width:100%;padding:13px;
-  border-radius:10px;font-size:14px;font-weight:600;
-  cursor:pointer;border:none;
-  transition:all .2s;text-align:center;display:block;
-  text-decoration:none;margin-bottom:28px;
-}
-.plan-cta.outline{
-  background:transparent;color:var(--text);
-  border:1px solid var(--border);
-}
-.plan-cta.outline:hover{border-color:rgba(124,58,237,.5);background:rgba(124,58,237,.1)}
-.plan-cta.filled{
-  background:linear-gradient(135deg,#7c3aed,#6d28d9);
-  color:#fff;
-  box-shadow:0 8px 24px rgba(124,58,237,.3);
-}
-.plan-cta.filled:hover{box-shadow:0 12px 32px rgba(124,58,237,.5)}
-
-.plan-features{
-  display:flex;flex-direction:column;gap:10px;
-  border-top:1px solid var(--border);
-  padding-top:24px;
-}
-.plan-feature{
-  display:flex;align-items:flex-start;gap:10px;
-  font-size:13px;color:rgba(245,243,255,.75);
-}
-.check{
-  width:18px;height:18px;border-radius:50%;
-  background:rgba(124,58,237,.2);
-  border:1px solid rgba(124,58,237,.3);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;font-size:10px;color:var(--purple-light);
-  margin-top:1px;
-}
-.pricing-card.popular .check{
-  background:rgba(124,58,237,.3);
-  border-color:rgba(167,139,250,.4);
-}
-
-/* Usage estimator */
-.usage-estimator{
-  background:rgba(255,255,255,.04);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:40px;
-  max-width:1100px;margin:0 auto;
-  backdrop-filter:blur(20px);
-}
-.ue-title{font-size:18px;font-weight:700;margin-bottom:8px}
-.ue-sub{font-size:14px;color:var(--muted);margin-bottom:32px}
-
-.ue-row{
-  display:grid;grid-template-columns:1fr 1fr;gap:40px;
-  align-items:center;
-}
-.ue-sliders{display:flex;flex-direction:column;gap:24px}
-.slider-group{display:flex;flex-direction:column;gap:8px}
-.slider-label{
-  display:flex;justify-content:space-between;
-  font-size:13px;color:rgba(245,243,255,.7);
-}
-.slider-value{color:var(--purple-light);font-weight:600}
-
-.slider{
-  -webkit-appearance:none;
-  width:100%;height:4px;border-radius:2px;
-  background:rgba(255,255,255,.12);
-  outline:none;cursor:pointer;
-}
-.slider::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:18px;height:18px;border-radius:50%;
-  background:linear-gradient(135deg,#a78bfa,#7c3aed);
-  box-shadow:0 0 12px rgba(124,58,237,.6);
-  cursor:pointer;
-}
-.slider::-moz-range-thumb{
-  width:18px;height:18px;border-radius:50%;
-  background:var(--purple);border:none;cursor:pointer;
-}
-
-.ue-result{
-  background:rgba(124,58,237,.08);
-  border:1px solid rgba(124,58,237,.2);
-  border-radius:16px;padding:32px;text-align:center;
-}
-.ue-plan-name{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-light);margin-bottom:8px}
-.ue-plan-price{font-size:52px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:4px}
-.ue-plan-period{font-size:14px;color:var(--muted);margin-bottom:20px}
-.ue-plan-cta{
-  width:100%;padding:13px;
-  background:var(--purple);color:#fff;
-  border:none;border-radius:10px;
-  font-size:14px;font-weight:600;cursor:pointer;
-  transition:background .2s,box-shadow .2s;
-}
-.ue-plan-cta:hover{background:#6d28d9;box-shadow:0 0 24px rgba(124,58,237,.5)}
-
-/* ── TESTIMONIALS ── */
-.testimonials{padding:80px 48px;position:relative;z-index:1}
-
-.testi-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:16px;max-width:1100px;margin:0 auto;
-}
-.testi-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:28px;
-  backdrop-filter:blur(20px);
-  transition:border-color .25s;
-}
-.testi-card:hover{border-color:rgba(167,139,250,.2)}
-.testi-text{font-size:14px;color:rgba(245,243,255,.8);line-height:1.65;margin-bottom:20px;font-style:italic}
-.testi-author{display:flex;align-items:center;gap:10px}
-.testi-av{
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,var(--purple),#6d28d9);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:700;color:#fff;
-}
-.testi-name{font-size:13px;font-weight:600}
-.testi-role{font-size:11px;color:var(--muted)}
-
-/* ── CTA ── */
-.cta{
-  padding:120px 48px;text-align:center;
-  position:relative;z-index:1;overflow:hidden;
-}
-.cta::before{
-  content:'';position:absolute;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  width:700px;height:400px;
-  background:radial-gradient(ellipse,rgba(124,58,237,.12) 0%,transparent 65%);
-  pointer-events:none;
-}
-.cta h2{font-size:clamp(40px,5vw,64px);font-weight:800;letter-spacing:-.02em;margin-bottom:16px;position:relative}
-.cta p{font-size:17px;color:var(--muted);margin-bottom:40px;position:relative}
-.cta-actions{display:flex;gap:14px;justify-content:center;position:relative}
-
-/* ── FOOTER ── */
-footer{
-  border-top:1px solid var(--border);padding:60px 48px 40px;
-  position:relative;z-index:1;
-}
-.footer-inner{
-  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:40px;
-}
-.footer-logo{
-  font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px;
-  display:flex;align-items:center;gap:8px;
-}
-.footer-desc{font-size:13px;color:var(--muted);line-height:1.6}
-.fc-title{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text);margin-bottom:14px}
-.fc a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
-.fc a:hover{color:var(--purple-light)}
-.footer-bottom{
-  display:flex;justify-content:space-between;
-  padding-top:28px;border-top:1px solid var(--border);
-  font-size:12px;color:var(--muted);
-}
-
-/* ── REVEAL ── */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
-.reveal.visible{opacity:1;transform:none}
-
-.section-label{
-  text-align:center;
-  font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--purple-light);margin-bottom:16px;
-}
-
-@media(max-width:900px){
-  .pricing-cards,.features-grid,.testi-grid,.footer-inner{grid-template-columns:1fr}
-  .ue-row{grid-template-columns:1fr}
-  .pricing-card.popular{order:-1}
-}
-</style>
+    /* Fade in */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fade-up 0.7s cubic-bezier(0.23, 1, 0.32, 1) both; }
+    .fade-up-1 { animation-delay: 0.1s; }
+    .fade-up-2 { animation-delay: 0.25s; }
+    .fade-up-3 { animation-delay: 0.4s; }
+  </style>
 </head>
 <body>
-<div class="purple-curtain"></div>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">
-    <div class="logo-prism"></div>
-    PRISM
-  </a>
-  <div class="nav-links">
-    <a href="#features">Product</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#testimonials">Customers</a>
-    <a href="#">Docs</a>
-  </div>
-  <a href="#" class="btn-nav-ghost">Log in</a>
-  <a href="#" class="btn-nav">Get started free</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge">✦ New: AI-powered funnel analysis</div>
-  <h1 class="hero-title reveal">
-    See your product<br><span>clearly.</span>
-  </h1>
-  <p class="hero-sub reveal">
-    PRISM gives your team the behavioral analytics, funnel intelligence, and retention insights to build products people love — and keep coming back to.
-  </p>
-  <div class="hero-actions reveal">
-    <a href="#pricing" class="btn-primary">Start free — no credit card</a>
-    <a href="#features" class="btn-secondary">See how it works →</a>
-  </div>
-  <div class="logos-strip reveal">
-    <div class="logo-placeholder">VERCEL</div>
-    <div class="logo-placeholder">NOTION</div>
-    <div class="logo-placeholder">LINEAR</div>
-    <div class="logo-placeholder">LOOM</div>
-    <div class="logo-placeholder">RETOOL</div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="section-label">Why PRISM</div>
-  <h2 class="reveal" style="text-align:center;font-size:clamp(32px,4vw,48px);font-weight:800;letter-spacing:-.02em;margin-bottom:40px">Analytics that<br>actually drive decisions.</h2>
-  <div class="features-grid">
-    <div class="f-card reveal">
-      <div class="f-icon">📊</div>
-      <div class="f-title">Behavioral Funnels</div>
-      <div class="f-desc">Track any conversion funnel with step-level breakdowns. Identify exactly where users drop off and why.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-icon">🔁</div>
-      <div class="f-title">Retention Cohorts</div>
-      <div class="f-desc">Understand which cohorts stick, which churn, and what drives the difference — with day-level granularity.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-icon">✨</div>
-      <div class="f-title">AI Insights Engine</div>
-      <div class="f-desc">PRISM's AI surfaces anomalies, growth opportunities, and risk signals before your team notices them manually.</div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING (CENTERPIECE) -->
-<section class="pricing" id="pricing">
-  <div class="pricing-header reveal">
-    <div class="section-label">Pricing</div>
-    <h2>Simple, transparent pricing.</h2>
-    <p>Start free. Scale as you grow. No hidden fees.</p>
+  <!-- Curtain Background -->
+  <div class="curtain-bg">
+    <div class="curtain-base"></div>
+    <div class="curtain-left-1"></div>
+    <div class="curtain-left-2"></div>
+    <div class="curtain-right-1"></div>
+    <div class="curtain-right-2"></div>
+    <div class="curtain-center"></div>
+    <div class="curtain-bottom"></div>
   </div>
 
-  <!-- Toggle -->
-  <div class="pricing-toggle reveal">
-    <span class="toggle-label active" id="monthly-label">Monthly</span>
-    <div class="toggle-switch" id="billing-toggle" onclick="toggleBilling()">
-      <div class="toggle-knob"></div>
-    </div>
-    <span class="toggle-label" id="annual-label">
-      Annual <span class="save-badge">Save 30%</span>
-    </span>
-  </div>
+  <div class="z-content" style="max-width: 1200px; margin: 0 auto; padding: 80px 32px 120px;">
 
-  <!-- Cards -->
-  <div class="pricing-cards">
-    <!-- Starter -->
-    <div class="pricing-card reveal">
-      <div class="plan-name">Starter</div>
-      <div class="plan-price"><span>$</span><span class="price-val">0</span></div>
-      <div class="plan-period">Free forever · up to 1K events/mo</div>
-      <div class="plan-desc">Perfect for solo founders and early products finding product-market fit.</div>
-      <a href="#" class="plan-cta outline">Get started free</a>
-      <div class="plan-features">
-        <div class="plan-feature"><div class="check">✓</div>Up to 1,000 events/month</div>
-        <div class="plan-feature"><div class="check">✓</div>3 team members</div>
-        <div class="plan-feature"><div class="check">✓</div>Core funnel analytics</div>
-        <div class="plan-feature"><div class="check">✓</div>90-day data retention</div>
-        <div class="plan-feature"><div class="check">✓</div>Community support</div>
+    <!-- Header -->
+    <header style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 80px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #7c3aed, #06b6d4); display: flex; align-items: center; justify-content: center;">
+          <i data-lucide="bar-chart-2" style="width: 18px; height: 18px; color: white;"></i>
+        </div>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: -0.02em;">PRISM</span>
+      </div>
+      <nav style="display: flex; gap: 28px; list-style: none;">
+        <a href="#" style="font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none;">Product</a>
+        <a href="#" style="font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none;">Docs</a>
+        <a href="#" style="font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none;">Blog</a>
+        <a href="#" style="font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none;">Enterprise</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <div style="text-align: center; margin-bottom: 64px;" class="fade-up">
+      <!-- Social proof pill -->
+      <div style="display: inline-flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 9999px; padding: 6px 20px 6px 6px; margin-bottom: 32px; cursor: default;">
+        <div style="display: flex;">
+          <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #a78bfa); border: 2px solid var(--bg); flex-shrink: 0;"></div>
+          <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #06b6d4, #0ea5e9); border: 2px solid var(--bg); margin-left: -10px; flex-shrink: 0;"></div>
+          <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #34d399); border: 2px solid var(--bg); margin-left: -10px; flex-shrink: 0;"></div>
+          <div style="width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #fbbf24); border: 2px solid var(--bg); margin-left: -10px; flex-shrink: 0;"></div>
+        </div>
+        <span style="font-size: 13px; color: rgba(255,255,255,0.75);">Trusted by 29,000+ product teams</span>
+      </div>
+
+      <h1 style="font-size: clamp(44px, 7vw, 72px); font-weight: 700; letter-spacing: -0.04em; line-height: 0.95; margin-bottom: 20px;">
+        Plans that scale<br/>with your product
+      </h1>
+      <p style="font-size: 17px; color: rgba(255,255,255,0.5); max-width: 480px; margin: 0 auto 36px; line-height: 1.65;">
+        From early-stage analytics to enterprise behavioral intelligence — PRISM prices with your usage, not against it.
+      </p>
+
+      <!-- Billing Toggle -->
+      <div style="display: inline-flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 9999px; padding: 8px 20px;">
+        <span id="lbl-monthly" style="font-size: 13px; font-weight: 500; color: #fff;">Monthly</span>
+        <div class="toggle-track" id="billing-toggle" onclick="toggleBilling()">
+          <div class="toggle-thumb"></div>
+        </div>
+        <span id="lbl-annual" style="font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.4);">Annual</span>
+        <span id="discount-badge" style="display: none; font-size: 11px; font-weight: 600; background: rgba(124,58,237,0.25); color: var(--purple-light); padding: 3px 10px; border-radius: 9999px; border: 1px solid rgba(124,58,237,0.3);">Save 20%</span>
       </div>
     </div>
 
-    <!-- Growth (popular) -->
-    <div class="pricing-card popular reveal">
-      <div class="popular-badge">Most popular</div>
-      <div class="plan-name">Growth</div>
-      <div class="plan-price"><span>$</span><span class="price-val">49</span></div>
-      <div class="plan-period">per month · up to 100K events/mo</div>
-      <div class="plan-desc">For growing teams who need deeper insights and team collaboration.</div>
-      <a href="#" class="plan-cta filled">Start 14-day trial</a>
-      <div class="plan-features">
-        <div class="plan-feature"><div class="check">✓</div>Up to 100,000 events/month</div>
-        <div class="plan-feature"><div class="check">✓</div>Unlimited team members</div>
-        <div class="plan-feature"><div class="check">✓</div>Advanced funnels & retention</div>
-        <div class="plan-feature"><div class="check">✓</div>AI Insights Engine</div>
-        <div class="plan-feature"><div class="check">✓</div>1-year data retention</div>
-        <div class="plan-feature"><div class="check">✓</div>Priority email support</div>
-      </div>
-    </div>
+    <!-- Pricing Cards -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 80px;" class="fade-up fade-up-1">
 
-    <!-- Enterprise -->
-    <div class="pricing-card reveal">
-      <div class="plan-name">Enterprise</div>
-      <div class="plan-price" style="font-size:36px;padding-top:8px">Custom</div>
-      <div class="plan-period">Tailored to your scale</div>
-      <div class="plan-desc">For large organizations with compliance, security, and custom data needs.</div>
-      <a href="#" class="plan-cta outline">Talk to sales</a>
-      <div class="plan-features">
-        <div class="plan-feature"><div class="check">✓</div>Unlimited events</div>
-        <div class="plan-feature"><div class="check">✓</div>SSO & SAML</div>
-        <div class="plan-feature"><div class="check">✓</div>SOC2 & HIPAA compliance</div>
-        <div class="plan-feature"><div class="check">✓</div>Custom data retention</div>
-        <div class="plan-feature"><div class="check">✓</div>Dedicated CSM</div>
-        <div class="plan-feature"><div class="check">✓</div>SLA guarantee</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Usage Estimator -->
-  <div class="usage-estimator reveal">
-    <div class="ue-title">Not sure which plan?</div>
-    <div class="ue-sub">Use the estimator to find your perfect fit.</div>
-    <div class="ue-row">
-      <div class="ue-sliders">
-        <div class="slider-group">
-          <div class="slider-label">
-            <span>Monthly active users</span>
-            <span class="slider-value" id="mau-val">5,000</span>
+      <!-- Free -->
+      <div class="pricing-card">
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 6px;">Free</h3>
+          <p style="font-size: 13px; color: #666; line-height: 1.5;">No credit card required. The essentials to get started.</p>
+        </div>
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 36px; font-weight: 700; letter-spacing: -0.03em; line-height: 1;">Free</div>
+          <div style="font-size: 13px; color: #888; margin-top: 8px; line-height: 1.5;">Capped at 1M monthly events. Core reports and dashboards.</div>
+        </div>
+        <a href="#" class="pill-btn light" style="margin-bottom: 24px;">Create Free Account</a>
+        <div class="card-divider"></div>
+        <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: #999; margin-bottom: 12px;">Includes</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Up to 1M monthly events</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>5 saved reports</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>10,000 monthly session replays</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Funnel and retention analysis</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>3 team members</div>
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
+          <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #aaa; margin-bottom: 10px;">Preferred by</div>
+          <div style="display: flex; gap: 8px; align-items: center; opacity: 0.6; font-size: 12px; font-weight: 600; color: #333;">
+            <span>DevRev</span><span style="color:#ddd">|</span><span>PodcastAI</span><span style="color:#ddd">|</span><span>MeetMe</span>
           </div>
-          <input type="range" class="slider" min="100" max="500000" value="5000" id="mau-slider" oninput="updateEstimate()">
         </div>
-        <div class="slider-group">
-          <div class="slider-label">
-            <span>Events per user per month</span>
-            <span class="slider-value" id="epv-val">20</span>
+      </div>
+
+      <!-- Growth (Highlight) -->
+      <div class="pricing-card highlight">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 6px;">Growth</h3>
+            <p style="font-size: 13px; color: #666; line-height: 1.5;">Make your competition sweat.</p>
           </div>
-          <input type="range" class="slider" min="1" max="200" value="20" id="epv-slider" oninput="updateEstimate()">
+          <span style="font-size: 11px; font-weight: 600; background: #7c3aed; color: #fff; padding: 4px 12px; border-radius: 9999px;">Popular</span>
         </div>
-        <div style="padding:16px;background:rgba(255,255,255,.04);border-radius:10px;font-size:13px">
-          <div style="color:var(--muted);margin-bottom:4px">Estimated monthly events</div>
-          <div style="font-size:24px;font-weight:700;color:var(--purple-light)" id="total-events">100,000</div>
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 36px; font-weight: 700; letter-spacing: -0.03em; line-height: 1;">
+            Starts at $<span id="growth-price">0</span>
+          </div>
+          <div style="font-size: 13px; color: #888; margin-top: 8px; line-height: 1.5;">1M events free, then <span id="cpm-rate">$0.28</span> per 1K events. Volume discounts available.</div>
         </div>
-      </div>
-      <div class="ue-result">
-        <div class="ue-plan-name" id="ue-plan-name">Growth Plan</div>
-        <div class="ue-plan-price">$<span id="ue-price">49</span></div>
-        <div class="ue-plan-period">per month, billed monthly</div>
-        <button class="ue-plan-cta">Get started with this plan →</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div class="section-label reveal">What customers say</div>
-  <h2 class="reveal" style="text-align:center;font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-.02em;margin-bottom:40px">Teams that chose PRISM.</h2>
-  <div class="testi-grid">
-    <div class="testi-card reveal">
-      <p class="testi-text">"PRISM's funnel analysis helped us find a drop-off point we'd been blind to for months. Fixing it increased our conversion by 31% in three weeks."</p>
-      <div class="testi-author">
-        <div class="testi-av">JW</div>
-        <div>
-          <div class="testi-name">Jamie Wilson</div>
-          <div class="testi-role">Head of Product, Beam</div>
+        <a href="#" class="pill-btn dark" style="margin-bottom: 16px;">Start Analyzing Free</a>
+        <a href="#calculator" style="text-align: center; font-size: 13px; color: #7c3aed; text-decoration: underline; display: block; margin-bottom: 24px;">Calculate your price</a>
+        <div class="card-divider"></div>
+        <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: #999; margin-bottom: 12px;">Everything in Free, plus</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Unlimited monthly events</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Unlimited saved reports</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>20,000 monthly session replays</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Cohorts and behavioral analysis</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>A/B test analysis</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Data pipelines</div>
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
+          <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #aaa; margin-bottom: 10px;">Preferred by</div>
+          <div style="display: flex; gap: 8px; align-items: center; opacity: 0.6; font-size: 12px; font-weight: 600; color: #333;">
+            <span>Noom</span><span style="color:#ddd">|</span><span>Zapier</span><span style="color:#ddd">|</span><span>Perplexity</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="testi-card reveal">
-      <p class="testi-text">"The AI Insights Engine is genuinely useful. It flagged a retention anomaly that our team hadn't spotted — turned out to be a critical onboarding bug."</p>
-      <div class="testi-author">
-        <div class="testi-av">SB</div>
-        <div>
-          <div class="testi-name">Sofia Blanc</div>
-          <div class="testi-role">Growth Lead, Parallel</div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 6px;">Enterprise</h3>
+          <p style="font-size: 13px; color: #666; line-height: 1.5;">Self-serve answers at unlimited scale.</p>
+        </div>
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 32px; font-weight: 700; letter-spacing: -0.03em; line-height: 1;">Let's talk</div>
+          <div style="font-size: 13px; color: #888; margin-top: 8px; line-height: 1.5;">Custom contracts, SLAs, dedicated infrastructure, and premium support.</div>
+        </div>
+        <a href="#" class="pill-btn light" style="margin-bottom: 24px;">Contact Sales</a>
+        <div class="card-divider"></div>
+        <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: #999; margin-bottom: 12px;">Everything in Growth, plus</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Unlimited monthly events</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Advanced data governance</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>SOC 2 Type II compliance</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>SSO / SAML / SCIM</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Dedicated customer success manager</div>
+        <div class="feature-check"><i data-lucide="check" class="check-icon"></i>Custom data retention</div>
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #f0f0f0;">
+          <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #aaa; margin-bottom: 10px;">Preferred by</div>
+          <div style="display: flex; gap: 8px; align-items: center; opacity: 0.6; font-size: 12px; font-weight: 600; color: #333;">
+            <span>Yelp</span><span style="color:#ddd">|</span><span>Pinterest</span><span style="color:#ddd">|</span><span>LG</span>
+          </div>
         </div>
       </div>
     </div>
-    <div class="testi-card reveal">
-      <p class="testi-text">"We've tried everything. PRISM is the first analytics tool that non-technical stakeholders actually use. The dashboards are that good."</p>
-      <div class="testi-author">
-        <div class="testi-av">TN</div>
-        <div>
-          <div class="testi-name">Tom Nguyen</div>
-          <div class="testi-role">VP Engineering, Slate</div>
+
+    <!-- Startups callout -->
+    <div style="border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 56px; text-align: center; margin-bottom: 80px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.02), transparent);" class="fade-up fade-up-2">
+      <h2 style="font-size: 28px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 14px;">Early-stage? Your first year is on us.</h2>
+      <p style="font-size: 15px; color: rgba(255,255,255,0.5); max-width: 540px; margin: 0 auto 28px; line-height: 1.65;">
+        Startups founded in the last 5 years, with up to $8M total funding, and no prior PRISM offer redeemed get 12 months free on the Growth plan.
+      </p>
+      <a href="#" style="display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 9999px; font-size: 14px; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+        Apply to the Startup Program
+        <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+      </a>
+    </div>
+
+    <!-- Usage Estimator -->
+    <div id="calculator" class="fade-up fade-up-3">
+      <div style="text-align: center; max-width: 520px; margin: 0 auto 40px;">
+        <h2 style="font-size: 36px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 12px;">Estimate your Growth plan cost</h2>
+        <p style="font-size: 15px; color: rgba(255,255,255,0.45);">Drag the slider to see pricing for your expected event volume.</p>
+      </div>
+
+      <div style="background: rgba(20,5,45,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; padding: 48px; position: relative; overflow: hidden; max-width: 900px; margin: 0 auto;">
+        <!-- Glow -->
+        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 60%; height: 100%; background: rgba(124,58,237,0.07); filter: blur(80px); pointer-events: none;"></div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; position: relative; z-index: 2;">
+          <!-- Price display -->
+          <div>
+            <div style="display: flex; gap: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 9999px; padding: 4px; width: fit-content; margin-bottom: 32px;">
+              <button id="est-monthly-btn" onclick="setEstPeriod('monthly')" style="padding: 8px 20px; border-radius: 9999px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--purple-main); color: #fff; transition: all 0.2s;">Monthly</button>
+              <button id="est-annual-btn" onclick="setEstPeriod('annual')" style="padding: 8px 20px; border-radius: 9999px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; background: transparent; color: rgba(255,255,255,0.4); transition: all 0.2s;">Annual</button>
+            </div>
+            <div style="font-size: 56px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin-bottom: 8px;">
+              $<span id="est-price">0</span><span style="font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.4); letter-spacing: 0;">/mo</span>
+            </div>
+            <div style="font-size: 13px; color: rgba(255,255,255,0.4);">Based on <span id="est-events">1</span>M monthly events</div>
+          </div>
+
+          <!-- Slider -->
+          <div>
+            <div style="margin-bottom: 32px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                <span style="font-size: 13px; color: rgba(255,255,255,0.5);">Event volume (monthly)</span>
+                <span style="font-size: 13px; font-weight: 600;" id="est-vol-label">1M</span>
+              </div>
+
+              <!-- Custom slider track -->
+              <div style="position: relative; height: 4px; background: rgba(255,255,255,0.1); border-radius: 9999px; margin-bottom: 8px;">
+                <div id="slider-fill" style="position: absolute; left: 0; top: 0; bottom: 0; width: 5%; background: linear-gradient(90deg, var(--purple-main), #a78bfa); border-radius: 9999px; transition: width 0.1s;"></div>
+                <input type="range" class="custom-range" id="event-slider" min="1" max="20" step="0.5" value="1" oninput="updateEstimator(this.value)" style="position: absolute; inset: -8px 0; opacity: 0; cursor: pointer; z-index: 5; height: 20px;" />
+                <div id="slider-thumb" style="position: absolute; top: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; background: #fff; border-radius: 50%; box-shadow: 0 0 0 4px rgba(124,58,237,0.5); pointer-events: none; left: 5%; transition: left 0.1s;"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.3); font-family: 'Courier New', monospace;">
+                <span>1M</span><span>5M</span><span>10M</span><span>15M</span><span>20M+</span>
+              </div>
+            </div>
+
+            <button style="background: #fff; color: #000; border: none; border-radius: 9999px; padding: 14px 28px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+              Activate This Plan
+              <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+            </button>
+          </div>
         </div>
       </div>
+      <p style="text-align: center; font-size: 12px; color: rgba(255,255,255,0.2); margin-top: 20px;">* Estimates based on standard Growth pricing. Legacy plans may differ.</p>
     </div>
-  </div>
-</section>
 
-<!-- CTA -->
-<section class="cta">
-  <h2 class="reveal">Start seeing clearly.</h2>
-  <p class="reveal">Join 4,200+ product teams. Free forever, upgrade when ready.</p>
-  <div class="cta-actions reveal">
-    <a href="#pricing" class="btn-primary" style="font-size:15px;padding:15px 40px">Get started free →</a>
-    <a href="#" class="btn-secondary" style="font-size:15px;padding:15px 28px">Talk to sales</a>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-logo">
-        <div class="logo-prism"></div>
-        PRISM
+  <!-- Footer -->
+  <footer class="z-content" style="border-top: 1px solid rgba(255,255,255,0.05); padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="width: 28px; height: 28px; border-radius: 6px; background: linear-gradient(135deg, #7c3aed, #06b6d4); display: flex; align-items: center; justify-content: center;">
+        <i data-lucide="bar-chart-2" style="width: 14px; height: 14px; color: white;"></i>
       </div>
-      <div class="footer-desc">Product analytics for teams who build with intention. See your product clearly, grow it confidently.</div>
+      <span style="font-weight: 700; letter-spacing: -0.01em;">PRISM</span>
     </div>
-    <div class="fc">
-      <div class="fc-title">Product</div>
-      <a href="#">Funnels</a>
-      <a href="#">Retention</a>
-      <a href="#">AI Insights</a>
-      <a href="#">Integrations</a>
+    <span style="font-size: 12px; color: rgba(255,255,255,0.25);">&copy; 2024 Prism Analytics, Inc.</span>
+    <div style="display: flex; gap: 20px;">
+      <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.25); text-decoration: none;">Privacy</a>
+      <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.25); text-decoration: none;">Terms</a>
+      <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.25); text-decoration: none;">Security</a>
     </div>
-    <div class="fc">
-      <div class="fc-title">Company</div>
-      <a href="#">About</a>
-      <a href="#">Blog</a>
-      <a href="#">Careers</a>
-    </div>
-    <div class="fc">
-      <div class="fc-title">Legal</div>
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Security</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2024 Prism Analytics, Inc.</span>
-    <span>See your product clearly.</span>
-  </div>
-</footer>
+  </footer>
 
-<script>
-// Billing toggle
-let isAnnual = false;
-const prices = { starter: 0, growth: { monthly: 49, annual: 35 }, enterprise: 'Custom' };
+  <script>
+    lucide.createIcons();
 
-function toggleBilling() {
-  isAnnual = !isAnnual;
-  const toggle = document.getElementById('billing-toggle');
-  const mLabel = document.getElementById('monthly-label');
-  const aLabel = document.getElementById('annual-label');
-  toggle.classList.toggle('annual', isAnnual);
-  mLabel.classList.toggle('active', !isAnnual);
-  aLabel.classList.toggle('active', isAnnual);
-  
-  const growthPrice = isAnnual ? prices.growth.annual : prices.growth.monthly;
-  document.querySelectorAll('.price-val')[1].textContent = growthPrice;
-  updateEstimate();
-}
+    let isAnnual = false;
+    let estPeriod = 'monthly';
 
-// Usage estimator
-function updateEstimate() {
-  const mau = parseInt(document.getElementById('mau-slider').value);
-  const epv = parseInt(document.getElementById('epv-slider').value);
-  const total = mau * epv;
-  
-  document.getElementById('mau-val').textContent = mau.toLocaleString();
-  document.getElementById('epv-val').textContent = epv;
-  document.getElementById('total-events').textContent = total.toLocaleString();
-  
-  let planName, price;
-  if (total <= 1000) { planName = 'Starter'; price = 0; }
-  else if (total <= 100000) { planName = 'Growth'; price = isAnnual ? 35 : 49; }
-  else { planName = 'Enterprise'; price = null; }
-  
-  document.getElementById('ue-plan-name').textContent = planName + ' Plan';
-  document.getElementById('ue-price').textContent = price !== null ? price : '?';
-  document.querySelector('.ue-plan-period').textContent = price === 0 ? 'Free forever' : price === null ? 'Contact sales' : `per month, billed ${isAnnual ? 'annually' : 'monthly'}`;
-}
+    function toggleBilling() {
+      isAnnual = !isAnnual;
+      const toggle = document.getElementById('billing-toggle');
+      toggle.classList.toggle('on', isAnnual);
 
-// Reveal
-const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 60);
-      io.unobserve(e.target);
+      document.getElementById('lbl-monthly').style.color = isAnnual ? 'rgba(255,255,255,0.4)' : '#fff';
+      document.getElementById('lbl-annual').style.color = isAnnual ? '#fff' : 'rgba(255,255,255,0.4)';
+
+      const badge = document.getElementById('discount-badge');
+      badge.style.display = isAnnual ? 'inline-block' : 'none';
+
+      const cpmEl = document.getElementById('cpm-rate');
+      cpmEl.textContent = isAnnual ? '$0.22' : '$0.28';
+
+      updateEstimator(document.getElementById('event-slider').value);
     }
-  });
-}, { threshold: 0.07 });
-reveals.forEach(el => io.observe(el));
-</script>
+
+    function setEstPeriod(period) {
+      estPeriod = period;
+      const mb = document.getElementById('est-monthly-btn');
+      const ab = document.getElementById('est-annual-btn');
+      if (period === 'monthly') {
+        mb.style.background = 'var(--purple-main)'; mb.style.color = '#fff';
+        ab.style.background = 'transparent'; ab.style.color = 'rgba(255,255,255,0.4)';
+      } else {
+        ab.style.background = 'var(--purple-main)'; ab.style.color = '#fff';
+        mb.style.background = 'transparent'; mb.style.color = 'rgba(255,255,255,0.4)';
+      }
+      updateEstimator(document.getElementById('event-slider').value);
+    }
+
+    function updateEstimator(val) {
+      val = parseFloat(val);
+      const pct = ((val - 1) / 19) * 100;
+
+      document.getElementById('slider-fill').style.width = pct + '%';
+      document.getElementById('slider-thumb').style.left = pct + '%';
+
+      const label = val >= 20 ? '20M+' : val + 'M';
+      document.getElementById('est-vol-label').textContent = label;
+      document.getElementById('est-events').textContent = val >= 20 ? '20+' : val;
+
+      const eventsM = Math.min(val, 20);
+      const over1M = Math.max(0, eventsM - 1);
+      const cpm = estPeriod === 'annual' ? 0.22 : 0.28;
+      const monthly = Math.round(over1M * 1000 * cpm);
+      const display = estPeriod === 'annual' ? Math.round(monthly * 0.8) : monthly;
+      document.getElementById('est-price').textContent = display.toLocaleString();
+    }
+
+    updateEstimator(1);
+  </script>
 </body>
 </html>

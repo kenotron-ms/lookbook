@@ -3,870 +3,642 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RAW//MATERIAL — Luxury Streetwear</title>
+<title>SEASON 04 — Raw Campaign</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,900;1,700&family=Barlow:wght@300;400;500;600&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #111111;
-  --surface: #191919;
-  --white: #F0EDE8;
-  --orange: #C8531A;
-  --neon: #B8FF00;
-  --gray: #555;
-  --mid: #888;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: 'Barlow', sans-serif;
-  overflow-x: hidden;
-}
-
-/* ── GRAIN OVERLAY ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-  opacity: 0.65;
-}
-
-/* ── REVEAL ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(60px);
-  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-
-/* ── NAV ── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 500;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 40px;
-  background: var(--bg);
-  border-bottom: 1px solid #222;
-}
-
-.nav-logo {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  color: var(--white);
-  text-decoration: none;
-}
-
-.nav-logo .slash { color: var(--orange); }
-
-.nav-links {
-  display: flex;
-  gap: 32px;
-  list-style: none;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--mid);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-
-.nav-links a:hover { color: var(--white); }
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.nav-tag {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--neon);
-  font-weight: 700;
-  border: 1px solid var(--neon);
-  padding: 6px 14px;
-}
-
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  padding-top: 80px;
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: 1fr auto;
-}
-
-.hero-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 60px 40px 0;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-label {
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--orange);
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.hero-h1 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(100px, 15vw, 240px);
-  font-weight: 900;
-  line-height: 0.85;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-}
-
-.hero-h1 .ghost {
-  color: transparent;
-  -webkit-text-stroke: 1px #333;
-}
-
-.hero-h1 .accent { color: var(--orange); }
-
-.hero-bottom {
-  padding: 40px 40px 60px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 40px;
-  border-top: 1px solid #222;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-bottom-item {}
-
-.hero-bottom-label {
-  font-size: 9px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 8px;
-}
-
-.hero-bottom-value {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.hero-desc-col {
-  grid-column: 3;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.hero-desc-text {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--mid);
-  max-width: 320px;
-  margin-bottom: 20px;
-}
-
-.btn-raw {
-  background: var(--white);
-  color: var(--bg);
-  padding: 14px 32px;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-family: 'Barlow Condensed', sans-serif;
-  text-decoration: none;
-  display: inline-block;
-  transition: background 0.2s;
-  align-self: flex-start;
-}
-
-.btn-raw:hover { background: var(--neon); }
-
-/* ── SECTION DIVIDER ── */
-.divider {
-  height: 1px;
-  background: #222;
-}
-
-/* ── TICKER ── */
-.ticker {
-  overflow: hidden;
-  padding: 16px 0;
-  border-bottom: 1px solid #222;
-}
-
-.ticker-track {
-  display: flex;
-  white-space: nowrap;
-  animation: scroll 22s linear infinite;
-}
-
-.ticker-item {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 0 32px;
-  color: var(--mid);
-  flex-shrink: 0;
-}
-
-.ticker-item .t-orange { color: var(--orange); }
-.ticker-item .t-neon { color: var(--neon); }
-
-@keyframes scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-/* ── PRODUCTS ── */
-.products {
-  padding: 80px 40px;
-}
-
-.products-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 40px;
-}
-
-.products-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(56px, 7vw, 100px);
-  font-weight: 900;
-  line-height: 0.9;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-}
-
-.products-meta {
-  text-align: right;
-  font-size: 11px;
-  color: var(--gray);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.product-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 2px;
-}
-
-.product-featured {
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.product-featured .p-visual {
-  aspect-ratio: 4/5;
-  background: linear-gradient(160deg, #C8531A 0%, #1a1a1a 50%, #B8FF00 100%);
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
-}
-
-.product-featured:hover .p-visual { transform: scale(1.03); }
-
-.product-featured .p-tag {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  background: var(--neon);
-  color: var(--bg);
-  padding: 6px 12px;
-}
-
-.product-featured .p-info {
-  padding: 24px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.p-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 28px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.p-type {
-  font-size: 11px;
-  color: var(--gray);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.p-price {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--neon);
-}
-
-.product-col {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.product-mini {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.product-mini .m-visual {
-  height: 100%;
-  min-height: 240px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
-}
-
-.product-mini:hover .m-visual { transform: scale(1.05); }
-
-.m-bg-1 { background: linear-gradient(145deg, #1a1a1a, #333, #C8531A); }
-.m-bg-2 { background: linear-gradient(225deg, #0d0d0d, #C8531A 80%, #B8FF00); }
-.m-bg-3 { background: linear-gradient(45deg, #222, #444, #0d0d0d); }
-.m-bg-4 { background: linear-gradient(315deg, #1a1a1a, #C8531A, #555); }
-
-.product-mini .m-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
-}
-
-.m-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 18px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 2px;
-}
-
-.m-price {
-  font-size: 13px;
-  color: var(--neon);
-  font-weight: 600;
-}
-
-/* ── STATEMENT BAND ── */
-.statement {
-  padding: 80px 40px;
-  background: var(--surface);
-  position: relative;
-  overflow: hidden;
-}
-
-.statement-inner {
-  position: relative;
-  z-index: 1;
-}
-
-.statement-label {
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--orange);
-  font-weight: 600;
-  margin-bottom: 24px;
-}
-
-.statement-text {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(40px, 5vw, 80px);
-  font-weight: 900;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  max-width: 1100px;
-}
-
-.statement-text .ghost {
-  color: transparent;
-  -webkit-text-stroke: 1px #444;
-}
-
-.statement-text .neon { color: var(--neon); }
-
-.statement-foot {
-  margin-top: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.statement-desc {
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--mid);
-  max-width: 420px;
-}
-
-.statement-stats {
-  display: flex;
-  gap: 60px;
-}
-
-.stat {
-  text-align: center;
-}
-
-.stat-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 48px;
-  font-weight: 900;
-  line-height: 1;
-  color: var(--orange);
-}
-
-.stat-label {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-top: 4px;
-}
-
-/* ── FEATURES GRID ── */
-.features {
-  padding: 80px 40px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: #222;
-}
-
-.feature-cell {
-  background: var(--bg);
-  padding: 48px 32px;
-  transition: background 0.3s;
-}
-
-.feature-cell:hover { background: var(--surface); }
-
-.feature-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 48px;
-  font-weight: 900;
-  color: #222;
-  margin-bottom: 24px;
-}
-
-.feature-icon {
-  font-size: 24px;
-  margin-bottom: 16px;
-}
-
-.feature-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 12px;
-}
-
-.feature-title .orange { color: var(--orange); }
-
-.feature-desc {
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--mid);
-}
-
-/* ── TESTIMONIALS ── */
-.testimonials {
-  padding: 80px 40px;
-  border-top: 1px solid #222;
-}
-
-.testimonials-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 48px;
-}
-
-.testimonials-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(48px, 6vw, 90px);
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 0.9;
-}
-
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1px;
-  background: #222;
-}
-
-.testimonial-block {
-  background: var(--surface);
-  padding: 40px 32px;
-}
-
-.t-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 40px;
-  font-weight: 900;
-  color: var(--orange);
-  margin-bottom: 20px;
-  line-height: 1;
-}
-
-.t-quote {
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--mid);
-  margin-bottom: 32px;
-  font-style: italic;
-}
-
-.t-author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.t-avatar {
-  width: 36px;
-  height: 36px;
-  background: var(--orange);
-  border-radius: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  font-weight: 900;
-  color: white;
-  flex-shrink: 0;
-}
-
-.t-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.t-role {
-  font-size: 10px;
-  color: var(--gray);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
-/* ── CTA ── */
-.cta {
-  padding: 120px 40px;
-  background: var(--surface);
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-
-.cta-bg-text {
-  position: absolute;
-  bottom: -20px;
-  right: -20px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 200px;
-  font-weight: 900;
-  text-transform: uppercase;
-  color: transparent;
-  -webkit-text-stroke: 1px #222;
-  white-space: nowrap;
-  z-index: 0;
-  user-select: none;
-}
-
-.cta-content { position: relative; z-index: 1; }
-
-.cta-label {
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--neon);
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.cta-headline {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(60px, 7vw, 110px);
-  font-weight: 900;
-  line-height: 0.9;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  margin-bottom: 32px;
-}
-
-.cta-desc {
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--mid);
-  max-width: 400px;
-  margin-bottom: 40px;
-}
-
-.cta-form {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.cta-form input {
-  background: var(--bg);
-  border: 1px solid #333;
-  color: var(--white);
-  padding: 16px 20px;
-  font-size: 13px;
-  font-family: 'Barlow', sans-serif;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.cta-form input::placeholder { color: var(--gray); }
-
-.cta-form input:focus { border-color: var(--orange); }
-
-.cta-form button {
-  background: var(--orange);
-  color: white;
-  border: none;
-  padding: 18px 32px;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-family: 'Barlow Condensed', sans-serif;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.cta-form button:hover { background: var(--neon); color: var(--bg); }
-
-.cta-note {
-  font-size: 10px;
-  color: var(--gray);
-  letter-spacing: 0.1em;
-}
-
-/* ── FOOTER ── */
-footer {
-  background: var(--bg);
-  border-top: 1px solid #222;
-  padding: 60px 40px 32px;
-}
-
-.footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px;
-  padding-bottom: 48px;
-  border-bottom: 1px solid #222;
-}
-
-.footer-brand-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  margin-bottom: 16px;
-}
-
-.footer-brand-name .slash { color: var(--orange); }
-
-.footer-brand-desc {
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--gray);
-  max-width: 260px;
-  margin-bottom: 24px;
-}
-
-.footer-socials {
-  display: flex;
-  gap: 12px;
-}
-
-.footer-social-link {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gray);
-  text-decoration: none;
-  border: 1px solid #333;
-  padding: 8px 14px;
-  transition: border-color 0.2s, color 0.2s;
-}
-
-.footer-social-link:hover { border-color: var(--orange); color: var(--orange); }
-
-.footer-col-title {
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 20px;
-  font-weight: 600;
-}
-
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 10px; }
-.footer-col ul li a { font-size: 13px; color: #555; text-decoration: none; transition: color 0.2s; }
-.footer-col ul li a:hover { color: var(--white); }
-
-.footer-bottom {
-  margin-top: 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-copy {
-  font-size: 10px;
-  color: #444;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.footer-links a {
-  font-size: 10px;
-  color: #444;
-  text-decoration: none;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  margin-left: 20px;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover { color: var(--white); }
-</style>
-
-<!-- inject-local -->
-<style>
-  .p-visual {
-    background-image: url('../../images/fashion-dark/fd-1.jpg') !important;
-    background-size: cover; background-position: center; filter: grayscale(100%) contrast(1.2);
+  :root {
+    --base: #E3E2DE;
+    --ink: #1B0E0D;
+    --red: #C72A09;
+    --neon: #31EF07;
   }
-  .m-bg-1 {
-    background-image: url('../../images/fashion-dark/fd-2.jpg') !important;
-    background-size: cover; background-position: center; filter: grayscale(100%) contrast(1.2);
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: var(--base); color: var(--ink); font-family: 'Space Grotesk', monospace; }
+
+  ::selection { background: var(--neon); color: var(--ink); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--base); }
+  ::-webkit-scrollbar-thumb { background: var(--ink); }
+
+  /* NOISE TEXTURE OVERLAY */
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.08;
+    mix-blend-mode: multiply;
   }
-  .m-bg-2 {
-    background-image: url('../../images/fashion-dark/fd-3.jpg') !important;
-    background-size: cover; background-position: center; filter: grayscale(100%) contrast(1.2);
+
+  .slide-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
   }
-  .m-bg-3 {
-    background-image: url('../../images/fashion-dark/fd-4.jpg') !important;
-    background-size: cover; background-position: center; filter: grayscale(100%) contrast(1.2);
+  .slide-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 56px;
+    background: var(--ink);
+    border-bottom: 1px solid rgba(227,226,222,0.12);
   }
-  .m-bg-4 {
-    background-image: url('../../images/fashion-dark/fd-5.jpg') !important;
-    background-size: cover; background-position: center; filter: grayscale(100%) contrast(1.2);
+  .nav-logo {
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--base);
+    text-decoration: none;
   }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(227,226,222,0.55);
+    text-decoration: none;
+    position: relative;
+    transition: color 200ms;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 100%;
+    height: 1.5px;
+    background: var(--neon);
+    transition: right 300ms cubic-bezier(0.165,0.84,0.44,1);
+  }
+  .nav-links a:hover { color: var(--base); }
+  .nav-links a:hover::after { right: 0; }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: rgba(227,226,222,0.6);
+  }
+  .nav-right a { color: rgba(227,226,222,0.6); text-decoration: none; transition: color 200ms; }
+  .nav-right a:hover { color: var(--neon); }
+  .season-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 0.2rem 0.6rem;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 2.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--base);
+  }
+  .hero-bg-img {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-bg-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.2);
+    opacity: 0.18;
+  }
+  .hero-type {
+    position: relative;
+    z-index: 10;
+  }
+  .hero-line {
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 700;
+    font-size: 13.5vw;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: block;
+  }
+  .hero-line-2 { margin-left: 20vw; }
+  .hero-footer {
+    position: relative;
+    z-index: 10;
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid rgba(27,14,13,0.2);
+    padding-top: 1.5rem;
+    gap: 2rem;
+  }
+  .hero-footer p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: rgba(27,14,13,0.55);
+    font-family: 'Space Grotesk', monospace;
+  }
+  .hero-footer-cta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  .hero-stat {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  /* NEON LINK */
+  .neon-link {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .neon-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 100%;
+    height: 2px;
+    background: var(--neon);
+    transition: right 300ms cubic-bezier(0.165,0.84,0.44,1);
+  }
+  .neon-link:hover::after { right: 0; }
+
+  /* TICKER */
+  .ticker {
+    overflow: hidden;
+    border-top: 1px solid rgba(27,14,13,0.15);
+    border-bottom: 1px solid rgba(27,14,13,0.15);
+    padding: 0.9rem 0;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 3rem;
+    animation: ticker 20s linear infinite;
+    width: max-content;
+  }
+  .ticker-item {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(27,14,13,0.45);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .ticker-dot { width: 3px; height: 3px; background: var(--red); border-radius: 50%; display: inline-block; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* PRODUCT GRID — asymmetric 12-col, 7+5 offset */
+  .product-section { padding: 4rem 2.5rem; }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(27,14,13,0.15);
+  }
+  .section-title {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+  .section-meta {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(27,14,13,0.45);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-meta .cnt { color: var(--red); }
+
+  /* Asymmetric grid: 12 cols, first item 7, second 5, then alternating */
+  .asym-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1px;
+    background: rgba(27,14,13,0.12);
+  }
+  .asym-cell-7 { grid-column: span 7; }
+  .asym-cell-5 { grid-column: span 5; }
+  .asym-cell-4 { grid-column: span 4; }
+  .asym-cell-8 { grid-column: span 8; }
+
+  .product-card {
+    background: var(--base);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--neon);
+    opacity: 0;
+    z-index: 5;
+    transition: opacity 200ms;
+    pointer-events: none;
+  }
+  .product-card:hover::before { opacity: 0.03; }
+
+  .product-img {
+    overflow: hidden;
+    flex: 1;
+  }
+  .product-img-tall { min-height: 560px; }
+  .product-img-mid { min-height: 380px; }
+  .product-img-short { min-height: 260px; }
+  .product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.2);
+    transition: filter 500ms, transform 600ms cubic-bezier(0.165,0.84,0.44,1);
+    display: block;
+  }
+  .product-card:hover .product-img img {
+    filter: grayscale(20%) contrast(1.1);
+    transform: scale(1.05);
+  }
+  .product-info {
+    padding: 1.2rem 1.5rem;
+    border-top: 1px solid rgba(27,14,13,0.12);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: var(--base);
+  }
+  .product-name-wrap { display: flex; flex-direction: column; gap: 0.2rem; }
+  .product-tag-sm {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .product-name {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .product-price-wrap { text-align: right; }
+  .product-price {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .product-size {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(27,14,13,0.45);
+    margin-top: 0.1rem;
+  }
+
+  /* MANIFESTO */
+  .manifesto {
+    padding: 6rem 2.5rem;
+    border-top: 1px solid rgba(27,14,13,0.12);
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .manifesto h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(3rem, 5.5vw, 6rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-transform: uppercase;
+  }
+  .manifesto h2 em {
+    color: var(--red);
+    font-style: normal;
+    display: block;
+  }
+  .manifesto-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .manifesto-content p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(27,14,13,0.65);
+    max-width: 520px;
+  }
+  .manifesto-content p strong { color: var(--ink); font-weight: 700; }
+  .manifesto-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(27,14,13,0.12);
+  }
+  .m-stat-num {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .m-stat-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(27,14,13,0.45);
+    margin-top: 0.3rem;
+  }
+
+  /* SPLIT CAMPAIGN */
+  .campaign {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 700px;
+    border-top: 1px solid rgba(27,14,13,0.12);
+  }
+  .campaign-img {
+    overflow: hidden;
+    position: relative;
+  }
+  .campaign-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.2);
+    transition: filter 600ms, transform 700ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .campaign:hover .campaign-img img {
+    filter: grayscale(40%) contrast(1.1);
+    transform: scale(1.03);
+  }
+  .campaign-text {
+    background: var(--ink);
+    color: var(--base);
+    padding: 4rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .campaign-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(227,226,222,0.4);
+  }
+  .campaign-headline {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(2.5rem, 4.5vw, 5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-transform: uppercase;
+  }
+  .campaign-headline em { color: var(--red); font-style: normal; }
+  .campaign-body {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(227,226,222,0.6);
+    max-width: 360px;
+  }
+  .campaign-link {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--neon);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+  }
+  .campaign-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 100%;
+    height: 1.5px;
+    background: var(--neon);
+    transition: right 300ms cubic-bezier(0.165,0.84,0.44,1);
+  }
+  .campaign-link:hover::after { right: 0; }
+
+  /* CTA */
+  .cta-section {
+    padding: 6rem 2.5rem;
+    border-top: 1px solid rgba(27,14,13,0.12);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .cta-section h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-transform: uppercase;
+  }
+  .cta-section h2 span { color: var(--red); }
+  .cta-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .cta-right p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: rgba(27,14,13,0.6);
+  }
+  .btn-primary {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--base);
+    background: var(--ink);
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 200ms;
+  }
+  .btn-primary:hover { background: var(--red); }
+  .btn-ghost {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+    opacity: 0.55;
+    transition: opacity 200ms;
+  }
+  .btn-ghost:hover { opacity: 1; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 4rem 2.5rem 2rem;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(227,226,222,0.08);
+    margin-bottom: 2rem;
+  }
+  .footer-brand {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--base);
+    margin-bottom: 0.75rem;
+  }
+  .footer-tagline {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: rgba(227,226,222,0.4);
+    max-width: 260px;
+  }
+  .footer-col h4 {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(227,226,222,0.35);
+    margin-bottom: 1.2rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .footer-col ul li a {
+    font-size: 0.85rem;
+    color: rgba(227,226,222,0.6);
+    text-decoration: none;
+    position: relative;
+    transition: color 200ms;
+  }
+  .footer-col ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 100%;
+    height: 1px;
+    background: var(--neon);
+    transition: right 250ms cubic-bezier(0.165,0.84,0.44,1);
+  }
+  .footer-col ul li a:hover { color: var(--base); }
+  .footer-col ul li a:hover::after { right: 0; }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom span { font-size: 0.68rem; color: rgba(227,226,222,0.25); letter-spacing: 0.06em; }
 </style>
 </head>
 <body>
 
+<!-- NOISE OVERLAY -->
+<svg class="noise-overlay" xmlns="http://www.w3.org/2000/svg">
+  <filter id="noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#noise)"/>
+</svg>
+
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">RAW<span class="slash">//</span>MATERIAL</a>
+  <a href="#" class="nav-logo">Season 04</a>
   <ul class="nav-links">
-    <li><a href="#">Shop</a></li>
-    <li><a href="#">Lookbook</a></li>
-    <li><a href="#">About</a></li>
+    <li><a href="#">Collection</a></li>
+    <li><a href="#">Archive</a></li>
+    <li><a href="#">Editorial</a></li>
     <li><a href="#">Stockists</a></li>
   </ul>
   <div class="nav-right">
-    <span class="nav-tag">SS25 Drop Live</span>
+    <span class="season-badge">SS 25</span>
+    <a href="#"><i data-lucide="search" style="width:18px;height:18px;"></i></a>
+    <a href="#"><i data-lucide="shopping-bag" style="width:18px;height:18px;"></i></a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-main">
-    <div class="hero-label reveal">SS25 / Raw Campaign / Volume III</div>
-    <h1 class="hero-h1 reveal reveal-delay-1">
-      RAW<span class="ghost">//</span><br>
-      <span class="ghost">MATER</span><span class="accent">IAL</span>
-    </h1>
+  <div class="hero-bg-img">
+    <img src="../../images/fashion-dark/fd-1.jpg" alt="">
   </div>
-  <div class="hero-bottom">
-    <div class="hero-bottom-item reveal">
-      <div class="hero-bottom-label">Drop Status</div>
-      <div class="hero-bottom-value" style="color:var(--neon)">Live Now</div>
-    </div>
-    <div class="hero-bottom-item reveal reveal-delay-1">
-      <div class="hero-bottom-label">Pieces Available</div>
-      <div class="hero-bottom-value">28 Styles</div>
-    </div>
-    <div class="hero-desc-col reveal reveal-delay-2">
-      <p class="hero-desc-text">Industrial construction. Radical silhouettes. Materials sourced from the margins and refined to the limit. This is not fashion — this is architecture for the body.</p>
-      <a href="#" class="btn-raw">Shop the Drop →</a>
+  <div class="hero-type slide-up">
+    <span class="hero-line">SEASON</span>
+    <span class="hero-line hero-line-2">04</span>
+  </div>
+  <div class="hero-footer slide-up" style="transition-delay:0.1s;">
+    <p>A collection built from tension. Between the domestic and the desolate. Between care and absence. <strong>Spring / Summer 2025.</strong></p>
+    <p><span class="hero-stat">36 Pieces &nbsp;&centerdot;&nbsp; 4 Drops</span><br><span style="font-size:0.75rem;color:rgba(27,14,13,0.45);margin-top:0.3rem;display:block;">First drop available 14 March 2025.</span></p>
+    <div class="hero-footer-cta">
+      <a href="#" class="neon-link">Enter Collection <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></a>
     </div>
   </div>
 </section>
@@ -874,189 +646,155 @@ footer {
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-track">
-    <span class="ticker-item">RAW<span class="t-orange">//</span>MATERIAL</span>
-    <span class="ticker-item">SS25 DROP <span class="t-neon">●</span></span>
-    <span class="ticker-item">LUXURY STREETWEAR</span>
-    <span class="ticker-item">MADE IN PORTUGAL <span class="t-orange">■</span></span>
-    <span class="ticker-item">LIMITED EDITION <span class="t-neon">◆</span></span>
-    <span class="ticker-item">RAW<span class="t-orange">//</span>MATERIAL</span>
-    <span class="ticker-item">SS25 DROP <span class="t-neon">●</span></span>
-    <span class="ticker-item">LUXURY STREETWEAR</span>
-    <span class="ticker-item">MADE IN PORTUGAL <span class="t-orange">■</span></span>
-    <span class="ticker-item">LIMITED EDITION <span class="t-neon">◆</span></span>
+    <span class="ticker-item">Drop 01 — Available Now <span class="ticker-dot"></span></span>
+    <span class="ticker-item">36 Pieces Total <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Drop 02 — 14 Apr <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Deadstock Fabrics Only <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Made in Portugal <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Free Returns — 30 Days <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Drop 01 — Available Now <span class="ticker-dot"></span></span>
+    <span class="ticker-item">36 Pieces Total <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Drop 02 — 14 Apr <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Deadstock Fabrics Only <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Made in Portugal <span class="ticker-dot"></span></span>
+    <span class="ticker-item">Free Returns — 30 Days <span class="ticker-dot"></span></span>
   </div>
 </div>
 
-<!-- PRODUCTS -->
-<section class="products">
-  <div class="products-header reveal">
-    <h2 class="products-title">NEW<br>DROPS</h2>
-    <div class="products-meta">
-      Spring / Summer 2025<br>
-      28 Limited Pieces
-    </div>
+<!-- PRODUCT SECTION — ASYMMETRIC GRID -->
+<section class="product-section slide-up">
+  <div class="section-header">
+    <h2 class="section-title">Drop 01</h2>
+    <div class="section-meta"><span class="cnt">12</span> pieces <span style="color:rgba(27,14,13,0.2);">|</span> <a href="#" class="neon-link" style="font-size:0.68rem;">View All</a></div>
   </div>
-  <div class="product-row">
-    <div class="product-featured reveal">
-      <div class="p-visual">
-        <div class="p-tag">Hero Piece</div>
+  <div class="asym-grid">
+    <!-- Row 1: 7 + 5 -->
+    <div class="product-card asym-cell-7">
+      <div class="product-img product-img-tall">
+        <img src="../../images/fashion-dark/fd-1.jpg" alt="Void Coat">
       </div>
-      <div class="p-info">
-        <div>
-          <div class="p-name">Obsidian Trench Coat</div>
-          <div class="p-type">Waxed Cotton / Oversized</div>
+      <div class="product-info">
+        <div class="product-name-wrap">
+          <span class="product-tag-sm">Hero Piece</span>
+          <span class="product-name">Void Coat</span>
         </div>
-        <div class="p-price">$685</div>
-      </div>
-    </div>
-    <div class="product-col">
-      <div class="product-mini reveal">
-        <div class="m-visual m-bg-1">
-          <div class="m-info">
-            <div class="m-name">Utility Vest</div>
-            <div class="m-price">$320</div>
-          </div>
-        </div>
-      </div>
-      <div class="product-mini reveal reveal-delay-1">
-        <div class="m-visual m-bg-2">
-          <div class="m-info">
-            <div class="m-name">Cargo Trousers</div>
-            <div class="m-price">$295</div>
-          </div>
+        <div class="product-price-wrap">
+          <div class="product-price">$880</div>
+          <div class="product-size">S / M / L</div>
         </div>
       </div>
     </div>
-    <div class="product-col">
-      <div class="product-mini reveal reveal-delay-1">
-        <div class="m-visual m-bg-3">
-          <div class="m-info">
-            <div class="m-name">Destroy Tee</div>
-            <div class="m-price">$165</div>
-          </div>
-        </div>
+    <div class="product-card asym-cell-5">
+      <div class="product-img product-img-tall">
+        <img src="../../images/fashion-dark/fd-2.jpg" alt="Seam Trouser">
       </div>
-      <div class="product-mini reveal reveal-delay-2">
-        <div class="m-visual m-bg-4">
-          <div class="m-info">
-            <div class="m-name">Arc Hoodie</div>
-            <div class="m-price">$380</div>
-          </div>
+      <div class="product-info">
+        <div class="product-name-wrap">
+          <span class="product-tag-sm">New</span>
+          <span class="product-name">Seam Trouser</span>
+        </div>
+        <div class="product-price-wrap">
+          <div class="product-price">$340</div>
+          <div class="product-size">28–34</div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- STATEMENT -->
-<section class="statement">
-  <div class="statement-inner reveal">
-    <div class="statement-label">Raw Manifesto</div>
-    <div class="statement-text">
-      WE BUILD FOR THE<br>
-      <span class="ghost">BODY</span> THAT <span class="neon">REFUSES</span><br>
-      TO FIT THE MOULD
+    <!-- Row 2: 4 + 4 + 4 -->
+    <div class="product-card asym-cell-4">
+      <div class="product-img product-img-mid">
+        <img src="../../images/fashion-dark/fd-3.jpg" alt="Woven Knit">
+      </div>
+      <div class="product-info">
+        <div class="product-name-wrap">
+          <span class="product-tag-sm">Deadstock</span>
+          <span class="product-name">Woven Knit</span>
+        </div>
+        <div class="product-price-wrap">
+          <div class="product-price">$220</div>
+          <div class="product-size">One Size</div>
+        </div>
+      </div>
     </div>
-    <div class="statement-foot">
-      <p class="statement-desc">Raw//Material was founded on the belief that luxury and brutalism are not opposites — they are the same impulse. We make clothes for people who understand that.</p>
-      <div class="statement-stats">
-        <div class="stat">
-          <div class="stat-num">6</div>
-          <div class="stat-label">Seasons</div>
+    <div class="product-card asym-cell-4" style="margin-top: 4rem;">
+      <div class="product-img product-img-mid">
+        <img src="../../images/fashion-dark/fd-4.jpg" alt="Raw Shirt">
+      </div>
+      <div class="product-info">
+        <div class="product-name-wrap">
+          <span class="product-name">Raw Shirt</span>
         </div>
-        <div class="stat">
-          <div class="stat-num">14</div>
-          <div class="stat-label">Countries</div>
+        <div class="product-price-wrap">
+          <div class="product-price">$175</div>
+          <div class="product-size">XS–XL</div>
         </div>
-        <div class="stat">
-          <div class="stat-num">100%</div>
-          <div class="stat-label">Traceable</div>
+      </div>
+    </div>
+    <div class="product-card asym-cell-4">
+      <div class="product-img product-img-mid">
+        <img src="../../images/fashion-dark/fd-5.jpg" alt="Field Short">
+      </div>
+      <div class="product-info">
+        <div class="product-name-wrap">
+          <span class="product-tag-sm">Ltd. 80 Units</span>
+          <span class="product-name">Field Short</span>
+        </div>
+        <div class="product-price-wrap">
+          <div class="product-price">$195</div>
+          <div class="product-size">S–XL</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES GRID -->
-<section class="features">
-  <div class="feature-cell reveal">
-    <div class="feature-num">01</div>
-    <div class="feature-title">PREMIUM<br><span class="orange">MATERIALS</span></div>
-    <p class="feature-desc">Every fabric sourced from certified mills in Japan, Italy, and Portugal. Heavyweight cottons, waxed canvas, Japanese selvedge.</p>
+<!-- MANIFESTO -->
+<section class="manifesto slide-up">
+  <div>
+    <h2>Built<br>Not<br><em>Styled</em></h2>
   </div>
-  <div class="feature-cell reveal reveal-delay-1">
-    <div class="feature-num">02</div>
-    <div class="feature-title">RADICAL<br><span class="orange">CUTS</span></div>
-    <p class="feature-desc">Silhouettes that defy the season. Oversized, asymmetric, and engineered — not styled. No compromises on form.</p>
-  </div>
-  <div class="feature-cell reveal reveal-delay-2">
-    <div class="feature-num">03</div>
-    <div class="feature-title">LIMITED<br><span class="orange">RUNS</span></div>
-    <p class="feature-desc">Maximum 80 units per design. Once gone, gone. We don't restock, rerun, or compromise the scarcity of our craft.</p>
-  </div>
-  <div class="feature-cell reveal reveal-delay-3">
-    <div class="feature-num">04</div>
-    <div class="feature-title">CHAIN OF<br><span class="orange">CUSTODY</span></div>
-    <p class="feature-desc">Full transparency from fiber to finished garment. Every piece ships with a traceability certificate and production provenance.</p>
+  <div class="manifesto-content">
+    <p><strong>Season 04 is a refusal.</strong> A refusal of the drop-culture dopamine loop, the influencer seeding machine, and the fabric that washes out in a season. We source from three Portuguese mills. Every pattern is cut by hand and graded internally. The seams are exposed because we have nothing to hide.</p>
+    <p>This is clothing for people who find beauty in tension. In the space between a garment pulled taut and one that falls soft. In the company of silence and the discomfort of honesty.</p>
+    <div class="manifesto-stats">
+      <div>
+        <div class="m-stat-num">04</div>
+        <div class="m-stat-label">Seasons Running</div>
+      </div>
+      <div>
+        <div class="m-stat-num">3</div>
+        <div class="m-stat-label">Portuguese Mills</div>
+      </div>
+      <div>
+        <div class="m-stat-num">100%</div>
+        <div class="m-stat-label">Deadstock or Organic</div>
+      </div>
+    </div>
+    <a href="#" class="neon-link" style="margin-top:0.5rem;">Read the full manifesto <i data-lucide="arrow-up-right" style="width:14px;height:14px;"></i></a>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="testimonials-header reveal">
-    <h2 class="testimonials-title">WORN BY<br>THE BOLD</h2>
-    <a href="#" class="btn-raw">All Reviews →</a>
+<!-- CAMPAIGN SPLIT -->
+<div class="campaign slide-up">
+  <div class="campaign-img">
+    <img src="../../images/fashion-dark/fd-2.jpg" alt="Campaign">
   </div>
-  <div class="testimonials-grid">
-    <div class="testimonial-block reveal">
-      <div class="t-num">01</div>
-      <p class="t-quote">"The Obsidian Trench arrived and I immediately understood what 'luxury brutalism' actually means. The weight, the drape, the silence of the seams. Nothing else comes close."</p>
-      <div class="t-author">
-        <div class="t-avatar">YO</div>
-        <div>
-          <div class="t-name">Yuki Okomura</div>
-          <div class="t-role">Architect — Tokyo</div>
-        </div>
-      </div>
+  <div class="campaign-text">
+    <div class="campaign-eyebrow">Editorial — Spring 2025</div>
+    <div>
+      <h2 class="campaign-headline">The<br><em>Quiet</em><br>Season</h2>
     </div>
-    <div class="testimonial-block reveal reveal-delay-1">
-      <div class="t-num">02</div>
-      <p class="t-quote">"I've been buying limited streetwear for a decade. Raw//Material operates on a different frequency entirely. The Destroy Tee alone is worth every cent."</p>
-      <div class="t-author">
-        <div class="t-avatar">CR</div>
-        <div>
-          <div class="t-name">Caleb R.</div>
-          <div class="t-role">Creative Director — Los Angeles</div>
-        </div>
-      </div>
-    </div>
-    <div class="testimonial-block reveal reveal-delay-2">
-      <div class="t-num">03</div>
-      <p class="t-quote">"Wore the cargo trousers to a gallery opening and three people asked me where they were from. That's all I needed to know about the design."</p>
-      <div class="t-author">
-        <div class="t-avatar">LB</div>
-        <div>
-          <div class="t-name">Léa Bonnet</div>
-          <div class="t-role">Curator — Paris</div>
-        </div>
-      </div>
-    </div>
+    <p class="campaign-body">Shot across Lisbon's industrial waterfront during an unseasonal cold week in November. The campaign doesn't sell a lifestyle. It records a temperature.</p>
+    <a href="#" class="campaign-link">View Campaign <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></a>
   </div>
-</section>
+</div>
 
 <!-- CTA -->
-<section class="cta">
-  <div class="cta-bg-text">DROP</div>
-  <div class="cta-content reveal">
-    <div class="cta-label">Join the Inner Circle</div>
-    <h2 class="cta-headline">GET DROP<br>ACCESS</h2>
-    <p class="cta-desc">Members receive 48-hour early access to all new drops, exclusive pieces never available to the public, and first allocation on limited runs.</p>
-  </div>
-  <div class="cta-form reveal reveal-delay-1">
-    <input type="text" placeholder="Your name">
-    <input type="email" placeholder="Your email address">
-    <button type="submit">Request Access →</button>
-    <p class="cta-note">Members-only. No spam. Unsubscribe anytime.</p>
+<section class="cta-section slide-up">
+  <h2>Drop<br>02 Starts<br><span>14 Apr.</span></h2>
+  <div class="cta-right">
+    <p>Eight new pieces. No restock after sell-through. Add your address to receive the access link six hours before public release.</p>
+    <a href="#" class="btn-primary">Request Early Access</a>
+    <a href="#" class="btn-ghost">View full schedule <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></a>
   </div>
 </section>
 
@@ -1064,61 +802,50 @@ footer {
 <footer>
   <div class="footer-top">
     <div>
-      <div class="footer-brand-name">RAW<span class="slash">//</span>MATERIAL</div>
-      <p class="footer-brand-desc">Luxury streetwear built for those who refuse to be average. Limited production. Maximum intention.</p>
-      <div class="footer-socials">
-        <a href="#" class="footer-social-link">IG</a>
-        <a href="#" class="footer-social-link">TK</a>
-        <a href="#" class="footer-social-link">PIN</a>
-      </div>
+      <div class="footer-brand">S04</div>
+      <p class="footer-tagline">High-fashion made with intention. Four seasons in. No plans to stop being difficult about fabric.</p>
     </div>
     <div class="footer-col">
-      <div class="footer-col-title">Shop</div>
+      <h4>Shop</h4>
       <ul>
-        <li><a href="#">Latest Drop</a></li>
-        <li><a href="#">Outerwear</a></li>
-        <li><a href="#">Tops</a></li>
-        <li><a href="#">Bottoms</a></li>
+        <li><a href="#">Drop 01</a></li>
+        <li><a href="#">Archive</a></li>
+        <li><a href="#">Deadstock</a></li>
         <li><a href="#">Accessories</a></li>
-        <li><a href="#">Archive Sale</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <div class="footer-col-title">Company</div>
+      <h4>Brand</h4>
       <ul>
-        <li><a href="#">About</a></li>
         <li><a href="#">Manifesto</a></li>
-        <li><a href="#">Materials</a></li>
-        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Editorial</a></li>
+        <li><a href="#">Stockists</a></li>
         <li><a href="#">Press</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <div class="footer-col-title">Support</div>
+      <h4>Support</h4>
       <ul>
-        <li><a href="#">Sizing</a></li>
-        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Care Instructions</a></li>
         <li><a href="#">Returns</a></li>
-        <li><a href="#">Care</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <span class="footer-copy">© 2025 RAW//MATERIAL — All Rights Reserved</span>
-    <div class="footer-links">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-    </div>
+    <span>&copy; 2025 SEASON 04 — All Rights Reserved</span>
+    <span style="color:rgba(227,226,222,0.25);font-size:0.68rem;letter-spacing:0.06em;">Privacy &nbsp;&middot;&nbsp; Terms</span>
   </div>
 </footer>
 
 <script>
-const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-reveals.forEach(el => io.observe(el));
+lucide.createIcons();
+const reveals = document.querySelectorAll('.slide-up');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.05 });
+reveals.forEach(el => obs.observe(el));
 </script>
 </body>
 </html>

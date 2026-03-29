@@ -3,670 +3,384 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CONCRETE MATTER — Built Different</title>
+<title>CONCRETE MATTER — High-End Streetwear</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;700&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --concrete: #D4CFC8;
-  --concrete-light: #E8E4DF;
-  --concrete-dark: #A09C96;
-  --ink: #0A0907;
-  --white: #F5F3F0;
-  --dark: #1A1916;
-  --accent: #FF3B1F;
-  --mid: #6B6860;
-}
-html { scroll-behavior: smooth; }
-body {
-  background: var(--white);
-  color: var(--ink);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  font-weight: 300;
-  overflow-x: hidden;
-  cursor: crosshair;
-}
-/* Grain */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0; z-index: 500;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 48px;
-  mix-blend-mode: difference;
-}
-.nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  letter-spacing: 0.15em;
-  color: var(--white);
-  text-decoration: none;
-}
-.nav-links { display: flex; gap: 40px; list-style: none; }
-.nav-links a {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--white);
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.nav-links a:hover { opacity: 0.5; }
-.nav-cta {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--white);
-  text-decoration: none;
-  border: 1px solid var(--white);
-  padding: 8px 20px;
-}
-
-/* HERO */
-.hero {
-  min-height: 100vh;
-  background: var(--ink);
-  position: relative;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-.hero-left {
-  padding: 120px 48px 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  position: relative;
-  z-index: 2;
-}
-.hero-sup {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--concrete-dark);
-  margin-bottom: 24px;
-}
-.hero-h1 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(80px, 12vw, 180px);
-  line-height: 0.9;
-  letter-spacing: 0.02em;
-  color: var(--white);
-  margin-bottom: 0;
-}
-.hero-h1 .accent-line { color: var(--accent); display: block; }
-.hero-h1 .offset { margin-left: 0.15em; }
-.hero-bottom {
-  margin-top: auto;
-  padding-top: 80px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-.hero-desc {
-  font-size: 14px;
-  color: var(--concrete-dark);
-  max-width: 300px;
-  line-height: 1.7;
-}
-.hero-cta-group { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
-.btn-hero {
-  display: inline-block;
-  background: var(--accent);
-  color: var(--white);
-  padding: 18px 48px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 0.1em;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.btn-hero:hover { background: var(--white); color: var(--ink); }
-.hero-scroll { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--concrete-dark); }
-.hero-right {
-  position: relative;
-  overflow: hidden;
-  border-left: 1px solid rgba(212,207,200,0.1);
-}
-.hero-img-placeholder {
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1E1C19 0%, #2A2724 50%, #1A1816 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.hero-garment {
-  width: 200px;
-  height: 320px;
-  background: linear-gradient(160deg, #2E2C28 0%, #1A1816 50%, #0E0D0B 100%);
-  border: 1px solid rgba(212,207,200,0.12);
-  position: relative;
-}
-.hero-garment::before {
-  content: 'DROP 003';
-  position: absolute;
-  top: 24px; left: 24px;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  color: rgba(212,207,200,0.4);
-}
-.hero-garment-tag {
-  position: absolute;
-  bottom: -1px; left: -1px; right: -1px;
-  background: var(--accent);
-  padding: 12px 20px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 16px;
-  letter-spacing: 0.1em;
-  color: var(--white);
-}
-.hero-number {
-  position: absolute;
-  bottom: 40px;
-  right: 40px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 200px;
-  line-height: 1;
-  color: rgba(212,207,200,0.04);
-  pointer-events: none;
-}
-
-/* TICKER */
-.ticker {
-  background: var(--accent);
-  padding: 14px 0;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.ticker-inner {
-  display: inline-block;
-  animation: ticker 20s linear infinite;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 0.12em;
-  color: var(--white);
-}
-.tsep { margin: 0 32px; opacity: 0.6; }
-@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-
-/* BROKEN GRID PRODUCTS */
-.products {
-  padding: 80px 0;
-  background: var(--white);
-  overflow: hidden;
-}
-.products-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 0 48px 48px;
-  border-bottom: 1px solid var(--concrete);
-}
-.products-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(48px, 8vw, 96px);
-  line-height: 0.9;
-  letter-spacing: 0.02em;
-  color: var(--ink);
-}
-.products-count { font-size: 12px; color: var(--mid); letter-spacing: 0.1em; }
-/* Horizontal Scroll */
-.product-scroll {
-  display: flex;
-  gap: 2px;
-  padding: 48px 48px 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-.product-scroll::-webkit-scrollbar { display: none; }
-.product-item {
-  flex-shrink: 0;
-  width: 320px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.product-item:nth-child(even) { margin-top: 60px; }
-.product-img {
-  width: 100%;
-  aspect-ratio: 3/4;
-  background: var(--concrete-light);
-  position: relative;
-  overflow: hidden;
-}
-.product-img-inner {
-  width: 100%;
-  height: 100%;
-  background: var(--concrete);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.6s;
-  filter: grayscale(1);
-}
-.product-item:hover .product-img-inner { transform: scale(1.06); filter: grayscale(0); }
-.product-silhouette {
-  width: 120px;
-  height: 200px;
-  background: linear-gradient(160deg, #A09C96 0%, #6B6860 100%);
-  clip-path: polygon(20% 0%, 80% 0%, 95% 10%, 95% 90%, 80% 100%, 20% 100%, 5% 90%, 5% 10%);
-}
-.product-overlay {
-  position: absolute;
-  inset: 0;
-  background: var(--ink);
-  opacity: 0;
-  transition: opacity 0.4s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.product-item:hover .product-overlay { opacity: 0.6; }
-.overlay-text {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  letter-spacing: 0.1em;
-  color: var(--white);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.4s 0.1s, transform 0.4s 0.1s;
-}
-.product-item:hover .overlay-text { opacity: 1; transform: translateY(0); }
-.product-tag {
-  position: absolute;
-  top: 16px; left: 0;
-  background: var(--ink);
-  color: var(--white);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 6px 14px;
-}
-.product-info { padding: 20px 0; }
-.product-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.05em; color: var(--ink); }
-.product-code { font-size: 11px; color: var(--mid); letter-spacing: 0.08em; margin-top: 2px; }
-.product-price { font-size: 16px; font-weight: 500; color: var(--ink); margin-top: 8px; }
-.product-price .sold { font-size: 12px; color: var(--accent); font-weight: 400; }
-
-/* MANIFESTO */
-.manifesto {
-  background: var(--ink);
-  padding: 120px 48px;
-  position: relative;
-  overflow: hidden;
-}
-.manifesto-number {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 400px;
-  line-height: 0.9;
-  color: rgba(212,207,200,0.03);
-  position: absolute;
-  top: -40px; right: -40px;
-  pointer-events: none;
-}
-.manifesto-content { position: relative; max-width: 800px; }
-.manifesto-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--concrete-dark); margin-bottom: 32px; }
-.manifesto-h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(56px, 9vw, 120px);
-  line-height: 0.9;
-  letter-spacing: 0.02em;
-  color: var(--white);
-  margin-bottom: 48px;
-}
-.manifesto-h2 em { color: var(--accent); font-style: normal; }
-.manifesto-body { font-size: 16px; color: var(--concrete-dark); line-height: 1.8; max-width: 560px; margin-bottom: 48px; }
-.manifesto-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: rgba(212,207,200,0.1);
-  margin-top: 80px;
-}
-.stat-cell {
-  padding: 32px 24px;
-  background: var(--ink);
-}
-.stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: var(--white); line-height: 1; margin-bottom: 8px; }
-.stat-label { font-size: 11px; color: var(--concrete-dark); letter-spacing: 0.08em; }
-
-/* MASONRY PROOF */
-.social-proof { padding: 80px 48px; border-top: 1px solid var(--concrete); }
-.proof-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; }
-.proof-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px,6vw,80px); line-height: 0.9; letter-spacing: 0.02em; }
-.masonry {
-  columns: 3;
-  column-gap: 2px;
-}
-.masonry-item {
-  break-inside: avoid;
-  margin-bottom: 2px;
-  background: var(--concrete-light);
-  border: 1px solid var(--concrete);
-  padding: 28px;
-  transition: background 0.3s;
-  position: relative;
-}
-.masonry-item:hover { background: var(--ink); color: var(--white); }
-.masonry-item:hover .masonry-author { color: var(--concrete-dark); }
-.masonry-handle { font-size: 11px; color: var(--mid); letter-spacing: 0.08em; margin-bottom: 16px; display: flex; justify-content: space-between; }
-.masonry-text { font-size: 14px; line-height: 1.65; margin-bottom: 20px; }
-.masonry-item:nth-child(2n) .masonry-text { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.05em; line-height: 1; }
-.masonry-author { font-size: 12px; font-weight: 500; color: var(--ink); transition: color 0.3s; }
-.masonry-prod { font-size: 11px; color: var(--mid); margin-top: 2px; }
-
-/* CTA */
-.cta-section {
-  padding: 0;
-  background: var(--ink);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 600px;
-}
-.cta-text {
-  padding: 100px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.cta-h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(60px,9vw,120px); line-height: 0.9; letter-spacing: 0.02em; color: var(--white); margin-bottom: 32px; }
-.cta-h2 em { color: var(--accent); font-style: normal; }
-.cta-sub { font-size: 15px; color: var(--concrete-dark); line-height: 1.75; max-width: 380px; margin-bottom: 48px; }
-.btn-cta { display: inline-block; background: var(--white); color: var(--ink); padding: 20px 52px; font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.08em; text-decoration: none; transition: all 0.2s; }
-.btn-cta:hover { background: var(--accent); color: var(--white); }
-.cta-visual { background: var(--dark); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-.cta-visual-bg { font-family: 'Bebas Neue', sans-serif; font-size: 300px; line-height: 1; color: rgba(212,207,200,0.04); pointer-events: none; user-select: none; }
-
-/* FOOTER */
-footer { background: var(--dark); color: var(--white); padding: 60px 48px 32px; border-top: 1px solid rgba(212,207,200,0.1); }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 80px; padding-bottom: 48px; border-bottom: 1px solid rgba(212,207,200,0.1); }
-.footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.12em; margin-bottom: 16px; }
-.footer-desc { font-size: 13px; color: var(--concrete-dark); line-height: 1.7; }
-.footer-col-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--concrete-dark); margin-bottom: 20px; }
-.footer-links { list-style: none; }
-.footer-links li { margin-bottom: 10px; }
-.footer-links a { font-size: 13px; color: rgba(212,207,200,0.45); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: var(--white); }
-.footer-bottom { display: flex; justify-content: space-between; padding-top: 32px; font-size: 11px; color: rgba(212,207,200,0.3); }
-
-@media (max-width: 900px) {
-  nav { padding: 20px 24px; }
-  .nav-links { display: none; }
-  .hero { grid-template-columns: 1fr; }
-  .hero-right { display: none; }
-  .manifesto-stats { grid-template-columns: 1fr 1fr; }
-  .masonry { columns: 1; }
-  .cta-section { grid-template-columns: 1fr; }
-  .cta-visual { display: none; }
-  .footer-top { grid-template-columns: 1fr; }
-}
-</style>
-
-<!-- inject-local -->
-<style>
-  .hero-img-placeholder {
-    background-image: url('../../images/fashion-warm/fw-1.jpg') !important;
-    background-size: cover; background-position: center top;
+  :root {
+    --concrete: #f2f2f2;
+    --ink: #0a0a0a;
+    --red: #dc2626;
+    --mid-gray: #6b6b6b;
   }
-  .hero-garment {
-    background-image: url('../../images/fashion-warm/fw-2.jpg') !important;
-    background-size: cover; background-position: center top;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Space Grotesk', sans-serif; background: var(--concrete); color: var(--ink); }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-repeat: repeat;
   }
-  .product-silhouette {
-    background-image: url('../../images/fashion-warm/fw-3.jpg') !important;
-    background-size: cover; background-position: center top;
+
+  /* Anton headline */
+  .display { font-family: 'Anton', sans-serif; text-transform: uppercase; line-height: 0.87; }
+
+  /* Mix-blend header */
+  #site-header { mix-blend-mode: difference; }
+  #site-header * { color: white !important; }
+  #header-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
   }
-  .product-img {
-    background-image: url('../../images/fashion-warm/fw-4.jpg') !important;
-    background-size: cover; background-position: center top;
+
+  /* Grayscale hover */
+  .gray-img {
+    filter: grayscale(100%);
+    transition: filter 700ms ease, transform 700ms ease;
   }
+  .gray-img:hover { filter: grayscale(0%); transform: scale(1.05); }
+
+  /* Strikethrough link hover */
+  .strike-link { text-decoration: none; color: var(--ink); position: relative; }
+  .strike-link:hover { text-decoration: line-through; text-decoration-thickness: 2px; }
+
+  /* Horizontal scroll */
+  .h-scroll { display: flex; overflow-x: auto; gap: 2px; scrollbar-width: none; scroll-snap-type: x mandatory; cursor: grab; }
+  .h-scroll::-webkit-scrollbar { display: none; }
+  .h-scroll-item { scroll-snap-align: start; flex-shrink: 0; }
+
+  /* Broken grid — intentional misalignment */
+  .broken-grid { display: grid; grid-template-columns: 1.6fr 1fr 1.2fr; grid-template-rows: 420px 380px; }
+
+  /* Live indicator */
+  @keyframes pulse-red { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .live-dot { animation: pulse-red 1.5s ease-in-out infinite; }
+
+  /* Product number */
+  .prod-num { font-family: 'Space Grotesk', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mid-gray); }
+
+  /* Cart shadow */
+  .cart-shadow { box-shadow: 8px 8px 0px rgba(0,0,0,0.1); }
 </style>
 </head>
 <body>
 
-<nav>
-  <a href="#" class="nav-logo">CONCRETE MATTER</a>
-  <ul class="nav-links">
-    <li><a href="#products">Drops</a></li>
-    <li><a href="#manifesto">Manifesto</a></li>
-    <li><a href="#lookbook">Lookbook</a></li>
-    <li><a href="#archive">Archive</a></li>
-  </ul>
-  <a href="#products" class="nav-cta">Shop Drop 003</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <p class="hero-sup">Drop 003 · SS25 · Limited Run</p>
-    <h1 class="hero-h1">
-      CON<span class="offset">CRETE</span><br>
-      <span class="accent-line">MAT</span><br>
-      TER.
-    </h1>
-    <div class="hero-bottom">
-      <p class="hero-desc">Architecture-grade streetwear for people who build things. No seasonality. No trend-chasing. Garments that last as long as the structures they're inspired by.</p>
-      <div class="hero-cta-group">
-        <a href="#products" class="btn-hero">View Drop 003</a>
-        <span class="hero-scroll">Scroll to explore ↓</span>
+<!-- FIXED HEADER WRAPPER (mix-blend lives here) -->
+<div id="header-wrap">
+  <header id="site-header" style="height: 72px; display: flex; align-items: center; padding: 0 48px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+      <!-- Logo -->
+      <a href="#" style="text-decoration: none; font-family: 'Anton', sans-serif; font-size: 22px; letter-spacing: 0.05em;">CONCRETE MATTER</a>
+      <!-- Center nav -->
+      <nav style="display: flex; gap: 32px; position: absolute; left: 50%; transform: translateX(-50%);">
+        <a href="#new" class="strike-link" style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: inherit !important;">New</a>
+        <a href="#collection" class="strike-link" style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: inherit !important;">Collection</a>
+        <a href="#about" class="strike-link" style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: inherit !important;">About</a>
+      </nav>
+      <!-- Right: cart + live indicator -->
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span class="live-dot" style="width: 6px; height: 6px; border-radius: 50%; background: var(--red); display: inline-block;"></span>
+          <span style="font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;">147 online</span>
+        </div>
+        <button style="background: none; border: none; cursor: pointer; position: relative; padding: 4px;">
+          <i data-lucide="shopping-cart" style="width: 18px; height: 18px; color: inherit;"></i>
+          <span style="position: absolute; top: 0; right: 0; width: 14px; height: 14px; background: var(--red); border-radius: 50%; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;">3</span>
+        </button>
       </div>
     </div>
+  </header>
+</div>
+
+<!-- HERO -->
+<section style="padding-top: 72px; min-height: 100vh; position: relative; overflow: hidden;">
+  <!-- Background image full bleed -->
+  <div style="position: absolute; inset: 0; z-index: 0;">
+    <img src="../../images/fashion-dark/fd-1.jpg" alt="Concrete Matter SS25" class="gray-img" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(80%); transform: scale(1.0); transition: filter 2s ease;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(242,242,242,0.85) 0%, rgba(242,242,242,0.4) 50%, rgba(10,10,10,0.2) 100%);"></div>
   </div>
-  <div class="hero-right">
-    <div class="hero-img-placeholder">
-      <div class="hero-number">03</div>
-      <div class="hero-garment">
-        <div class="hero-garment-tag">MATTER JACKET — 003</div>
+  <!-- Hero text — pushed to extreme corners -->
+  <div style="position: relative; z-index: 2; height: calc(100vh - 72px); display: flex; flex-direction: column; justify-content: flex-end; padding: 64px 48px;">
+    <div style="max-width: 900px;">
+      <p class="prod-num" style="margin-bottom: 16px; color: var(--mid-gray);">SS-25 / STRUCTURAL SERIES / DROP 01</p>
+      <h1 class="display" style="font-size: clamp(72px, 11vw, 180px); color: var(--ink); margin-bottom: 24px;">
+        Weight<br>Bearing.
+      </h1>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px;">
+        <p style="font-size: 14px; line-height: 1.7; color: var(--mid-gray); max-width: 420px;">
+          Constructed from 480gsm Japanese mill cotton. Zero distressing. No graphics for graphics' sake. Clothes that wear the person who chose them.
+        </p>
+        <div style="display: flex; gap: 12px;">
+          <a href="#collection" style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 36px; background: var(--ink); color: var(--concrete); text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Shop the drop</a>
+          <a href="#about" style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 36px; border: 2px solid var(--ink); color: var(--ink); text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='rgba(10,10,10,0.08)'" onmouseout="this.style.background='transparent'">The fabric story</a>
+        </div>
       </div>
+    </div>
+    <!-- Bottom strip -->
+    <div style="position: absolute; bottom: 32px; right: 48px; display: flex; gap: 8px; align-items: center;">
+      <span class="prod-num">Scroll</span>
+      <i data-lucide="arrow-down" style="width: 14px; height: 14px; color: var(--mid-gray);"></i>
     </div>
   </div>
 </section>
 
 <!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner">
-    Built Different<span class="tsep">·</span>Drop 003<span class="tsep">·</span>Limited Run 200 Units<span class="tsep">·</span>Concrete Series<span class="tsep">·</span>Architecture-Grade Materials<span class="tsep">·</span>Anti-Trend<span class="tsep">·</span>Built Different<span class="tsep">·</span>Drop 003<span class="tsep">·</span>Limited Run 200 Units<span class="tsep">·</span>Concrete Series<span class="tsep">·</span>Architecture-Grade Materials<span class="tsep">·</span>Anti-Trend<span class="tsep">·</span>
+<div style="background: var(--ink); height: 40px; overflow: hidden; display: flex; align-items: center; position: relative;">
+  <div id="ticker" style="display: flex; gap: 48px; white-space: nowrap; animation: ticker-scroll 20s linear infinite;">
+    <span style="font-size: 11px; letter-spacing: 0.25em; color: var(--concrete); text-transform: uppercase;">Free delivery over £200</span>
+    <span style="color: var(--red);">•</span>
+    <span style="font-size: 11px; letter-spacing: 0.25em; color: var(--concrete); text-transform: uppercase;">SS-25 Structural Series — Available now</span>
+    <span style="color: var(--red);">•</span>
+    <span style="font-size: 11px; letter-spacing: 0.25em; color: var(--concrete); text-transform: uppercase;">All garments cut and sewn in Portugal</span>
+    <span style="color: var(--red);">•</span>
+    <span style="font-size: 11px; letter-spacing: 0.25em; color: var(--concrete); text-transform: uppercase;">Free delivery over £200</span>
+    <span style="color: var(--red);">•</span>
+    <span style="font-size: 11px; letter-spacing: 0.25em; color: var(--concrete); text-transform: uppercase;">SS-25 Structural Series — Available now</span>
+    <span style="color: var(--red);">•</span>
+    <span style="font-size: 11px; letter-spacing: 0.25em; color: var(--concrete); text-transform: uppercase;">All garments cut and sewn in Portugal</span>
+    <span style="color: var(--red);">•</span>
   </div>
 </div>
+<style>
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+</style>
 
-<!-- PRODUCTS -->
-<section class="products" id="products">
-  <div class="products-header">
-    <h2 class="products-title">DROP<br>003</h2>
-    <span class="products-count">08 / 08 ITEMS · LIVE NOW</span>
-  </div>
-  <div class="product-scroll">
-    <div class="product-item">
-      <div class="product-img">
-        <div class="product-img-inner"><div class="product-silhouette"></div></div>
-        <div class="product-overlay"><span class="overlay-text">QUICK VIEW</span></div>
-        <span class="product-tag">New</span>
-      </div>
-      <div class="product-info">
-        <p class="product-name">Matter Jacket</p>
-        <p class="product-code">CM-003-JK · Concrete Grey</p>
-        <p class="product-price">£ 380</p>
-      </div>
-    </div>
-    <div class="product-item">
-      <div class="product-img">
-        <div class="product-img-inner"><div class="product-silhouette" style="clip-path:polygon(10% 0%,90% 0%,100% 15%,100% 100%,0% 100%,0% 15%);height:160px;width:180px;"></div></div>
-        <div class="product-overlay"><span class="overlay-text">QUICK VIEW</span></div>
-        <span class="product-tag">Last 3</span>
-      </div>
-      <div class="product-info">
-        <p class="product-name">Utility Trouser</p>
-        <p class="product-code">CM-003-TP · Ink Black</p>
-        <p class="product-price">£ 240</p>
-      </div>
-    </div>
-    <div class="product-item">
-      <div class="product-img">
-        <div class="product-img-inner"><div class="product-silhouette" style="height:120px;width:200px;clip-path:polygon(0% 20%,100% 0%,100% 80%,0% 100%);"></div></div>
-        <div class="product-overlay"><span class="overlay-text">QUICK VIEW</span></div>
-        <span class="product-tag">Sold Out</span>
-      </div>
-      <div class="product-info">
-        <p class="product-name">Slab Hoodie</p>
-        <p class="product-code">CM-003-HD · Raw Concrete</p>
-        <p class="product-price">£ 195 <span class="sold">Sold Out</span></p>
-      </div>
-    </div>
-    <div class="product-item">
-      <div class="product-img">
-        <div class="product-img-inner"><div class="product-silhouette" style="width:100px;height:180px;border-radius:50% 50% 10% 10%;"></div></div>
-        <div class="product-overlay"><span class="overlay-text">QUICK VIEW</span></div>
-      </div>
-      <div class="product-info">
-        <p class="product-name">Archive Tee</p>
-        <p class="product-code">CM-003-TE · Off-White</p>
-        <p class="product-price">£ 95</p>
-      </div>
-    </div>
-    <div class="product-item">
-      <div class="product-img">
-        <div class="product-img-inner"><div class="product-silhouette" style="width:160px;height:80px;border-radius:4px;"></div></div>
-        <div class="product-overlay"><span class="overlay-text">QUICK VIEW</span></div>
-      </div>
-      <div class="product-info">
-        <p class="product-name">Structured Cap</p>
-        <p class="product-code">CM-003-CP · Concrete</p>
-        <p class="product-price">£ 65</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MANIFESTO -->
-<section class="manifesto" id="manifesto">
-  <div class="manifesto-number">CM</div>
-  <div class="manifesto-content">
-    <p class="manifesto-label">Manifesto · 2019 — Present</p>
-    <h2 class="manifesto-h2">BUILT<br><em>DIFF</em><br>ERENT.</h2>
-    <p class="manifesto-body">We build clothes the way architects build structures. No ornamentation for its own sake. No seasonal deadlines that compromise material selection. No trend reports. Just garments that hold their form for a decade and develop character in the process.</p>
-    <p class="manifesto-body" style="margin-top:0;">Concrete Matter produces two drops per year. Each limited to 200 units per style. When it's gone, it's gone. The archive is documented, not restocked.</p>
-    <a href="#" class="btn-hero">Read the Full Manifesto</a>
-  </div>
-  <div class="manifesto-stats">
-    <div class="stat-cell"><div class="stat-val">200</div><div class="stat-label">Units per Drop</div></div>
-    <div class="stat-cell"><div class="stat-val">2×</div><div class="stat-label">Collections Per Year</div></div>
-    <div class="stat-cell"><div class="stat-val">0</div><div class="stat-label">Discounts. Ever.</div></div>
-    <div class="stat-cell"><div class="stat-val">5yr</div><div class="stat-label">Repair Guarantee</div></div>
-  </div>
-</section>
-
-<!-- SOCIAL PROOF MASONRY -->
-<section class="social-proof">
-  <div class="proof-header">
-    <h2 class="proof-title">WORN<br>OUT THERE.</h2>
-    <span style="font-size:12px;color:var(--mid);letter-spacing:0.08em;">@CONCRETEMATTER</span>
-  </div>
-  <div class="masonry">
-    <div class="masonry-item">
-      <div class="masonry-handle"><span>@architect.studio</span><span>Drop 002</span></div>
-      <p class="masonry-text">"I've worn the Matter Jacket to three different building sites this winter. The Japanese ripstop takes abuse without looking damaged. The design is indistinguishable from technical outerwear—until someone asks about it."</p>
-      <p class="masonry-author">Kai M. — Architect</p>
-      <p class="masonry-prod">Matter Jacket · Concrete Grey · M</p>
-    </div>
-    <div class="masonry-item">
-      <div class="masonry-handle"><span>@dailycarry</span><span>Drop 001</span></div>
-      <p class="masonry-text">"DIFFERENT. NOT LOUD."</p>
-      <p class="masonry-author">Tomás R. — Designer</p>
-      <p class="masonry-prod">Archive Tee · Off-White · L</p>
-    </div>
-    <div class="masonry-item">
-      <div class="masonry-handle"><span>@noisy_neutral</span><span>Drop 003</span></div>
-      <p class="masonry-text">"The utility trouser has twelve pockets. Twelve. None of them are decorative. I can't go back to regular trousers."</p>
-      <p class="masonry-author">Sam L. — Photographer</p>
-      <p class="masonry-prod">Utility Trouser · Ink Black · 32</p>
-    </div>
-    <div class="masonry-item">
-      <div class="masonry-handle"><span>@buildersedge</span><span>Drop 002</span></div>
-      <p class="masonry-text">"Three years on the Slab Hoodie from Drop 001. The seams haven't moved. The colour hasn't shifted. This is what garments used to be like before fast fashion made everyone forget."</p>
-      <p class="masonry-author">Elena P. — Brand Director</p>
-      <p class="masonry-prod">Slab Hoodie · Raw Concrete · S</p>
-    </div>
-    <div class="masonry-item">
-      <div class="masonry-handle"><span>@typeface.daily</span><span>Drop 003</span></div>
-      <p class="masonry-text">"CONCRETE IS THE NEW BLACK."</p>
-      <p class="masonry-author">Marin V. — Typographer</p>
-      <p class="masonry-prod">Structured Cap · Concrete · S/M</p>
-    </div>
-    <div class="masonry-item">
-      <div class="masonry-handle"><span>@workwear.archive</span><span>Drop 003</span></div>
-      <p class="masonry-text">"Finally. Clothes that understand that 'workwear' means something worn to work — not costume workwear. The Utility Trouser is the best trouser I've ever put on."</p>
-      <p class="masonry-author">James T. — Civil Engineer</p>
-      <p class="masonry-prod">Utility Trouser · Ink Black · 34</p>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-text">
-    <h2 class="cta-h2">DROP<br><em>003</em><br>LIVE.</h2>
-    <p class="cta-sub">200 units. 8 styles. One drop, no restock. The Concrete Matter way — made well, sold directly, worn for a decade.</p>
-    <a href="#" class="btn-cta">Shop the Drop</a>
-  </div>
-  <div class="cta-visual">
-    <div class="cta-visual-bg">003</div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-top">
+<!-- BROKEN GRID COLLECTION -->
+<section id="collection" style="padding: 80px 48px;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;">
     <div>
-      <div class="footer-brand">CONCRETE MATTER</div>
-      <p class="footer-desc">Architecture-grade garments. Two drops per year. 200 units per style. No trends, no restocks, no apologies.</p>
+      <p class="prod-num" style="margin-bottom: 12px;">Drop 01 — 14 pieces</p>
+      <h2 class="display" style="font-size: clamp(36px, 5vw, 72px); color: var(--ink);">New Arrivals</h2>
     </div>
-    <div>
-      <p class="footer-col-label">Drops</p>
-      <ul class="footer-links">
-        <li><a href="#">Drop 003 — Current</a></li>
-        <li><a href="#">Drop 002 — Archive</a></li>
-        <li><a href="#">Drop 001 — Archive</a></li>
-        <li><a href="#">Notify for Drop 004</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-label">Studio</p>
-      <ul class="footer-links">
-        <li><a href="#">The Manifesto</a></li>
-        <li><a href="#">Materials</a></li>
-        <li><a href="#">Repair Programme</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <button style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 16px; border: 1px solid var(--ink); background: var(--ink); color: var(--concrete); cursor: pointer;">All</button>
+      <button style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 16px; border: 1px solid rgba(10,10,10,0.2); color: var(--mid-gray); cursor: pointer; background: none;">Outerwear</button>
+      <button style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 16px; border: 1px solid rgba(10,10,10,0.2); color: var(--mid-gray); cursor: pointer; background: none;">Tops</button>
+      <button style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 16px; border: 1px solid rgba(10,10,10,0.2); color: var(--mid-gray); cursor: pointer; background: none;">Trousers</button>
     </div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2024 Concrete Matter. Built different. All rights reserved.</span>
-    <span>No trend. No compromise. No restock.</span>
+  <!-- BROKEN GRID — intentionally misaligned -->
+  <div style="display: grid; grid-template-columns: 2fr 1fr 1.3fr; grid-template-rows: 520px 400px; gap: 2px;">
+    <!-- Large hero item -->
+    <div style="grid-row: 1; grid-column: 1; position: relative; overflow: hidden; cursor: pointer;" onmouseover="this.querySelector('.gray-img').style.filter='grayscale(0%)'; this.querySelector('.gray-img').style.transform='scale(1.05)'" onmouseout="this.querySelector('.gray-img').style.filter='grayscale(100%)'; this.querySelector('.gray-img').style.transform='scale(1)'">
+      <img src="../../images/fashion-dark/fd-2.jpg" class="gray-img" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,0.7) 0%, transparent 50%);"></div>
+      <div style="position: absolute; bottom: 24px; left: 24px; right: 24px;">
+        <p class="prod-num" style="color: rgba(242,242,242,0.6); margin-bottom: 4px;">CM-25-001</p>
+        <p style="font-size: 18px; font-weight: 600; color: var(--concrete); letter-spacing: -0.01em; margin-bottom: 4px;">Structural Field Jacket</p>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <p style="font-size: 14px; color: rgba(242,242,242,0.7);">480gsm Japanese Cotton — Stone</p>
+          <p style="font-size: 16px; font-weight: 600; color: var(--concrete);">£380</p>
+        </div>
+      </div>
+    </div>
+    <!-- Two right cells stacked -->
+    <div style="grid-row: 1; grid-column: 2; position: relative; overflow: hidden; cursor: pointer; margin-top: 40px;" onmouseover="this.querySelector('.gray-img').style.filter='grayscale(0%)'" onmouseout="this.querySelector('.gray-img').style.filter='grayscale(100%)'">
+      <img src="../../images/fashion-dark/fd-3.jpg" class="gray-img" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+      <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
+        <p class="prod-num" style="color: rgba(242,242,242,0.6); margin-bottom: 2px;">CM-25-002</p>
+        <p style="font-size: 14px; font-weight: 600; color: var(--concrete); margin-bottom: 2px;">Heavy Tee — Oversized</p>
+        <p style="font-size: 13px; color: rgba(242,242,242,0.7);">£95</p>
+      </div>
+    </div>
+    <div style="grid-row: 1; grid-column: 3; position: relative; overflow: hidden; cursor: pointer; margin-bottom: 60px;" onmouseover="this.querySelector('.gray-img').style.filter='grayscale(0%)'" onmouseout="this.querySelector('.gray-img').style.filter='grayscale(100%)'">
+      <img src="../../images/fashion-dark/fd-4.jpg" class="gray-img" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+      <div style="position: absolute; top: 16px; left: 16px;">
+        <span style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; background: var(--red); color: white; padding: 4px 8px;">Low stock</span>
+      </div>
+      <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
+        <p class="prod-num" style="color: rgba(242,242,242,0.6); margin-bottom: 2px;">CM-25-003</p>
+        <p style="font-size: 14px; font-weight: 600; color: var(--concrete); margin-bottom: 2px;">Cargo Trouser — Wide</p>
+        <p style="font-size: 13px; color: rgba(242,242,242,0.7);">£195</p>
+      </div>
+    </div>
+    <!-- Second row — offset -->
+    <div style="grid-row: 2; grid-column: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 2px;">
+      <div style="position: relative; overflow: hidden; cursor: pointer; margin-top: -60px;" onmouseover="this.querySelector('.gray-img').style.filter='grayscale(0%)'" onmouseout="this.querySelector('.gray-img').style.filter='grayscale(100%)'">
+        <img src="../../images/fashion-dark/fd-5.jpg" class="gray-img" style="width: 100%; height: 100%; object-fit: cover;">
+        <div style="position: absolute; bottom: 12px; left: 12px;">
+          <p style="font-size: 13px; font-weight: 600; color: var(--concrete);">Hoodie — Fleece</p>
+          <p style="font-size: 12px; color: rgba(242,242,242,0.7);">£145</p>
+        </div>
+      </div>
+      <div style="background: var(--ink); padding: 28px; display: flex; flex-direction: column; justify-content: flex-end; margin-top: 40px;">
+        <p class="display" style="font-size: 32px; color: var(--concrete); margin-bottom: 16px;">14 pieces.<br>One mill.</p>
+        <p style="font-size: 12px; color: rgba(242,242,242,0.5); line-height: 1.65; margin-bottom: 24px;">Every garment in Drop 01 comes from the same 480gsm fabric produced at Kurabo Industries, Osaka. Batch-dyed, stone-washed by hand.</p>
+        <a href="#about" style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--concrete); text-decoration: none; border-bottom: 1px solid rgba(242,242,242,0.3); padding-bottom: 2px; display: inline-block;">Read the material notes</a>
+      </div>
+    </div>
+    <div style="grid-row: 2; grid-column: 2 / span 2; display: flex; gap: 2px; overflow: hidden;">
+      <div style="flex: 1; background: var(--concrete); padding: 28px; border: 1px solid rgba(10,10,10,0.08);">
+        <p class="prod-num" style="margin-bottom: 24px;">Quality Standard</p>
+        <p class="display" style="font-size: 28px; color: var(--ink); margin-bottom: 16px;">480 GSM.<br>Not a claim.</p>
+        <p style="font-size: 12px; color: var(--mid-gray); line-height: 1.7; margin-bottom: 24px;">Standard streetwear t-shirts run 160–180gsm. Ours are 480. The difference is structural — the garment holds its shape across 200+ washes. We include a wash log card with every piece.</p>
+        <div style="border-top: 1px solid rgba(10,10,10,0.1); padding-top: 16px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">
+            <span style="color: var(--mid-gray);">Fabric weight</span>
+            <span style="font-weight: 600;">480 gsm</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">
+            <span style="color: var(--mid-gray);">Wash durability tested</span>
+            <span style="font-weight: 600;">200+ cycles</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px;">
+            <span style="color: var(--mid-gray);">Origin</span>
+            <span style="font-weight: 600;">Kurabo, Osaka / Cut in Portugal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HORIZONTAL SCROLL COLLECTION -->
+<section id="new" style="padding: 80px 0; border-top: 1px solid rgba(10,10,10,0.08);">
+  <div style="padding: 0 48px; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 32px;">
+    <h2 class="display" style="font-size: clamp(32px, 4vw, 56px);">Classics</h2>
+    <p class="prod-num">Drag to scroll</p>
+  </div>
+  <div class="h-scroll" style="padding: 0 48px;">
+    <div class="h-scroll-item" style="width: 320px; flex-shrink: 0; position: relative; overflow: hidden; cursor: pointer;" onmouseover="this.querySelector('img').style.filter='grayscale(0%)'; this.querySelector('img').style.transform='scale(1.05)'" onmouseout="this.querySelector('img').style.filter='grayscale(100%)'; this.querySelector('img').style.transform='scale(1)'">
+      <img src="../../images/fashion-dark/fd-1.jpg" style="width: 100%; height: 420px; object-fit: cover; filter: grayscale(100%); transition: all 700ms ease;">
+      <div style="padding: 16px 0;">
+        <p class="prod-num" style="margin-bottom: 4px;">CM-24-011</p>
+        <p style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Arc Bomber — Ink</p>
+        <p style="font-size: 13px; color: var(--mid-gray);">£290</p>
+      </div>
+    </div>
+    <div class="h-scroll-item" style="width: 320px; flex-shrink: 0; position: relative; overflow: hidden; cursor: pointer;" onmouseover="this.querySelector('img').style.filter='grayscale(0%)'; this.querySelector('img').style.transform='scale(1.05)'" onmouseout="this.querySelector('img').style.filter='grayscale(100%)'; this.querySelector('img').style.transform='scale(1)'">
+      <img src="../../images/fashion-dark/fd-2.jpg" style="width: 100%; height: 420px; object-fit: cover; filter: grayscale(100%); transition: all 700ms ease;">
+      <div style="padding: 16px 0;">
+        <p class="prod-num" style="margin-bottom: 4px;">CM-24-008</p>
+        <p style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Foundation Trouser — Cement</p>
+        <p style="font-size: 13px; color: var(--mid-gray);">£175</p>
+      </div>
+    </div>
+    <div class="h-scroll-item" style="width: 320px; flex-shrink: 0; position: relative; overflow: hidden; cursor: pointer;" onmouseover="this.querySelector('img').style.filter='grayscale(0%)'; this.querySelector('img').style.transform='scale(1.05)'" onmouseout="this.querySelector('img').style.filter='grayscale(100%)'; this.querySelector('img').style.transform='scale(1)'">
+      <img src="../../images/fashion-dark/fd-3.jpg" style="width: 100%; height: 420px; object-fit: cover; filter: grayscale(100%); transition: all 700ms ease;">
+      <div style="padding: 16px 0;">
+        <p class="prod-num" style="margin-bottom: 4px;">CM-24-005</p>
+        <p style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Weight Crewneck — Stone</p>
+        <p style="font-size: 13px; color: var(--mid-gray);">£135</p>
+      </div>
+    </div>
+    <div class="h-scroll-item" style="width: 320px; flex-shrink: 0; position: relative; overflow: hidden; cursor: pointer;" onmouseover="this.querySelector('img').style.filter='grayscale(0%)'; this.querySelector('img').style.transform='scale(1.05)'" onmouseout="this.querySelector('img').style.filter='grayscale(100%)'; this.querySelector('img').style.transform='scale(1)'">
+      <img src="../../images/fashion-dark/fd-4.jpg" style="width: 100%; height: 420px; object-fit: cover; filter: grayscale(100%); transition: all 700ms ease;">
+      <div style="padding: 16px 0;">
+        <p class="prod-num" style="margin-bottom: 4px;">CM-24-003</p>
+        <p style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Vault Jacket — Waxed Cotton</p>
+        <p style="font-size: 13px; color: var(--mid-gray);">£445</p>
+      </div>
+    </div>
+    <div class="h-scroll-item" style="width: 320px; flex-shrink: 0; position: relative; overflow: hidden; cursor: pointer;" onmouseover="this.querySelector('img').style.filter='grayscale(0%)'; this.querySelector('img').style.transform='scale(1.05)'" onmouseout="this.querySelector('img').style.filter='grayscale(100%)'; this.querySelector('img').style.transform='scale(1)'">
+      <img src="../../images/fashion-dark/fd-5.jpg" style="width: 100%; height: 420px; object-fit: cover; filter: grayscale(100%); transition: all 700ms ease;">
+      <div style="padding: 16px 0;">
+        <p class="prod-num" style="margin-bottom: 4px;">CM-24-001</p>
+        <p style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">Core Tee — Double Layer</p>
+        <p style="font-size: 13px; color: var(--mid-gray);">£95</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / ETHOS -->
+<section id="about" style="background: var(--ink); padding: 96px 48px;">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1440px; margin: 0 auto;">
+    <div>
+      <p class="prod-num" style="color: rgba(242,242,242,0.3); margin-bottom: 32px;">On the work</p>
+      <h2 class="display" style="font-size: clamp(40px, 5vw, 80px); color: var(--concrete); margin-bottom: 32px; line-height: 0.9;">Built For<br>Wearing.</h2>
+      <p style="font-size: 14px; line-height: 1.8; color: rgba(242,242,242,0.55); max-width: 420px; margin-bottom: 40px;">
+        We make clothes for people who have stopped being impressed by clothes. Every piece is constructed rather than assembled. No licensed graphics, no seasonal prints. The texture is the design.
+      </p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid rgba(242,242,242,0.08);">
+        <div style="padding: 24px 24px 24px 0; border-right: 1px solid rgba(242,242,242,0.08);">
+          <p style="font-size: 28px; font-weight: 700; color: var(--concrete); letter-spacing: -0.02em;">2018</p>
+          <p style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,242,242,0.3); margin-top: 4px;">Founded, London</p>
+        </div>
+        <div style="padding: 24px 0 24px 24px;">
+          <p style="font-size: 28px; font-weight: 700; color: var(--concrete); letter-spacing: -0.02em;">4</p>
+          <p style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,242,242,0.3); margin-top: 4px;">Annual collections</p>
+        </div>
+      </div>
+    </div>
+    <!-- Right: material close-up -->
+    <div style="position: relative;">
+      <img src="../../images/fashion-dark/fd-3.jpg" style="width: 100%; height: 560px; object-fit: cover; filter: grayscale(60%); mix-blend-mode: luminosity; opacity: 0.85;">
+      <div style="position: absolute; bottom: 0; right: 0; background: var(--concrete); padding: 24px; max-width: 220px;">
+        <p class="prod-num" style="color: var(--mid-gray); margin-bottom: 8px;">Fabric note</p>
+        <p style="font-size: 13px; line-height: 1.65; color: var(--ink);">All fabrics are tested for 200 wash cycles before inclusion. We publish shrinkage, weight retention, and pilling scores for each lot.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS / MASONRY SOCIAL PROOF -->
+<section style="padding: 80px 48px; border-top: 1px solid rgba(10,10,10,0.06);">
+  <p class="prod-num" style="margin-bottom: 32px;">Press</p>
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 2px;">
+    <div style="padding: 28px; border: 1px solid rgba(10,10,10,0.08);">
+      <p style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 12px;">032c</p>
+      <p style="font-size: 13px; color: var(--mid-gray); line-height: 1.65;">"CONCRETE MATTER builds clothes the way architects build load-bearing walls. Heavy enough to mean something."</p>
+    </div>
+    <div style="padding: 28px; border: 1px solid rgba(10,10,10,0.08); margin-top: 24px;">
+      <p style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 12px;">Hypebeast</p>
+      <p style="font-size: 13px; color: var(--mid-gray); line-height: 1.65;">"The anti-hype brand that hypebeasts are secretly buying. Heavy fabric, zero nonsense."</p>
+    </div>
+    <div style="padding: 28px; border: 1px solid rgba(10,10,10,0.08);">
+      <p style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 12px;">Highsnobiety</p>
+      <p style="font-size: 13px; color: var(--mid-gray); line-height: 1.65;">"In a landscape of thin t-shirts at £200, Concrete Matter's 480gsm weight feels like a quiet protest."</p>
+    </div>
+    <div style="padding: 28px; border: 1px solid rgba(10,10,10,0.08); margin-top: 24px;">
+      <p style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 12px;">Document Journal</p>
+      <p style="font-size: 13px; color: var(--mid-gray); line-height: 1.65;">"The clothes feel like furniture. You buy them once and keep them until you die. Which is the point."</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background: var(--ink); padding: 64px 48px;">
+  <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 48px; max-width: 1440px; margin: 0 auto; padding-bottom: 48px; border-bottom: 1px solid rgba(242,242,242,0.08);">
+    <div>
+      <p class="display" style="font-size: 20px; color: var(--concrete); letter-spacing: 0.05em; margin-bottom: 12px;">CONCRETE MATTER</p>
+      <p style="font-size: 12px; color: rgba(242,242,242,0.35); max-width: 260px; line-height: 1.7;">Streetwear built like architecture. Founded London 2018. Cut in Portugal.</p>
+    </div>
+    <nav style="display: flex; gap: 32px; flex-wrap: wrap;">
+      <a href="#" class="strike-link" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,242,242,0.5) !important;">Sizing guide</a>
+      <a href="#" class="strike-link" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,242,242,0.5) !important;">Delivery</a>
+      <a href="#" class="strike-link" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,242,242,0.5) !important;">Returns</a>
+      <a href="#" class="strike-link" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,242,242,0.5) !important;">Material archive</a>
+      <a href="#" class="strike-link" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242,242,242,0.5) !important;">Privacy</a>
+    </nav>
+  </div>
+  <div style="padding-top: 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; max-width: 1440px; margin: 0 auto;">
+    <p style="font-size: 11px; color: rgba(242,242,242,0.2);">© 2025 Concrete Matter Ltd. All rights reserved.</p>
+    <p class="prod-num" style="color: rgba(242,242,242,0.2);">London — Porto</p>
   </div>
 </footer>
 
 <script>
-window.addEventListener('scroll', () => {
-  document.querySelector('nav').style.opacity = scrollY > 10 ? '1' : '1';
-});
-const obs = new IntersectionObserver(e => e.forEach(i => { if(i.isIntersecting) i.target.style.opacity='1'; }), { threshold: 0.05 });
+  lucide.createIcons();
+
+  // Drag scroll on horizontal scroll container
+  const hScroll = document.querySelector('.h-scroll');
+  let isDown = false, startX, scrollLeft;
+  hScroll.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - hScroll.offsetLeft; scrollLeft = hScroll.scrollLeft; });
+  hScroll.addEventListener('mouseleave', () => isDown = false);
+  hScroll.addEventListener('mouseup', () => isDown = false);
+  hScroll.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - hScroll.offsetLeft; hScroll.scrollLeft = scrollLeft - (x - startX); });
 </script>
 </body>
 </html>

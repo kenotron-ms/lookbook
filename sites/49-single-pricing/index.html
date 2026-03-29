@@ -1,781 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STACKR — Simple Equity Management</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STACKR — Startup Equity Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  <style>
+    :root {
+      --bg: #fafafa;
+      --bg2: #f4f3f0;
+      --ink: #0d0d0d;
+      --dim: #6b6b6b;
+      --border: #e8e7e4;
+      --accent: #1a1a1a;
+      --green: #16a34a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+    }
 
-:root{
-  --bg:#fafafa;
-  --white:#ffffff;
-  --ink:#111111;
-  --ink2:#2a2a2a;
-  --muted:#6b7280;
-  --border:#e5e7eb;
-  --border2:#d1d5db;
-  --accent:#111111;
-  --green:#16a34a;
-  --green-pale:#f0fdf4;
-  --green-border:#86efac;
-}
+    /* ── Nav ── */
+    nav {
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      height: 56px;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .nav-brand {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-right: auto;
+    }
+    .nav-link {
+      font-size: 13px;
+      color: var(--dim);
+      text-decoration: none;
+      margin-left: 28px;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--ink); }
+    .nav-cta {
+      margin-left: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.82; }
 
-html{scroll-behavior:smooth}
+    /* ── Feature check rows ── */
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+      color: #333;
+    }
+    .check-row:last-child { border-bottom: none; }
+    .check-icon {
+      width: 16px; height: 16px;
+      color: var(--green);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
 
-body{
-  background:var(--bg);
-  color:var(--ink);
-  font-family:'Inter',sans-serif;
-  font-size:15px;
-  line-height:1.6;
-  overflow-x:hidden;
-}
+    .category-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--dim);
+      padding: 20px 0 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4px;
+    }
 
-/* ── NAV ── */
-nav{
-  position:sticky;top:0;z-index:100;
-  padding:0 48px;
-  height:64px;
-  display:flex;align-items:center;
-  background:rgba(250,250,250,.95);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
-}
+    /* ── Price highlight ── */
+    .price-big {
+      font-size: 72px;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
 
-.nav-logo{
-  font-size:18px;font-weight:800;
-  color:var(--ink);text-decoration:none;
-  margin-right:auto;letter-spacing:-.01em;
-}
+    /* ── Trust badges ── */
+    .trust-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dim);
+      background: #fff;
+    }
 
-.nav-links{display:flex;align-items:center;gap:24px;margin-right:24px}
-.nav-links a{
-  font-size:14px;color:var(--muted);text-decoration:none;
-  transition:color .2s;font-weight:400;
-}
-.nav-links a:hover{color:var(--ink)}
+    .highlight-box {
+      background: #111;
+      color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
 
-.btn-nav{
-  background:var(--ink);color:#fff;
-  font-size:13px;font-weight:600;
-  padding:9px 20px;border:none;border-radius:8px;
-  cursor:pointer;text-decoration:none;display:inline-block;
-  transition:background .2s,transform .1s;
-}
-.btn-nav:hover{background:var(--ink2);transform:translateY(-1px)}
+    /* Comparison row */
+    .compare-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-label { color: var(--dim); }
+    .compare-val { font-weight: 600; }
+    .compare-val.green { color: var(--green); }
 
-.btn-ghost{
-  background:transparent;color:var(--ink);
-  font-size:14px;font-weight:500;
-  padding:9px 16px;border:1px solid var(--border2);border-radius:8px;
-  cursor:pointer;text-decoration:none;display:inline-block;
-  transition:border-color .2s;margin-right:8px;
-}
-.btn-ghost:hover{border-color:var(--ink)}
-
-/* ── HERO ── */
-.hero{
-  padding:100px 48px 80px;
-  text-align:center;
-  max-width:900px;
-  margin:0 auto;
-}
-
-.hero-tag{
-  display:inline-flex;align-items:center;gap:6px;
-  background:#f0f0f0;
-  padding:5px 12px;border-radius:100px;
-  font-size:12px;font-weight:500;color:var(--muted);
-  margin-bottom:28px;
-}
-.hero-tag::before{
-  content:'';width:6px;height:6px;border-radius:50%;background:var(--green);
-}
-
-.hero-title{
-  font-size:clamp(44px,6vw,72px);
-  font-weight:800;
-  letter-spacing:-.03em;
-  line-height:1.0;
-  margin-bottom:20px;
-  color:var(--ink);
-}
-
-.hero-sub{
-  font-size:18px;font-weight:400;color:var(--muted);
-  max-width:540px;margin:0 auto 40px;
-  line-height:1.6;
-}
-
-.hero-actions{
-  display:flex;gap:12px;justify-content:center;margin-bottom:60px;
-}
-
-.btn-primary{
-  background:var(--ink);color:#fff;
-  font-size:15px;font-weight:600;
-  padding:13px 32px;border:none;border-radius:10px;
-  cursor:pointer;text-decoration:none;display:inline-block;
-  transition:background .2s,transform .1s,box-shadow .2s;
-}
-.btn-primary:hover{background:var(--ink2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
-
-.btn-outline{
-  background:transparent;color:var(--ink);
-  font-size:15px;font-weight:500;
-  padding:13px 28px;border:1.5px solid var(--border2);border-radius:10px;
-  cursor:pointer;text-decoration:none;display:inline-block;
-  transition:border-color .2s;
-}
-.btn-outline:hover{border-color:var(--ink)}
-
-.hero-social{
-  display:flex;align-items:center;justify-content:center;gap:20px;
-  font-size:13px;color:var(--muted);
-}
-.hero-social-item{display:flex;align-items:center;gap:6px}
-.check-icon{color:var(--green)}
-
-/* ── LOGOS ── */
-.logos{
-  padding:40px 48px;
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-  text-align:center;
-}
-.logos-label{
-  font-size:12px;font-weight:500;color:var(--muted);
-  letter-spacing:.05em;margin-bottom:20px;
-}
-.logos-row{
-  display:flex;align-items:center;justify-content:center;gap:48px;
-}
-.logo-co{
-  font-size:14px;font-weight:700;color:#cbd5e1;
-  letter-spacing:.06em;
-}
-
-/* ── FEATURES ── */
-.features{
-  padding:100px 48px;
-  max-width:1100px;margin:0 auto;
-}
-
-.section-heading{
-  text-align:center;margin-bottom:60px;
-}
-.section-heading h2{
-  font-size:clamp(32px,3.5vw,44px);
-  font-weight:800;letter-spacing:-.02em;margin-bottom:12px;
-}
-.section-heading p{font-size:16px;color:var(--muted)}
-
-.features-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:24px;
-}
-
-.f-card{
-  padding:32px 28px;
-  border:1px solid var(--border);
-  border-radius:16px;
-  background:var(--white);
-  transition:border-color .25s,box-shadow .25s,transform .25s;
-}
-.f-card:hover{
-  border-color:var(--border2);
-  box-shadow:0 8px 32px rgba(0,0,0,.06);
-  transform:translateY(-3px);
-}
-.f-icon{
-  width:44px;height:44px;
-  background:#f5f5f5;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;margin-bottom:16px;
-}
-.f-title{font-size:16px;font-weight:700;margin-bottom:8px}
-.f-desc{font-size:13px;color:var(--muted);line-height:1.7}
-
-/* ── PRICING (CENTERPIECE — AngelList style) ── */
-.pricing{
-  padding:100px 48px;
-  background:var(--white);
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
-}
-
-.pricing-inner{
-  max-width:900px;margin:0 auto;
-}
-
-.pricing-header{text-align:center;margin-bottom:60px}
-.pricing-header h2{
-  font-size:clamp(36px,4vw,52px);
-  font-weight:800;letter-spacing:-.02em;margin-bottom:12px;
-}
-.pricing-header p{font-size:17px;color:var(--muted)}
-
-/* Two-column pricing layout */
-.pricing-layout{
-  display:grid;
-  grid-template-columns:1fr 1.4fr;
-  gap:40px;
-  align-items:start;
-}
-
-/* Left: price highlight */
-.price-highlight{
-  background:var(--ink);
-  border-radius:20px;
-  padding:44px 40px;
-  color:#fff;
-  position:sticky;top:80px;
-}
-
-.ph-label{
-  font-size:11px;font-weight:600;letter-spacing:.15em;
-  text-transform:uppercase;color:rgba(255,255,255,.5);
-  margin-bottom:20px;
-}
-
-.ph-price{
-  font-size:64px;font-weight:800;letter-spacing:-.03em;
-  line-height:1;margin-bottom:4px;
-}
-.ph-price span{font-size:24px;font-weight:400;color:rgba(255,255,255,.5);vertical-align:super;font-size:20px}
-
-.ph-period{
-  font-size:14px;color:rgba(255,255,255,.5);
-  margin-bottom:32px;
-}
-
-.ph-desc{
-  font-size:15px;color:rgba(255,255,255,.75);
-  line-height:1.65;margin-bottom:36px;
-}
-
-.ph-cta{
-  width:100%;padding:14px;
-  background:#fff;color:var(--ink);
-  border:none;border-radius:10px;
-  font-size:15px;font-weight:700;
-  cursor:pointer;
-  transition:background .2s,transform .1s;
-  text-align:center;display:block;
-  text-decoration:none;
-}
-.ph-cta:hover{background:#f0f0f0;transform:translateY(-1px)}
-
-.ph-guarantee{
-  margin-top:16px;
-  text-align:center;
-  font-size:12px;color:rgba(255,255,255,.4);
-  display:flex;align-items:center;justify-content:center;gap:6px;
-}
-
-/* Right: feature list */
-.feature-list{
-  display:flex;flex-direction:column;gap:0;
-}
-
-.fl-category{
-  margin-bottom:32px;
-}
-.fl-category-title{
-  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:12px;
-  padding-bottom:10px;border-bottom:1px solid var(--border);
-}
-
-.fl-items{display:flex;flex-direction:column;gap:0}
-.fl-item{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:12px 0;
-  border-bottom:1px solid var(--border);
-}
-.fl-item:last-child{border-bottom:none}
-.fl-check{
-  width:20px;height:20px;border-radius:50%;
-  background:var(--green-pale);border:1px solid var(--green-border);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;font-size:11px;color:var(--green);
-  margin-top:1px;
-}
-.fl-text{font-size:14px;color:var(--ink);line-height:1.4}
-.fl-sub{font-size:12px;color:var(--muted);margin-top:2px}
-
-/* Enterprise add-on */
-.enterprise-note{
-  margin-top:40px;
-  padding:24px 28px;
-  border:1px solid var(--border);
-  border-radius:14px;
-  display:flex;align-items:center;gap:20px;
-}
-.en-text h3{font-size:15px;font-weight:700;margin-bottom:4px}
-.en-text p{font-size:13px;color:var(--muted)}
-.en-cta{
-  flex-shrink:0;
-  background:transparent;color:var(--ink);
-  font-size:13px;font-weight:600;
-  padding:10px 20px;
-  border:1.5px solid var(--border2);border-radius:8px;
-  cursor:pointer;text-decoration:none;white-space:nowrap;
-  transition:border-color .2s;
-}
-.en-cta:hover{border-color:var(--ink)}
-
-/* ── TESTIMONIALS ── */
-.testimonials{
-  padding:100px 48px;
-  max-width:1100px;margin:0 auto;
-}
-
-.testi-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:20px;margin-top:48px;
-}
-.testi-card{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:16px;padding:28px;
-  transition:box-shadow .25s,transform .25s;
-}
-.testi-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.06);transform:translateY(-3px)}
-
-.testi-stars{display:flex;gap:3px;margin-bottom:14px;color:#f59e0b;font-size:13px}
-.testi-text{font-size:14px;line-height:1.65;color:var(--ink2);margin-bottom:20px;font-style:italic}
-.testi-author{display:flex;align-items:center;gap:10px;border-top:1px solid var(--border);padding-top:16px}
-.testi-av{
-  width:36px;height:36px;border-radius:50%;
-  background:var(--ink);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:700;color:#fff;
-}
-.testi-name{font-size:13px;font-weight:600}
-.testi-role{font-size:11px;color:var(--muted)}
-
-/* ── HOW IT WORKS ── */
-.how{
-  padding:100px 48px;
-  background:var(--white);
-  border-top:1px solid var(--border);
-}
-
-.how-inner{max-width:900px;margin:0 auto}
-
-.how-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:32px;margin-top:48px;
-}
-.how-step{text-align:center}
-.how-num{
-  width:48px;height:48px;border-radius:50%;
-  background:var(--bg);border:1.5px solid var(--border2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:800;color:var(--ink);
-  margin:0 auto 16px;
-}
-.how-title{font-size:16px;font-weight:700;margin-bottom:8px}
-.how-desc{font-size:13px;color:var(--muted);line-height:1.65}
-
-/* ── CTA ── */
-.cta{
-  padding:100px 48px;
-  text-align:center;
-}
-.cta h2{
-  font-size:clamp(36px,4.5vw,56px);
-  font-weight:800;letter-spacing:-.02em;
-  margin-bottom:16px;
-}
-.cta p{font-size:17px;color:var(--muted);margin-bottom:36px}
-.cta-actions{display:flex;gap:12px;justify-content:center}
-
-/* ── FOOTER ── */
-footer{
-  padding:60px 48px 40px;
-  border-top:1px solid var(--border);
-  background:var(--white);
-}
-.footer-inner{
-  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
-  gap:60px;margin-bottom:40px;
-}
-.footer-logo{font-size:18px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
-.footer-desc{font-size:13px;color:var(--muted);line-height:1.6}
-.fc-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
-.fc a{display:block;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:10px;transition:color .2s}
-.fc a:hover{color:var(--ink)}
-.footer-bottom{
-  display:flex;justify-content:space-between;
-  padding-top:28px;border-top:1px solid var(--border);
-  font-size:12px;color:var(--muted);
-}
-
-/* ── REVEAL ── */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
-.reveal.visible{opacity:1;transform:none}
-
-@media(max-width:900px){
-  .pricing-layout,.features-grid,.testi-grid,.how-grid,.footer-inner{grid-template-columns:1fr}
-  .price-highlight{position:static}
-  .hero,.pricing,.features,.testimonials{padding-left:24px;padding-right:24px}
-  .logos-row{flex-wrap:wrap;gap:24px}
-}
-</style>
+    /* FAQ */
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      font-size: 14px;
+      font-weight: 500;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink);
+      text-align: left;
+    }
+    .faq-a {
+      font-size: 13.5px;
+      color: var(--dim);
+      line-height: 1.65;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.23, 1, 0.32, 1), padding 0.3s;
+    }
+    .faq-a.open { max-height: 200px; padding-bottom: 16px; }
+  </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">Stackr</a>
-  <div class="nav-links">
-    <a href="#features">Features</a>
-    <a href="#how">How it works</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#">Docs</a>
-  </div>
-  <a href="#" class="btn-ghost">Log in</a>
-  <a href="#" class="btn-nav">Get started →</a>
-</nav>
+  <!-- Nav -->
+  <nav>
+    <span class="nav-brand">STACKR</span>
+    <a class="nav-link" href="#">Product</a>
+    <a class="nav-link" href="#">SPVs</a>
+    <a class="nav-link" href="#">Investors</a>
+    <a class="nav-link" href="#">Founders</a>
+    <a href="#" class="nav-cta">Open a Cap Table</a>
+  </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-tag">Equity management for startups</div>
-  <h1 class="hero-title reveal">The simplest way<br>to manage your cap table.</h1>
-  <p class="hero-sub reveal">STACKR makes equity management simple, compliant, and affordable. One flat fee. No surprises.</p>
-  <div class="hero-actions reveal">
-    <a href="#pricing" class="btn-primary">See pricing →</a>
-    <a href="#features" class="btn-outline">Explore features</a>
+  <!-- Hero strip -->
+  <div style="background: var(--bg2); border-bottom: 1px solid var(--border); padding: 12px 40px; display: flex; align-items: center; gap: 16px; justify-content: center;">
+    <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--green);"></div>
+    <span style="font-size: 13px; color: var(--dim);">Transparent flat-fee pricing. No percentage of round. No hidden setup costs.</span>
   </div>
-  <div class="hero-social reveal">
-    <div class="hero-social-item"><span class="check-icon">✓</span> No per-stakeholder fees</div>
-    <div class="hero-social-item"><span class="check-icon">✓</span> SAFE-ready</div>
-    <div class="hero-social-item"><span class="check-icon">✓</span> 409A included</div>
-    <div class="hero-social-item"><span class="check-icon">✓</span> Cancel anytime</div>
-  </div>
-</section>
 
-<!-- LOGOS -->
-<div class="logos">
-  <div class="logos-label">TRUSTED BY 1,800+ STARTUPS</div>
-  <div class="logos-row">
-    <div class="logo-co">NOVA</div>
-    <div class="logo-co">BRANCHWORK</div>
-    <div class="logo-co">FIELDSET</div>
-    <div class="logo-co">ATMOS</div>
-    <div class="logo-co">PILLAR</div>
-    <div class="logo-co">VESPER</div>
-  </div>
-</div>
+  <!-- Main pricing section -->
+  <main style="max-width: 1100px; margin: 0 auto; padding: 72px 40px 100px;">
 
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="section-heading reveal">
-    <h2>Everything your cap table needs.</h2>
-    <p>Built for early-stage startups. Grows with you to Series B and beyond.</p>
-  </div>
-  <div class="features-grid">
-    <div class="f-card reveal">
-      <div class="f-icon">📋</div>
-      <div class="f-title">Cap Table Management</div>
-      <div class="f-desc">Maintain a clean, audit-ready cap table. Track all equity classes, SAFEs, convertible notes, and warrants in one place.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-icon">📄</div>
-      <div class="f-title">Option Pool & Grants</div>
-      <div class="f-desc">Issue stock options with one click. Automated grant letters, exercise notices, and 83(b) election reminders.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-icon">🔢</div>
-      <div class="f-title">409A Valuation</div>
-      <div class="f-desc">Annual 409A valuations included at no extra charge. Defend any audit with our IRS-compliant methodology.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-icon">📊</div>
-      <div class="f-title">Scenario Modeling</div>
-      <div class="f-desc">Model exit scenarios, dilution, and waterfall analysis. Know exactly what everyone gets at any exit price.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-icon">🤝</div>
-      <div class="f-title">Investor Portal</div>
-      <div class="f-desc">Give investors a clean, read-only view of their equity. Stop sending spreadsheets and PDF cap table exports.</div>
-    </div>
-    <div class="f-card reveal">
-      <div class="f-icon">⚖️</div>
-      <div class="f-title">Legal Templates</div>
-      <div class="f-desc">YC SAFE, KISS, option agreements, board consents — all included. Legal documents generated in seconds.</div>
-    </div>
-  </div>
-</section>
+    <!-- Page header -->
+    <div style="text-align: center; margin-bottom: 72px;">
+      <h1 style="font-size: clamp(40px, 6vw, 64px); font-weight: 700; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 16px;">
+        One plan. One price.<br/>No surprises.
+      </h1>
+      <p style="font-size: 17px; color: var(--dim); max-width: 440px; margin: 0 auto; line-height: 1.65;">
+        Everything you need to manage equity, run SPVs, and keep your cap table clean — for a single flat monthly fee.
+      </p>
 
-<!-- HOW IT WORKS -->
-<section class="how" id="how">
-  <div class="how-inner">
-    <div class="section-heading reveal">
-      <h2>Up and running in minutes.</h2>
-      <p>No lawyers required to get started.</p>
-    </div>
-    <div class="how-grid">
-      <div class="how-step reveal">
-        <div class="how-num">1</div>
-        <div class="how-title">Import or create</div>
-        <div class="how-desc">Import an existing cap table from Airtable, Excel, or Carta. Or start fresh — it takes 5 minutes.</div>
-      </div>
-      <div class="how-step reveal">
-        <div class="how-num">2</div>
-        <div class="how-title">Invite your team</div>
-        <div class="how-desc">Add your co-founders, lawyers, and investors. Set permissions so everyone sees exactly what they need.</div>
-      </div>
-      <div class="how-step reveal">
-        <div class="how-num">3</div>
-        <div class="how-title">Manage everything</div>
-        <div class="how-desc">Issue grants, run scenarios, generate documents, and stay compliant — all from one clean dashboard.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING (CENTERPIECE) -->
-<section class="pricing" id="pricing">
-  <div class="pricing-inner">
-    <div class="pricing-header reveal">
-      <h2>One flat fee. No surprises.</h2>
-      <p>We believe equity management shouldn't cost equity. So we charge a flat fee — regardless of your headcount or stakeholder count.</p>
-    </div>
-    <div class="pricing-layout">
-      <!-- Left: Price -->
-      <div class="price-highlight reveal">
-        <div class="ph-label">Flat-fee Plan</div>
-        <div class="ph-price"><span>$</span>149</div>
-        <div class="ph-period">per month, billed annually · or $199/mo</div>
-        <div class="ph-desc">
-          Everything you need to manage your cap table from pre-seed through Series B. No per-user fees. No per-stakeholder charges. No hidden extras.
+      <!-- Trust pills -->
+      <div style="display: flex; gap: 10px; justify-content: center; margin-top: 28px; flex-wrap: wrap;">
+        <div class="trust-pill">
+          <i data-lucide="shield-check" style="width: 13px; height: 13px; color: var(--green);"></i>
+          SOC 2 Type II
         </div>
-        <a href="#" class="ph-cta">Start 14-day free trial →</a>
-        <div class="ph-guarantee">
-          <span>🔒</span>
-          No credit card required to start
+        <div class="trust-pill">
+          <i data-lucide="lock" style="width: 13px; height: 13px;"></i>
+          409A Defensible
+        </div>
+        <div class="trust-pill">
+          <i data-lucide="file-text" style="width: 13px; height: 13px;"></i>
+          EDGAR Compatible
+        </div>
+        <div class="trust-pill">
+          <i data-lucide="users" style="width: 13px; height: 13px;"></i>
+          4,200+ Cap Tables
         </div>
       </div>
+    </div>
 
-      <!-- Right: Feature list -->
-      <div class="feature-list reveal">
-        <div class="fl-category">
-          <div class="fl-category-title">Cap Table</div>
-          <div class="fl-items">
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Unlimited stakeholders</div>
-                <div class="fl-sub">No per-person pricing. Ever.</div>
-              </div>
-            </div>
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">All equity instruments</div>
-                <div class="fl-sub">Common, preferred, SAFEs, convertibles, warrants</div>
-              </div>
-            </div>
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Audit trail & version history</div>
-                <div class="fl-sub">Every change logged with timestamp and user</div>
-              </div>
-            </div>
+    <!-- Two-column layout -->
+    <div style="display: grid; grid-template-columns: 1fr 1.05fr; gap: 64px; align-items: start;">
+
+      <!-- Left: Price + info -->
+      <div>
+        <!-- Flat fee highlight -->
+        <div style="background: var(--ink); color: #fff; border-radius: 16px; padding: 36px; margin-bottom: 24px;">
+          <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.4); margin-bottom: 16px;">Startup Plan — Flat Fee</div>
+          <div style="display: flex; align-items: baseline; gap: 4px; margin-bottom: 8px;">
+            <span style="font-size: 16px; font-weight: 500; color: rgba(255,255,255,0.6); margin-top: -8px;">$</span>
+            <span class="price-big">49</span>
+            <span style="font-size: 16px; color: rgba(255,255,255,0.5); font-weight: 400;">/month</span>
+          </div>
+          <p style="font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 24px; line-height: 1.5;">Billed annually at $588/yr. Month-to-month at $59/mo.</p>
+
+          <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #fff; color: var(--ink); font-size: 14px; font-weight: 600; border-radius: 8px; padding: 14px; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">
+            Open Your Cap Table
+            <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+          </a>
+        </div>
+
+        <!-- Comparison table -->
+        <div style="background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+          <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim); margin-bottom: 16px;">How STACKR compares</div>
+          <div class="compare-row">
+            <span class="compare-label">Setup fee</span>
+            <span class="compare-val green">$0</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">Percentage of round</span>
+            <span class="compare-val green">$0</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">SPV formation</span>
+            <span class="compare-val green">Included</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">Shareholder limit</span>
+            <span class="compare-val green">Unlimited</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">409A valuations / yr</span>
+            <span class="compare-val">2 included</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-label">Legal document generation</span>
+            <span class="compare-val green">Unlimited</span>
           </div>
         </div>
 
-        <div class="fl-category">
-          <div class="fl-category-title">Equity Compensation</div>
-          <div class="fl-items">
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Stock option grants</div>
-                <div class="fl-sub">ISO, NSO, and restricted stock units</div>
-              </div>
-            </div>
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Vesting schedule automation</div>
-                <div class="fl-sub">Cliff, standard, and custom vesting rules</div>
-              </div>
-            </div>
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Annual 409A valuation included</div>
-                <div class="fl-sub">IRS-compliant, defensible methodology</div>
-              </div>
-            </div>
+        <!-- Money-back guarantee -->
+        <div style="border: 1px solid var(--border); border-radius: 10px; padding: 18px; display: flex; gap: 14px; align-items: flex-start;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background: #f0fdf4; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i data-lucide="rotate-ccw" style="width: 18px; height: 18px; color: var(--green);"></i>
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">30-day money-back guarantee</div>
+            <div style="font-size: 12px; color: var(--dim); line-height: 1.5;">Not the right fit? We'll refund your first payment. No questions, no hassle.</div>
           </div>
         </div>
+      </div>
 
-        <div class="fl-category">
-          <div class="fl-category-title">Modeling & Documents</div>
-          <div class="fl-items">
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Exit & dilution modeling</div>
-                <div class="fl-sub">Unlimited scenario runs, waterfall analysis</div>
-              </div>
-            </div>
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Legal document generation</div>
-                <div class="fl-sub">YC SAFE, KISS, board consents, and more</div>
-              </div>
-            </div>
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Investor portal access</div>
-                <div class="fl-sub">Read-only dashboards for all stakeholders</div>
-              </div>
-            </div>
-          </div>
+      <!-- Right: Feature checklist -->
+      <div style="background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 36px;">
+        <div style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">Everything included</div>
+        <p style="font-size: 13px; color: var(--dim); margin-bottom: 8px;">Every feature. No tiers. No upgrades required.</p>
+
+        <!-- Category: Cap Table -->
+        <div class="category-label">Cap Table Management</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Unlimited shareholders and security classes</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Safe, convertible note, and preferred stock modeling</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Fully diluted waterfall analysis</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Real-time cap table audit log</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>409A defensible valuation reports (2/yr)</div>
+
+        <!-- Category: SPV -->
+        <div class="category-label">SPV Formation</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Delaware LLC formation, included</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Subscription documents, auto-generated</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>K-1 tax document preparation</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Investor management portal</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Wire and ACH collection built-in</div>
+
+        <!-- Category: Legal -->
+        <div class="category-label">Legal Documents</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Standard VCs / NDAs / Term sheets</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Stock option plan and grant generation</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Board consent and written resolution builder</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>83(b) election filing assistance</div>
+
+        <!-- Category: Investor Relations -->
+        <div class="category-label">Investor Relations</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Secure investor data room</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Update and announcement broadcasts</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Electronic signature (all documents)</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Investor self-service portal</div>
+
+        <!-- Category: Integrations -->
+        <div class="category-label">Integrations &amp; Export</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>QuickBooks and Carta import/export</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Slack and email notifications</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>Audit-ready Excel and PDF exports</div>
+        <div class="check-row"><i data-lucide="check" class="check-icon"></i>REST API access</div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div style="max-width: 680px; margin: 80px auto 0;">
+      <h2 style="font-size: 24px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 8px;">Frequently asked questions</h2>
+      <p style="font-size: 14px; color: var(--dim); margin-bottom: 32px;">We don't hide complexity in the fine print. Here's how pricing actually works.</p>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Is there really no percentage taken from funding rounds?
+          <i data-lucide="chevron-down" style="width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.3s;"></i>
+        </button>
+        <div class="faq-a">Correct. STACKR charges a flat monthly subscription with no success fees, no percentage of capital raised, and no per-transaction charges. The $49/month covers your entire equity stack regardless of round size.
         </div>
+      </div>
 
-        <div class="fl-category" style="margin-bottom:0">
-          <div class="fl-category-title">Support</div>
-          <div class="fl-items">
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Dedicated onboarding specialist</div>
-                <div class="fl-sub">We migrate your existing cap table for free</div>
-              </div>
-            </div>
-            <div class="fl-item">
-              <div class="fl-check">✓</div>
-              <div>
-                <div class="fl-text">Priority email & chat support</div>
-                <div class="fl-sub">4-hour response guarantee</div>
-              </div>
-            </div>
-          </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What counts as a shareholder?
+          <i data-lucide="chevron-down" style="width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.3s;"></i>
+        </button>
+        <div class="faq-a">Any individual or entity holding equity in your company — common shareholders, SAFE holders, option holders, warrant holders, and SPV members all count. There is no cap on shareholders at any plan level.
         </div>
+      </div>
 
-        <!-- Enterprise note -->
-        <div class="enterprise-note reveal">
-          <div class="en-text">
-            <h3>Need enterprise features?</h3>
-            <p>Custom SLAs, SSO, audit logs, and dedicated support for $500+/mo.</p>
-          </div>
-          <a href="#" class="en-cta">Talk to sales</a>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How does SPV formation work with the flat fee?
+          <i data-lucide="chevron-down" style="width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.3s;"></i>
+        </button>
+        <div class="faq-a">Your subscription includes formation of one Delaware LLC SPV per month. Additional SPVs are $199 each. State filing fees (~$90) are passed through at cost — we don't mark them up.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do you offer equity-based pricing for pre-revenue startups?
+          <i data-lucide="chevron-down" style="width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.3s;"></i>
+        </button>
+        <div class="faq-a">Yes. Companies that have raised under $500K total and are within 18 months of incorporation can apply for our Founder Access program — six months of STACKR at $9/month.
+        </div>
+      </div>
+
+      <div class="faq-item" style="border-bottom: none;">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I migrate from Carta or AngelList?
+          <i data-lucide="chevron-down" style="width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.3s;"></i>
+        </button>
+        <div class="faq-a">Our migration team handles Carta, AngelList, and Pulley imports at no additional cost. Most companies are fully operational on STACKR within 48 hours of signing up.
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div class="section-heading reveal">
-    <h2>Founders trust Stackr.</h2>
-    <p>From pre-seed to Series B, we've got your cap table covered.</p>
-  </div>
-  <div class="testi-grid">
-    <div class="testi-card reveal">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"We switched from Carta after our renewal quote came in at $8,000 for the year. Stackr does everything we need at a fraction of the cost — and the UX is actually better."</p>
-      <div class="testi-author">
-        <div class="testi-av">AK</div>
-        <div>
-          <div class="testi-name">Alex Kim</div>
-          <div class="testi-role">CEO, Fieldset (Seed stage)</div>
-        </div>
+    <!-- Bottom CTA -->
+    <div style="margin-top: 80px; text-align: center; border-top: 1px solid var(--border); padding-top: 64px;">
+      <h2 style="font-size: 32px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 12px;">Your cap table is overdue for an upgrade.</h2>
+      <p style="font-size: 15px; color: var(--dim); margin-bottom: 32px; max-width: 380px; margin-left: auto; margin-right: auto; line-height: 1.6;">Join 4,200 founder teams who stopped paying percentage fees and started paying one honest price.</p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="#" style="background: var(--ink); color: #fff; font-size: 14px; font-weight: 600; padding: 14px 28px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.82'" onmouseout="this.style.opacity='1'">
+          Open Your Cap Table <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+        </a>
+        <a href="#" style="background: #fff; color: var(--ink); font-size: 14px; font-weight: 500; padding: 14px 28px; border-radius: 8px; border: 1px solid var(--border); text-decoration: none; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--ink)'" onmouseout="this.style.borderColor='var(--border)'">
+          Talk to a Founder Advisor
+        </a>
       </div>
     </div>
-    <div class="testi-card reveal">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"The 409A valuation alone is worth the price. Our lawyers were impressed by the documentation quality — said it was better than most they see from more expensive platforms."</p>
-      <div class="testi-author">
-        <div class="testi-av">RG</div>
-        <div>
-          <div class="testi-name">Rina Gupta</div>
-          <div class="testi-role">CFO, Atmos Labs (Series A)</div>
-        </div>
-      </div>
-    </div>
-    <div class="testi-card reveal">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"The flat pricing model made it easy to justify to the board. No surprises at renewal. The scenario modeling has become our go-to for investor conversations."</p>
-      <div class="testi-author">
-        <div class="testi-av">TJ</div>
-        <div>
-          <div class="testi-name">Tom Jacobs</div>
-          <div class="testi-role">Founder, Vesper AI (Pre-seed)</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  </main>
 
-<!-- CTA -->
-<section class="cta">
-  <h2 class="reveal">Start managing your<br>cap table today.</h2>
-  <p class="reveal">14-day free trial. No credit card. Free migration from any platform.</p>
-  <div class="cta-actions reveal">
-    <a href="#" class="btn-primary" style="font-size:16px;padding:14px 36px">Start free trial →</a>
-    <a href="#" class="btn-outline" style="font-size:16px;padding:14px 28px">Talk to sales</a>
-  </div>
-</section>
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--border); padding: 32px 40px; display: flex; justify-content: space-between; align-items: center; background: #fff;">
+    <span style="font-weight: 700; font-size: 14px; letter-spacing: -0.02em;">STACKR</span>
+    <span style="font-size: 12px; color: var(--dim);">&copy; 2024 Stackr Technologies, Inc. All rights reserved.</span>
+    <div style="display: flex; gap: 20px;">
+      <a href="#" style="font-size: 12px; color: var(--dim); text-decoration: none;">Privacy</a>
+      <a href="#" style="font-size: 12px; color: var(--dim); text-decoration: none;">Terms</a>
+      <a href="#" style="font-size: 12px; color: var(--dim); text-decoration: none;">Security</a>
+    </div>
+  </footer>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-logo">Stackr</div>
-      <div class="footer-desc">Simple, flat-fee equity management for startups. Cap tables, option grants, 409A valuations, and legal documents — all in one place.</div>
-    </div>
-    <div class="fc">
-      <div class="fc-title">Product</div>
-      <a href="#">Cap Table</a>
-      <a href="#">Option Grants</a>
-      <a href="#">409A</a>
-      <a href="#">Scenarios</a>
-    </div>
-    <div class="fc">
-      <div class="fc-title">Company</div>
-      <a href="#">About</a>
-      <a href="#">Blog</a>
-      <a href="#">Careers</a>
-    </div>
-    <div class="fc">
-      <div class="fc-title">Legal</div>
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Security</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2024 Stackr, Inc. Not a law firm. Not legal advice.</span>
-    <span>Simple equity. Flat fee.</span>
-  </div>
-</footer>
+  <script>
+    lucide.createIcons();
 
-<script>
-const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 70);
-      io.unobserve(e.target);
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const answer = item.querySelector('.faq-a');
+      const chevron = btn.querySelector('[data-lucide="chevron-down"]');
+      const isOpen = answer.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-q [data-lucide="chevron-down"]').forEach(c => c.style.transform = 'rotate(0deg)');
+
+      if (!isOpen) {
+        answer.classList.add('open');
+        chevron.style.transform = 'rotate(180deg)';
+      }
     }
-  });
-}, { threshold: 0.07 });
-reveals.forEach(el => io.observe(el));
-</script>
+  </script>
 </body>
 </html>

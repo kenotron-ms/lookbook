@@ -3,780 +3,786 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FRAME — We Make the World Look Better</title>
+<title>FRAME — Creative Production Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,700;0,900;1,300&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #060608;
-  --surface: #0D0D12;
-  --card: #12121A;
-  --border: rgba(255,255,255,0.07);
-  --border-bright: rgba(255,255,255,0.13);
-  --white: #FFFFFF;
-  --gray-200: #E2E0E8;
-  --gray-400: #9490A8;
-  --gray-600: #4A4760;
-  --cyan: #00D9FF;
-  --pink: #FF0080;
-  --grad: linear-gradient(135deg, var(--cyan), var(--pink));
-  --grad-text: linear-gradient(135deg, #00D9FF, #FF0080);
-}
-
-html { scroll-behavior: smooth; }
-body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--white); overflow-x: hidden; }
-
-/* ── MIX-BLEND NAV ────────────────────────────────────────── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-  padding: 0 56px; height: 64px;
-  display: flex; align-items: center; justify-content: space-between;
-  mix-blend-mode: difference;
-}
-
-.nav-logo {
-  font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px;
-  color: var(--white); display: flex; align-items: center; gap: 10px;
-}
-
-.nav-logo-f {
-  width: 30px; height: 30px;
-  border: 2px solid var(--white); border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 0.85rem;
-}
-
-.nav-links { display: flex; gap: 0; list-style: none; }
-.nav-links a { display: block; padding: 0 18px; line-height: 64px; font-size: 0.8rem; font-weight: 500; color: var(--white); text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
-.nav-links a:hover { opacity: 1; }
-
-.nav-contact {
-  padding: 9px 22px; border: 1.5px solid var(--white); border-radius: 100px;
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 600;
-  color: var(--white); text-decoration: none; opacity: 0.8; transition: opacity 0.2s;
-}
-.nav-contact:hover { opacity: 1; }
-
-/* ── HERO — 3D CUBE ───────────────────────────────────────── */
-.hero {
-  height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
-}
-
-/* Gradient blur background */
-.hero-bg-gradient {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse at 30% 40%, rgba(0,217,255,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 70% 60%, rgba(255,0,128,0.12) 0%, transparent 50%),
-    var(--bg);
-}
-
-/* 3D scene container */
-.scene-3d {
-  position: relative; width: 280px; height: 280px;
-  perspective: 800px; margin-bottom: 60px;
-}
-
-.cube {
-  width: 100%; height: 100%;
-  position: relative; transform-style: preserve-3d;
-  animation: rotateCube 12s linear infinite;
-}
-
-@keyframes rotateCube {
-  0% { transform: rotateX(-15deg) rotateY(0deg); }
-  100% { transform: rotateX(-15deg) rotateY(360deg); }
-}
-
-.face {
-  position: absolute; width: 100%; height: 100%;
-  border: 1px solid rgba(255,255,255,0.08);
-  display: flex; align-items: center; justify-content: center;
-  backface-visibility: hidden;
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-}
-
-.face-front {
-  background: linear-gradient(135deg, rgba(0,217,255,0.08), rgba(255,0,128,0.08));
-  transform: translateZ(140px);
-  border: 1px solid rgba(0,217,255,0.2);
-}
-
-.face-back {
-  background: linear-gradient(135deg, rgba(255,0,128,0.08), rgba(0,217,255,0.08));
-  transform: rotateY(180deg) translateZ(140px);
-  border: 1px solid rgba(255,0,128,0.2);
-}
-
-.face-right {
-  background: rgba(255,255,255,0.02);
-  transform: rotateY(90deg) translateZ(140px);
-}
-
-.face-left {
-  background: rgba(255,255,255,0.02);
-  transform: rotateY(-90deg) translateZ(140px);
-}
-
-.face-top {
-  background: linear-gradient(rgba(255,255,255,0.04), transparent);
-  transform: rotateX(90deg) translateZ(140px);
-}
-
-.face-bottom {
-  background: transparent;
-  transform: rotateX(-90deg) translateZ(140px);
-}
-
-/* FRAME text on front face */
-.face-front::after {
-  content: 'FRAME'; font-size: 3rem; font-weight: 900;
-  letter-spacing: -2px; color: rgba(255,255,255,0.8);
-  text-shadow: 0 0 40px rgba(0,217,255,0.5), 0 0 80px rgba(255,0,128,0.3);
-}
-
-.hero-content {
-  text-align: center; position: relative; z-index: 1;
-}
-
-.hero-eyebrow {
-  font-size: 0.72rem; font-weight: 600; letter-spacing: 4px;
-  text-transform: uppercase; color: var(--gray-400); margin-bottom: 16px;
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-}
-
-.hero-eyebrow::before, .hero-eyebrow::after {
-  content: ''; width: 40px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gray-600), transparent);
-}
-
-.hero-title {
-  font-size: clamp(4rem, 9vw, 9rem); font-weight: 800;
-  letter-spacing: -4px; line-height: 0.92; margin-bottom: 24px;
-}
-
-.hero-title .grad-text {
-  background: var(--grad-text);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-
-.hero-sub {
-  font-size: 1.05rem; color: var(--gray-400); line-height: 1.7; font-weight: 300;
-  max-width: 480px; margin: 0 auto 44px;
-}
-
-.hero-cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-
-.btn-grad {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 16px 32px; border: none; border-radius: 100px;
-  background: var(--grad); font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.9rem; font-weight: 700; color: var(--white); cursor: pointer;
-  transition: all 0.25s; text-decoration: none;
-  box-shadow: 0 4px 24px rgba(0,217,255,0.2), 0 4px 24px rgba(255,0,128,0.1);
-}
-.btn-grad:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,217,255,0.3), 0 12px 40px rgba(255,0,128,0.2); }
-
-.btn-ghost-w {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 16px 28px; background: transparent;
-  border: 1px solid var(--border-bright); border-radius: 100px;
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 500;
-  color: var(--gray-200); text-decoration: none; transition: all 0.25s;
-}
-.btn-ghost-w:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
-
-/* scroll indicator */
-.hero-scroll {
-  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-600);
-}
-
-.scroll-dot { width: 4px; height: 28px; border-radius: 100px; background: var(--border-bright); position: relative; overflow: hidden; }
-.scroll-dot::after { content: ''; position: absolute; top: -100%; left: 0; right: 0; height: 100%; border-radius: 100px; background: var(--grad); animation: scrollDot 2s ease infinite; }
-@keyframes scrollDot { 0% { top: -100%; } 100% { top: 200%; } }
-
-/* ── REEL SECTION ─────────────────────────────────────────── */
-.reel-section {
-  position: relative; overflow: hidden; height: 120px;
-  display: flex; align-items: center;
-  background: linear-gradient(135deg, rgba(0,217,255,0.06), rgba(255,0,128,0.06));
-  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-}
-
-.reel-track { display: inline-flex; gap: 64px; animation: reelScroll 24s linear infinite; white-space: nowrap; align-items: center; }
-.reel-item { font-size: 0.72rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-600); }
-.reel-dot { width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg, var(--cyan), var(--pink)); flex-shrink: 0; }
-@keyframes reelScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-/* ── WORK GRID ────────────────────────────────────────────── */
-.work-section { padding: 100px 56px; }
-.work-inner { max-width: 1400px; margin: 0 auto; }
-
-.work-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; gap: 48px; flex-wrap: wrap; }
-.work-header h2 { font-size: clamp(2.5rem, 4.5vw, 4rem); font-weight: 800; letter-spacing: -2px; line-height: 1.05; }
-.work-header h2 .grad { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.work-header p { font-size: 0.9rem; color: var(--gray-400); line-height: 1.7; max-width: 360px; }
-
-.work-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-
-.work-item {
-  background: var(--card); border-radius: 16px; overflow: hidden;
-  border: 1px solid var(--border); transition: border-color 0.3s, transform 0.3s;
-  cursor: pointer; position: relative;
-  opacity: 0; transform: translateY(24px);
-}
-.work-item.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s, border-color 0.3s; }
-.work-item:hover { border-color: var(--border-bright); transform: translateY(-4px) !important; }
-
-.work-item.w8 { grid-column: span 8; }
-.work-item.w4 { grid-column: span 4; }
-.work-item.w5 { grid-column: span 5; }
-.work-item.w7 { grid-column: span 7; }
-.work-item.w6 { grid-column: span 6; }
-
-.work-thumb {
-  width: 100%; aspect-ratio: 16/9;
-  display: flex; align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
-  font-size: 4rem;
-}
-
-.work-item.w4 .work-thumb { aspect-ratio: 4/3; font-size: 3rem; }
-.work-item.w6 .work-thumb { aspect-ratio: 16/10; }
-
-.work-thumb-bg-1 { background: linear-gradient(135deg, #0D0D1A, #1A0D2E); }
-.work-thumb-bg-2 { background: linear-gradient(135deg, #0A1A0A, #0D2A0D); }
-.work-thumb-bg-3 { background: linear-gradient(135deg, #1A0A0A, #2E0D0D); }
-.work-thumb-bg-4 { background: linear-gradient(135deg, #0A0D1A, #0D1422); }
-.work-thumb-bg-5 { background: linear-gradient(135deg, #1A1A0A, #2E2A0D); }
-.work-thumb-bg-6 { background: linear-gradient(135deg, #0D1A1A, #0D2222); }
-
-.work-thumb::after {
-  content: 'PLAY ▶'; position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 3px;
-  color: rgba(255,255,255,0);
-  background: rgba(0,0,0,0); transition: all 0.3s;
-}
-
-.work-item:hover .work-thumb::after { color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.5); }
-
-.work-glow {
-  position: absolute; inset: 0; opacity: 0;
-  transition: opacity 0.3s;
-}
-.work-item:hover .work-glow { opacity: 1; }
-
-.work-glow-cyan { background: radial-gradient(ellipse at 30% 50%, rgba(0,217,255,0.15), transparent 60%); }
-.work-glow-pink { background: radial-gradient(ellipse at 70% 50%, rgba(255,0,128,0.15), transparent 60%); }
-.work-glow-both { background: radial-gradient(ellipse at 50% 50%, rgba(0,217,255,0.08), transparent 40%), radial-gradient(ellipse at 70% 70%, rgba(255,0,128,0.08), transparent 40%); }
-
-.work-meta { padding: 20px 24px; }
-.work-category { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-600); margin-bottom: 6px; }
-.work-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.3px; color: var(--gray-200); margin-bottom: 4px; }
-.work-client { font-size: 0.75rem; color: var(--gray-600); }
-
-.work-grad-tag {
-  position: absolute; top: 16px; right: 16px;
-  padding: 4px 10px; border-radius: 100px;
-  background: var(--grad); font-size: 0.6rem; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase; color: white;
-}
-
-/* ── SERVICES ─────────────────────────────────────────────── */
-.services-section {
-  padding: 100px 56px;
-  background: var(--surface);
-  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-}
-.services-inner { max-width: 1400px; margin: 0 auto; }
-
-.services-header { margin-bottom: 64px; }
-.services-header h2 { font-size: clamp(2.5rem, 4.5vw, 4rem); font-weight: 800; letter-spacing: -2px; margin-bottom: 12px; }
-.services-header .grad-text { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.services-header p { font-size: 0.9rem; color: var(--gray-400); max-width: 480px; line-height: 1.7; }
-
-.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-.service-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-  padding: 36px 32px; transition: border-color 0.25s, transform 0.25s;
-  opacity: 0; transform: translateY(20px);
-}
-.service-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s, border-color 0.25s; }
-.service-card:hover { border-color: var(--border-bright); transform: translateY(-4px) !important; }
-
-.service-num {
-  width: 40px; height: 40px; border-radius: 10px; margin-bottom: 20px;
-  background: linear-gradient(135deg, rgba(0,217,255,0.1), rgba(255,0,128,0.1));
-  border: 1px solid var(--border-bright);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.7rem; font-weight: 700; color: var(--gray-400);
-}
-
-.service-card h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
-.service-card p { font-size: 0.82rem; color: var(--gray-400); line-height: 1.65; }
-
-.service-tag {
-  display: inline-block; margin-top: 16px; padding: 4px 12px; border-radius: 100px;
-  border: 1px solid var(--border-bright); font-size: 0.65rem; font-weight: 600;
-  color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px;
-  transition: all 0.2s;
-}
-.service-card:hover .service-tag { border-color: rgba(0,217,255,0.3); color: var(--cyan); }
-
-/* ── TESTIMONIALS ─────────────────────────────────────────── */
-.test-section { padding: 100px 56px; }
-.test-inner { max-width: 1400px; margin: 0 auto; }
-
-.test-header { margin-bottom: 64px; }
-.test-header h2 { font-size: clamp(2.5rem, 4.5vw, 4rem); font-weight: 800; letter-spacing: -2px; }
-.test-header .grad-text { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-
-.test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-.test-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-  padding: 36px 32px; opacity: 0; transform: translateY(20px);
-}
-.test-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s; }
-
-.test-card.featured-t { grid-column: span 2; background: linear-gradient(135deg, rgba(0,217,255,0.05), rgba(255,0,128,0.05)); border-color: var(--border-bright); }
-
-.test-stars { font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 14px; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.test-quote { font-size: 0.9rem; color: var(--gray-200); line-height: 1.75; font-weight: 300; margin-bottom: 20px; }
-.test-card.featured-t .test-quote { font-size: 1.05rem; }
-.test-author { display: flex; align-items: center; gap: 12px; }
-.test-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, rgba(0,217,255,0.2), rgba(255,0,128,0.2)); border: 1px solid var(--border-bright); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
-.test-name { font-size: 0.85rem; font-weight: 600; color: var(--gray-200); }
-.test-role { font-size: 0.7rem; color: var(--gray-600); margin-top: 2px; }
-
-/* ── CTA FINAL ────────────────────────────────────────────── */
-.cta-section {
-  position: relative; overflow: hidden;
-  padding: 160px 56px; text-align: center;
-  border-top: 1px solid var(--border);
-}
-
-.cta-bg-glow-1 { position: absolute; top: -20%; left: 20%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,217,255,0.1), transparent 65%); pointer-events: none; }
-.cta-bg-glow-2 { position: absolute; bottom: -20%; right: 20%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(ellipse, rgba(255,0,128,0.1), transparent 65%); pointer-events: none; }
-
-.cta-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
-
-.cta-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 20px; }
-
-.cta-title { font-size: clamp(3.5rem, 7vw, 7rem); font-weight: 800; letter-spacing: -3px; line-height: 0.95; margin-bottom: 24px; }
-.cta-title .grad { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.cta-title .outline { -webkit-text-stroke: 2px rgba(255,255,255,0.2); color: transparent; }
-
-.cta-sub { font-size: 1rem; color: var(--gray-400); line-height: 1.7; font-weight: 300; margin-bottom: 48px; }
-
-.cta-btn-large {
-  display: inline-flex; align-items: center; gap: 12px;
-  padding: 20px 44px; border: none; border-radius: 100px;
-  background: var(--grad); font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem; font-weight: 700; color: var(--white); cursor: pointer;
-  transition: all 0.25s; text-decoration: none;
-  box-shadow: 0 8px 40px rgba(0,217,255,0.2), 0 8px 40px rgba(255,0,128,0.15);
-}
-.cta-btn-large:hover { transform: translateY(-4px); box-shadow: 0 16px 60px rgba(0,217,255,0.3), 0 16px 60px rgba(255,0,128,0.25); }
-
-.cta-awards { display: flex; gap: 32px; justify-content: center; margin-top: 56px; flex-wrap: wrap; }
-.cta-award { text-align: center; }
-.cta-award-icon { font-size: 1.5rem; margin-bottom: 6px; }
-.cta-award-name { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-600); }
-
-/* ── FOOTER ──────────────────────────────────────────────── */
-footer { background: var(--bg); border-top: 1px solid var(--border); padding: 60px 56px 32px; }
-.footer-inner { max-width: 1400px; margin: 0 auto; }
-.footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-.footer-logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.footer-brand p { font-size: 0.78rem; color: var(--gray-600); line-height: 1.65; max-width: 220px; }
-.footer-links { display: flex; gap: 64px; flex-wrap: wrap; }
-.footer-col h4 { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-600); margin-bottom: 16px; }
-.footer-col a { display: block; font-size: 0.8rem; color: var(--gray-400); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
-.footer-col a:hover { color: var(--cyan); }
-.footer-bottom { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--gray-600); flex-wrap: wrap; gap: 8px; }
-
-@media (max-width: 1024px) {
-  nav { padding: 0 20px; mix-blend-mode: normal; background: rgba(6,6,8,0.9); }
-  .nav-links { display: none; }
-  .hero { padding: 100px 20px 60px; }
-  .scene-3d { width: 180px; height: 180px; }
-  .work-section, .services-section, .test-section, .cta-section { padding: 60px 20px; }
-  .work-item.w8, .work-item.w4, .work-item.w5, .work-item.w7, .work-item.w6 { grid-column: span 12; }
-  .services-grid, .test-grid { grid-template-columns: 1fr; }
-  .test-card.featured-t { grid-column: span 1; }
-  footer { padding: 48px 20px 24px; }
-  .footer-top { flex-direction: column; }
-}
-</style>
-
-<!-- inject-local -->
-<style>
-  .work-thumb-bg-1 {
-    background-image: url('../../images/creative/creative-1.jpg') !important;
-    background-size: cover; background-position: center;
+  :root {
+    --bg: #050505;
+    --cyan: #00D9FF;
+    --pink: #FF0080;
+    --fg: #ffffff;
+    --fg-muted: rgba(255,255,255,0.55);
+    --surface: #111111;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.1);
   }
-  .work-thumb-bg-2 {
-    background-image: url('../../images/creative/creative-2.jpg') !important;
-    background-size: cover; background-position: center;
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
   }
-  .work-thumb-bg-3 {
-    background-image: url('../../images/creative/creative-3.jpg') !important;
-    background-size: cover; background-position: center;
+  /* Custom cursor */
+  #cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
   }
-  .work-thumb-bg-4 {
-    background-image: url('../../images/creative/creative-4.jpg') !important;
-    background-size: cover; background-position: center;
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0,217,255,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.18s ease-out, width 0.3s, height 0.3s;
   }
-  .work-thumb-bg-5 {
-    background-image: url('../../images/creative/creative-5.jpg') !important;
-    background-size: cover; background-position: center;
+  /* Nav — mix-blend-mode difference */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    z-index: 1000;
+    mix-blend-mode: difference;
   }
-  .work-thumb-bg-6 {
-    background-image: url('../../images/creative/creative-6.jpg') !important;
-    background-size: cover; background-position: center;
+  .nav-logo {
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #fff;
+    mix-blend-mode: difference;
   }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 0.5; }
+  .nav-cta {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 10px 20px;
+    cursor: none;
+    transition: border-color 0.2s;
+  }
+  .nav-cta:hover { border-color: #fff; }
+  /* Hero — 3D Cube */
+  .hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Background gradient */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(0,217,255,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(255,0,128,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  /* 3D cube */
+  .cube-scene {
+    perspective: 1200px;
+    width: 380px;
+    height: 380px;
+    position: absolute;
+    right: 12%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .cube {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-15deg) rotateY(25deg);
+    animation: cube-rotate 18s linear infinite;
+  }
+  @keyframes cube-rotate {
+    from { transform: rotateX(-15deg) rotateY(0deg); }
+    to   { transform: rotateX(-15deg) rotateY(360deg); }
+  }
+  .face {
+    position: absolute;
+    width: 380px; height: 380px;
+    border: 1px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .face img { width:100%;height:100%;object-fit:cover;filter:grayscale(100%);transition:filter 1s; }
+  .face:hover img { filter:grayscale(0%); }
+  .face-front  { transform: translateZ(190px); }
+  .face-back   { transform: rotateY(180deg) translateZ(190px); }
+  .face-left   { transform: rotateY(-90deg) translateZ(190px); }
+  .face-right  { transform: rotateY(90deg) translateZ(190px); }
+  .face-top    { transform: rotateX(90deg) translateZ(190px); }
+  .face-bottom { transform: rotateX(-90deg) translateZ(190px); }
+  .face-label {
+    position: absolute;
+    bottom: 16px; left: 16px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+  /* Hero text */
+  .hero-text {
+    position: relative;
+    z-index: 2;
+    left: 0;
+    padding-left: 10%;
+    max-width: 52%;
+  }
+  .hero-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 24px;
+  }
+  .hero-h1 {
+    font-size: clamp(70px, 10vw, 160px);
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .hero-h1 span {
+    background: linear-gradient(90deg, var(--cyan), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--fg-muted);
+    max-width: 440px;
+    margin-bottom: 48px;
+  }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-neon {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(90deg, var(--cyan), var(--pink));
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none;
+    cursor: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .btn-neon:hover { opacity: 0.9; transform: scale(1.02); }
+  .btn-outline-neon {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: transparent;
+    color: var(--fg);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: none;
+    transition: border-color 0.2s;
+  }
+  .btn-outline-neon:hover { border-color: var(--cyan); color: var(--cyan); }
+  /* Scroll indicator */
+  .scroll-cue {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--cyan));
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+  @keyframes scroll-pulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+  /* Marquee */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 20px 0;
+    background: var(--surface);
+  }
+  .marquee-inner {
+    display: inline-flex;
+    gap: 48px;
+    white-space: nowrap;
+    animation: marquee 25s linear infinite;
+  }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .m-word {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+  .m-sep { color: var(--cyan); font-size: 11px; }
+  /* Project grid */
+  .projects {
+    padding: 100px 60px;
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 60px;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 32px;
+  }
+  .section-title-lg {
+    font-size: clamp(48px, 7vw, 100px);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    line-height: 0.9;
+  }
+  /* Projects — asymmetric layout */
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 2px;
+  }
+  .proj {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    background: var(--surface);
+  }
+  .proj img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    display: block;
+    transition: filter 0.7s ease, transform 0.7s ease;
+    min-height: 320px;
+  }
+  .proj:hover img { filter: grayscale(0%); transform: scale(1.04); }
+  .proj-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5,5,5,0.85) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .proj-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 28px;
+  }
+  .proj-cat {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+  .proj-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .proj-large { grid-row: 1 / 3; }
+  .proj-large img { min-height: 660px; }
+  /* Agency section */
+  .agency {
+    padding: 100px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+    border-top: 1px solid var(--glass-border);
+  }
+  .agency-visual {
+    position: relative;
+    height: 560px;
+    overflow: hidden;
+  }
+  .agency-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.6s;
+  }
+  .agency-visual:hover .agency-img { filter: grayscale(30%); }
+  .neon-tag {
+    position: absolute;
+    top: 24px; right: 24px;
+    padding: 8px 16px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  /* Services */
+  .services { padding: 0 60px 100px; }
+  .service-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--glass-border);
+    transition: background 0.2s;
+    cursor: none;
+  }
+  .service-row:first-child { border-top: 1px solid var(--glass-border); }
+  .service-row:hover { background: rgba(255,255,255,0.02); padding-left: 16px; padding-right: 16px; }
+  .service-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--cyan);
+    min-width: 40px;
+  }
+  .service-name {
+    font-size: clamp(24px, 3vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    flex: 1;
+    margin-left: 40px;
+  }
+  .service-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .service-arrow { color: var(--fg-muted); margin-left: 24px; }
+  /* CTA */
+  .cta-section {
+    padding: 120px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(0,217,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,0,128,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .cta-h2 {
+    font-size: clamp(60px, 9vw, 130px);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    line-height: 0.88;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+  }
+  .cta-h2 span {
+    background: linear-gradient(90deg, var(--cyan), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  /* Footer */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--glass-border);
+    padding: 80px 60px 40px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 60px;
+  }
+  footer h6 {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 20px;
+  }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  footer ul a { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+  footer ul a:hover { color: var(--cyan); }
+  .footer-bottom {
+    border-top: 1px solid var(--glass-border);
+    padding: 24px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; }
+  /* Reveals */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  /* Parallax containers */
+  .parallax-img { will-change: transform; }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Navigation — mix-blend-mode:difference -->
 <nav>
-  <div class="nav-logo">
-    <div class="nav-logo-f">F</div>
-    FRAME
+  <div class="nav-logo">Frame</div>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#studio">Studio</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
   </div>
-  <ul class="nav-links">
-    <li><a href="#">Work</a></li>
-    <li><a href="#">Services</a></li>
-    <li><a href="#">Studio</a></li>
-    <li><a href="#">Awards</a></li>
-    <li><a href="#">Journal</a></li>
-  </ul>
-  <a href="#" class="nav-contact">Start a Project</a>
+  <button class="nav-cta">Open a brief</button>
 </nav>
 
-<!-- HERO -->
+<!-- Hero with 3D CSS Cube -->
 <section class="hero">
-  <div class="hero-bg-gradient"></div>
-  <div class="scene-3d">
+  <!-- 3D Cube -->
+  <div class="cube-scene">
     <div class="cube">
-      <div class="face face-front"></div>
-      <div class="face face-back"><span style="color:rgba(255,255,255,0.4);font-size:0.7rem;letter-spacing:3px;">STUDIO</span></div>
-      <div class="face face-right"></div>
-      <div class="face face-left"></div>
-      <div class="face face-top"></div>
-      <div class="face face-bottom"></div>
+      <div class="face face-front">
+        <img src="../../images/creative/creative-1.jpg" alt="Frame production">
+        <div class="face-label">Directed Work</div>
+      </div>
+      <div class="face face-back">
+        <img src="../../images/noir/noir-1.jpg" alt="Frame editorial">
+        <div class="face-label">Editorial</div>
+      </div>
+      <div class="face face-right">
+        <img src="../../images/creative/creative-2.jpg" alt="Frame campaign">
+        <div class="face-label">Campaign</div>
+      </div>
+      <div class="face face-left">
+        <img src="../../images/noir/noir-2.jpg" alt="Frame narrative">
+        <div class="face-label">Narrative</div>
+      </div>
+      <div class="face face-top">
+        <img src="../../images/creative/creative-3.jpg" alt="Frame still">
+        <div class="face-label">Stills</div>
+      </div>
+      <div class="face face-bottom">
+        <img src="../../images/noir/noir-3.jpg" alt="Frame motion">
+        <div class="face-label">Motion</div>
+      </div>
     </div>
   </div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">Creative Production Studio · Est. 2017</div>
-    <h1 class="hero-title">
-      We make the<br>
-      world <span class="grad-text">look better.</span>
-    </h1>
-    <p class="hero-sub">FRAME is a creative production studio specializing in brand films, campaign visuals, motion design, and digital experiences for the world's most ambitious brands.</p>
-    <div class="hero-cta-row">
-      <a href="#" class="btn-grad">View Our Work →</a>
-      <a href="#" class="btn-ghost-w">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none"/></svg>
-        Watch Showreel
-      </a>
+
+  <!-- Text -->
+  <div class="hero-text">
+    <div class="hero-eyebrow">Creative Production Studio / Est. 2019</div>
+    <h1 class="hero-h1">Every<br>frame<br><span>matters.</span></h1>
+    <p class="hero-sub">FRAME crafts visual narratives for brands with something to say. Feature campaigns, editorial motion, and hybrid productions built for screens of any size.</p>
+    <div class="hero-btns">
+      <button class="btn-neon">
+        Show reel 2025 <i data-lucide="play" style="width:13px;height:13px;"></i>
+      </button>
+      <button class="btn-outline-neon">
+        See selected work <i data-lucide="arrow-right" style="width:13px;height:13px;"></i>
+      </button>
     </div>
   </div>
-  <div class="hero-scroll">
-    <div class="scroll-dot"></div>
-    Scroll
+
+  <!-- Scroll cue -->
+  <div class="scroll-cue">
+    <span style="font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.35);">Scroll</span>
+    <div class="scroll-line"></div>
   </div>
 </section>
 
-<!-- REEL BAND -->
-<div class="reel-section">
-  <div class="reel-track">
-    <div class="reel-item">Brand Films</div><div class="reel-dot"></div>
-    <div class="reel-item">Campaign Visuals</div><div class="reel-dot"></div>
-    <div class="reel-item">Motion Design</div><div class="reel-dot"></div>
-    <div class="reel-item">Digital Experiences</div><div class="reel-dot"></div>
-    <div class="reel-item">Photography</div><div class="reel-dot"></div>
-    <div class="reel-item">Art Direction</div><div class="reel-dot"></div>
-    <div class="reel-item">Post Production</div><div class="reel-dot"></div>
-    <div class="reel-item">Color Grading</div><div class="reel-dot"></div>
-    <div class="reel-item">Brand Films</div><div class="reel-dot"></div>
-    <div class="reel-item">Campaign Visuals</div><div class="reel-dot"></div>
-    <div class="reel-item">Motion Design</div><div class="reel-dot"></div>
-    <div class="reel-item">Digital Experiences</div><div class="reel-dot"></div>
-    <div class="reel-item">Photography</div><div class="reel-dot"></div>
-    <div class="reel-item">Art Direction</div><div class="reel-dot"></div>
-    <div class="reel-item">Post Production</div><div class="reel-dot"></div>
-    <div class="reel-item">Color Grading</div><div class="reel-dot"></div>
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="m-word">Film Direction</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Editorial Motion</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Brand Campaigns</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Narrative Series</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Digital Experiences</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Hybrid Production</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Film Direction</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Editorial Motion</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Brand Campaigns</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Narrative Series</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Digital Experiences</span>
+    <span class="m-sep">/</span>
+    <span class="m-word">Hybrid Production</span>
+    <span class="m-sep">/</span>
   </div>
 </div>
 
-<!-- WORK GRID -->
-<section class="work-section">
-  <div class="work-inner">
-    <div class="work-header">
-      <h2>Selected <span class="grad">work.</span></h2>
-      <p>Award-winning campaigns for global brands across entertainment, fashion, technology, and culture.</p>
+<!-- Selected Work -->
+<section class="projects" id="work">
+  <div class="section-header">
+    <div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;">Selected Work</div>
+      <h2 class="section-title-lg reveal">REEL<br>2025</h2>
     </div>
-    <div class="work-grid">
-      <div class="work-item w8">
-        <div class="work-thumb work-thumb-bg-1">
-          <div class="work-glow work-glow-cyan"></div>
-          🎬
-        </div>
-        <div class="work-grad-tag">2024 Cannes Lion</div>
-        <div class="work-meta">
-          <div class="work-category">Brand Film · 60s</div>
-          <div class="work-title">The Future of Movement — Nike x FRAME</div>
-          <div class="work-client">Nike Global / Wieden+Kennedy</div>
+    <button class="btn-outline-neon reveal" style="transition-delay:0.15s;">View full archive <i data-lucide="arrow-right" style="width:13px;height:13px;"></i></button>
+  </div>
+  <div class="project-grid">
+    <!-- Large left -->
+    <div class="proj proj-large reveal">
+      <img src="../../images/creative/creative-4.jpg" alt="Continuum — Brand Film" class="parallax-img" data-speed="0.08">
+      <div class="proj-overlay"></div>
+      <div class="proj-info">
+        <div class="proj-cat">Brand Film / Fashion</div>
+        <div class="proj-title">Continuum<br>SS 2025</div>
+      </div>
+    </div>
+    <!-- Right stack -->
+    <div style="display:flex;flex-direction:column;gap:2px;">
+      <div class="proj reveal" style="transition-delay:0.1s;">
+        <img src="../../images/noir/noir-4.jpg" alt="Nocturne Series">
+        <div class="proj-overlay"></div>
+        <div class="proj-info">
+          <div class="proj-cat">Documentary / Music</div>
+          <div class="proj-title">Nocturne Series</div>
         </div>
       </div>
-      <div class="work-item w4">
-        <div class="work-thumb work-thumb-bg-2">
-          <div class="work-glow work-glow-pink"></div>
-          ✨
-        </div>
-        <div class="work-meta">
-          <div class="work-category">Campaign · Editorial</div>
-          <div class="work-title">Luminance AW24</div>
-          <div class="work-client">Maison Valentino</div>
-        </div>
-      </div>
-      <div class="work-item w5">
-        <div class="work-thumb work-thumb-bg-3">
-          <div class="work-glow work-glow-both"></div>
-          🎵
-        </div>
-        <div class="work-meta">
-          <div class="work-category">Music Video · Director's Cut</div>
-          <div class="work-title">Cascades — Official Video</div>
-          <div class="work-client">Atlantic Records / Maya J.</div>
-        </div>
-      </div>
-      <div class="work-item w7">
-        <div class="work-thumb work-thumb-bg-4">
-          <div class="work-glow work-glow-cyan"></div>
-          🌐
-        </div>
-        <div class="work-meta">
-          <div class="work-category">Digital Experience · Interactive</div>
-          <div class="work-title">The Architecture of Sound</div>
-          <div class="work-client">Dolby Laboratories</div>
-        </div>
-      </div>
-      <div class="work-item w6">
-        <div class="work-thumb work-thumb-bg-5">
-          <div class="work-glow work-glow-pink"></div>
-          🚗
-        </div>
-        <div class="work-meta">
-          <div class="work-category">Product Film · Launch</div>
-          <div class="work-title">Aether — World Premiere</div>
-          <div class="work-client">Genesis Motors</div>
-        </div>
-      </div>
-      <div class="work-item w6">
-        <div class="work-thumb work-thumb-bg-6">
-          <div class="work-glow work-glow-both"></div>
-          🏙
-        </div>
-        <div class="work-meta">
-          <div class="work-category">Brand Identity · Motion</div>
-          <div class="work-title">Reborn — Brand Film</div>
-          <div class="work-client">Marriott International</div>
+      <div class="proj reveal" style="transition-delay:0.2s;">
+        <img src="../../images/creative/creative-5.jpg" alt="Signal — Tech Campaign">
+        <div class="proj-overlay"></div>
+        <div class="proj-info">
+          <div class="proj-cat">Tech Campaign / Global</div>
+          <div class="proj-title">Signal 2025</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="services-section">
-  <div class="services-inner">
-    <div class="services-header">
-      <h2>What we <span class="grad-text">do.</span></h2>
-      <p>End-to-end creative production — from concept development to final delivery. We don't just make content, we build visual worlds.</p>
-    </div>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-num">01</div>
-        <h3>Brand Films & Commercials</h3>
-        <p>Campaign spots, brand films, and TV commercials that move audiences and metrics. Full production from script to screen in 100+ countries.</p>
-        <div class="service-tag">Director + Producer</div>
+<!-- Studio section -->
+<section class="agency" id="studio">
+  <div class="reveal">
+    <div style="font-size:9px;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;color:var(--pink);margin-bottom:20px;">The Studio</div>
+    <h2 style="font-size:clamp(40px,5.5vw,80px);font-weight:900;letter-spacing:-0.04em;text-transform:uppercase;line-height:0.9;margin-bottom:32px;">Built for<br>the work<br>that counts</h2>
+    <p style="font-size:15px;line-height:1.75;color:var(--fg-muted);margin-bottom:32px;">FRAME is a twenty-person studio in East London. We produce for brands, artists, and cultural institutions that need visual work which endures beyond a campaign cycle. No templates. No stock. Every frame built from brief.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px;">
+      <div style="border-top:1px solid var(--glass-border);padding-top:20px;">
+        <div style="font-size:clamp(36px,4vw,56px);font-weight:900;letter-spacing:-0.04em;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">247</div>
+        <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-muted);margin-top:4px;">Films delivered</div>
       </div>
-      <div class="service-card">
-        <div class="service-num">02</div>
-        <h3>Motion Design & VFX</h3>
-        <p>Title sequences, product visualizations, 3D animation, and visual effects that blur the line between reality and imagination.</p>
-        <div class="service-tag">CG + Compositing</div>
-      </div>
-      <div class="service-card">
-        <div class="service-num">03</div>
-        <h3>Campaign Photography</h3>
-        <p>Editorial and campaign photography for fashion, lifestyle, product, and portrait. A global roster of world-class photographers under one roof.</p>
-        <div class="service-tag">Global Roster</div>
-      </div>
-      <div class="service-card">
-        <div class="service-num">04</div>
-        <h3>Digital Experiences</h3>
-        <p>Interactive installations, web experiences, and immersive digital environments that bridge the physical and digital worlds.</p>
-        <div class="service-tag">Immersive + Web</div>
-      </div>
-      <div class="service-card">
-        <div class="service-num">05</div>
-        <h3>Post Production</h3>
-        <p>Color grading, sound design, editing, and VFX finishing. Our post facility works on 200+ projects annually with the industry's best talent.</p>
-        <div class="service-tag">HDR + Dolby Vision</div>
-      </div>
-      <div class="service-card">
-        <div class="service-num">06</div>
-        <h3>Creative Strategy</h3>
-        <p>Brand narrative development, campaign ideation, and creative strategy that gives production a direction worth pursuing.</p>
-        <div class="service-tag">Strategy + Concept</div>
+      <div style="border-top:1px solid var(--glass-border);padding-top:20px;">
+        <div style="font-size:clamp(36px,4vw,56px);font-weight:900;letter-spacing:-0.04em;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">38</div>
+        <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-muted);margin-top:4px;">Award wins</div>
       </div>
     </div>
+    <button class="btn-neon">Tell us about your project</button>
+  </div>
+  <div class="agency-visual reveal" style="transition-delay:0.15s;">
+    <img src="../../images/creative/creative-6.jpg" alt="Frame Studio" class="agency-img">
+    <div class="neon-tag">East London, E1</div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="test-section">
-  <div class="test-inner">
-    <div class="test-header">
-      <h2>What <span class="grad-text">clients say.</span></h2>
-    </div>
-    <div class="test-grid">
-      <div class="test-card featured-t">
-        <div class="test-stars">★★★★★</div>
-        <p class="test-quote">"FRAME didn't just deliver a brand film — they delivered something we're still showing at every board meeting two years later. The campaign drove a 34% lift in brand awareness globally and won three Lions. More importantly, it captured something true about what we're building that we couldn't have put into words ourselves."</p>
-        <div class="test-author">
-          <div class="test-avatar">LK</div>
-          <div>
-            <div class="test-name">Laura Kim</div>
-            <div class="test-role">Chief Marketing Officer · Genesis Motors Global</div>
-          </div>
-        </div>
-      </div>
-      <div class="test-card">
-        <div class="test-stars">★★★★★</div>
-        <p class="test-quote">"The FRAME team operates at a standard I haven't seen elsewhere. They challenge your creative brief, push the concept further, and deliver something better than you imagined. Essential partners."</p>
-        <div class="test-author">
-          <div class="test-avatar">RB</div>
-          <div>
-            <div class="test-name">Raphael B.</div>
-            <div class="test-role">Creative Director · Valentino</div>
-          </div>
-        </div>
-      </div>
-      <div class="test-card">
-        <div class="test-stars">★★★★★</div>
-        <p class="test-quote">"We've worked with production studios on every continent. FRAME is our first call every time. They understand that we're not just making video — we're shaping how people feel about our brand."</p>
-        <div class="test-author">
-          <div class="test-avatar">MH</div>
-          <div>
-            <div class="test-name">Maya H.</div>
-            <div class="test-role">Global Brand Director · Nike</div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- Services -->
+<section class="services" id="services">
+  <div style="font-size:9px;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;color:var(--cyan);margin-bottom:40px;">What we do</div>
+  <div class="service-row reveal">
+    <div class="service-num">01</div>
+    <div class="service-name">Brand Films</div>
+    <div class="service-tag">Campaign / Narrative</div>
+    <div class="service-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
+  </div>
+  <div class="service-row reveal" style="transition-delay:0.05s;">
+    <div class="service-num">02</div>
+    <div class="service-name">Editorial Motion</div>
+    <div class="service-tag">Fashion / Culture</div>
+    <div class="service-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
+  </div>
+  <div class="service-row reveal" style="transition-delay:0.1s;">
+    <div class="service-num">03</div>
+    <div class="service-name">Documentary Series</div>
+    <div class="service-tag">Long-form / Archive</div>
+    <div class="service-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
+  </div>
+  <div class="service-row reveal" style="transition-delay:0.15s;">
+    <div class="service-num">04</div>
+    <div class="service-name">Digital Campaigns</div>
+    <div class="service-tag">Social / Platform</div>
+    <div class="service-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
+  </div>
+  <div class="service-row reveal" style="transition-delay:0.2s;">
+    <div class="service-num">05</div>
+    <div class="service-name">Live Direction</div>
+    <div class="service-tag">Events / Broadcast</div>
+    <div class="service-arrow"><i data-lucide="arrow-right" style="width:18px;height:18px;"></i></div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="cta-section">
-  <div class="cta-bg-glow-1"></div>
-  <div class="cta-bg-glow-2"></div>
-  <div class="cta-inner">
-    <div class="cta-label">Start a project</div>
-    <h2 class="cta-title">
-      <span class="grad">Make</span><br>
-      <span class="outline">something</span><br>
-      <span class="grad">iconic.</span>
-    </h2>
-    <p class="cta-sub">We take on a limited number of new projects each quarter. If you have a brand that deserves to be seen, let's talk.</p>
-    <a href="#" class="cta-btn-large">
-      Start a Conversation →
-    </a>
-    <div class="cta-awards">
-      <div class="cta-award">
-        <div class="cta-award-icon">🏆</div>
-        <div class="cta-award-name">12 Cannes Lions</div>
-      </div>
-      <div class="cta-award">
-        <div class="cta-award-icon">🎨</div>
-        <div class="cta-award-name">D&AD Pencils</div>
-      </div>
-      <div class="cta-award">
-        <div class="cta-award-icon">⭐</div>
-        <div class="cta-award-name">Clio Grand Prix</div>
-      </div>
-      <div class="cta-award">
-        <div class="cta-award-icon">🎬</div>
-        <div class="cta-award-name">Emmy Nominated</div>
-      </div>
-    </div>
+<section class="cta-section" id="contact">
+  <h2 class="cta-h2 reveal">Ready to<br><span>make</span><br>something?</h2>
+  <p class="reveal" style="font-size:16px;color:var(--fg-muted);margin-bottom:40px;max-width:500px;margin-left:auto;margin-right:auto;transition-delay:0.15s;">Every great project starts with an honest conversation about what you're trying to say. Send us your brief and we'll come back within 24 hours.</p>
+  <div style="display:flex;gap:16px;justify-content:center;" class="reveal" style="transition-delay:0.25s;">
+    <button class="btn-neon">Send your brief <i data-lucide="send" style="width:13px;height:13px;"></i></button>
+    <button class="btn-outline-neon">frame@framestudio.co</button>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo">FRAME</div>
-        <p>We make the world look better. A creative production studio for the world's most ambitious brands.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Studio</h4>
-          <a href="#">Work</a>
-          <a href="#">Services</a>
-          <a href="#">Awards</a>
-          <a href="#">Showreel</a>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="#">About</a>
-          <a href="#">Journal</a>
-          <a href="#">Careers</a>
-          <a href="#">Press</a>
-        </div>
-        <div class="footer-col">
-          <h4>Contact</h4>
-          <a href="#">New Project</a>
-          <a href="#">Instagram</a>
-          <a href="#">Locations</a>
-          <a href="#">Newsletter</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 FRAME Studio Inc. We make the world look better.</span>
-      <span>LA · NYC · London · Tokyo</span>
-    </div>
+  <div>
+    <div style="font-size:20px;font-weight:900;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px;">Frame</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;">Creative production studio. East London. Built for the work that endures.</div>
+  </div>
+  <div>
+    <h6>Work</h6>
+    <ul>
+      <li><a href="#">Brand Films</a></li>
+      <li><a href="#">Editorial Motion</a></li>
+      <li><a href="#">Documentaries</a></li>
+      <li><a href="#">Archive</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>Studio</h6>
+    <ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Team</a></li>
+      <li><a href="#">Awards</a></li>
+      <li><a href="#">Journal</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>Connect</h6>
+    <ul>
+      <li><a href="#">frame@framestudio.co</a></li>
+      <li><a href="#">+44 20 7946 0000</a></li>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">Vimeo</a></li>
+    </ul>
   </div>
 </footer>
+<div class="footer-bottom">
+  <p>Frame Studio &copy; 2025</p>
+  <p style="background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">Every frame matters.</p>
+</div>
 
 <script>
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
-      obs.unobserve(e.target);
-    }
+  lucide.createIcons();
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+    ring.style.left = mx + 'px';
+    ring.style.top = my + 'px';
   });
-}, { threshold: 0.1 });
-document.querySelectorAll('.work-item, .service-card, .test-card').forEach(el => obs.observe(el));
+
+  document.querySelectorAll('a, button, .proj, .service-row').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // Scroll reveals
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Simple parallax on scroll
+  const parallaxImgs = document.querySelectorAll('.parallax-img');
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    parallaxImgs.forEach(img => {
+      const speed = parseFloat(img.dataset.speed) || 0.06;
+      const rect = img.closest('.proj').getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        const offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * speed;
+        img.style.transform = `translateY(${offset}px)`;
+      }
+    });
+  });
 </script>
 </body>
 </html>

@@ -1,432 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ORBIT STUDIO — Photography Reimagined</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Manrope:wght@300;400;500;600;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ORBIT STUDIO — Photography &amp; Visual Storytelling</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --paper: #f5f4f0;
+      --dim: rgba(255,255,255,0.35);
+      --border: rgba(255,255,255,0.08);
+      --accent: rgba(255,255,255,0.9);
+      --snap: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
 
-:root {
-  --bg: #f8f5f0;
-  --ink: #0f0e0c;
-  --warm: #c4a882;
-  --warm-pale: #e8ddd0;
-  --accent: #8b6b4a;
-  --muted: #7a6e64;
-  --surface: #ede9e2;
-}
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 48px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(10,10,10,0.75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: #fff; background: transparent; border: 1px solid rgba(255,255,255,0.25);
+      padding: 10px 20px; cursor: pointer; text-decoration: none; transition: border-color 0.2s, background 0.2s;
+    }
+    .nav-cta:hover { border-color: #fff; background: rgba(255,255,255,0.06); }
 
-html { scroll-behavior: smooth; }
-body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+    /* ── Hero ── */
+    .serif { font-family: 'Cormorant Garamond', serif; }
 
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 56px; height: 72px;
-  background: rgba(248,245,240,0.88); backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(15,14,12,0.06);
-}
-.nav-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 22px; letter-spacing: 0.12em; text-transform: uppercase; }
-.nav-logo span { color: var(--warm); }
-.nav-links { display: flex; gap: 36px; list-style: none; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
-.nav-links a:hover { color: var(--ink); }
-.nav-cta {
-  font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink); text-decoration: none; padding: 10px 24px;
-  border: 1px solid var(--ink); border-radius: 100px; transition: all 0.3s;
-}
-.nav-cta:hover { background: var(--ink); color: var(--bg); }
+    /* ── Circular Gallery ── */
+    #gallery-section {
+      width: 100%; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
 
-/* HERO */
-.hero {
-  height: 100vh; display: grid; place-items: center;
-  position: relative; overflow: hidden; padding-top: 72px;
-}
-.hero-text { position: relative; z-index: 2; text-align: center; }
-.hero-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 20px; }
-.hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(64px, 10vw, 130px); font-weight: 300; line-height: 0.9; letter-spacing: -2px; margin-bottom: 28px; }
-.hero h1 em { font-style: italic; color: var(--accent); }
-.hero p { font-size: 15px; color: var(--muted); max-width: 440px; margin: 0 auto 40px; line-height: 1.8; letter-spacing: 0.01em; }
-.hero-scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--warm)); animation: grow 2s ease-in-out infinite; }
-@keyframes grow { 0%{height:0;opacity:0} 50%{height:60px;opacity:1} 100%{height:60px;opacity:0} }
-.scroll-text { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    #gallery-track-wrapper {
+      position: relative;
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
 
-/* CIRCULAR GALLERY */
-.gallery-section { padding: 0; overflow: hidden; position: relative; background: var(--ink); }
-.gallery-wrapper { position: relative; height: 600px; display: flex; align-items: center; justify-content: center; }
+    /* The circular track — items orbit around a center point */
+    #gallery-track {
+      position: relative;
+      width: 700px; height: 700px;
+      flex-shrink: 0;
+    }
 
-.circular-track {
-  position: relative; width: 560px; height: 560px; border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.08);
-}
-.circular-track::before {
-  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  width: 60%; height: 60%; border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-.gallery-item {
-  position: absolute; width: 120px; height: 160px;
-  border-radius: 8px; overflow: hidden; cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
-  transform-origin: center center;
-}
-.gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-.gallery-item:hover { transform: scale(1.12) !important; box-shadow: 0 20px 60px rgba(0,0,0,0.5); z-index: 10; }
-.gallery-item-inner {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; font-style: italic; color: rgba(255,255,255,0.6);
-}
+    /* Gentle ambient glow in center */
+    #gallery-track::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
 
-/* Color palettes for fake photos */
-.p1 { background: linear-gradient(135deg, #2c3e50 0%, #4a6741 100%); }
-.p2 { background: linear-gradient(135deg, #8b5e3c 0%, #c4a882 100%); }
-.p3 { background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
-.p4 { background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%); }
-.p5 { background: linear-gradient(135deg, #6d2b6d 0%, #b5838d 100%); }
-.p6 { background: linear-gradient(135deg, #c77dff 0%, #7b2d8b 100%); }
-.p7 { background: linear-gradient(160deg, #f4a261 0%, #e76f51 100%); }
-.p8 { background: linear-gradient(135deg, #264653 0%, #2a9d8f 100%); }
+    .gallery-item {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 220px; height: 290px;
+      margin-left: -110px; margin-top: -145px;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.4s var(--snap), box-shadow 0.4s;
+    }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--snap);
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-item:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
 
-.gallery-center-text {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  text-align: center; pointer-events: none;
-}
-.gallery-center-text .num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: rgba(255,255,255,0.1); line-height: 1; }
-.gallery-center-text .label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+    /* Item label overlay */
+    .gallery-item-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px 16px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gallery-item:hover .gallery-item-label { opacity: 1; }
+    .gallery-item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; line-height: 1.2;
+    }
+    .gallery-item-cat {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--dim); margin-top: 4px;
+    }
 
-/* CAROUSEL (below the circle) */
-.carousel-section { padding: 100px 0 60px; background: var(--ink); overflow: hidden; }
-.carousel-label { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 64px); font-weight: 300; color: rgba(255,255,255,0.9); letter-spacing: -1px; margin-bottom: 56px; }
-.carousel-label em { font-style: italic; color: var(--warm); }
+    /* ── Auto-rotate animation ── */
+    @keyframes orbit {
+      from { transform: rotate(var(--start-angle)) translateX(var(--radius)) rotate(calc(-1 * var(--start-angle))); }
+      to { transform: rotate(calc(var(--start-angle) + 360deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--start-angle) + 360deg))); }
+    }
+    #gallery-track { animation: none; } /* Track itself stays still */
 
-.carousel-track-wrap { overflow: hidden; position: relative; }
-.carousel-track-wrap::before,
-.carousel-track-wrap::after {
-  content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
-}
-.carousel-track-wrap::before { left: 0; background: linear-gradient(90deg, var(--ink), transparent); }
-.carousel-track-wrap::after { right: 0; background: linear-gradient(-90deg, var(--ink), transparent); }
+    /* ── Marquee ── */
+    @keyframes marquee-left {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes marquee-right {
+      from { transform: translateX(-50%); }
+      to { transform: translateX(0); }
+    }
+    .marquee-left { animation: marquee-left 40s linear infinite; }
+    .marquee-right { animation: marquee-right 50s linear infinite; }
 
-.carousel-track {
-  display: flex; gap: 20px;
-  animation: carousel 28s linear infinite;
-  width: max-content;
-}
-.carousel-track:hover { animation-play-state: paused; }
-@keyframes carousel { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    /* ── Editorial text sections ── */
+    .edit-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.0;
+    }
 
-.carousel-card {
-  flex-shrink: 0; width: 280px; height: 380px;
-  border-radius: 12px; overflow: hidden; position: relative; cursor: pointer;
-}
-.carousel-card-inner { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 24px; }
-.cc-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%); }
-.cc-content { position: relative; z-index: 1; }
-.cc-cat { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); margin-bottom: 8px; }
-.cc-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: white; line-height: 1.2; }
+    /* Service rows */
+    .service-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 48px;
+    }
+    .service-row:first-child { border-top: 1px solid var(--border); }
 
-/* ABOUT */
-.about-section { padding: 120px 56px; background: var(--bg); }
-.about-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.about-text .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 20px; }
-.about-text h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4vw, 56px); font-weight: 300; letter-spacing: -1px; line-height: 1.1; margin-bottom: 28px; }
-.about-text h2 em { font-style: italic; color: var(--accent); }
-.about-text p { color: var(--muted); font-size: 15px; line-height: 1.9; margin-bottom: 20px; }
-.about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-.stat-item { padding: 24px; background: var(--surface); border-radius: 12px; }
-.stat-value { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 400; line-height: 1; margin-bottom: 8px; }
-.stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
+    .service-num {
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); width: 32px; flex-shrink: 0;
+    }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300;
+      flex: 1; line-height: 1.1;
+    }
+    .service-desc {
+      font-size: 13px; color: var(--dim); line-height: 1.65; max-width: 320px; flex: 1;
+    }
 
-/* SERVICES */
-.services-section { padding: 100px 56px; background: var(--surface); }
-.services-inner { max-width: 1100px; margin: 0 auto; }
-.services-inner .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 16px; }
-.services-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 300; letter-spacing: -1px; margin-bottom: 60px; }
-.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(15,14,12,0.08); border: 1px solid rgba(15,14,12,0.08); }
-.service-item { background: var(--surface); padding: 36px 32px; }
-.service-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--warm-pale); line-height: 1; margin-bottom: 20px; }
-.service-item h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; margin-bottom: 12px; }
-.service-item p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.8s var(--snap), transform 0.8s var(--snap);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* TESTIMONIALS */
-.testi-section { padding: 100px 56px; background: var(--bg); }
-.testi-inner { max-width: 1100px; margin: 0 auto; }
-.testi-inner .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 16px; }
-.testi-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 300; letter-spacing: -1px; margin-bottom: 60px; }
-.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-.t-card { }
-.t-card blockquote { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; font-weight: 300; line-height: 1.7; color: var(--ink); margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(15,14,12,0.1); }
-.t-attr { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
-.t-attr strong { color: var(--ink); display: block; margin-bottom: 2px; font-size: 13px; }
-
-/* CTA */
-.cta-section { padding: 160px 56px; background: var(--ink); text-align: center; position: relative; overflow: hidden; }
-.cta-deco { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(196,168,130,0.1); pointer-events: none; }
-.cta-deco::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 70%; height: 70%; border-radius: 50%; border: 1px solid rgba(196,168,130,0.07); }
-.cta-section .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 24px; position: relative; z-index: 1; }
-.cta-section h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 7vw, 88px); font-weight: 300; letter-spacing: -2px; color: rgba(248,245,240,0.95); margin-bottom: 32px; position: relative; z-index: 1; line-height: 1; }
-.cta-section h2 em { font-style: italic; color: var(--warm); }
-.cta-section p { font-size: 15px; color: rgba(248,245,240,0.5); max-width: 400px; margin: 0 auto 48px; line-height: 1.8; position: relative; z-index: 1; }
-.cta-btn { display: inline-block; background: transparent; color: var(--bg); padding: 18px 52px; border-radius: 100px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; background: var(--warm); transition: all 0.3s; position: relative; z-index: 1; }
-.cta-btn:hover { background: rgba(196,168,130,0.9); transform: translateY(-3px); box-shadow: 0 20px 60px rgba(196,168,130,0.3); }
-
-/* FOOTER */
-footer { padding: 40px 56px; background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); }
-.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--bg); }
-.footer-logo span { color: var(--warm); }
-.footer-links { display: flex; gap: 24px; list-style: none; }
-.footer-links a { font-size: 11px; color: rgba(248,245,240,0.35); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
-.footer-links a:hover { color: rgba(248,245,240,0.7); }
-.footer-copy { font-size: 11px; color: rgba(248,245,240,0.25); letter-spacing: 0.05em; }
-
-@media (max-width: 768px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .about-inner { grid-template-columns: 1fr; gap: 40px; }
-  .services-grid, .testi-grid { grid-template-columns: 1fr; }
-  .circular-track { width: 320px; height: 320px; }
-  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
-}
-</style>
+    /* Hover pause on gallery */
+    #gallery-section:hover .gallery-item { animation-play-state: paused; }
+  </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">ORBIT<span>&nbsp;·&nbsp;</span>STUDIO</div>
-  <ul class="nav-links">
-    <li><a href="#">Portfolio</a></li>
-    <li><a href="#">Services</a></li>
-    <li><a href="#">About</a></li>
-    <li><a href="#">Journal</a></li>
-  </ul>
-  <a href="#" class="nav-cta">Inquire</a>
-</nav>
-
-<section class="hero">
-  <div class="hero-text">
-    <div class="hero-label">Fine Art Photography</div>
-    <h1>Vision in<br><em>orbit</em></h1>
-    <p>We craft photographic experiences that move between worlds — editorial, commercial, and fine art, always in perfect orbit.</p>
-    <div class="hero-scroll-cue">
-      <div class="scroll-line"></div>
-      <span class="scroll-text">Scroll to discover</span>
-    </div>
-  </div>
-</section>
-
-<!-- CIRCULAR GALLERY -->
-<section class="gallery-section">
-  <div class="gallery-wrapper">
-    <div class="circular-track" id="circularTrack">
-      <!-- Items placed by JS -->
-      <div class="gallery-center-text">
-        <div class="num">48</div>
-        <div class="label">Exhibitions</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CAROUSEL -->
-<section class="carousel-section">
-  <div class="carousel-label">Selected <em>Works</em></div>
-  <div class="carousel-track-wrap">
-    <div class="carousel-track" id="carouselTrack">
-      <!-- duplicated for infinite loop -->
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section class="about-section">
-  <div class="about-inner">
-    <div class="about-text">
-      <div class="eyebrow">Our Philosophy</div>
-      <h2>Light is the only<br>material that <em>matters</em></h2>
-      <p>ORBIT Studio was founded on the belief that a single photograph can hold a universe — of mood, memory, and meaning. We work with fashion houses, galleries, and tastemakers who demand images that outlast trends.</p>
-      <p>Every commission is approached as a collaboration between vision and craft, resulting in photographs that don't just document moments — they define them.</p>
-    </div>
-    <div class="about-stats">
-      <div class="stat-item">
-        <div class="stat-value">240+</div>
-        <div class="stat-label">Campaigns Shot</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">18</div>
-        <div class="stat-label">Years of Practice</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">48</div>
-        <div class="stat-label">Gallery Shows</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">6</div>
-        <div class="stat-label">International Awards</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="services-section">
-  <div class="services-inner">
-    <div class="eyebrow">What We Do</div>
-    <h2>Every frame, a story</h2>
-    <div class="services-grid">
-      <div class="service-item">
-        <div class="service-num">01</div>
-        <h3>Editorial</h3>
-        <p>Magazine-grade photography for fashion and lifestyle brands. Concept development through final retouching.</p>
-      </div>
-      <div class="service-item">
-        <div class="service-num">02</div>
-        <h3>Commercial</h3>
-        <p>Campaign imagery that performs — beauty, product, and architecture for brands that understand that quality converts.</p>
-      </div>
-      <div class="service-item">
-        <div class="service-num">03</div>
-        <h3>Fine Art Prints</h3>
-        <p>Limited-edition archival prints produced to museum standards. Available for collectors and private commissions.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testi-section">
-  <div class="testi-inner">
-    <div class="eyebrow">Client Words</div>
-    <h2>What our clients say</h2>
-    <div class="testi-grid">
-      <div class="t-card">
-        <blockquote>"ORBIT captured something we'd never been able to communicate in 20 years of brand building. The campaign was transformative."</blockquote>
-        <div class="t-attr"><strong>Isabelle Marchetti</strong>Creative Director, Maison Lumière</div>
-      </div>
-      <div class="t-card">
-        <blockquote>"The photographs they produced for our gallery sold out within the first private view. Collectors were calling the next morning."</blockquote>
-        <div class="t-attr"><strong>Thomas Okafor</strong>Gallery Director, Form + Space</div>
-      </div>
-      <div class="t-card">
-        <blockquote>"Working with ORBIT changed how we think about photography as a business asset. Every image pays for itself many times over."</blockquote>
-        <div class="t-attr"><strong>Cleo Nakamura</strong>Head of Brand, Kōto Atelier</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-deco"></div>
-  <div class="eyebrow">Begin Your Project</div>
-  <h2>Let's make<br>something <em>eternal</em></h2>
-  <p>We accept a limited number of commissions each season. Inquire early to secure your place.</p>
-  <a href="#" class="cta-btn">Open Inquiry →</a>
-</section>
-
-<footer>
-  <div class="footer-inner">
-    <div class="footer-logo">ORBIT<span>&nbsp;·&nbsp;</span>STUDIO</div>
-    <ul class="footer-links">
-      <li><a href="#">Privacy</a></li>
-      <li><a href="#">Terms</a></li>
-      <li><a href="#">Licensing</a></li>
+  <!-- Nav -->
+  <nav>
+    <span class="nav-brand">Orbit Studio</span>
+    <ul class="nav-links">
+      <li><a href="#">Portfolio</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Exhibitions</a></li>
     </ul>
-    <div class="footer-copy">© 2025 Orbit Studio. All rights reserved.</div>
-  </div>
-</footer>
+    <a href="#" class="nav-cta">Book a Session</a>
+  </nav>
 
-<script>
-// Circular gallery placement
-const track = document.getElementById('circularTrack');
-const items = [
-  { cls: 'p1', label: 'Solitude' },
-  { cls: 'p2', label: 'Amber' },
-  { cls: 'p3', label: 'Deep Sea' },
-  { cls: 'p4', label: 'Verdant' },
-  { cls: 'p5', label: 'Bloom' },
-  { cls: 'p6', label: 'Aubergine' },
-  { cls: 'p7', label: 'Ember' },
-  { cls: 'p8', label: 'Teal Dusk' },
-];
-const count = items.length;
-const radius = 220;
-const cx = 280, cy = 280;
+  <!-- Hero text -->
+  <section style="padding: 160px 64px 0; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end;">
+    <div>
+      <h1 class="edit-heading">
+        Images<br/>
+        that<br/>
+        <em>hold</em>
+      </h1>
+    </div>
+    <div style="padding-bottom: 8px;">
+      <p style="font-size: 15px; line-height: 1.75; color: var(--dim); max-width: 380px; margin-bottom: 32px;">
+        ORBIT STUDIO documents the architecture of moments. Commercial, editorial, and fine-art photography for brands and institutions that understand the weight of a single image.
+      </p>
+      <div style="display: flex; gap: 20px; align-items: center;">
+        <a href="#" style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 4px; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#fff'" onmouseout="this.style.borderColor='rgba(255,255,255,0.25)'">View Portfolio</a>
+        <a href="#" style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--dim)'">Book a Session</a>
+      </div>
+    </div>
+  </section>
 
-items.forEach((item, i) => {
-  const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
-  const x = cx + radius * Math.cos(angle) - 60;
-  const y = cy + radius * Math.sin(angle) - 80;
+  <!-- Circular Gallery -->
+  <section id="gallery-section">
+    <div id="gallery-track-wrapper">
+      <!-- Central info -->
+      <div style="position: absolute; z-index: 10; text-align: center; pointer-events: none;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); margin-bottom: 4px;">Portfolio</div>
+        <div style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.15);">2019 — 2024</div>
+      </div>
 
-  const el = document.createElement('div');
-  el.className = `gallery-item ${item.cls}`;
-  el.style.left = x + 'px';
-  el.style.top = y + 'px';
-  el.style.transform = `rotate(${(angle + Math.PI/2) * (180/Math.PI)}deg)`;
-  el.innerHTML = `<div class="gallery-item-inner">${item.label}</div>`;
+      <div id="gallery-track"></div>
+    </div>
 
-  // hover restore
-  el.addEventListener('mouseenter', () => {
-    el.style.transform = `rotate(${(angle + Math.PI/2) * (180/Math.PI)}deg) scale(1.12)`;
-  });
-  el.addEventListener('mouseleave', () => {
-    el.style.transform = `rotate(${(angle + Math.PI/2) * (180/Math.PI)}deg)`;
-  });
+    <!-- Drag hint -->
+    <div style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); display: flex; align-items: center; gap: 8px;">
+      <i data-lucide="mouse-pointer-2" style="width: 12px; height: 12px;"></i>
+      Drag to explore
+    </div>
+  </section>
 
-  track.appendChild(el);
-});
-
-// Auto-rotate the circular track
-let rotation = 0;
-function rotateTrack() {
-  rotation += 0.15;
-  track.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
-  // Counter-rotate items so they stay upright
-  track.querySelectorAll('.gallery-item').forEach(item => {
-    item.style.transform = `rotate(${-rotation}deg)`;
-  });
-  requestAnimationFrame(rotateTrack);
-}
-// Center the track
-track.style.position = 'absolute';
-track.style.top = '50%';
-track.style.left = '50%';
-track.style.transform = 'translate(-50%, -50%)';
-track.style.transformOrigin = '280px 280px';
-rotateTrack();
-
-// Build carousel
-const carouselData = [
-  { cls: 'p1', cat: 'Editorial', title: 'The Solitude Series' },
-  { cls: 'p2', cat: 'Commercial', title: 'Amber Campaign' },
-  { cls: 'p3', cat: 'Fine Art', title: 'Midnight Depths' },
-  { cls: 'p4', cat: 'Editorial', title: 'Verdant Dreams' },
-  { cls: 'p5', cat: 'Portrait', title: 'In Full Bloom' },
-  { cls: 'p6', cat: 'Fashion', title: 'Purple Reign' },
-  { cls: 'p7', cat: 'Product', title: 'Ember Days' },
-  { cls: 'p8', cat: 'Landscape', title: 'Teal at Dusk' },
-];
-const ctEl = document.getElementById('carouselTrack');
-const doubled = [...carouselData, ...carouselData];
-doubled.forEach(d => {
-  ctEl.innerHTML += `
-    <div class="carousel-card ${d.cls}">
-      <div class="cc-overlay"></div>
-      <div class="carousel-card-inner">
-        <div class="cc-content">
-          <div class="cc-cat">${d.cat}</div>
-          <div class="cc-title">${d.title}</div>
+  <!-- Marquee Strip 1 -->
+  <div style="overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); height: 52px; display: flex; align-items: center; background: rgba(255,255,255,0.015);">
+    <div class="marquee-left" style="display: flex; width: max-content;">
+      <div style="display: flex; align-items: center; gap: 0;">
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; white-space: nowrap;">Commercial Photography</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); white-space: nowrap;">Editorial</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; white-space: nowrap;">Brand Storytelling</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); white-space: nowrap;">Fine Art</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; white-space: nowrap;">Architectural</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); white-space: nowrap;">Portrait</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0;"></div>
         </div>
       </div>
-    </div>`;
-});
-</script>
+      <!-- Duplicate -->
+      <div style="display: flex; align-items: center; gap: 0;">
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; white-space: nowrap;">Commercial Photography</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); white-space: nowrap;">Editorial</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; white-space: nowrap;">Brand Storytelling</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); white-space: nowrap;">Fine Art</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px; border-right: 1px solid var(--border);">
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; white-space: nowrap;">Architectural</span>
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); flex-shrink: 0;"></div>
+        </div>
+        <div style="padding: 0 32px; display: flex; align-items: center; gap: 16px;">
+          <span style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); white-space: nowrap;">Portrait</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editorial section -->
+  <section style="padding: 100px 64px; max-width: 1200px; margin: 0 auto;" class="reveal">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-bottom: 80px;">
+      <div>
+        <div style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); margin-bottom: 24px;">About the Studio</div>
+        <h2 class="edit-heading" style="font-size: clamp(36px, 5vw, 64px);">Precision<br/>in every<br/>frame</h2>
+      </div>
+      <div style="padding-top: 24px;">
+        <p style="font-size: 15px; line-height: 1.8; color: var(--dim); margin-bottom: 24px;">
+          Founded in 2014, ORBIT STUDIO is a photography practice rooted in the belief that great images begin with great listening. We work with creative directors, art editors, and brand teams across fashion, architecture, and culture.
+        </p>
+        <p style="font-size: 15px; line-height: 1.8; color: var(--dim);">
+          Our approach combines technical rigor with an editorial eye trained across three continents — producing work that feels inevitable, not constructed.
+        </p>
+        <div style="display: flex; gap: 48px; margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--border);">
+          <div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300;">180+</div>
+            <div style="font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); margin-top: 4px;">Commissions</div>
+          </div>
+          <div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300;">12</div>
+            <div style="font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); margin-top: 4px;">Countries</div>
+          </div>
+          <div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300;">4</div>
+            <div style="font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); margin-top: 4px;">Exhibitions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section style="padding: 0 64px 100px; max-width: 1200px; margin: 0 auto;" class="reveal">
+    <div style="font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); margin-bottom: 40px;">Services</div>
+    <div>
+      <div class="service-row">
+        <span class="service-num">01</span>
+        <h3 class="service-name">Commercial &amp; Advertising</h3>
+        <p class="service-desc">Full production — concept, location scouting, talent direction, post-processing. Campaigns that work across print, digital, and OOH at any scale.</p>
+      </div>
+      <div class="service-row">
+        <span class="service-num">02</span>
+        <h3 class="service-name">Editorial &amp; Press</h3>
+        <p class="service-desc">Magazine editorial and press photography with a journalism-informed sensibility. Fast turnaround, high resolution, publication-ready files.</p>
+      </div>
+      <div class="service-row">
+        <span class="service-num">03</span>
+        <h3 class="service-name">Architectural &amp; Interiors</h3>
+        <p class="service-desc">Documenting designed environments with technical precision — for architects, developers, and hospitality brands that need spaces to read as beautifully as they were built.</p>
+      </div>
+      <div class="service-row">
+        <span class="service-num">04</span>
+        <h3 class="service-name">Fine Art &amp; Exhibition</h3>
+        <p class="service-desc">Limited-edition prints for gallery, collector, and institutional contexts. Museum-quality archival processing, custom framing consultation, edition documentation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Second marquee -->
+  <div style="overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); height: 52px; display: flex; align-items: center; background: rgba(255,255,255,0.01);">
+    <div class="marquee-right" style="display: flex; width: max-content;">
+      <div style="display: flex; align-items: center; gap: 0;">
+        <div style="padding: 0 32px; font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--dim); white-space: nowrap; border-right: 1px solid var(--border);">Wallpaper*</div>
+        <div style="padding: 0 32px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.2); white-space: nowrap; border-right: 1px solid var(--border);">Dezeen</div>
+        <div style="padding: 0 32px; font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--dim); white-space: nowrap; border-right: 1px solid var(--border);">Kinfolk</div>
+        <div style="padding: 0 32px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.2); white-space: nowrap; border-right: 1px solid var(--border);">Frame Magazine</div>
+        <div style="padding: 0 32px; font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--dim); white-space: nowrap; border-right: 1px solid var(--border);">Apartamento</div>
+        <div style="padding: 0 32px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.2); white-space: nowrap; border-right: 1px solid var(--border);">Domus</div>
+        <div style="padding: 0 32px; font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--dim); white-space: nowrap; border-right: 1px solid var(--border);">Vogue Living</div>
+        <div style="padding: 0 32px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.2); white-space: nowrap; border-right: 1px solid var(--border);">The World of Interiors</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0;">
+        <div style="padding: 0 32px; font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--dim); white-space: nowrap; border-right: 1px solid var(--border);">Wallpaper*</div>
+        <div style="padding: 0 32px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.2); white-space: nowrap; border-right: 1px solid var(--border);">Dezeen</div>
+        <div style="padding: 0 32px; font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--dim); white-space: nowrap; border-right: 1px solid var(--border);">Kinfolk</div>
+        <div style="padding: 0 32px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.2); white-space: nowrap; border-right: 1px solid var(--border);">Frame Magazine</div>
+        <div style="padding: 0 32px; font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--dim); white-space: nowrap; border-right: 1px solid var(--border);">Apartamento</div>
+        <div style="padding: 0 32px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.2); white-space: nowrap; border-right: 1px solid var(--border);">Domus</div>
+        <div style="padding: 0 32px; font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.05em; color: var(--dim); white-space: nowrap; border-right: 1px solid var(--border);">Vogue Living</div>
+        <div style="padding: 0 32px; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.2); white-space: nowrap;">The World of Interiors</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact CTA -->
+  <section style="padding: 120px 64px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;" class="reveal">
+    <div>
+      <h2 class="edit-heading">
+        Let's make<br/>
+        something<br/>
+        <em>lasting</em>
+      </h2>
+    </div>
+    <div>
+      <p style="font-size: 15px; line-height: 1.8; color: var(--dim); margin-bottom: 32px; max-width: 380px;">
+        We take on a limited number of new commissions each quarter to ensure every project receives our full attention. Enquiries are reviewed within 48 hours.
+      </p>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <a href="#" style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.25); padding: 14px 28px; transition: border-color 0.2s, background 0.2s;" onmouseover="this.style.borderColor='#fff'; this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.25)'; this.style.background='transparent'">
+          Submit an Enquiry
+        </a>
+        <a href="mailto:hello@orbitstudio.co" style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--dim)'">
+          hello@orbitstudio.co
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--border); padding: 32px 64px; display: flex; justify-content: space-between; align-items: center;">
+    <span style="font-family: 'Cormorant Garamond', serif; font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase;">Orbit Studio</span>
+    <span style="font-size: 11px; color: var(--dim);">&copy; 2024 Orbit Studio. All rights reserved.</span>
+    <div style="display: flex; gap: 24px;">
+      <a href="#" style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--dim)'">Instagram</a>
+      <a href="#" style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--dim)'">Privacy</a>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    // ── Circular Gallery ──
+    const galleryData = [
+      { img: '../../images/creative/creative-1.jpg', title: 'Maison Verde', cat: 'Brand Identity' },
+      { img: '../../images/creative/creative-2.jpg', title: 'Studio Still', cat: 'Commercial' },
+      { img: '../../images/creative/creative-3.jpg', title: 'Drift Campaign', cat: 'Editorial' },
+      { img: '../../images/creative/creative-4.jpg', title: 'Celeste Botanicals', cat: 'Packaging' },
+      { img: '../../images/creative/creative-5.jpg', title: 'Urban Geometry', cat: 'Architectural' },
+      { img: '../../images/creative/creative-6.jpg', title: 'Contours Series', cat: 'Fine Art' },
+    ];
+
+    const track = document.getElementById('gallery-track');
+    const trackSize = 700;
+    const radius = 280;
+    const count = galleryData.length;
+
+    // Place items on a circle and animate with JS for smooth drag support
+    const items = [];
+    let currentAngle = 0;
+    let dragStartX = 0;
+    let isDragging = false;
+    let dragVelocity = 0;
+    let lastDragX = 0;
+    let lastDragTime = 0;
+    let autoSpeed = 0.15; // degrees per frame
+
+    galleryData.forEach((data, i) => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `
+        <img src="${data.img}" alt="${data.title}" />
+        <div class="gallery-item-label">
+          <div class="gallery-item-title">${data.title}</div>
+          <div class="gallery-item-cat">${data.cat}</div>
+        </div>
+      `;
+      track.appendChild(item);
+      items.push(item);
+    });
+
+    function positionItems(baseAngle) {
+      items.forEach((item, i) => {
+        const angle = baseAngle + (360 / count) * i;
+        const rad = (angle * Math.PI) / 180;
+        const x = Math.cos(rad) * radius;
+        const y = Math.sin(rad) * radius;
+
+        // Counter-rotate text to keep upright
+        const cx = trackSize / 2;
+        const cy = trackSize / 2;
+
+        item.style.left = cx + x - 110 + 'px';
+        item.style.top = cy + y - 145 + 'px';
+
+        // Scale and opacity based on vertical position (bottom = front, top = back)
+        const normalizedY = (y + radius) / (2 * radius); // 0=top, 1=bottom
+        const scale = 0.65 + normalizedY * 0.45;
+        const opacity = 0.35 + normalizedY * 0.65;
+        const zIndex = Math.round(normalizedY * 100);
+
+        item.style.transform = `scale(${scale})`;
+        item.style.opacity = opacity;
+        item.style.zIndex = zIndex;
+        item.style.transformOrigin = 'center center';
+      });
+    }
+
+    let animFrame;
+    function animate() {
+      if (!isDragging) {
+        currentAngle += autoSpeed;
+        // Apply drag velocity decay
+        if (Math.abs(dragVelocity) > 0.01) {
+          currentAngle += dragVelocity;
+          dragVelocity *= 0.95;
+        }
+      }
+      positionItems(currentAngle);
+      animFrame = requestAnimationFrame(animate);
+    }
+
+    // Drag support
+    const section = document.getElementById('gallery-section');
+
+    section.addEventListener('mousedown', e => {
+      isDragging = true;
+      dragStartX = e.clientX;
+      lastDragX = e.clientX;
+      lastDragTime = Date.now();
+      dragVelocity = 0;
+      section.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dx = e.clientX - lastDragX;
+      const now = Date.now();
+      const dt = now - lastDragTime;
+      dragVelocity = (dx / (dt || 1)) * 3;
+      currentAngle += dx * 0.3;
+      lastDragX = e.clientX;
+      lastDragTime = now;
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      section.style.cursor = '';
+    });
+
+    // Touch support
+    section.addEventListener('touchstart', e => {
+      isDragging = true;
+      lastDragX = e.touches[0].clientX;
+      lastDragTime = Date.now();
+      dragVelocity = 0;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      const dx = e.touches[0].clientX - lastDragX;
+      const now = Date.now();
+      dragVelocity = (dx / (Math.max(now - lastDragTime, 1))) * 3;
+      currentAngle += dx * 0.3;
+      lastDragX = e.touches[0].clientX;
+      lastDragTime = now;
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => { isDragging = false; });
+
+    // Start animation
+    positionItems(currentAngle);
+    animate();
+
+    // ── Scroll reveal ──
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
 </body>
 </html>

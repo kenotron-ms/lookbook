@@ -3,557 +3,829 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CIPHER — AI Code Assistant · Request Early Access</title>
+<title>CIPHER &mdash; AI Code Assistant</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Geist+Mono:wght@100;200;300;400;500;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap');
+  :root {
+    --bg: #080808;
+    --white: #ffffff;
+    --silver: #E2E8F0;
+    --silver-gradient: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    --border: rgba(255,255,255,0.08);
+    --glass-bg: rgba(255,255,255,0.02);
+    --muted: rgba(255,255,255,0.35);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::selection { background: rgba(255,255,255,0.15); color: var(--white); }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--silver);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
 
-:root {
-  --bg: #080808;
-  --surface: #0F0F0F;
-  --card: #141414;
-  --border: rgba(255,255,255,0.07);
-  --border-bright: rgba(255,255,255,0.14);
-  --white: #FFFFFF;
-  --gray-100: #F5F5F5;
-  --gray-300: #B3B3B3;
-  --gray-500: #666666;
-  --gray-700: #333333;
-  --silver: #C0C0C0;
-  --silver-bright: #E8E8E8;
-  --gold: #9B8B6E;
-  --mono: 'DM Mono', monospace;
-}
+  /* Noise */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
 
-html { scroll-behavior: smooth; }
-body { font-family: 'DM Serif Display', serif; background: var(--bg); color: var(--white); overflow-x: hidden; }
+  .font-serif { font-family: 'DM Serif Display', serif; }
+  .font-mono { font-family: 'Geist Mono', monospace; }
+  .font-sans { font-family: 'Inter', sans-serif; }
 
-/* noise overlay */
-body::after {
-  content: '';
-  position: fixed; inset: 0; z-index: 999; pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  opacity: 1;
-}
+  /* Silver gradient text */
+  .silver-text {
+    background: var(--silver-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-/* ── FLOATING MOBILE NAV ──────────────────────────────────── */
-.float-nav {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 900;
-  background: rgba(20, 20, 20, 0.92); backdrop-filter: blur(24px);
-  border: 1px solid var(--border-bright); border-radius: 100px;
-  padding: 12px 28px; display: flex; align-items: center; gap: 28px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
-}
+  /* Glassmorphism */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+  }
 
-.float-nav-logo { font-size: 0.88rem; letter-spacing: 4px; text-transform: uppercase; color: var(--white); font-family: var(--mono); font-weight: 500; }
+  /* Slide-up animation */
+  .slide-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .slide-up.visible { opacity: 1; transform: translateY(0); }
 
-.float-nav-links { display: flex; gap: 24px; }
-.float-nav-links a { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-500); text-decoration: none; transition: color 0.2s; letter-spacing: 0.5px; }
-.float-nav-links a:hover { color: var(--white); }
+  /* Silver gradient button */
+  .btn-silver {
+    background: var(--silver-gradient);
+    color: #080808;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.875rem 2rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: box-shadow 0.3s, transform 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-silver:hover { box-shadow: 0 0 20px rgba(255,255,255,0.15); transform: translateY(-1px); }
 
-.float-nav-cta {
-  font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
-  padding: 8px 18px; border: 1px solid var(--border-bright); border-radius: 100px;
-  color: var(--white); text-decoration: none; transition: all 0.2s; white-space: nowrap;
-  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-}
-.float-nav-cta:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.1); }
+  /* Floating mobile nav */
+  .mobile-nav {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.75rem 2rem;
+    background: rgba(8,8,8,0.85);
+    backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    white-space: nowrap;
+  }
+  .mnav-logo {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--white);
+  }
+  .mnav-sep { width: 1px; height: 16px; background: var(--border); }
+  .mnav-links { display: flex; gap: 1.25rem; }
+  .mnav-links a {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mnav-links a:hover { color: var(--white); }
 
-/* ── HERO ─────────────────────────────────────────────────── */
-.hero {
-  min-height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 80px 5vw 120px;
-  position: relative; overflow: hidden; text-align: center;
-}
+  /* Sticky top bar */
+  .top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 1.25rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .top-bar.scrolled { border-color: var(--border); background: rgba(8,8,8,0.7); backdrop-filter: blur(20px); }
+  .top-bar-logo {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .top-bar-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.2);
+    text-transform: uppercase;
+  }
+  .top-bar-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-.hero-bg-circle {
-  position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
-  width: 900px; height: 900px; border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(192,192,192,0.04) 0%, transparent 60%);
-  border: 1px solid rgba(255,255,255,0.03);
-  pointer-events: none;
-}
+  /* Hero */
+  .hero {
+    width: 92vw;
+    margin: 0 auto;
+    padding: 10rem 0 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('../../images/tech/tech-3.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.04;
+    filter: grayscale(100%);
+    border-radius: 4rem;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 5rem;
+    background: rgba(255,255,255,0.01);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 4rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3rem;
+  }
+  .hero-headline {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(4rem, 10vw, 12rem);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin-bottom: 2.5rem;
+    max-width: 900px;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 3.5rem;
+  }
+  .hero-form {
+    display: flex;
+    gap: 0;
+    max-width: 480px;
+    width: 100%;
+    margin-bottom: 1.25rem;
+  }
+  .hero-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--white);
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.825rem;
+    outline: none;
+    border-radius: 6px 0 0 6px;
+    transition: border-color 0.2s;
+  }
+  .hero-input:focus { border-color: rgba(255,255,255,0.2); }
+  .hero-input::placeholder { color: rgba(255,255,255,0.2); }
+  .hero-btn {
+    padding: 1rem 1.75rem;
+    background: var(--silver-gradient);
+    color: #000;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 6px 6px 0;
+    transition: box-shadow 0.3s;
+    white-space: nowrap;
+  }
+  .hero-btn:hover { box-shadow: 0 0 20px rgba(255,255,255,0.15); }
+  .hero-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.1em;
+  }
 
-.hero-overline {
-  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 4px;
-  text-transform: uppercase; color: var(--gray-500); margin-bottom: 32px;
-  display: flex; align-items: center; gap: 16px;
-  opacity: 0; animation: slideUp 0.8s ease forwards 0.2s;
-}
+  /* Data metadata bar */
+  .meta-bar {
+    width: 92vw;
+    margin: 0 auto;
+    padding: 2rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--glass-bg);
+  }
+  .meta-item {
+    padding: 0 2rem;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .meta-item:first-child { padding-left: 0; }
+  .meta-item:last-child { border-right: none; }
+  .meta-val {
+    font-family: 'Geist Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--silver-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.03em;
+  }
+  .meta-key {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
 
-.hero-overline::before, .hero-overline::after {
-  content: ''; flex: 1; max-width: 80px; height: 1px; background: var(--border-bright);
-}
+  /* Feature bento */
+  .bento-section {
+    width: 92vw;
+    margin: 3rem auto;
+  }
+  .bento-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 2.5rem;
+  }
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  .bento-card {
+    background: var(--bg);
+    padding: 3rem;
+    transition: background 0.3s;
+  }
+  .bento-card:hover { background: #0e0e0e; }
+  .bento-card.wide { grid-column: span 2; }
+  .bento-card.tall { grid-row: span 2; }
+  .bento-card-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.18);
+    margin-bottom: 1.5rem;
+  }
+  .bento-card-icon {
+    margin-bottom: 1.5rem;
+  }
+  .bento-card-icon i { width: 24px; height: 24px; color: rgba(255,255,255,0.3); }
+  .bento-card.wide .bento-card-icon i { width: 32px; height: 32px; }
+  .bento-card-name {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 0.875rem;
+  }
+  .bento-card.wide .bento-card-name { font-size: 2.25rem; }
+  .bento-card-desc {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.35);
+  }
+  .bento-card.wide .bento-card-desc { max-width: 520px; }
+  .bento-stat {
+    margin-top: 2rem;
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    font-style: italic;
+    background: var(--silver-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .bento-stat-sub {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.1em;
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+  }
 
-.hero-title {
-  width: 92vw; max-width: 1200px;
-  font-size: clamp(4rem, 10vw, 9rem); font-weight: 400;
-  line-height: 0.95; letter-spacing: -3px;
-  margin-bottom: 40px;
-  opacity: 0; animation: slideUp 0.8s ease forwards 0.4s;
-  background: linear-gradient(180deg, var(--white) 0%, var(--gray-300) 60%, var(--gray-500) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
+  /* Value propositions */
+  .value-section {
+    width: 92vw;
+    margin: 3rem auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  .value-card {
+    background: var(--bg);
+    padding: 4rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .value-number {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.15);
+  }
+  .value-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.15;
+  }
+  .value-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.4);
+  }
+  .value-rule { width: 40px; height: 1px; background: rgba(255,255,255,0.1); }
 
-.hero-title em {
-  font-style: italic; color: var(--silver);
-  -webkit-text-fill-color: transparent;
-  background: linear-gradient(135deg, var(--silver-bright), var(--silver), var(--gray-500));
-  -webkit-background-clip: text; background-clip: text;
-}
+  /* Social proof / urgency */
+  .proof-section {
+    width: 92vw;
+    margin: 3rem auto;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--glass-bg);
+    padding: 4rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .proof-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .proof-body {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 2rem;
+  }
+  .proof-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+  .proof-item {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1.25rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .proof-item-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .proof-item-icon i { width: 14px; height: 14px; color: rgba(255,255,255,0.4); }
+  .proof-item-text { font-size: 0.875rem; color: rgba(255,255,255,0.5); }
+  .proof-item-val {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--silver-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-left: auto;
+  }
 
-.hero-sub {
-  font-family: var(--mono); font-size: 0.9rem; color: var(--gray-500);
-  line-height: 1.75; max-width: 520px; margin: 0 auto 48px;
-  font-weight: 400;
-  opacity: 0; animation: slideUp 0.8s ease forwards 0.6s;
-}
+  /* Final CTA */
+  .final-cta {
+    width: 92vw;
+    margin: 3rem auto 8rem;
+    padding: 6rem;
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    background: rgba(255,255,255,0.01);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('../../images/tech/tech-4.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.03;
+    filter: grayscale(100%);
+  }
+  .final-cta-headline {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(3rem, 7vw, 8rem);
+    line-height: 0.88;
+    color: var(--white);
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .final-cta-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.35);
+    max-width: 440px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+  }
+  .final-cta-form {
+    display: flex;
+    gap: 0;
+    max-width: 460px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+  }
+  .final-cta-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-right: none;
+    color: var(--white);
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.825rem;
+    outline: none;
+    border-radius: 6px 0 0 6px;
+    transition: border-color 0.2s;
+  }
+  .final-cta-input:focus { border-color: rgba(255,255,255,0.2); }
+  .final-cta-input::placeholder { color: rgba(255,255,255,0.15); }
+  .final-cta-btn {
+    padding: 1rem 1.75rem;
+    background: var(--silver-gradient);
+    color: #000;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 6px 6px 0;
+    transition: box-shadow 0.3s;
+    white-space: nowrap;
+  }
+  .final-cta-btn:hover { box-shadow: 0 0 30px rgba(255,255,255,0.15); }
+  .final-cta-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
 
-/* access form */
-.access-form {
-  width: 92vw; max-width: 480px; margin: 0 auto;
-  opacity: 0; animation: slideUp 0.8s ease forwards 0.8s;
-}
+  /* Footer */
+  footer {
+    width: 92vw;
+    margin: 0 auto;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5rem;
+  }
+  .footer-mono {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.15);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
 
-.form-input-group { position: relative; margin-bottom: 12px; }
-
-.form-input {
-  width: 100%; padding: 18px 24px;
-  background: rgba(255,255,255,0.04); border: 1px solid var(--border-bright);
-  border-radius: 4px; font-family: var(--mono); font-size: 0.85rem;
-  color: var(--white); outline: none; transition: border-color 0.2s;
-  letter-spacing: 0.5px;
-}
-
-.form-input::placeholder { color: var(--gray-700); }
-.form-input:focus { border-color: rgba(255,255,255,0.3); }
-
-.form-select {
-  width: 100%; padding: 18px 24px;
-  background: rgba(255,255,255,0.04); border: 1px solid var(--border-bright);
-  border-radius: 4px; font-family: var(--mono); font-size: 0.85rem;
-  color: var(--gray-500); outline: none; appearance: none;
-  transition: border-color 0.2s; cursor: pointer;
-}
-
-.form-select:focus { border-color: rgba(255,255,255,0.3); color: var(--white); }
-.form-select option { background: #141414; }
-
-.form-submit {
-  width: 100%; padding: 18px;
-  background: linear-gradient(135deg, var(--silver-bright) 0%, var(--silver) 50%, var(--gray-300) 100%);
-  border: none; border-radius: 4px;
-  font-family: var(--mono); font-size: 0.82rem; font-weight: 500; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--bg); cursor: pointer;
-  transition: all 0.2s; margin-top: 4px;
-}
-
-.form-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(192,192,192,0.2); }
-
-.form-note { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-700); text-align: center; margin-top: 12px; letter-spacing: 0.5px; }
-
-.waitlist-count {
-  font-family: var(--mono); font-size: 0.72rem; color: var(--gray-500);
-  margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 12px;
-  opacity: 0; animation: slideUp 0.8s ease forwards 1s;
-}
-
-.waitlist-avatars { display: flex; }
-.waitlist-avatar { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--bg); margin-left: -6px; background: var(--gray-700); font-size: 0; }
-.waitlist-avatar:first-child { margin-left: 0; }
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(32px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ── MARQUEE ──────────────────────────────────────────────── */
-.marquee-wrap {
-  background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  padding: 16px 0; overflow: hidden;
-}
-.marquee-track { display: inline-flex; animation: marqueeScroll 24s linear infinite; white-space: nowrap; }
-.marquee-track span { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-700); padding: 0 32px; letter-spacing: 2px; text-transform: uppercase; }
-.marquee-track .sep { color: var(--gray-500); }
-@keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-/* ── BENTO SECTION ────────────────────────────────────────── */
-.bento-section { padding: 100px 5vw; }
-.bento-inner { max-width: 1200px; margin: 0 auto; }
-
-.section-header { margin-bottom: 64px; }
-.section-overline { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-700); margin-bottom: 12px; }
-.section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 400; letter-spacing: -2px; line-height: 1.0; }
-.section-title em { font-style: italic; color: var(--gray-500); }
-
-.bento-grid {
-  display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px;
-}
-
-.b-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 8px; padding: 36px 32px;
-  opacity: 0; transform: translateY(24px);
-}
-.b-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
-.b-card:hover { border-color: var(--border-bright); }
-
-.b-card.c5 { grid-column: span 5; }
-.b-card.c7 { grid-column: span 7; }
-.b-card.c4 { grid-column: span 4; }
-.b-card.c8 { grid-column: span 8; }
-.b-card.c6 { grid-column: span 6; }
-.b-card.c3 { grid-column: span 3; }
-.b-card.c12 { grid-column: span 12; }
-
-.b-tag { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-700); margin-bottom: 20px; }
-.b-title { font-size: clamp(1.2rem, 2vw, 1.8rem); letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 12px; }
-.b-title em { font-style: italic; color: var(--gray-500); }
-.b-body { font-family: var(--mono); font-size: 0.78rem; color: var(--gray-500); line-height: 1.7; }
-
-.b-metric { font-size: 5rem; font-weight: 400; letter-spacing: -4px; line-height: 0.9; margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--white), var(--gray-300));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-
-.b-code {
-  margin-top: 20px; background: rgba(0,0,0,0.5); border: 1px solid var(--border);
-  border-radius: 6px; padding: 16px 20px;
-  font-family: var(--mono); font-size: 0.72rem; line-height: 1.8; overflow-x: auto;
-}
-
-.c-green { color: #4EC9B0; }
-.c-blue { color: #9CDCFE; }
-.c-purple { color: #C792EA; }
-.c-yellow { color: #FFCB8B; }
-.c-gray { color: var(--gray-700); }
-
-.b-silver-bar {
-  height: 2px; border-radius: 100px; margin-top: 20px;
-  background: linear-gradient(90deg, var(--silver-bright), var(--silver), transparent);
-}
-
-.b-progress-list { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
-.b-progress-item { }
-.b-progress-label { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-500); display: flex; justify-content: space-between; margin-bottom: 6px; }
-.b-progress-track { height: 3px; background: var(--border); border-radius: 100px; overflow: hidden; }
-.b-progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--silver-bright), var(--silver)); }
-
-/* ── TESTIMONIALS ─────────────────────────────────────────── */
-.testimonials-section { padding: 100px 5vw; border-top: 1px solid var(--border); }
-.testimonials-inner { max-width: 1200px; margin: 0 auto; }
-
-.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 64px; }
-
-.t-card {
-  border: 1px solid var(--border); border-radius: 8px; padding: 36px 32px;
-  background: var(--card); opacity: 0; transform: translateY(20px);
-}
-.t-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.6s, transform 0.6s; }
-
-.t-card.featured-t { background: transparent; border-color: var(--border-bright); grid-column: span 2; }
-
-.t-quote { font-size: clamp(1rem, 1.5vw, 1.3rem); line-height: 1.6; margin-bottom: 24px; font-weight: 400; }
-.t-card .t-quote { font-size: 0.9rem; }
-.t-featured-badge { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-700); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
-.t-divider { width: 24px; height: 1px; background: var(--border-bright); margin-bottom: 16px; }
-.t-name { font-size: 0.9rem; letter-spacing: -0.2px; margin-bottom: 4px; }
-.t-role { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-700); letter-spacing: 1px; }
-
-/* ── CTA ──────────────────────────────────────────────────── */
-.cta-section {
-  padding: 140px 5vw; text-align: center;
-  position: relative; overflow: hidden; border-top: 1px solid var(--border);
-}
-
-.cta-section::before {
-  content: 'CIPHER';
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  font-size: 28vw; letter-spacing: -0.05em;
-  color: rgba(255,255,255,0.018); pointer-events: none;
-}
-
-.cta-inner { max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
-.cta-eyebrow { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gray-700); margin-bottom: 24px; }
-.cta-title { font-size: clamp(3rem, 7vw, 6rem); letter-spacing: -3px; line-height: 0.95; margin-bottom: 24px;
-  background: linear-gradient(180deg, var(--white) 0%, var(--gray-300) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.cta-sub { font-family: var(--mono); font-size: 0.85rem; color: var(--gray-500); line-height: 1.7; margin-bottom: 40px; }
-.cta-input-row { display: flex; gap: 8px; max-width: 420px; margin: 0 auto; }
-.cta-input { flex: 1; padding: 16px 20px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-bright); border-radius: 4px; font-family: var(--mono); font-size: 0.82rem; color: var(--white); outline: none; }
-.cta-input::placeholder { color: var(--gray-700); }
-.cta-btn { padding: 16px 24px; background: linear-gradient(135deg, var(--silver-bright), var(--silver)); border: none; border-radius: 4px; font-family: var(--mono); font-size: 0.78rem; font-weight: 500; letter-spacing: 1px; color: var(--bg); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
-.cta-btn:hover { box-shadow: 0 0 24px rgba(192,192,192,0.2); }
-.cta-footnote { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-700); margin-top: 12px; letter-spacing: 1px; }
-
-/* ── FOOTER ───────────────────────────────────────────────── */
-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 60px 5vw 32px; }
-.footer-inner { max-width: 1200px; margin: 0 auto; }
-.footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-.footer-brand-name { font-size: 1.5rem; letter-spacing: -0.5px; margin-bottom: 8px; }
-.footer-brand p { font-family: var(--mono); font-size: 0.72rem; color: var(--gray-700); max-width: 200px; line-height: 1.65; }
-.footer-links { display: flex; gap: 64px; }
-.footer-col h4 { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-700); margin-bottom: 16px; }
-.footer-col a { display: block; font-family: var(--mono); font-size: 0.75rem; color: var(--gray-500); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
-.footer-col a:hover { color: var(--white); }
-.footer-bottom { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.65rem; color: var(--gray-700); letter-spacing: 0.5px; flex-wrap: wrap; gap: 8px; }
-
-@media (max-width: 900px) {
-  .float-nav-links { display: none; }
-  .hero-title { font-size: clamp(3rem, 15vw, 9rem); }
-  .bento-section, .testimonials-section, .cta-section { padding: 60px 5vw; }
-  .b-card.c5, .b-card.c7, .b-card.c4, .b-card.c8, .b-card.c6, .b-card.c3 { grid-column: span 12; }
-  .testimonials-grid { grid-template-columns: 1fr; }
-  .t-card.featured-t { grid-column: span 1; }
-  .footer-top { flex-direction: column; }
-  .footer-links { flex-wrap: wrap; gap: 32px; }
-}
+  @media (max-width: 768px) {
+    .hero-inner { padding: 3rem 2rem; border-radius: 2rem; }
+    .meta-bar { grid-template-columns: 1fr 1fr; padding: 1.5rem; }
+    .meta-item { padding: 0.75rem; }
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-card.wide, .bento-card.tall { grid-column: span 1; grid-row: span 1; }
+    .value-section { grid-template-columns: 1fr; }
+    .proof-section { grid-template-columns: 1fr; gap: 2rem; }
+    .final-cta { padding: 3rem 2rem; }
+    .final-cta-form { flex-direction: column; }
+    .final-cta-input { border-right: 1px solid var(--border); border-radius: 6px; }
+    .final-cta-btn { border-radius: 6px; }
+    .mobile-nav { width: calc(100% - 3rem); }
+    .mnav-links { display: none; }
+  }
 </style>
 </head>
 <body>
 
-<!-- FLOATING NAV -->
-<div class="float-nav">
-  <div class="float-nav-logo">CIPHER</div>
-  <div class="float-nav-links">
-    <a href="#">Features</a>
-    <a href="#">Research</a>
-    <a href="#">Pricing</a>
-    <a href="#">Docs</a>
-  </div>
-  <a href="#" class="float-nav-cta">Request Access →</a>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg-circle"></div>
-  <div class="hero-overline">AI Code Assistant · Early Access · 2025</div>
-  <h1 class="hero-title">The last<br>codebase<br>you'll <em>ever</em><br>misread.</h1>
-  <p class="hero-sub">CIPHER is an AI reasoning engine that understands your entire codebase — architecture, patterns, dependencies — and writes code that actually fits.</p>
-  <form class="access-form" onsubmit="return false;">
-    <div class="form-input-group">
-      <input class="form-input" type="email" placeholder="your work email" />
-    </div>
-    <div class="form-input-group">
-      <select class="form-select">
-        <option value="" disabled selected>what are you building?</option>
-        <option>SaaS Product</option>
-        <option>Internal Tooling</option>
-        <option>Open Source Project</option>
-        <option>Agency / Consulting</option>
-        <option>Enterprise Software</option>
-      </select>
-    </div>
-    <button class="form-submit">Request Early Access</button>
-    <p class="form-note">By requesting access, you agree to our Terms of Service and Privacy Policy.</p>
-  </form>
-  <div class="waitlist-count">
-    <div class="waitlist-avatars">
-      <div class="waitlist-avatar" style="background:#2A2A3E;">1</div>
-      <div class="waitlist-avatar" style="background:#1A2A1A;">2</div>
-      <div class="waitlist-avatar" style="background:#2A1A1A;">3</div>
-      <div class="waitlist-avatar" style="background:#1A2A2A;">4</div>
-    </div>
-    <span>6,847 engineers already on the waitlist</span>
-  </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <span>AI Code Completion</span><span class="sep">·</span>
-    <span>Codebase Reasoning</span><span class="sep">·</span>
-    <span>Refactor Intelligence</span><span class="sep">·</span>
-    <span>Architecture Analysis</span><span class="sep">·</span>
-    <span>Test Generation</span><span class="sep">·</span>
-    <span>Code Review</span><span class="sep">·</span>
-    <span>Dependency Mapping</span><span class="sep">·</span>
-    <span>Natural Language Queries</span><span class="sep">·</span>
-    <span>AI Code Completion</span><span class="sep">·</span>
-    <span>Codebase Reasoning</span><span class="sep">·</span>
-    <span>Refactor Intelligence</span><span class="sep">·</span>
-    <span>Architecture Analysis</span><span class="sep">·</span>
-    <span>Test Generation</span><span class="sep">·</span>
-    <span>Code Review</span><span class="sep">·</span>
-    <span>Dependency Mapping</span><span class="sep">·</span>
-    <span>Natural Language Queries</span><span class="sep">·</span>
+<!-- Top bar -->
+<div class="top-bar" id="topbar">
+  <span class="top-bar-logo">CIPHER</span>
+  <div class="top-bar-status">
+    <div class="top-bar-dot"></div>
+    Early access open
   </div>
 </div>
 
-<!-- BENTO FEATURES -->
-<section class="bento-section">
-  <div class="bento-inner">
-    <div class="section-header">
-      <div class="section-overline">// capabilities</div>
-      <h2 class="section-title">Intelligence<br>that thinks<br><em>like you do.</em></h2>
-    </div>
-    <div class="bento-grid">
-      <div class="b-card c7">
-        <div class="b-tag">// codebase context</div>
-        <h3 class="b-title">Your entire codebase,<br><em>understood.</em></h3>
-        <p class="b-body">CIPHER indexes your repository and builds a deep semantic map — not just file contents but relationships, patterns, and architectural decisions. Ask it anything.</p>
-        <div class="b-code">
-          <span class="c-gray">// Ask CIPHER in plain language</span><br>
-          <span class="c-blue">cipher</span><span style="color:#E2E8F0;"> ask </span><span class="c-yellow">"where is authentication handled?"</span><br><br>
-          <span class="c-gray">→ Found 3 auth layers:</span><br>
-          <span class="c-green">  /src/middleware/auth.ts</span> <span class="c-gray">(JWT verification)</span><br>
-          <span class="c-green">  /src/services/AuthService.ts</span> <span class="c-gray">(session logic)</span><br>
-          <span class="c-green">  /src/guards/RoleGuard.ts</span> <span class="c-gray">(RBAC)</span>
-        </div>
+<!-- Hero -->
+<section style="padding-top:5rem">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner slide-up">
+      <p class="hero-label">AI Code Assistant &mdash; Early Access Program</p>
+      <h1 class="hero-headline">
+        Code at the<br>edge of thought.
+      </h1>
+      <p class="hero-sub">CIPHER is the AI code assistant that thinks in architecture, not autocomplete. It understands your codebase, not just your cursor position.</p>
+      <div class="hero-form">
+        <input type="email" class="hero-input" placeholder="engineer@yourcompany.com">
+        <button class="hero-btn">Request Access</button>
       </div>
-      <div class="b-card c5">
-        <div class="b-tag">// code quality</div>
-        <div class="b-metric">94<span style="font-size:2rem;">%</span></div>
-        <p class="b-body" style="margin-bottom:20px;">Accuracy on HumanEval benchmark — higher than any model trained exclusively on code.</p>
-        <div class="b-progress-list">
-          <div class="b-progress-item">
-            <div class="b-progress-label"><span>HumanEval</span><span>94.2%</span></div>
-            <div class="b-progress-track"><div class="b-progress-fill" style="width:94%;"></div></div>
-          </div>
-          <div class="b-progress-item">
-            <div class="b-progress-label"><span>MBPP Plus</span><span>91.8%</span></div>
-            <div class="b-progress-track"><div class="b-progress-fill" style="width:92%;"></div></div>
-          </div>
-          <div class="b-progress-item">
-            <div class="b-progress-label"><span>SWE-Bench</span><span>38.4%</span></div>
-            <div class="b-progress-track"><div class="b-progress-fill" style="width:38%;"></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="b-card c4">
-        <div class="b-tag">// privacy</div>
-        <h3 class="b-title">Local.<br><em>Always.</em></h3>
-        <p class="b-body">Your code never leaves your machine. CIPHER runs the reasoning model locally with optional cloud inference for larger contexts.</p>
-        <div class="b-silver-bar"></div>
-      </div>
-      <div class="b-card c4">
-        <div class="b-tag">// refactoring</div>
-        <h3 class="b-title">Refactor<br><em>at scale.</em></h3>
-        <p class="b-body">Rename a function across 200 files, extract a shared interface, migrate a library — CIPHER plans and executes complex refactors with full context.</p>
-        <div class="b-silver-bar"></div>
-      </div>
-      <div class="b-card c4">
-        <div class="b-tag">// test generation</div>
-        <h3 class="b-title">Tests that<br><em>actually cover.</em></h3>
-        <p class="b-body">Generate unit, integration, and edge case tests based on real understanding of your business logic — not just function signatures.</p>
-        <div class="b-silver-bar"></div>
-      </div>
-      <div class="b-card c12">
-        <div class="b-tag">// multi-language</div>
-        <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
-          <h3 class="b-title" style="flex:1;min-width:200px;">Fluent in every language you work in.</h3>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">TypeScript</span>
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">Python</span>
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">Rust</span>
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">Go</span>
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">Java</span>
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">C++</span>
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">Ruby</span>
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">Kotlin</span>
-            <span style="font-family:var(--mono);font-size:0.72rem;padding:6px 14px;border:1px solid var(--border-bright);border-radius:4px;color:var(--gray-500);">+40 more</span>
-          </div>
-        </div>
-      </div>
+      <p class="hero-meta">No credit card required &mdash; Early access members receive founding pricing for life</p>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials-section">
-  <div class="testimonials-inner">
-    <div class="section-overline">// from the waitlist</div>
-    <h2 class="section-title" style="font-size:clamp(2rem,4vw,3.5rem);margin-bottom:0;">Engineers <em>can't wait.</em></h2>
-    <div class="testimonials-grid">
-      <div class="t-card featured-t">
-        <div class="t-featured-badge">// top signal</div>
-        <p class="t-quote">"Every code assistant I've tried treats my codebase like a blank slate. CIPHER actually understands *why* the code is written the way it is. It's the difference between a junior dev who can Google and a senior who has actually worked in the repo for two years."</p>
-        <div class="t-divider"></div>
-        <div class="t-name">Daniel K.</div>
-        <div class="t-role">Principal Engineer · Scale AI</div>
-      </div>
-      <div class="t-card">
-        <p class="t-quote">"The refactoring intelligence is what got me. I asked it to migrate our auth system to a new pattern and it produced a perfect implementation plan with all edge cases considered."</p>
-        <div class="t-divider"></div>
-        <div class="t-name">Priya M.</div>
-        <div class="t-role">Staff Engineer · Stripe</div>
-      </div>
-      <div class="t-card">
-        <p class="t-quote">"Copilot is autocomplete. CIPHER is architecture. It answers questions no other tool can. I need this yesterday."</p>
-        <div class="t-divider"></div>
-        <div class="t-name">Alex W.</div>
-        <div class="t-role">CTO · Finley (Y Combinator)</div>
-      </div>
-      <div class="t-card">
-        <p class="t-quote">"The local-first approach sealed it for me. Our code is sensitive and I refuse to send it to a cloud. CIPHER's architecture is the right answer."</p>
-        <div class="t-divider"></div>
-        <div class="t-name">Lena B.</div>
-        <div class="t-role">Security Lead · Palantir</div>
-      </div>
+<!-- Meta data bar -->
+<div class="meta-bar slide-up" style="transition-delay:0.1s">
+  <div class="meta-item">
+    <span class="meta-val">4.2K</span>
+    <span class="meta-key">Developers on waitlist</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-val">92%</span>
+    <span class="meta-key">Suggestion acceptance rate in beta</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-val">47ms</span>
+    <span class="meta-key">Median response latency</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-val">22+</span>
+    <span class="meta-key">Languages supported at launch</span>
+  </div>
+</div>
+
+<!-- Bento grid -->
+<div class="bento-section">
+  <p class="bento-eyebrow slide-up">Capabilities</p>
+  <div class="bento-grid slide-up" style="transition-delay:0.1s">
+    <div class="bento-card wide">
+      <p class="bento-card-label">01 &mdash; Comprehension</p>
+      <div class="bento-card-icon"><i data-lucide="cpu"></i></div>
+      <h3 class="bento-card-name">Whole-codebase context, not just open files</h3>
+      <p class="bento-card-desc">CIPHER indexes your entire repository and maintains a live knowledge graph of every function, type, API contract, and dependency relationship. When you write a line, CIPHER knows where it fits in the system &mdash; not just the file.</p>
+      <div class="bento-stat">94%</div>
+      <p class="bento-stat-sub">Contextual accuracy in cross-file refactoring</p>
+    </div>
+    <div class="bento-card tall">
+      <p class="bento-card-label">02 &mdash; Intelligence</p>
+      <div class="bento-card-icon"><i data-lucide="layers"></i></div>
+      <h3 class="bento-card-name">Architecture-aware suggestions</h3>
+      <p class="bento-card-desc">CIPHER doesn't suggest code. It suggests code that fits your existing patterns, respects your constraints, and doesn't break the parts you're not looking at.</p>
+      <div class="bento-stat">3.8x</div>
+      <p class="bento-stat-sub">Faster than writing from scratch</p>
+    </div>
+    <div class="bento-card">
+      <p class="bento-card-label">03 &mdash; Speed</p>
+      <div class="bento-card-icon"><i data-lucide="zap"></i></div>
+      <h3 class="bento-card-name">47ms response</h3>
+      <p class="bento-card-desc">Sub-50ms median response at p95. Faster than typing.</p>
+    </div>
+    <div class="bento-card">
+      <p class="bento-card-label">04 &mdash; Privacy</p>
+      <div class="bento-card-icon"><i data-lucide="shield"></i></div>
+      <h3 class="bento-card-name">Your code stays yours</h3>
+      <p class="bento-card-desc">CIPHER processes on-device for individual users and in your VPC for enterprises. No code leaves your environment.</p>
+    </div>
+    <div class="bento-card">
+      <p class="bento-card-label">05 &mdash; Integration</p>
+      <div class="bento-card-icon"><i data-lucide="plug"></i></div>
+      <h3 class="bento-card-name">Native editor support</h3>
+      <p class="bento-card-desc">VS Code, JetBrains, Neovim, Cursor. LSP protocol for any editor. CLI for pipelines.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-inner">
-    <div class="cta-eyebrow">// join the waitlist</div>
-    <h2 class="cta-title">Request<br>Early<br>Access.</h2>
-    <p class="cta-sub">6,847 engineers are already waiting. First cohort ships Q3 2025.<br>Spots are allocated based on team size and use case.</p>
-    <div class="cta-input-row">
-      <input class="cta-input" type="email" placeholder="work email" />
-      <button class="cta-btn">Request →</button>
-    </div>
-    <p class="cta-footnote">No spam. No updates until we're ready. Just a single email when access opens.</p>
+<!-- Value props -->
+<div class="value-section slide-up">
+  <div class="value-card">
+    <div class="value-number">01</div>
+    <div class="value-rule"></div>
+    <h3 class="value-title">Not a chatbot. A collaborator.</h3>
+    <p class="value-desc">Every other AI assistant answers questions. CIPHER works alongside you &mdash; understanding your intent from the first keystroke, tracking the shape of what you're building, and contributing code that belongs in your codebase, not code that could belong in anyone's.</p>
   </div>
-</section>
+  <div class="value-card" style="border-left:1px solid var(--border)">
+    <div class="value-number">02</div>
+    <div class="value-rule"></div>
+    <h3 class="value-title">Built for engineers who care about craft.</h3>
+    <p class="value-desc">CIPHER was designed by engineers who were tired of AI tools that produced working code that they'd never be proud to ship. The output is testable, readable, and architecturally coherent. No hallucinated APIs. No unexplained leaps. Just good code.</p>
+  </div>
+</div>
 
-<!-- FOOTER -->
+<!-- Social proof / urgency -->
+<div class="proof-section slide-up">
+  <div>
+    <h2 class="proof-title">Early access is limited. Intentionally.</h2>
+    <p class="proof-body">We're onboarding 100 engineering teams at a time to maintain quality feedback loops and ensure CIPHER learns from diverse codebases under real conditions. Once your team is in, you're in for the lifetime of the product.</p>
+    <a href="#" class="btn-silver">Apply for Early Access</a>
+  </div>
+  <div class="proof-list">
+    <div class="proof-item">
+      <div class="proof-item-icon"><i data-lucide="users"></i></div>
+      <span class="proof-item-text">Active beta teams</span>
+      <span class="proof-item-val">847</span>
+    </div>
+    <div class="proof-item">
+      <div class="proof-item-icon"><i data-lucide="code"></i></div>
+      <span class="proof-item-text">Lines reviewed in beta</span>
+      <span class="proof-item-val">12.4M</span>
+    </div>
+    <div class="proof-item">
+      <div class="proof-item-icon"><i data-lucide="thumbs-up"></i></div>
+      <span class="proof-item-text">Suggestion acceptance rate</span>
+      <span class="proof-item-val">92%</span>
+    </div>
+    <div class="proof-item">
+      <div class="proof-item-icon"><i data-lucide="clock"></i></div>
+      <span class="proof-item-text">Avg. time saved per engineer/day</span>
+      <span class="proof-item-val">2.8h</span>
+    </div>
+    <div class="proof-item">
+      <div class="proof-item-icon"><i data-lucide="calendar"></i></div>
+      <span class="proof-item-text">Public launch target</span>
+      <span class="proof-item-val">Q3 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- Final CTA -->
+<div class="final-cta slide-up">
+  <h2 class="final-cta-headline">Write code<br>that matters.</h2>
+  <p class="final-cta-sub">Request early access to CIPHER. We review every application. If your team is a good fit, you'll be onboarded within 2 business days.</p>
+  <div class="final-cta-form">
+    <input type="email" class="final-cta-input" placeholder="you@company.com">
+    <button class="final-cta-btn">Request Early Access</button>
+  </div>
+  <p class="final-cta-meta">Early access members receive founding pricing &mdash; locked forever</p>
+</div>
+
+<!-- Footer -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-brand-name">CIPHER</div>
-        <p>An AI code intelligence platform. Built for engineers who care about correctness.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#">Features</a>
-          <a href="#">Research</a>
-          <a href="#">Benchmarks</a>
-          <a href="#">Changelog</a>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="#">About</a>
-          <a href="#">Blog</a>
-          <a href="#">Careers</a>
-          <a href="#">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Security</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 CIPHER AI Inc.</span>
-      <span>Intelligence that thinks like you do.</span>
-    </div>
+  <span class="footer-mono">CIPHER &mdash; 2026 &mdash; All rights reserved</span>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Docs</a>
+    <a href="#">Security</a>
   </div>
 </footer>
 
+<!-- Floating nav pill -->
+<div class="mobile-nav">
+  <span class="mnav-logo">CIPHER</span>
+  <div class="mnav-sep"></div>
+  <div class="mnav-links">
+    <a href="#">Features</a>
+    <a href="#">Pricing</a>
+    <a href="#">Docs</a>
+  </div>
+  <div class="mnav-sep"></div>
+  <a href="#" style="font-family:'Geist Mono',monospace;font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;background:linear-gradient(135deg,#F8FAFC,#94A3B8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none">Request Access</a>
+</div>
+
 <script>
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.b-card, .t-card').forEach(el => obs.observe(el));
+  lucide.createIcons();
+  const slides = document.querySelectorAll('.slide-up');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, { threshold: 0.08 });
+  slides.forEach(s => obs.observe(s));
+
+  // Top bar scroll effect
+  const topbar = document.getElementById('topbar');
+  window.addEventListener('scroll', () => {
+    topbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
 </script>
 </body>
 </html>

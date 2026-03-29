@@ -3,464 +3,500 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>METRIC — Data Analytics at Scale</title>
+<title>METRIC — Data Analytics Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#06090f;color:#e2e8f0;overflow-x:hidden}
 
-:root {
-  --bg: #08090d;
-  --surface: #0f1117;
-  --surface2: #161820;
-  --border: rgba(255,255,255,0.06);
-  --bright: rgba(255,255,255,0.1);
-  --text: #d4d8f0;
-  --muted: rgba(212,216,240,0.4);
-  --accent: #00e5ff;
-  --accent2: #7c6aff;
-  --accent3: #00ff9d;
-  --warn: #ffd740;
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;height:64px;
+  background:rgba(6,9,15,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(226,232,240,.06);
+}
+.logo{
+  font-family:'Sora',sans-serif;font-weight:800;font-size:1rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:rgba(226,232,240,.4);text-decoration:none;font-size:.8125rem;font-weight:400;letter-spacing:.06em;transition:color .2s}
+.nav-links a:hover{color:#e2e8f0}
+.nav-btn{
+  padding:.5rem 1.25rem;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  color:#fff;font-size:.8125rem;font-weight:600;letter-spacing:.06em;
+  text-decoration:none;transition:opacity .2s;
+}
+.nav-btn:hover{opacity:.85}
+
+/* ── HERO ── */
+.hero{
+  position:relative;min-height:100vh;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 3rem 4rem;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background-image:url('../../images/tech/tech-1.jpg');
+  background-size:cover;background-position:center;
+  filter:brightness(.2) saturate(.6);
+}
+.hero-bg-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(6,9,15,.6) 0%,rgba(6,9,15,.85) 60%,#06090f 100%);
+}
+.hero-content{position:relative;z-index:2;max-width:740px;}
+
+.hero-tag{
+  display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid rgba(59,130,246,.25);background:rgba(59,130,246,.08);
+  padding:.375rem 1rem;
+  font-size:.6875rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:#60a5fa;margin-bottom:2rem;
+}
+.hero-h1{
+  font-family:'Sora',sans-serif;font-size:clamp(3rem,7.5vw,6.5rem);
+  font-weight:800;line-height:.95;letter-spacing:-.04em;color:#e2e8f0;
+}
+.hero-h1 span{
+  background:linear-gradient(135deg,#3b82f6 0%,#06b6d4 50%,#10b981 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  max-width:500px;margin:1.75rem auto 0;
+  font-size:1.0625rem;font-weight:300;line-height:1.75;color:rgba(226,232,240,.52);
+}
+.hero-actions{display:flex;gap:1rem;justify-content:center;margin-top:2.75rem;flex-wrap:wrap}
+.btn-prime{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.875rem 2rem;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  color:#fff;font-size:.875rem;font-weight:600;letter-spacing:.05em;
+  text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  transition:opacity .2s;
+}
+.btn-prime:hover{opacity:.88}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.875rem 2rem;border:1px solid rgba(226,232,240,.15);
+  color:rgba(226,232,240,.65);font-size:.875rem;font-weight:400;letter-spacing:.04em;
+  text-decoration:none;transition:border-color .2s,color .2s;
+}
+.btn-ghost:hover{border-color:rgba(226,232,240,.4);color:#e2e8f0}
+
+/* ── STATS SECTION ── */
+.stats-section{
+  background:#06090f;padding:8rem 3rem 6rem;
+}
+.stats-header{max-width:1080px;margin:0 auto;text-align:center;margin-bottom:5rem}
+.eyebrow{font-size:.6875rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#3b82f6;margin-bottom:.875rem}
+.section-h{font-family:'Sora',sans-serif;font-size:clamp(1.75rem,3vw,2.875rem);font-weight:700;letter-spacing:-.025em;color:#e2e8f0;line-height:1.12}
+
+.stats-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
+  background:rgba(226,232,240,.06);max-width:1080px;margin:0 auto;
+}
+.stat-block{
+  background:#06090f;padding:4rem 3rem;text-align:center;
+  position:relative;overflow:hidden;
+}
+.stat-block::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(59,130,246,.4),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.stat-block:hover::before{opacity:1}
+
+/* stat counter display */
+.stat-value-wrap{
+  display:flex;align-items:baseline;justify-content:center;gap:.25rem;
+  margin-bottom:1rem;
+}
+.stat-prefix{
+  font-family:'Sora',sans-serif;font-size:2.5rem;font-weight:700;
+  color:rgba(226,232,240,.5);letter-spacing:-.03em;
+  align-self:center;
+}
+.stat-number{
+  font-family:'Sora',sans-serif;font-size:clamp(4rem,8vw,7rem);
+  font-weight:800;letter-spacing:-.04em;line-height:1;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  /* actual number set by JS */
+}
+.stat-suffix{
+  font-family:'Sora',sans-serif;font-size:2.5rem;font-weight:700;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-label{
+  font-size:.875rem;font-weight:400;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(226,232,240,.38);margin-bottom:.75rem;
+}
+.stat-desc{
+  font-size:.875rem;font-weight:300;line-height:1.7;color:rgba(226,232,240,.4);
+  max-width:280px;margin:0 auto;
 }
 
-html { scroll-behavior: smooth; }
-body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
-
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px; height: 64px;
-  background: rgba(8,9,13,0.88); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+/* alternate gradient for different stats */
+.stat-block:nth-child(2) .stat-number,
+.stat-block:nth-child(2) .stat-suffix{
+  background:linear-gradient(135deg,#10b981,#06b6d4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: 0.05em; text-transform: uppercase; }
-.nav-logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 32px; list-style: none; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
-.nav-links a:hover { color: var(--text); }
-.nav-cta { background: var(--accent); color: var(--bg); padding: 9px 22px; border-radius: 6px; font-size: 13px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.06em; transition: all 0.2s; }
-.nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
-
-/* HERO */
-.hero {
-  min-height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 100px 48px 60px; text-align: center; position: relative; overflow: hidden;
+.stat-block:nth-child(3) .stat-number,
+.stat-block:nth-child(3) .stat-suffix{
+  background:linear-gradient(135deg,#f59e0b,#ef4444);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.hero-grid {
-  position: absolute; inset: 0;
-  background-image: linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
+.stat-block:nth-child(4) .stat-number,
+.stat-block:nth-child(4) .stat-suffix{
+  background:linear-gradient(135deg,#a855f7,#3b82f6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2); color: var(--accent); padding: 7px 18px; border-radius: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 32px; position: relative; z-index: 1; }
-.hero h1 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(56px, 9vw, 110px); font-weight: 900; line-height: 0.9; text-transform: uppercase; letter-spacing: -2px; margin-bottom: 24px; position: relative; z-index: 1; }
-.hero h1 .cyan { color: var(--accent); }
-.hero p { font-size: 18px; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 48px; position: relative; z-index: 1; }
-.hero-cta { display: flex; gap: 16px; justify-content: center; position: relative; z-index: 1; margin-bottom: 80px; }
-.btn-cyan { background: var(--accent); color: var(--bg); padding: 16px 36px; border-radius: 6px; font-size: 15px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.06em; transition: all 0.2s; box-shadow: 0 0 30px rgba(0,229,255,0.3); }
-.btn-cyan:hover { opacity: 0.85; transform: translateY(-2px); box-shadow: 0 0 60px rgba(0,229,255,0.5); }
-.btn-ghost { background: transparent; color: var(--text); padding: 16px 32px; border-radius: 6px; font-size: 15px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.06em; border: 1px solid var(--bright); transition: all 0.2s; }
-.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-/* STATS COUNTER SECTION — the hero interaction */
-.stats-band {
-  position: relative; z-index: 1; width: 100%; max-width: 1100px;
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 1px; background: var(--border);
-  border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+/* ── CAPABILITIES ── */
+.cap-section{background:#080c14;padding:7rem 3rem;border-top:1px solid rgba(226,232,240,.05)}
+.cap-inner{max-width:1080px;margin:0 auto}
+
+.cap-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;border:1px solid rgba(226,232,240,.06);margin-top:3.5rem;
 }
-.stat-cell {
-  background: var(--surface); padding: 36px 32px; text-align: center;
-  position: relative; overflow: hidden; transition: background 0.3s;
+.cap-cell{
+  padding:2.5rem;
+  border-right:1px solid rgba(226,232,240,.06);
+  border-bottom:1px solid rgba(226,232,240,.06);
+  transition:background .3s;
 }
-.stat-cell::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(0,229,255,0.06) 0%, transparent 70%); }
-.stat-cell:hover { background: var(--surface2); }
-.stat-number {
-  font-family: 'Barlow Condensed', sans-serif; font-size: clamp(42px, 6vw, 72px);
-  font-weight: 900; line-height: 1; letter-spacing: -2px;
-  display: flex; align-items: baseline; justify-content: center; gap: 4px;
+.cap-cell:nth-child(3n){border-right:none}
+.cap-cell:nth-last-child(-n+3){border-bottom:none}
+.cap-cell:hover{background:rgba(59,130,246,.04)}
+.cap-icon{color:#3b82f6;opacity:.75;margin-bottom:1.25rem}
+.cap-title{font-size:.9375rem;font-weight:600;color:#e2e8f0;letter-spacing:-.01em;margin-bottom:.625rem}
+.cap-body{font-size:.8125rem;line-height:1.75;color:rgba(226,232,240,.42);font-weight:300}
+
+/* ── QUERY SAMPLE ── */
+.query-section{background:#06090f;padding:7rem 3rem;border-top:1px solid rgba(226,232,240,.05)}
+.query-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.q-side-label{font-size:.6875rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(226,232,240,.3);margin-bottom:1.25rem}
+.q-terminal{
+  background:#0d1117;border:1px solid rgba(226,232,240,.08);
+  padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.8125rem;line-height:1.8;
 }
-.stat-number.color-cyan { color: var(--accent); }
-.stat-number.color-purple { color: var(--accent2); }
-.stat-number.color-green { color: var(--accent3); }
-.stat-number.color-yellow { color: var(--warn); }
-.stat-suffix { font-size: 0.5em; font-weight: 700; }
-.stat-prefix { font-size: 0.4em; font-weight: 700; vertical-align: top; padding-top: 8px; }
-.stat-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 10px; }
-.stat-trend { font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-top: 8px; }
-.stat-trend.up { color: var(--accent3); }
-.stat-trend.dn { color: #ff4a6e; }
+.q-line-comment{color:rgba(226,232,240,.3)}
+.q-keyword{color:#06b6d4}
+.q-func{color:#3b82f6}
+.q-string{color:#10b981}
+.q-number{color:#f59e0b}
 
-/* big increase flash effect */
-@keyframes flash-cyan { 0%,100%{box-shadow:none} 20%{box-shadow:inset 0 0 40px rgba(0,229,255,0.2)} }
-@keyframes flash-purple { 0%,100%{box-shadow:none} 20%{box-shadow:inset 0 0 40px rgba(124,106,255,0.2)} }
-@keyframes flash-green { 0%,100%{box-shadow:none} 20%{box-shadow:inset 0 0 40px rgba(0,255,157,0.2)} }
-@keyframes flash-yellow { 0%,100%{box-shadow:none} 20%{box-shadow:inset 0 0 40px rgba(255,215,64,0.2)} }
-
-.stat-cell.flash-cyan { animation: flash-cyan 0.5s ease; }
-.stat-cell.flash-purple { animation: flash-purple 0.5s ease; }
-.stat-cell.flash-green { animation: flash-green 0.5s ease; }
-.stat-cell.flash-yellow { animation: flash-yellow 0.5s ease; }
-
-/* LIVE TICKER */
-.ticker-bar {
-  background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  padding: 12px 0; overflow: hidden; position: relative;
+/* ── CUSTOMER LOGOS ── */
+.logos-section{background:#080c14;padding:5rem 3rem;border-top:1px solid rgba(226,232,240,.05)}
+.logos-inner{max-width:1080px;margin:0 auto;text-align:center}
+.logos-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:3.5rem;flex-wrap:wrap;margin-top:2.5rem;
 }
-.ticker-bar::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 80px; z-index: 2; background: linear-gradient(90deg, var(--surface), transparent); }
-.ticker-bar::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 80px; z-index: 2; background: linear-gradient(-90deg, var(--surface), transparent); }
-.ticker-inner { display: flex; gap: 56px; animation: tickerScroll 20s linear infinite; width: max-content; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-@keyframes tickerScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-.ticker-item { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
-.ticker-name { color: var(--muted); }
-.ticker-val { font-weight: 700; }
-.ticker-up { color: var(--accent3); }
-.ticker-dn { color: #ff4a6e; }
-
-/* CHART SECTION */
-.chart-section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
-.section-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 12px; }
-.section-h { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(32px, 4vw, 52px); font-weight: 900; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 48px; }
-.chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
-.chart-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; }
-.chart-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 20px; }
-.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 140px; }
-.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.bar { width: 100%; border-radius: 4px 4px 0 0; transition: height 1s cubic-bezier(0.34,1.56,0.64,1); }
-.bar-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); }
-.b1 { background: linear-gradient(to top, rgba(0,229,255,0.3), rgba(0,229,255,0.8)); }
-.b2 { background: linear-gradient(to top, rgba(124,106,255,0.3), rgba(124,106,255,0.8)); }
-.b3 { background: linear-gradient(to top, rgba(0,255,157,0.3), rgba(0,255,157,0.8)); }
-
-.donut-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 180px; }
-.donut-label { font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 900; color: var(--accent); line-height: 1; }
-.donut-sub { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
-
-/* FEATURES */
-.features-section { padding: 100px 48px; background: var(--surface); }
-.features-inner { max-width: 1100px; margin: 0 auto; }
-.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
-.feat { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 28px; transition: all 0.3s; }
-.feat:hover { border-color: rgba(0,229,255,0.2); transform: translateY(-3px); }
-.feat-n { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); margin-bottom: 14px; }
-.feat h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 10px; }
-.feat p { font-size: 13px; color: var(--muted); line-height: 1.8; }
-
-/* TESTIMONIALS */
-.testi-section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
-.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
-.t-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
-.t-co { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--accent); margin-bottom: 12px; }
-.t-text { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
-.t-text strong { color: var(--text); }
-.t-name { font-size: 13px; font-weight: 700; }
-.t-role { font-size: 11px; color: var(--muted); }
-
-/* CTA */
-.cta-section { padding: 100px 48px; background: var(--accent); color: var(--bg); text-align: center; }
-.cta-section h2 { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(40px, 6vw, 72px); font-weight: 900; text-transform: uppercase; letter-spacing: -1.5px; margin-bottom: 16px; }
-.cta-section p { font-size: 18px; opacity: 0.75; max-width: 480px; margin: 0 auto 40px; line-height: 1.7; font-weight: 500; }
-.cta-btn-dark { display: inline-block; background: var(--bg); color: var(--accent); padding: 18px 48px; border-radius: 6px; font-size: 16px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em; transition: all 0.2s; }
-.cta-btn-dark:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.3); }
-.cta-note { margin-top: 14px; font-size: 13px; opacity: 0.6; }
-
-/* FOOTER */
-footer { padding: 40px 48px; border-top: 1px solid var(--border); }
-.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 18px; text-transform: uppercase; letter-spacing: 0.05em; }
-.footer-logo span { color: var(--accent); }
-.footer-links { display: flex; gap: 24px; list-style: none; }
-.footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.2s; }
-.footer-links a:hover { color: var(--text); }
-.footer-copy { font-size: 12px; color: var(--muted); }
-
-@media(max-width:768px){
-  nav{padding:0 20px;} .nav-links{display:none;}
-  .hero{padding:80px 20px 40px;}
-  .stats-band{grid-template-columns:repeat(2,1fr);}
-  .chart-grid,.features-grid,.testi-grid{grid-template-columns:1fr;}
-  .footer-inner{flex-direction:column;gap:20px;text-align:center;}
+.logo-item{
+  font-family:'Sora',sans-serif;font-size:.75rem;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(226,232,240,.22);transition:color .2s;
 }
-</style>
+.logo-item:hover{color:rgba(226,232,240,.55)}
 
-<!-- inject-local -->
-<style>
-  .hero-grid {
-    background-image: url('../../images/tech/tech-1.jpg') !important;
-    background-size: cover; background-position: center;
-  }
+/* ── FOOTER ── */
+footer{background:#04060b;padding:4rem 3rem 2rem;border-top:1px solid rgba(226,232,240,.05)}
+.footer-g{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1080px;margin:0 auto}
+.footer-brand p{font-size:.8125rem;line-height:1.85;color:rgba(226,232,240,.3);font-weight:300;max-width:260px;margin-top:1rem}
+.footer-col h4{font-size:.625rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(226,232,240,.28);margin-bottom:1.25rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.footer-col a{text-decoration:none;font-size:.8125rem;color:rgba(226,232,240,.3);font-weight:300;transition:color .2s}
+.footer-col a:hover{color:#3b82f6}
+.footer-bot{max-width:1080px;margin:2.5rem auto 0;padding-top:1.5rem;border-top:1px solid rgba(226,232,240,.05);display:flex;justify-content:space-between;font-size:.75rem;color:rgba(226,232,240,.18)}
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">MET<span>RIC</span></div>
+  <div class="logo">Metric</div>
   <ul class="nav-links">
     <li><a href="#">Platform</a></li>
-    <li><a href="#">Integrations</a></li>
+    <li><a href="#">SQL Studio</a></li>
+    <li><a href="#">Pipelines</a></li>
     <li><a href="#">Pricing</a></li>
-    <li><a href="#">Docs</a></li>
   </ul>
-  <a href="#" class="nav-cta">Start Free</a>
+  <a href="#" class="nav-btn">Start Querying Free</a>
 </nav>
 
+<!-- Hero -->
 <section class="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-badge">⚡ Real-Time Analytics at Any Scale</div>
-  <h1>Numbers that<br><span class="cyan">mean something</span></h1>
-  <p>METRIC processes billions of events and surfaces the signals that matter. Real-time counters, anomaly detection, and insights that actually drive decisions.</p>
-  <div class="hero-cta">
-    <a href="#" class="btn-cyan">Get Started Free</a>
-    <a href="#" class="btn-ghost">View Live Demo</a>
-  </div>
-
-  <!-- DYNAMIC COUNTER STATS -->
-  <div class="stats-band">
-    <div class="stat-cell" id="statCell1">
-      <div class="stat-number color-cyan">
-        <span class="stat-prefix">$</span>
-        <span id="counter1">0</span>
-        <span class="stat-suffix">B</span>
-      </div>
-      <div class="stat-label">Processed This Month</div>
-      <div class="stat-trend up" id="trend1">▲ +12.4% MoM</div>
+  <div class="hero-bg"></div>
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <i data-lucide="bar-chart-3" style="width:10px;height:10px;"></i>
+      Data Analytics Platform
     </div>
-    <div class="stat-cell" id="statCell2">
-      <div class="stat-number color-purple">
-        <span id="counter2">0</span>
+    <h1 class="hero-h1">
+      Data at<br>
+      <span>the speed</span><br>
+      of thought
+    </h1>
+    <p class="hero-sub">
+      METRIC turns your data warehouse into a real-time decision engine. Sub-10ms queries, automated pipelines, and dashboards that update as your business moves.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-prime">
+        <i data-lucide="zap" style="width:14px;height:14px;"></i>
+        Connect Your Warehouse
+      </a>
+      <a href="#" class="btn-ghost">
+        <i data-lucide="play-circle" style="width:14px;height:14px;"></i>
+        See a Live Query
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section — Count-up on scroll -->
+<section class="stats-section" id="statsSection">
+  <div class="stats-header">
+    <div class="eyebrow">By the Numbers</div>
+    <h2 class="section-h">The infrastructure that<br>serious data teams trust.</h2>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-block">
+      <div class="stat-label">Events Tracked</div>
+      <div class="stat-value-wrap">
+        <span class="stat-number" data-target="10" data-suffix="M+" data-prefix="">0</span>
         <span class="stat-suffix">M+</span>
       </div>
-      <div class="stat-label">Events Tracked</div>
-      <div class="stat-trend up" id="trend2">▲ +8.2M today</div>
+      <p class="stat-desc">events tracked every single day across our global infrastructure, with zero data loss guarantees</p>
     </div>
-    <div class="stat-cell" id="statCell3">
-      <div class="stat-number color-green">
-        <span id="counter3">0</span>
+    <div class="stat-block">
+      <div class="stat-label">Platform Uptime</div>
+      <div class="stat-value-wrap">
+        <span class="stat-number" data-target="99.9" data-suffix="%" data-decimal="1" data-prefix="">0</span>
         <span class="stat-suffix">%</span>
       </div>
-      <div class="stat-label">Uptime SLA</div>
-      <div class="stat-trend up" id="trend3">▲ 99.9% rolling 90d</div>
+      <p class="stat-desc">uptime maintained across 18 months of production operations, backed by a contractual SLA</p>
     </div>
-    <div class="stat-cell" id="statCell4">
-      <div class="stat-number color-yellow">
-        <span id="counter4">0</span>
+    <div class="stat-block">
+      <div class="stat-label">Volume Processed</div>
+      <div class="stat-value-wrap">
+        <span class="stat-prefix">$</span>
+        <span class="stat-number" data-target="2.4" data-suffix="B" data-decimal="1" data-prefix="$">0</span>
+        <span class="stat-suffix">B</span>
+      </div>
+      <p class="stat-desc">in total transaction volume processed through METRIC pipelines in the last fiscal year</p>
+    </div>
+    <div class="stat-block">
+      <div class="stat-label">Median Query Latency</div>
+      <div class="stat-value-wrap">
+        <span class="stat-number" data-target="8" data-suffix="ms" data-prefix="">0</span>
         <span class="stat-suffix">ms</span>
       </div>
-      <div class="stat-label">Avg Query Time</div>
-      <div class="stat-trend up" id="trend4">▼ Down 18% this week</div>
+      <p class="stat-desc">median end-to-end query latency measured at P50 across all query types and dataset sizes</p>
     </div>
   </div>
 </section>
 
-<!-- LIVE TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-inner">
-    <span class="ticker-item"><span class="ticker-name">EVENTS/SEC</span><span class="ticker-val ticker-up">847,291 ▲</span></span>
-    <span class="ticker-item"><span class="ticker-name">LATENCY P99</span><span class="ticker-val ticker-up">12ms ▲</span></span>
-    <span class="ticker-item"><span class="ticker-name">DATA INGESTED</span><span class="ticker-val ticker-up">2.4TB/hr</span></span>
-    <span class="ticker-item"><span class="ticker-name">ACTIVE QUERIES</span><span class="ticker-val">14,820</span></span>
-    <span class="ticker-item"><span class="ticker-name">ANOMALIES DETECTED</span><span class="ticker-val ticker-dn">3 ▼</span></span>
-    <span class="ticker-item"><span class="ticker-name">CACHE HIT RATE</span><span class="ticker-val ticker-up">98.4%</span></span>
-    <span class="ticker-item"><span class="ticker-name">THROUGHPUT</span><span class="ticker-val ticker-up">1.2M rpm ▲</span></span>
-    <span class="ticker-item"><span class="ticker-name">STORAGE EFFICIENCY</span><span class="ticker-val ticker-up">94.2%</span></span>
-    <span class="ticker-item"><span class="ticker-name">EVENTS/SEC</span><span class="ticker-val ticker-up">847,291 ▲</span></span>
-    <span class="ticker-item"><span class="ticker-name">LATENCY P99</span><span class="ticker-val ticker-up">12ms ▲</span></span>
-    <span class="ticker-item"><span class="ticker-name">DATA INGESTED</span><span class="ticker-val ticker-up">2.4TB/hr</span></span>
-    <span class="ticker-item"><span class="ticker-name">ACTIVE QUERIES</span><span class="ticker-val">14,820</span></span>
-    <span class="ticker-item"><span class="ticker-name">ANOMALIES DETECTED</span><span class="ticker-val ticker-dn">3 ▼</span></span>
-    <span class="ticker-item"><span class="ticker-name">CACHE HIT RATE</span><span class="ticker-val ticker-up">98.4%</span></span>
-    <span class="ticker-item"><span class="ticker-name">THROUGHPUT</span><span class="ticker-val ticker-up">1.2M rpm ▲</span></span>
-    <span class="ticker-item"><span class="ticker-name">STORAGE EFFICIENCY</span><span class="ticker-val ticker-up">94.2%</span></span>
-  </div>
-</div>
-
-<!-- CHARTS -->
-<section class="chart-section">
-  <div class="section-tag">// Live Dashboard Preview</div>
-  <h2 class="section-h">Your data,<br>beautifully rendered</h2>
-  <div class="chart-grid">
-    <div class="chart-panel">
-      <div class="chart-title">Event Volume — Last 7 Days (Billions)</div>
-      <div class="bar-chart" id="barChart">
-        <!-- built by JS -->
+<!-- Capabilities -->
+<section class="cap-section">
+  <div class="cap-inner">
+    <div class="eyebrow">Platform Capabilities</div>
+    <h2 class="section-h">Everything a modern data<br>team demands. Nothing it doesn't.</h2>
+    <div class="cap-grid">
+      <div class="cap-cell">
+        <i data-lucide="zap" class="cap-icon" style="width:24px;height:24px;"></i>
+        <div class="cap-title">Real-Time Streaming</div>
+        <p class="cap-body">Sub-100ms event ingestion with exactly-once delivery semantics. Kafka, Kinesis, or our native event bus — your choice.</p>
       </div>
-    </div>
-    <div class="chart-panel">
-      <div class="chart-title">System Health Score</div>
-      <div class="donut-wrap">
-        <svg width="140" height="140" viewBox="0 0 140 140">
-          <circle cx="70" cy="70" r="56" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12"/>
-          <circle cx="70" cy="70" r="56" fill="none" stroke="#00e5ff" stroke-width="12" stroke-linecap="round" stroke-dasharray="351.9" stroke-dashoffset="35.2" transform="rotate(-90 70 70)"/>
-        </svg>
-        <div class="donut-label" style="margin-top:-80px;position:relative;z-index:1">99%</div>
-        <div class="donut-sub">System Health</div>
+      <div class="cap-cell">
+        <i data-lucide="database" class="cap-icon" style="width:24px;height:24px;"></i>
+        <div class="cap-title">Semantic Layer</div>
+        <p class="cap-body">Define metrics once in SQL. Consume them everywhere — dashboards, APIs, notebooks, and embedded analytics — all from the same source of truth.</p>
+      </div>
+      <div class="cap-cell">
+        <i data-lucide="network" class="cap-icon" style="width:24px;height:24px;"></i>
+        <div class="cap-title">Warehouse-Native</div>
+        <p class="cap-body">Query runs directly inside BigQuery, Snowflake, Databricks, or Redshift. No data movement, no duplication, no egress cost.</p>
+      </div>
+      <div class="cap-cell">
+        <i data-lucide="cpu" class="cap-icon" style="width:24px;height:24px;"></i>
+        <div class="cap-title">Intelligent Caching</div>
+        <p class="cap-body">Query result caching with smart invalidation. 92% of dashboard loads never hit your warehouse — they hit our edge cache instead.</p>
+      </div>
+      <div class="cap-cell">
+        <i data-lucide="git-branch" class="cap-icon" style="width:24px;height:24px;"></i>
+        <div class="cap-title">Pipeline Orchestration</div>
+        <p class="cap-body">Declarative DAGs with automatic backfill, retry logic, and SLA alerting. Data freshness is a first-class property, not an afterthought.</p>
+      </div>
+      <div class="cap-cell">
+        <i data-lucide="shield-check" class="cap-icon" style="width:24px;height:24px;"></i>
+        <div class="cap-title">Column-Level Security</div>
+        <p class="cap-body">Masking, redaction, and access policies defined in code and enforced at query time. Compliance that doesn't slow you down.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features-section">
-  <div class="features-inner">
-    <div class="section-tag">// Core Capabilities</div>
-    <h2 class="section-h">Built for volume.<br>Designed for clarity.</h2>
-    <div class="features-grid">
-      <div class="feat">
-        <div class="feat-n">CAP_01 // INGEST</div>
-        <h3>Billion-Event Ingestion</h3>
-        <p>Ingest any event, at any volume. Streaming and batch ingestion with automatic schema inference and validation.</p>
+<!-- Query Sample -->
+<section class="query-section">
+  <div class="query-inner">
+    <div>
+      <div class="eyebrow">SQL Studio</div>
+      <h2 class="section-h" style="max-width:420px;margin-bottom:1.25rem;">Write SQL. Ship insights.</h2>
+      <p style="font-size:.9375rem;color:rgba(226,232,240,.45);font-weight:300;line-height:1.8;max-width:380px;margin-bottom:2rem;">
+        METRIC's SQL Studio autocompletes your schema, catches errors before execution, and explains query plans in plain language. Your analyst doesn't need a DBA anymore.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:.875rem;">
+        <div style="display:flex;align-items:center;gap:.75rem;font-size:.875rem;color:rgba(226,232,240,.55);">
+          <i data-lucide="check-circle" style="width:16px;height:16px;color:#10b981;flex-shrink:0;"></i>
+          Schema-aware autocomplete
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;font-size:.875rem;color:rgba(226,232,240,.55);">
+          <i data-lucide="check-circle" style="width:16px;height:16px;color:#10b981;flex-shrink:0;"></i>
+          Query plan visualization
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;font-size:.875rem;color:rgba(226,232,240,.55);">
+          <i data-lucide="check-circle" style="width:16px;height:16px;color:#10b981;flex-shrink:0;"></i>
+          Cost estimation before execution
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;font-size:.875rem;color:rgba(226,232,240,.55);">
+          <i data-lucide="check-circle" style="width:16px;height:16px;color:#10b981;flex-shrink:0;"></i>
+          One-click publish to dashboard
+        </div>
       </div>
-      <div class="feat">
-        <div class="feat-n">CAP_02 // QUERY</div>
-        <h3>Sub-Second Queries</h3>
-        <p>Query across petabytes of historical data in under a second. Columnar storage and aggressive caching make it possible.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-n">CAP_03 // ALERT</div>
-        <h3>Anomaly Detection</h3>
-        <p>ML models continuously monitor your metrics. Statistical anomalies surface instantly — before your customers notice.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-n">CAP_04 // VIZ</div>
-        <h3>Live Dashboards</h3>
-        <p>Drag-and-drop dashboard builder with 40+ chart types. Every number animates to life as data arrives.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-n">CAP_05 // API</div>
-        <h3>Developer-First API</h3>
-        <p>REST and GraphQL APIs. SDKs for Python, Node, Go, and Ruby. Query METRIC from any tool in your stack.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-n">CAP_06 // SEC</div>
-        <h3>Enterprise Compliance</h3>
-        <p>SOC 2, HIPAA, GDPR compliant. Data residency, field-level encryption, and granular access controls built-in.</p>
+    </div>
+    <div>
+      <div class="q-side-label">Example Query</div>
+      <div class="q-terminal">
+        <span class="q-line-comment">-- Revenue by segment, last 30 days</span><br>
+        <span class="q-keyword">SELECT</span><br>
+        &nbsp;&nbsp;customer_segment,<br>
+        &nbsp;&nbsp;<span class="q-func">metric</span>(<span class="q-string">'revenue'</span>) <span class="q-keyword">AS</span> total_revenue,<br>
+        &nbsp;&nbsp;<span class="q-func">metric</span>(<span class="q-string">'orders'</span>) <span class="q-keyword">AS</span> order_count,<br>
+        &nbsp;&nbsp;<span class="q-func">round</span>(total_revenue / order_count, <span class="q-number">2</span>) <span class="q-keyword">AS</span> aov<br>
+        <span class="q-keyword">FROM</span> <span class="q-string">metrics.revenue_daily</span><br>
+        <span class="q-keyword">WHERE</span> event_date &gt;= <span class="q-func">dateadd</span>(<span class="q-string">'day'</span>, -<span class="q-number">30</span>, <span class="q-func">today</span>())<br>
+        <span class="q-keyword">GROUP BY</span> <span class="q-number">1</span><br>
+        <span class="q-keyword">ORDER BY</span> total_revenue <span class="q-keyword">DESC</span><br>
+        <span class="q-line-comment">-- 8ms execution &nbsp;&#183;&nbsp; 0.001 credits &nbsp;&#183;&nbsp; cached</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testi-section">
-  <div class="section-tag">// Customer Stories</div>
-  <h2 class="section-h">Data teams that swear<br>by METRIC</h2>
-  <div class="testi-grid">
-    <div class="t-card">
-      <div class="t-co">// FINTECH — 2.4B events/month</div>
-      <p class="t-text">"METRIC processes our entire transaction stream in real-time. <strong>We caught a $4M fraud pattern</strong> 6 minutes after it started."</p>
-      <div class="t-name">James P.</div>
-      <div class="t-role">Head of Data Engineering, Cascade Bank</div>
-    </div>
-    <div class="t-card">
-      <div class="t-co">// E-COMMERCE — 840M events/day</div>
-      <p class="t-text">"Every product team has their own METRIC dashboard. <strong>Data-driven decisions went from quarterly to daily</strong> overnight."</p>
-      <div class="t-name">Mia T.</div>
-      <div class="t-role">VP Analytics, Threadmarket</div>
-    </div>
-    <div class="t-card">
-      <div class="t-co">// SAAS — 12M MAU</div>
-      <p class="t-text">"The anomaly detection found a memory leak in our event pipeline that had been costing us <strong>$80K/month in infra</strong>."</p>
-      <div class="t-name">Leon K.</div>
-      <div class="t-role">Platform Engineer, Vantage SaaS</div>
+<!-- Trusted By -->
+<section class="logos-section">
+  <div class="logos-inner">
+    <div class="eyebrow">Trusted By Data Teams At</div>
+    <div class="logos-row">
+      <div class="logo-item">Northstar</div>
+      <div class="logo-item">Faroe Systems</div>
+      <div class="logo-item">Meridian Labs</div>
+      <div class="logo-item">Vantage Group</div>
+      <div class="logo-item">Cascade Works</div>
+      <div class="logo-item">Arctic Cloud</div>
+      <div class="logo-item">HealthBridge</div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <h2>Turn your data into<br>your advantage</h2>
-  <p>Start tracking for free. No credit card. Scale to billions when you're ready.</p>
-  <a href="#" class="cta-btn-dark">Start Tracking Free</a>
-  <p class="cta-note">Free: 10M events/mo · Pro from $99/mo · Enterprise: custom</p>
-</section>
-
+<!-- Footer -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-logo">MET<span>RIC</span></div>
-    <ul class="footer-links">
-      <li><a href="#">Privacy</a></li>
-      <li><a href="#">Terms</a></li>
-      <li><a href="#">Security</a></li>
-      <li><a href="#">Status</a></li>
-    </ul>
-    <div class="footer-copy">© 2025 Metric Inc. All rights reserved.</div>
+  <div class="footer-g">
+    <div class="footer-brand">
+      <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.2em;text-transform:uppercase;background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">METRIC</div>
+      <p>The analytics platform built for speed-obsessed data teams. Warehouse-native, real-time ready, and priced for the modern stack.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#">SQL Studio</a></li>
+        <li><a href="#">Streaming Ingestion</a></li>
+        <li><a href="#">Semantic Layer</a></li>
+        <li><a href="#">Pipeline Orchestration</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Integrations</h4>
+      <ul>
+        <li><a href="#">BigQuery</a></li>
+        <li><a href="#">Snowflake</a></li>
+        <li><a href="#">Databricks</a></li>
+        <li><a href="#">Redshift</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Security</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>&copy; 2026 METRIC Analytics Inc. All rights reserved.</span>
+    <span>Privacy &nbsp;&middot;&nbsp; Terms &nbsp;&middot;&nbsp; SOC 2 Type II</span>
   </div>
 </footer>
 
 <script>
-// Count-up function
-function animateCounter(el, target, isFloat, duration = 2000) {
-  const start = 0;
-  const startTime = performance.now();
-  function update(currentTime) {
-    const elapsed = currentTime - startTime;
+// ── Count-up animation with IntersectionObserver ──
+function easeOutQuart(t) {
+  return 1 - Math.pow(1 - t, 4);
+}
+
+function animateCounter(el, target, duration, decimals) {
+  const start = performance.now();
+  function update(now) {
+    const elapsed = now - start;
     const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const val = start + (target - start) * eased;
-    el.textContent = isFloat ? val.toFixed(1) : Math.floor(val).toLocaleString();
+    const eased = easeOutQuart(progress);
+    const current = eased * target;
+    el.textContent = decimals > 0
+      ? current.toFixed(decimals)
+      : Math.floor(current).toString();
     if (progress < 1) requestAnimationFrame(update);
-    else el.textContent = isFloat ? target.toFixed(1) : target.toLocaleString();
+    else el.textContent = decimals > 0 ? target.toFixed(decimals) : target.toString();
   }
   requestAnimationFrame(update);
 }
 
-// IntersectionObserver to trigger on scroll
-const statsSection = document.querySelector('.stats-band');
-let fired = false;
+const statsSection = document.getElementById('statsSection');
+let animated = false;
+
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting && !fired) {
-      fired = true;
-      setTimeout(() => {
-        animateCounter(document.getElementById('counter1'), 2.4, true, 2000);
-        document.getElementById('statCell1').classList.add('flash-cyan');
-      }, 0);
-      setTimeout(() => {
-        animateCounter(document.getElementById('counter2'), 10, false, 1800);
-        document.getElementById('statCell2').classList.add('flash-purple');
-      }, 200);
-      setTimeout(() => {
-        animateCounter(document.getElementById('counter3'), 99.9, true, 1600);
-        document.getElementById('statCell3').classList.add('flash-green');
-      }, 400);
-      setTimeout(() => {
-        animateCounter(document.getElementById('counter4'), 8, false, 1400);
-        document.getElementById('statCell4').classList.add('flash-yellow');
-      }, 600);
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !animated) {
+      animated = true;
+      const counters = document.querySelectorAll('.stat-number[data-target]');
+      counters.forEach((el, i) => {
+        const target = parseFloat(el.dataset.target);
+        const decimals = parseInt(el.dataset.decimal || '0');
+        const delay = i * 150;
+        setTimeout(() => animateCounter(el, target, 2000, decimals), delay);
+      });
     }
   });
 }, { threshold: 0.3 });
+
 observer.observe(statsSection);
 
-// Build bar chart
-const bars = [
-  { label: 'Mon', h: 55, cls: 'b1' },
-  { label: 'Tue', h: 70, cls: 'b2' },
-  { label: 'Wed', h: 80, cls: 'b3' },
-  { label: 'Thu', h: 60, cls: 'b1' },
-  { label: 'Fri', h: 90, cls: 'b2' },
-  { label: 'Sat', h: 75, cls: 'b3' },
-  { label: 'Sun', h: 100, cls: 'b1' },
-];
-const bc = document.getElementById('barChart');
-bars.forEach(b => {
-  bc.innerHTML += `<div class="bar-col">
-    <div class="bar ${b.cls}" style="height:${b.h}%"></div>
-    <span class="bar-label">${b.label}</span>
-  </div>`;
-});
-
-// Periodically update a random counter to show "live" feel
-setInterval(() => {
-  if (!fired) return;
-  const which = Math.floor(Math.random() * 4) + 1;
-  const cells = ['statCell1','statCell2','statCell3','statCell4'];
-  const flashes = ['flash-cyan','flash-purple','flash-green','flash-yellow'];
-  const cell = document.getElementById(cells[which-1]);
-  cell.classList.add(flashes[which-1]);
-  setTimeout(() => cell.classList.remove(flashes[which-1]), 600);
-}, 2800);
+lucide.createIcons();
 </script>
 </body>
 </html>

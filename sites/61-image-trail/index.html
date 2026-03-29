@@ -3,475 +3,537 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRACE — Luxury Photography Agency</title>
+<title>TRACE — Luxury Creative Agency</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,600&family=Neue+Montreal:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Sora:wght@300;400;600;700;800&display=swap');
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#080808;color:#e8e8e8;overflow-x:hidden}
 
-:root {
-  --bg: #0c0b09;
-  --surface: #141310;
-  --warm: #c8a96e;
-  --warm-dim: #7a6240;
-  --text: #e8e4dc;
-  --muted: rgba(232,228,220,0.4);
-  --border: rgba(232,228,220,0.08);
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;height:68px;
+  background:rgba(8,8,8,.8);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(232,232,232,.05);
+}
+.logo{
+  font-family:'Sora',sans-serif;font-weight:800;font-size:.9375rem;
+  letter-spacing:.22em;text-transform:uppercase;color:#e8e8e8;
+}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:rgba(232,232,232,.38);text-decoration:none;font-size:.8125rem;font-weight:300;letter-spacing:.08em;transition:color .2s}
+.nav-links a:hover{color:#e8e8e8}
+.nav-contact{
+  font-size:.6875rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(232,232,232,.5);text-decoration:none;
+  border-bottom:1px solid rgba(232,232,232,.2);padding-bottom:.125rem;
+  transition:color .2s,border-color .2s;
+}
+.nav-contact:hover{color:#e8e8e8;border-color:rgba(232,232,232,.6)}
+
+/* ── TRAIL HERO ── */
+.trail-hero{
+  position:relative;width:100%;height:100vh;
+  background:#080808;
+  overflow:hidden;cursor:none;
+  display:flex;align-items:center;justify-content:center;
+}
+/* Custom cursor */
+#cursor{
+  position:fixed;z-index:500;
+  width:8px;height:8px;
+  background:#e8e8e8;
+  border-radius:50%;
+  pointer-events:none;transform:translate(-50%,-50%);
+  transition:transform .1s ease,width .3s,height .3s;
+  mix-blend-mode:difference;
+}
+#cursor-ring{
+  position:fixed;z-index:499;
+  width:32px;height:32px;
+  border:1px solid rgba(232,232,232,.4);
+  border-radius:50%;
+  pointer-events:none;transform:translate(-50%,-50%);
+  transition:transform .18s ease,width .3s,height .3s,opacity .3s;
+}
+/* trail image card */
+.trail-img{
+  position:fixed;
+  width:200px;
+  aspect-ratio:3/4;
+  pointer-events:none;
+  z-index:300;
+  overflow:hidden;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  transition:opacity .12s ease;
+  will-change:transform,opacity;
+}
+.trail-img img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  filter:grayscale(10%) contrast(1.05);
+}
+.trail-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(8,8,8,.3) 0%,transparent 60%);
 }
 
-html { scroll-behavior: smooth; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; cursor: none; }
-
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 56px; height: 72px;
-  mix-blend-mode: normal; background: rgba(12,11,9,0.7); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+/* Hero headline */
+.hero-inner{position:relative;z-index:10;text-align:center;pointer-events:none}
+.hero-kicker{
+  font-size:.625rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(232,232,232,.3);margin-bottom:2rem;
 }
-.nav-logo { font-family: 'Bodoni Moda', serif; font-size: 22px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); }
-.nav-links { display: flex; gap: 40px; list-style: none; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.3s; }
-.nav-links a:hover { color: var(--text); }
-.nav-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--bg); background: var(--warm); padding: 10px 24px; transition: all 0.3s; }
-.nav-cta:hover { background: var(--text); text-decoration: none; }
-
-/* CUSTOM CURSOR */
-.cursor {
-  position: fixed; z-index: 9999; pointer-events: none;
-  mix-blend-mode: difference;
+.hero-h1{
+  font-family:'Sora',sans-serif;font-size:clamp(4rem,10vw,9rem);
+  font-weight:800;line-height:.9;letter-spacing:-.04em;color:#e8e8e8;
+  mix-blend-mode:difference;
 }
-.cursor-dot { width: 8px; height: 8px; background: var(--warm); border-radius: 50%; transform: translate(-50%,-50%); transition: transform 0.1s ease; }
-.cursor-ring {
-  width: 48px; height: 48px; border: 1px solid rgba(200,169,110,0.4); border-radius: 50%;
-  transform: translate(-50%,-50%); transition: width 0.3s ease, height 0.3s ease, transform 0.1s ease;
+.hero-h1 em{font-style:normal;color:rgba(232,232,232,.18);font-weight:300}
+.hero-scroll-label{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  font-size:.5625rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(232,232,232,.25);display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  pointer-events:none;
+  animation:float 3s ease-in-out infinite;
 }
-body:hover .cursor-ring { width: 48px; height: 48px; }
+@keyframes float{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 
-/* IMAGE TRAIL */
-.trail-image {
-  position: fixed; z-index: 200; pointer-events: none;
-  border-radius: 4px; overflow: hidden;
-  opacity: 0; transform: scale(0.7) rotate(0deg);
-  transition: none;
-  will-change: transform, opacity;
+/* ── WORK SECTION ── */
+.work-section{background:#080808;padding:0 0 8rem}
+.work-header{
+  max-width:1080px;margin:0 auto;padding:7rem 3rem 4rem;
+  display:flex;justify-content:space-between;align-items:flex-end;
 }
-.trail-image-inner { width: 100%; height: 100%; }
+.eyebrow{font-size:.625rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:rgba(232,232,232,.32);margin-bottom:.875rem}
+.section-h{font-family:'Sora',sans-serif;font-size:clamp(1.75rem,3vw,2.75rem);font-weight:700;letter-spacing:-.025em;color:#e8e8e8;line-height:1.1}
+.work-count{font-family:'Sora',sans-serif;font-size:5rem;font-weight:800;color:rgba(232,232,232,.05);line-height:1}
 
-/* HERO */
-.hero {
-  min-height: 100vh; display: flex; align-items: center;
-  padding: 80px 56px; position: relative; overflow: hidden;
+.work-list{max-width:1080px;margin:0 auto;padding:0 3rem}
+.work-item{
+  display:grid;grid-template-columns:4rem 1fr auto;gap:2rem;align-items:center;
+  padding:1.75rem 0;border-top:1px solid rgba(232,232,232,.06);
+  cursor:pointer;transition:padding-left .3s ease;
+  position:relative;
 }
-.hero-grain {
-  position: absolute; inset: 0; z-index: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
-  opacity: 0.4;
+.work-item::after{
+  content:'';position:absolute;bottom:0;left:0;width:0;height:1px;
+  background:#e8e8e8;transition:width .4s ease;
 }
-.hero-content { position: relative; z-index: 1; max-width: 700px; }
-.hero-label { font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--warm); margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
-.hero-label::before { content: ''; display: block; width: 40px; height: 1px; background: var(--warm-dim); }
-.hero h1 { font-family: 'Bodoni Moda', serif; font-size: clamp(60px, 9vw, 116px); font-weight: 400; line-height: 0.9; letter-spacing: -2px; margin-bottom: 36px; }
-.hero h1 em { font-style: italic; color: var(--warm); }
-.hero-divider { width: 60px; height: 1px; background: var(--warm-dim); margin-bottom: 32px; }
-.hero p { font-size: 16px; color: var(--muted); line-height: 2.0; max-width: 420px; margin-bottom: 52px; letter-spacing: 0.02em; }
-.hero-actions { display: flex; gap: 20px; align-items: center; }
-.btn-warm { display: inline-block; background: var(--warm); color: var(--bg); padding: 16px 40px; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; }
-.btn-warm:hover { background: var(--text); transform: translateY(-2px); }
-.hero-link { font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--warm-dim); text-decoration: none; display: flex; align-items: center; gap: 10px; transition: all 0.3s; }
-.hero-link:hover { color: var(--warm); gap: 16px; }
-
-/* Move cursor prompt */
-.cursor-prompt {
-  position: absolute; bottom: 60px; right: 56px; z-index: 1;
-  text-align: center; pointer-events: none;
+.work-item:hover{padding-left:.75rem}
+.work-item:hover::after{width:100%}
+.work-item:last-child{border-bottom:1px solid rgba(232,232,232,.06)}
+.wi-num{font-family:'Sora',sans-serif;font-size:.75rem;font-weight:700;color:rgba(232,232,232,.2)}
+.wi-main h3{font-size:1.25rem;font-weight:600;color:#e8e8e8;letter-spacing:-.01em;margin-bottom:.25rem}
+.wi-main p{font-size:.8125rem;color:rgba(232,232,232,.38);font-weight:300}
+.wi-tags{display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap}
+.wi-tag{
+  font-size:.5625rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  padding:.25rem .75rem;border:1px solid rgba(232,232,232,.1);color:rgba(232,232,232,.38);
 }
-.cursor-prompt-circle {
-  width: 100px; height: 100px; border: 1px solid var(--border);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 0;
-  animation: spin 8s linear infinite;
+.wi-arrow{color:rgba(232,232,232,.2);transition:transform .3s,color .3s}
+.work-item:hover .wi-arrow{transform:translate(4px,-4px);color:#e8e8e8}
+
+/* ── STUDIO SECTION ── */
+.studio-section{
+  background:#0d0d0d;padding:8rem 3rem;
+  border-top:1px solid rgba(232,232,232,.05);
 }
-.cursor-prompt svg { width: 100px; height: 100px; }
-.cursor-prompt svg text { fill: var(--muted); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; }
-.cursor-prompt-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 18px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ABOUT */
-.about-section { padding: 120px 56px; }
-.about-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.about-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 20px; }
-.about h2 { font-family: 'Bodoni Moda', serif; font-size: clamp(36px, 4vw, 54px); font-weight: 400; letter-spacing: -1px; line-height: 1.1; margin-bottom: 28px; }
-.about h2 em { font-style: italic; color: var(--warm); }
-.about p { font-size: 15px; color: var(--muted); line-height: 2.0; margin-bottom: 20px; }
-.about-sig { font-family: 'Bodoni Moda', serif; font-style: italic; font-size: 28px; color: var(--warm); margin-top: 32px; }
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.about-stat { border-top: 1px solid var(--border); padding-top: 20px; }
-.about-stat-val { font-family: 'Bodoni Moda', serif; font-size: 44px; font-weight: 400; color: var(--warm); line-height: 1; }
-.about-stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 6px; }
-
-/* WORK SECTION */
-.work-section { padding: 60px 56px; }
-.work-inner { max-width: 1100px; margin: 0 auto; }
-.work-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px; }
-.work-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 8px; }
-.work-h { font-family: 'Bodoni Moda', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 400; letter-spacing: -1px; }
-.work-view-all { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: gap 0.3s; }
-.work-view-all:hover { gap: 14px; }
-.work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.work-item { position: relative; overflow: hidden; cursor: none; }
-.work-image { aspect-ratio: 3/4; overflow: hidden; }
-.work-img-inner { width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.25,1,0.5,1); }
-.work-item:hover .work-img-inner { transform: scale(1.05); }
-.w1 { background: linear-gradient(160deg, #2a1a0a 0%, #5c3012 50%, #8b4820 100%); }
-.w2 { background: linear-gradient(160deg, #0a0a1a 0%, #1a1040 50%, #2d1f6b 100%); }
-.w3 { background: linear-gradient(160deg, #0a1a12 0%, #1a3d26 50%, #2d6640 100%); }
-.w4 { background: linear-gradient(160deg, #1a0a14 0%, #3d1030 50%, #6b1a48 100%); }
-.w5 { background: linear-gradient(160deg, #1a1208 0%, #3d2c0a 50%, #6b4c0e 100%); }
-.w6 { background: linear-gradient(160deg, #0a1018 0%, #18283a 50%, #2a405c 100%); }
-
-.work-image-label {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: 'Bodoni Moda', serif; font-style: italic; font-size: 18px;
-  color: rgba(232,228,220,0.4);
+.studio-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
+.studio-text h2{font-family:'Sora',sans-serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:700;letter-spacing:-.025em;color:#e8e8e8;line-height:1.1;margin-bottom:1.5rem}
+.studio-text p{font-size:.9375rem;font-weight:300;line-height:1.85;color:rgba(232,232,232,.45);margin-bottom:1rem;font-style:italic}
+.studio-cred{display:flex;flex-direction:column;gap:1rem}
+.cred-row{
+  display:flex;align-items:center;gap:1rem;
+  padding:1.25rem;border:1px solid rgba(232,232,232,.06);
+  transition:border-color .3s;
 }
-.work-meta { padding: 16px 0; display: flex; justify-content: space-between; align-items: baseline; }
-.work-client { font-size: 13px; font-weight: 600; }
-.work-cat { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.cred-row:hover{border-color:rgba(232,232,232,.18)}
+.cred-num{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;color:rgba(232,232,232,.12);width:2.5rem;flex-shrink:0;text-align:center}
+.cred-body h4{font-size:.875rem;font-weight:600;color:#e8e8e8;margin-bottom:.25rem}
+.cred-body p{font-size:.75rem;color:rgba(232,232,232,.38);font-weight:300}
 
-/* SERVICES */
-.services-section { padding: 100px 56px; background: var(--surface); }
-.services-inner { max-width: 1100px; margin: 0 auto; }
-.services-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 16px; }
-.services-h { font-family: 'Bodoni Moda', serif; font-size: clamp(32px, 4vw, 50px); font-weight: 400; letter-spacing: -1px; margin-bottom: 60px; }
-.services-list { display: grid; gap: 0; }
-.service-row { display: grid; grid-template-columns: 80px 1fr 1fr auto; gap: 40px; align-items: center; padding: 28px 0; border-bottom: 1px solid var(--border); transition: all 0.3s; }
-.service-row:hover { padding-left: 12px; }
-.service-row:first-child { border-top: 1px solid var(--border); }
-.s-num { font-family: 'Bodoni Moda', serif; font-size: 14px; color: var(--warm-dim); }
-.s-name { font-family: 'Bodoni Moda', serif; font-size: 22px; font-weight: 400; }
-.s-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
-.s-arrow { color: var(--warm-dim); font-size: 20px; transition: all 0.3s; }
-.service-row:hover .s-arrow { color: var(--warm); transform: translateX(4px); }
-
-/* TESTIMONIALS */
-.testi-section { padding: 100px 56px; }
-.testi-inner { max-width: 1100px; margin: 0 auto; }
-.testi-label { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm); margin-bottom: 16px; }
-.testi-h { font-family: 'Bodoni Moda', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 400; letter-spacing: -1px; margin-bottom: 60px; }
-.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-.t-card { border-top: 1px solid var(--border); padding-top: 32px; }
-.t-quote { font-family: 'Bodoni Moda', serif; font-size: 17px; font-style: italic; line-height: 1.8; color: rgba(232,228,220,0.75); margin-bottom: 28px; }
-.t-name { font-size: 13px; font-weight: 600; color: var(--text); }
-.t-co { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
-
-/* CTA */
-.cta-section { padding: 160px 56px; text-align: center; position: relative; overflow: hidden; background: var(--surface); }
-.cta-section h2 { font-family: 'Bodoni Moda', serif; font-size: clamp(48px, 7vw, 88px); font-weight: 400; letter-spacing: -2px; line-height: 1.0; margin-bottom: 24px; }
-.cta-section h2 em { font-style: italic; color: var(--warm); }
-.cta-section p { font-size: 15px; color: var(--muted); max-width: 380px; margin: 0 auto 48px; line-height: 2.0; }
-.cta-btn { display: inline-block; background: var(--warm); color: var(--bg); padding: 20px 56px; font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: all 0.3s; }
-.cta-btn:hover { background: var(--text); transform: translateY(-3px); }
-
-/* FOOTER */
-footer { padding: 48px 56px; border-top: 1px solid var(--border); }
-.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: 18px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm); }
-.footer-links { display: flex; gap: 28px; list-style: none; }
-.footer-links a { font-size: 11px; color: var(--muted); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
-.footer-links a:hover { color: var(--text); }
-.footer-copy { font-size: 11px; color: rgba(232,228,220,0.2); letter-spacing: 0.06em; }
-
-@media(max-width:768px){
-  body{cursor:auto;}
-  nav{padding:0 20px;} .nav-links{display:none;}
-  .hero{padding:80px 20px 40px;}
-  .about-inner{grid-template-columns:1fr;}
-  .work-grid{grid-template-columns:1fr 1fr;}
-  .service-row{grid-template-columns:40px 1fr;} .s-desc,.s-arrow{display:none;}
-  .testi-grid{grid-template-columns:1fr;}
-  .footer-inner{flex-direction:column;gap:20px;text-align:center;}
+/* ── CONTACT ── */
+.contact-section{background:#080808;padding:9rem 3rem;border-top:1px solid rgba(232,232,232,.05)}
+.contact-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.contact-text{font-family:'Sora',sans-serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:#e8e8e8}
+.contact-text strong{font-weight:800;display:block}
+.contact-form{display:flex;flex-direction:column;gap:1.25rem}
+.form-row{border-bottom:1px solid rgba(232,232,232,.1);padding-bottom:1rem}
+.form-label{font-size:.5625rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,232,232,.3);display:block;margin-bottom:.625rem}
+.form-input{
+  background:transparent;border:none;outline:none;
+  width:100%;font-size:.9375rem;font-weight:300;color:#e8e8e8;
+  font-family:'Inter',sans-serif;
 }
-</style>
+.form-input::placeholder{color:rgba(232,232,232,.22)}
+.form-submit{
+  display:inline-flex;align-items:center;gap:.625rem;
+  margin-top:.75rem;
+  font-size:.6875rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:#e8e8e8;background:none;border:1px solid rgba(232,232,232,.25);
+  padding:.875rem 2rem;cursor:pointer;
+  transition:border-color .2s,background .2s;
+}
+.form-submit:hover{background:rgba(232,232,232,.06);border-color:rgba(232,232,232,.5)}
 
-<!-- inject-local -->
-<style>
-  .work-image {
-    background-image: url('../../images/creative/creative-1.jpg') !important;
-    background-size: cover; background-position: center;
-  }
+/* ── FOOTER ── */
+footer{background:#050505;padding:3rem;border-top:1px solid rgba(232,232,232,.05)}
+.footer-inner{max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:'Sora',sans-serif;font-weight:800;font-size:.9375rem;letter-spacing:.22em;text-transform:uppercase;color:#e8e8e8}
+.footer-links{display:flex;gap:2rem;list-style:none}
+.footer-links a{text-decoration:none;font-size:.75rem;color:rgba(232,232,232,.28);font-weight:300;letter-spacing:.06em;transition:color .2s}
+.footer-links a:hover{color:#e8e8e8}
+.footer-copy{font-size:.6875rem;color:rgba(232,232,232,.18);letter-spacing:.06em}
 </style>
 </head>
 <body>
 
 <!-- Custom cursor -->
-<div class="cursor cursor-dot" id="cursorDot"></div>
-<div class="cursor cursor-ring" id="cursorRing"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Trail image cards (pre-created, cycled by JS) -->
+<div id="trailContainer"></div>
 
 <nav>
-  <div class="nav-logo">TRACE</div>
+  <div class="logo">TRACE</div>
   <ul class="nav-links">
-    <li><a href="#">Portfolio</a></li>
-    <li><a href="#">Services</a></li>
+    <li><a href="#">Work</a></li>
     <li><a href="#">Studio</a></li>
-    <li><a href="#">Journal</a></li>
+    <li><a href="#">Process</a></li>
   </ul>
-  <a href="#" class="nav-cta">Inquire</a>
+  <a href="#" class="nav-contact">Begin a Project</a>
 </nav>
 
-<section class="hero" id="heroSection">
-  <div class="hero-grain"></div>
-  <div class="hero-content">
-    <div class="hero-label">Luxury Photography Agency</div>
-    <h1>We<br>leave<br><em>traces.</em></h1>
-    <div class="hero-divider"></div>
-    <p>TRACE is a luxury photography agency creating images that outlast campaigns, collections, and seasons. Move your cursor to discover our work.</p>
-    <div class="hero-actions">
-      <a href="#" class="btn-warm">View Portfolio</a>
-      <a href="#" class="hero-link">Our Philosophy →</a>
-    </div>
+<!-- Trail Hero -->
+<section class="trail-hero" id="trailHero">
+  <div class="hero-inner">
+    <div class="hero-kicker">Luxury Creative Agency &nbsp;&mdash;&nbsp; Est. 2018</div>
+    <h1 class="hero-h1">
+      TRACE<br><em>your vision</em>
+    </h1>
   </div>
-  <div class="cursor-prompt">
-    <div class="cursor-prompt-circle">
-      <svg viewBox="0 0 100 100">
-        <defs><path id="circle" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"/></defs>
-        <text><textPath href="#circle">MOVE YOUR CURSOR · MOVE YOUR CURSOR · </textPath></text>
-      </svg>
-      <div class="cursor-prompt-inner">✦</div>
-    </div>
+  <div class="hero-scroll-label">
+    <i data-lucide="chevron-down" style="width:14px;height:14px;"></i>
+    <span>Scroll to discover</span>
   </div>
 </section>
 
-<!-- ABOUT -->
-<section class="about-section">
-  <div class="about-inner">
-    <div class="about">
-      <div class="about-label">The Studio</div>
-      <h2>Photography<br>as <em>legacy</em></h2>
-      <p>Founded in 2012 in Paris, TRACE has spent a decade collaborating with fashion houses, art directors, and brands who understand that a photograph is an investment, not an expense.</p>
-      <p>Every engagement begins with a conversation about meaning — what you want these images to say, not just today, but in twenty years.</p>
-      <div class="about-sig">— Élise Moreau, Founder</div>
-    </div>
-    <div class="about-grid">
-      <div class="about-stat"><div class="about-stat-val">340</div><div class="about-stat-label">Commissions</div></div>
-      <div class="about-stat"><div class="about-stat-val">14</div><div class="about-stat-label">Years of Practice</div></div>
-      <div class="about-stat"><div class="about-stat-val">28</div><div class="about-stat-label">Territories</div></div>
-      <div class="about-stat"><div class="about-stat-val">7</div><div class="about-stat-label">International Awards</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- WORK GRID -->
+<!-- Work Section -->
 <section class="work-section">
-  <div class="work-inner">
-    <div class="work-header">
-      <div>
-        <div class="work-label">Selected Works</div>
-        <div class="work-h">Recent commissions</div>
-      </div>
-      <a href="#" class="work-view-all">View All →</a>
+  <div class="work-header">
+    <div>
+      <div class="eyebrow">Selected Work</div>
+      <h2 class="section-h">Projects that<br>leave a mark.</h2>
     </div>
-    <div class="work-grid">
-      <div class="work-item">
-        <div class="work-image"><div class="work-img-inner w1"><div class="work-image-label">Campaign</div></div></div>
-        <div class="work-meta"><span class="work-client">Maison Duvalier</span><span class="work-cat">Campaign · 2025</span></div>
+    <div class="work-count">07</div>
+  </div>
+  <div class="work-list">
+    <div class="work-item">
+      <div class="wi-num">01</div>
+      <div class="wi-main">
+        <h3>Vesper Campaign</h3>
+        <p>Luxury fragrance launch &mdash; global rollout, six markets</p>
       </div>
-      <div class="work-item">
-        <div class="work-image"><div class="work-img-inner w2"><div class="work-image-label">Editorial</div></div></div>
-        <div class="work-meta"><span class="work-client">Vogue Paris</span><span class="work-cat">Editorial · 2024</span></div>
+      <div style="display:flex;align-items:center;gap:1.5rem;">
+        <div class="wi-tags">
+          <span class="wi-tag">Campaign</span>
+          <span class="wi-tag">Art Direction</span>
+        </div>
+        <i data-lucide="arrow-up-right" class="wi-arrow" style="width:18px;height:18px;"></i>
       </div>
-      <div class="work-item">
-        <div class="work-image"><div class="work-img-inner w3"><div class="work-image-label">Architecture</div></div></div>
-        <div class="work-meta"><span class="work-client">Atelier Verde</span><span class="work-cat">Architecture · 2024</span></div>
+    </div>
+    <div class="work-item">
+      <div class="wi-num">02</div>
+      <div class="wi-main">
+        <h3>Meridian Identity</h3>
+        <p>Full brand identity for private equity firm</p>
       </div>
-      <div class="work-item">
-        <div class="work-image"><div class="work-img-inner w4"><div class="work-image-label">Portrait</div></div></div>
-        <div class="work-meta"><span class="work-client">Rosette Fine Art</span><span class="work-cat">Fine Art · 2025</span></div>
+      <div style="display:flex;align-items:center;gap:1.5rem;">
+        <div class="wi-tags">
+          <span class="wi-tag">Brand</span>
+          <span class="wi-tag">Identity</span>
+        </div>
+        <i data-lucide="arrow-up-right" class="wi-arrow" style="width:18px;height:18px;"></i>
       </div>
-      <div class="work-item">
-        <div class="work-image"><div class="work-img-inner w5"><div class="work-image-label">Product</div></div></div>
-        <div class="work-meta"><span class="work-client">Ora Parfums</span><span class="work-cat">Product · 2025</span></div>
+    </div>
+    <div class="work-item">
+      <div class="wi-num">03</div>
+      <div class="wi-main">
+        <h3>Atelier Nordvik</h3>
+        <p>E-commerce experience for Scandinavian furniture brand</p>
       </div>
-      <div class="work-item">
-        <div class="work-image"><div class="work-img-inner w6"><div class="work-image-label">Brand</div></div></div>
-        <div class="work-meta"><span class="work-client">Céléste Hotels</span><span class="work-cat">Brand · 2024</span></div>
+      <div style="display:flex;align-items:center;gap:1.5rem;">
+        <div class="wi-tags">
+          <span class="wi-tag">Digital</span>
+          <span class="wi-tag">UX</span>
+        </div>
+        <i data-lucide="arrow-up-right" class="wi-arrow" style="width:18px;height:18px;"></i>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="wi-num">04</div>
+      <div class="wi-main">
+        <h3>Nocturne Film Series</h3>
+        <p>Campaign identity for international film festival circuit</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:1.5rem;">
+        <div class="wi-tags">
+          <span class="wi-tag">Film</span>
+          <span class="wi-tag">Print</span>
+        </div>
+        <i data-lucide="arrow-up-right" class="wi-arrow" style="width:18px;height:18px;"></i>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="wi-num">05</div>
+      <div class="wi-main">
+        <h3>Carver Architectural</h3>
+        <p>Annual report and environmental brand system</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:1.5rem;">
+        <div class="wi-tags">
+          <span class="wi-tag">Print</span>
+          <span class="wi-tag">Environmental</span>
+        </div>
+        <i data-lucide="arrow-up-right" class="wi-arrow" style="width:18px;height:18px;"></i>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="wi-num">06</div>
+      <div class="wi-main">
+        <h3>Dusk Editorial</h3>
+        <p>Six-issue art photography publication</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:1.5rem;">
+        <div class="wi-tags">
+          <span class="wi-tag">Editorial</span>
+          <span class="wi-tag">Typography</span>
+        </div>
+        <i data-lucide="arrow-up-right" class="wi-arrow" style="width:18px;height:18px;"></i>
+      </div>
+    </div>
+    <div class="work-item">
+      <div class="wi-num">07</div>
+      <div class="wi-main">
+        <h3>Thornfield Whisky</h3>
+        <p>Heritage brand relaunch with global distribution</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:1.5rem;">
+        <div class="wi-tags">
+          <span class="wi-tag">Brand</span>
+          <span class="wi-tag">Packaging</span>
+        </div>
+        <i data-lucide="arrow-up-right" class="wi-arrow" style="width:18px;height:18px;"></i>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="services-section">
-  <div class="services-inner">
-    <div class="services-label">Services</div>
-    <div class="services-h">What we offer</div>
-    <div class="services-list">
-      <div class="service-row">
-        <div class="s-num">01</div>
-        <div class="s-name">Campaign Photography</div>
-        <div class="s-desc">Full-campaign production for fashion, beauty, and luxury lifestyle brands. Concept through final retouching.</div>
-        <div class="s-arrow">→</div>
+<!-- Studio Section -->
+<section class="studio-section">
+  <div class="studio-inner">
+    <div class="studio-text">
+      <div class="eyebrow">The Studio</div>
+      <h2>We don't decorate ideas.<br>We build them from first principles.</h2>
+      <p>TRACE was founded on a single belief: that the most effective creative work starts with the question no one else is asking. Our process moves from strategic clarity through visual precision to executed reality.</p>
+      <p>We work with a deliberately small number of clients each year. Not because we can't scale — because we won't sacrifice the quality of attention that earns results worth keeping.</p>
+      <a href="#" style="display:inline-flex;align-items:center;gap:.625rem;margin-top:2rem;font-size:.6875rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(232,232,232,.5);text-decoration:none;border-bottom:1px solid rgba(232,232,232,.18);padding-bottom:.25rem;transition:color .2s,border-color .2s;">
+        View Our Process
+        <i data-lucide="arrow-right" style="width:12px;height:12px;"></i>
+      </a>
+    </div>
+    <div class="studio-cred">
+      <div class="cred-row">
+        <div class="cred-num">07</div>
+        <div class="cred-body">
+          <h4>Years in Practice</h4>
+          <p>Building brands since 2018. Every year, more selective.</p>
+        </div>
       </div>
-      <div class="service-row">
-        <div class="s-num">02</div>
-        <div class="s-name">Editorial</div>
-        <div class="s-desc">Magazine and digital editorial for fashion, culture, and lifestyle publications worldwide.</div>
-        <div class="s-arrow">→</div>
+      <div class="cred-row">
+        <div class="cred-num">12</div>
+        <div class="cred-body">
+          <h4>Studio Members</h4>
+          <p>Strategists, designers, writers, and directors. No generalists.</p>
+        </div>
       </div>
-      <div class="service-row">
-        <div class="s-num">03</div>
-        <div class="s-name">Fine Art Prints</div>
-        <div class="s-desc">Limited-edition archival prints, private commissions, and gallery representation for collectors.</div>
-        <div class="s-arrow">→</div>
+      <div class="cred-row">
+        <div class="cred-num">4</div>
+        <div class="cred-body">
+          <h4>Active Projects at Once</h4>
+          <p>The only way to give every client the attention they deserve.</p>
+        </div>
       </div>
-      <div class="service-row">
-        <div class="s-num">04</div>
-        <div class="s-name">Brand Identity</div>
-        <div class="s-desc">Visual identity systems anchored in photography — for brands building a 20-year visual language.</div>
-        <div class="s-arrow">→</div>
+      <div class="cred-row">
+        <div class="cred-num">38</div>
+        <div class="cred-body">
+          <h4>Clients Served</h4>
+          <p>From private individuals to Fortune 500 divisions. All treated identically.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testi-section">
-  <div class="testi-inner">
-    <div class="testi-label">Client Words</div>
-    <div class="testi-h">In their own words</div>
-    <div class="testi-grid">
-      <div class="t-card">
-        <blockquote class="t-quote">"TRACE produced images that our brand has built an entire visual language around. Three years later, we're still drawing from that shoot."</blockquote>
-        <div class="t-name">Isabelle F.</div>
-        <div class="t-co">Creative Director · Maison Duvalier</div>
-      </div>
-      <div class="t-card">
-        <blockquote class="t-quote">"The editorial TRACE delivered for our September issue generated more reader engagement than any shoot in five years. The images simply hold attention."</blockquote>
-        <div class="t-name">Thomas D.</div>
-        <div class="t-co">Photo Director · Vogue Paris</div>
-      </div>
-      <div class="t-card">
-        <blockquote class="t-quote">"Collectors recognized the quality immediately. Six of the twelve prints sold at the opening night. Working with TRACE was the most important creative decision we made."</blockquote>
-        <div class="t-name">Nadia O.</div>
-        <div class="t-co">Gallery Director · Forme et Lumière</div>
+<!-- Contact -->
+<section class="contact-section">
+  <div class="contact-inner">
+    <div>
+      <div class="eyebrow" style="margin-bottom:1.5rem;">New Enquiries</div>
+      <div class="contact-text">
+        Tell us<br>
+        <strong>what you're<br>building.</strong>
       </div>
     </div>
+    <form class="contact-form" onsubmit="return false;">
+      <div class="form-row">
+        <label class="form-label">Your Name</label>
+        <input class="form-input" type="text" placeholder="Helena Vasquez" autocomplete="off">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Your Email</label>
+        <input class="form-input" type="email" placeholder="hello@meridian.co" autocomplete="off">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Project Brief</label>
+        <input class="form-input" type="text" placeholder="Describe what you're working on in a sentence" autocomplete="off">
+      </div>
+      <button class="form-submit">
+        <i data-lucide="arrow-right" style="width:12px;height:12px;"></i>
+        Send Enquiry
+      </button>
+    </form>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <h2>Begin your<br><em>legacy</em> today</h2>
-  <p>We accept a limited number of commissions each quarter. Inquire early to secure your place.</p>
-  <a href="#" class="cta-btn">Open Commission Inquiry</a>
-</section>
-
+<!-- Footer -->
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">TRACE</div>
     <ul class="footer-links">
+      <li><a href="#">Work</a></li>
+      <li><a href="#">Studio</a></li>
+      <li><a href="#">Process</a></li>
       <li><a href="#">Privacy</a></li>
-      <li><a href="#">Terms</a></li>
-      <li><a href="#">Instagram</a></li>
     </ul>
-    <div class="footer-copy">© 2025 Trace Studio. Paris · New York · Tokyo.</div>
+    <div class="footer-copy">&copy; 2026 TRACE Creative Studio</div>
   </div>
 </footer>
 
 <script>
-// Custom cursor
-const dot = document.getElementById('cursorDot');
-const ring = document.getElementById('cursorRing');
-let cx = 0, cy = 0, rx = 0, ry = 0;
+  // ── Custom cursor ──
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursor-ring');
+  let cx = 0, cy = 0;
 
-document.addEventListener('mousemove', (e) => {
-  cx = e.clientX; cy = e.clientY;
-  dot.style.left = cx + 'px';
-  dot.style.top = cy + 'px';
-});
+  document.addEventListener('mousemove', (e) => {
+    cx = e.clientX;
+    cy = e.clientY;
+    cursor.style.left = cx + 'px';
+    cursor.style.top = cy + 'px';
+    cursorRing.style.left = cx + 'px';
+    cursorRing.style.top = cy + 'px';
+  });
 
-function animateRing() {
-  rx += (cx - rx) * 0.12;
-  ry += (cy - ry) * 0.12;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
-  requestAnimationFrame(animateRing);
-}
-animateRing();
+  // ── Image Trail ──
+  const images = [
+    '../../images/creative/creative-1.jpg',
+    '../../images/creative/creative-2.jpg',
+    '../../images/creative/creative-3.jpg',
+    '../../images/creative/creative-4.jpg',
+    '../../images/creative/creative-5.jpg',
+    '../../images/creative/creative-6.jpg',
+  ];
 
-// IMAGE TRAIL
-const trailColors = [
-  { bg: 'linear-gradient(160deg, #2a1a0a 0%, #5c3012 50%, #8b4820 100%)', label: 'Campaign' },
-  { bg: 'linear-gradient(160deg, #0a0a1a 0%, #1a1040 50%, #2d1f6b 100%)', label: 'Portrait' },
-  { bg: 'linear-gradient(160deg, #0a1a12 0%, #1a3d26 50%, #2d6640 100%)', label: 'Nature' },
-  { bg: 'linear-gradient(160deg, #1a0a14 0%, #3d1030 50%, #6b1a48 100%)', label: 'Editorial' },
-  { bg: 'linear-gradient(160deg, #1a1208 0%, #3d2c0a 50%, #6b4c0e 100%)', label: 'Product' },
-  { bg: 'linear-gradient(160deg, #0a1018 0%, #18283a 50%, #2a405c 100%)', label: 'Brand' },
-];
+  const POOL_SIZE = 12;
+  const THRESHOLD = 90; // px mouse must move to trigger next card
+  const LIFETIME = 700; // ms each card lives
 
-const trailImages = [];
-const MAX_TRAIL = 8;
-let trailIdx = 0;
-let lastX = -999, lastY = -999;
+  const trailContainer = document.getElementById('trailContainer');
+  const pool = [];
 
-// Pre-create trail elements
-for (let i = 0; i < MAX_TRAIL; i++) {
-  const el = document.createElement('div');
-  el.className = 'trail-image';
-  const w = 140 + Math.floor(Math.random() * 60);
-  const h = w * (1.2 + Math.random() * 0.4);
-  el.style.width = w + 'px';
-  el.style.height = h + 'px';
-  const inner = document.createElement('div');
-  inner.className = 'trail-image-inner';
-  inner.style.display = 'flex';
-  inner.style.alignItems = 'center';
-  inner.style.justifyContent = 'center';
-  inner.style.fontFamily = "'Bodoni Moda', serif";
-  inner.style.fontStyle = 'italic';
-  inner.style.fontSize = '14px';
-  inner.style.color = 'rgba(232,228,220,0.4)';
-  el.appendChild(inner);
-  document.body.appendChild(el);
-  trailImages.push({ el, inner, w, h });
-}
+  // Pre-create card elements
+  for (let i = 0; i < POOL_SIZE; i++) {
+    const card = document.createElement('div');
+    card.className = 'trail-img';
+    const img = document.createElement('img');
+    img.src = images[i % images.length];
+    img.alt = '';
+    const overlay = document.createElement('div');
+    overlay.className = 'trail-img-overlay';
+    card.appendChild(img);
+    card.appendChild(overlay);
+    trailContainer.appendChild(card);
+    pool.push({ el: card, active: false });
+  }
 
-let lastTrailTime = 0;
+  let poolIndex = 0;
+  let lastX = 0, lastY = 0;
+  let ticking = false;
 
-document.addEventListener('mousemove', (e) => {
-  const now = Date.now();
-  const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+  function getNext() {
+    const slot = pool[poolIndex % POOL_SIZE];
+    poolIndex++;
+    return slot;
+  }
 
-  if (dist < 30 || now - lastTrailTime < 120) return;
-  lastTrailTime = now;
-  lastX = e.clientX;
-  lastY = e.clientY;
+  function spawnCard(x, y) {
+    const slot = getNext();
+    const card = slot.el;
+    const imgIndex = poolIndex % images.length;
+    card.querySelector('img').src = images[imgIndex];
 
-  const t = trailImages[trailIdx % MAX_TRAIL];
-  trailIdx++;
+    // Randomize slight rotation and scale
+    const rot = (Math.random() - 0.5) * 14;
+    const scale = 0.85 + Math.random() * 0.3;
+    const zIndex = 300 + (poolIndex % 50);
 
-  const colorData = trailColors[trailIdx % trailColors.length];
-  const rot = (Math.random() - 0.5) * 20;
-  const offsetX = (Math.random() - 0.5) * 60 - t.w / 2;
-  const offsetY = (Math.random() - 0.5) * 40 - t.h / 2;
+    card.style.left = x + 'px';
+    card.style.top = y + 'px';
+    card.style.zIndex = zIndex;
+    card.style.transform = `translate(-50%,-50%) rotate(${rot}deg) scale(${scale})`;
+    card.style.opacity = '0';
 
-  t.el.style.left = (e.clientX + offsetX) + 'px';
-  t.el.style.top = (e.clientY + offsetY) + 'px';
-  t.inner.style.background = colorData.bg;
-  t.inner.textContent = colorData.label;
-  t.el.style.transition = 'none';
-  t.el.style.opacity = '0.95';
-  t.el.style.transform = `scale(1) rotate(${rot}deg)`;
-  t.el.style.zIndex = String(100 + (trailIdx % 50));
+    // Fade in
+    requestAnimationFrame(() => {
+      card.style.transition = 'opacity 0.12s ease';
+      card.style.opacity = '0.85';
+    });
 
-  // Fade out
-  setTimeout(() => {
-    t.el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
-    t.el.style.opacity = '0';
-    t.el.style.transform = `scale(0.85) rotate(${rot + (Math.random()-0.5)*5}deg)`;
-  }, 400);
-});
+    // Fade out after lifetime
+    setTimeout(() => {
+      card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+      card.style.opacity = '0';
+      card.style.transform = `translate(-50%,-50%) rotate(${rot}deg) scale(${scale * 0.85})`;
+    }, LIFETIME);
+  }
+
+  const hero = document.getElementById('trailHero');
+  hero.addEventListener('mousemove', (e) => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > THRESHOLD) {
+          spawnCard(e.clientX, e.clientY);
+          lastX = e.clientX;
+          lastY = e.clientY;
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+
+  lucide.createIcons();
 </script>
 </body>
 </html>

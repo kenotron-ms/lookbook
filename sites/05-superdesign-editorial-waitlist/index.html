@@ -3,1003 +3,791 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATELIER — The Exclusive AI Design Tool</title>
+<title>ATELIER — The Design Tool You've Been Waiting For</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #181818;
-  --surface: #1E1E1E;
-  --beige: #EBDCC4;
-  --coral: #C8614A;
-  --rust: #8B3E2A;
-  --sage: #7A8F7D;
-  --white: #F5F0E8;
-  --gray: #555;
-  --mid: #888;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--beige);
-  font-family: 'Syne', sans-serif;
-  overflow-x: hidden;
-}
-
-/* ── NOISE TEXTURE ── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 9000;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-}
-
-/* ── REVEAL ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1);
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.delay-1 { transition-delay: 0.15s; }
-.delay-2 { transition-delay: 0.3s; }
-
-/* ── NAV ── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 500;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28px 56px;
-  mix-blend-mode: normal;
-}
-
-.nav-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  color: var(--beige);
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.nav-links {
-  display: flex;
-  gap: 40px;
-  list-style: none;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--mid);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover { color: var(--beige); }
-
-.nav-badge {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--bg);
-  background: var(--coral);
-  padding: 8px 20px;
-  font-weight: 700;
-}
-
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Layered text depth effect */
-.hero-depth {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.depth-word {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(120px, 20vw, 280px);
-  font-weight: 300;
-  font-style: italic;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  position: absolute;
-  white-space: nowrap;
-}
-
-.depth-word-1 {
-  color: transparent;
-  -webkit-text-stroke: 0.5px #333;
-  transform: translate(-8px, -8px);
-}
-
-.depth-word-2 {
-  color: transparent;
-  -webkit-text-stroke: 0.5px #3A3A3A;
-  transform: translate(-4px, -4px);
-}
-
-.depth-word-3 {
-  color: transparent;
-  -webkit-text-stroke: 1px #444;
-}
-
-.hero-top {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 100px 56px 0;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--coral);
-  font-weight: 600;
-  margin-bottom: 24px;
-}
-
-.hero-h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(72px, 11vw, 180px);
-  font-weight: 300;
-  line-height: 0.92;
-  letter-spacing: -0.02em;
-  color: var(--beige);
-}
-
-.hero-h1 .italic { font-style: italic; }
-.hero-h1 .coral { color: var(--coral); }
-
-.hero-bottom {
-  padding: 60px 56px 80px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0;
-  border-top: 1px solid #2a2a2a;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-bottom-col {
-  padding: 0 40px;
-  border-right: 1px solid #2a2a2a;
-}
-
-.hero-bottom-col:first-child { padding-left: 0; }
-.hero-bottom-col:last-child { border-right: none; }
-
-.hbc-label {
-  font-size: 9px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 16px;
-}
-
-.hbc-content {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
-  font-weight: 400;
-  color: var(--beige);
-  line-height: 1.5;
-}
-
-/* ── WAITLIST SECTION ── */
-.waitlist-section {
-  padding: 120px 56px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 100px;
-  align-items: center;
-  border-top: 1px solid #2a2a2a;
-}
-
-.waitlist-left .reveal {}
-
-.waitlist-label {
-  font-size: 9px;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--sage);
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.waitlist-label::before {
-  content: '';
-  display: block;
-  width: 32px;
-  height: 1px;
-  background: var(--sage);
-}
-
-.waitlist-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(48px, 5vw, 80px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  color: var(--beige);
-  margin-bottom: 32px;
-}
-
-.waitlist-title em { font-style: italic; color: var(--coral); }
-
-.waitlist-desc {
-  font-size: 15px;
-  line-height: 1.8;
-  color: var(--mid);
-  max-width: 440px;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
-}
-
-.waitlist-stats {
-  display: flex;
-  gap: 48px;
-  margin-top: 48px;
-}
-
-.wl-stat {}
-
-.wl-stat-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 40px;
-  font-weight: 600;
-  color: var(--coral);
-  line-height: 1;
-}
-
-.wl-stat-label {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-top: 6px;
-}
-
-.waitlist-right {}
-
-.waitlist-form {
-  background: var(--surface);
-  padding: 52px 48px;
-  border: 1px solid #2a2a2a;
-}
-
-.form-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--beige);
-  margin-bottom: 8px;
-}
-
-.form-subtitle {
-  font-size: 13px;
-  color: var(--mid);
-  margin-bottom: 36px;
-  line-height: 1.6;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-label {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gray);
-  display: block;
-  margin-bottom: 8px;
-}
-
-.form-input {
-  width: 100%;
-  background: #111;
-  border: 1px solid #2a2a2a;
-  color: var(--beige);
-  padding: 14px 18px;
-  font-size: 14px;
-  font-family: 'Syne', sans-serif;
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-.form-input::placeholder { color: #444; }
-.form-input:focus { border-color: var(--coral); }
-
-.form-select-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.form-btn {
-  width: 100%;
-  background: var(--coral);
-  color: white;
-  border: none;
-  padding: 18px 32px;
-  font-family: 'Syne', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.3s;
-  margin-top: 12px;
-}
-
-.form-btn:hover { background: var(--rust); }
-
-.form-note {
-  font-size: 11px;
-  color: var(--gray);
-  text-align: center;
-  margin-top: 16px;
-  letter-spacing: 0.08em;
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-}
-
-/* ── FEATURES ── */
-.features {
-  padding: 100px 56px;
-  border-top: 1px solid #2a2a2a;
-}
-
-.features-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 80px;
-}
-
-.features-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(48px, 6vw, 90px);
-  font-weight: 300;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-}
-
-.features-title em { font-style: italic; color: var(--coral); }
-
-.features-desc {
-  max-width: 360px;
-  font-size: 14px;
-  line-height: 1.8;
-  color: var(--mid);
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: #2a2a2a;
-}
-
-.feat-card {
-  background: var(--bg);
-  padding: 52px 40px;
-  transition: background 0.4s;
-}
-
-.feat-card:hover { background: var(--surface); }
-
-.feat-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  color: var(--gray);
-  margin-bottom: 24px;
-}
-
-.feat-icon {
-  width: 48px;
-  height: 48px;
-  border: 1px solid #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-  font-size: 20px;
-}
-
-.feat-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--beige);
-  margin-bottom: 16px;
-}
-
-.feat-desc {
-  font-size: 13px;
-  line-height: 1.75;
-  color: var(--mid);
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 400;
-}
-
-/* ── TESTIMONIALS ── */
-.testimonials {
-  padding: 100px 56px;
-  border-top: 1px solid #2a2a2a;
-}
-
-.testimonials-label {
-  font-size: 9px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--sage);
-  margin-bottom: 60px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.testimonials-label::before {
-  content: '';
-  display: block;
-  width: 32px;
-  height: 1px;
-  background: var(--sage);
-}
-
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 40px;
-}
-
-.t-card {
-  border-top: 1px solid #2a2a2a;
-  padding-top: 36px;
-}
-
-.t-stars {
-  color: var(--coral);
-  font-size: 12px;
-  letter-spacing: 4px;
-  margin-bottom: 20px;
-}
-
-.t-quote {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 17px;
-  font-weight: 400;
-  font-style: italic;
-  line-height: 1.7;
-  color: var(--beige);
-  margin-bottom: 32px;
-}
-
-.t-author-name {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--beige);
-  margin-bottom: 4px;
-}
-
-.t-author-role {
-  font-size: 11px;
-  color: var(--gray);
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-}
-
-/* ── QUOTE MARQUEE ── */
-.quote-marquee {
-  padding: 48px 0;
-  overflow: hidden;
-  border-top: 1px solid #2a2a2a;
-  border-bottom: 1px solid #2a2a2a;
-}
-
-.marquee-track {
-  display: flex;
-  white-space: nowrap;
-  animation: marquee 40s linear infinite;
-}
-
-.marquee-item {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
-  font-weight: 300;
-  font-style: italic;
-  letter-spacing: 0.04em;
-  color: var(--mid);
-  padding: 0 60px;
-  flex-shrink: 0;
-}
-
-.marquee-item .sep { color: var(--coral); margin: 0 20px; font-style: normal; }
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-/* ── FINAL CTA ── */
-.cta-final {
-  padding: 140px 56px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-ambient {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  filter: blur(150px);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  opacity: 0.12;
-  background: radial-gradient(circle, var(--coral) 0%, var(--rust) 50%, transparent 100%);
-}
-
-.cta-label {
-  font-size: 9px;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--sage);
-  margin-bottom: 32px;
-  position: relative;
-  z-index: 1;
-}
-
-.cta-headline {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(56px, 8vw, 120px);
-  font-weight: 300;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  color: var(--beige);
-  margin-bottom: 48px;
-  position: relative;
-  z-index: 1;
-}
-
-.cta-headline em { font-style: italic; color: var(--coral); }
-
-.cta-form-inline {
-  display: flex;
-  gap: 0;
-  max-width: 520px;
-  margin: 0 auto 24px;
-  position: relative;
-  z-index: 1;
-}
-
-.cta-form-inline input {
-  flex: 1;
-  background: var(--surface);
-  border: 1px solid #333;
-  border-right: none;
-  color: var(--beige);
-  padding: 18px 24px;
-  font-family: 'Syne', sans-serif;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-.cta-form-inline input:focus { border-color: var(--coral); }
-.cta-form-inline input::placeholder { color: #444; }
-
-.cta-form-inline button {
-  background: var(--coral);
-  color: white;
-  border: none;
-  padding: 18px 32px;
-  font-family: 'Syne', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.3s;
-}
-
-.cta-form-inline button:hover { background: var(--rust); }
-
-.cta-sub {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
-  font-style: italic;
-  color: var(--gray);
-  position: relative;
-  z-index: 1;
-}
-
-/* ── FOOTER ── */
-footer {
-  background: #111;
-  border-top: 1px solid #2a2a2a;
-  padding: 72px 56px 40px;
-}
-
-.footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px;
-  padding-bottom: 56px;
-  border-bottom: 1px solid #1e1e1e;
-}
-
-.footer-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--beige);
-  margin-bottom: 16px;
-}
-
-.footer-desc {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
-  font-style: italic;
-  color: var(--mid);
-  line-height: 1.7;
-  max-width: 280px;
-}
-
-.footer-col-title {
-  font-size: 9px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 20px;
-  font-weight: 600;
-}
-
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 12px; }
-.footer-col ul li a {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 16px;
-  color: var(--mid);
-  text-decoration: none;
-  transition: color 0.3s;
-}
-.footer-col ul li a:hover { color: var(--beige); }
-
-.footer-bottom {
-  margin-top: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-copy {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 13px;
-  font-style: italic;
-  color: var(--gray);
-}
-
-.footer-legal a {
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gray);
-  text-decoration: none;
-  margin-left: 24px;
-  transition: color 0.3s;
-}
-
-.footer-legal a:hover { color: var(--beige); }
-</style>
-
-<!-- inject-nano -->
-<style>
+  :root {
+    --bg: #181818;
+    --beige: #EBDCC4;
+    --muted: #B6A596;
+    --accent: #DC9F85;
+    --border: #66473B;
+    --dark-border: #35211A;
+    --outline-color: #66473B;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: var(--bg); color: var(--beige); font-family: 'Space Grotesk', sans-serif; scroll-behavior: smooth; }
+
+  ::selection { background: var(--accent); color: var(--bg); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+
+  /* NOISE OVERLAY */
+  .noise {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.03;
+  }
+
+  /* LAYERED TEXT DEPTH EFFECT */
+  .depth-text {
+    position: relative;
+    display: inline-block;
+  }
+  .depth-text::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 1px; left: 1px;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--outline-color);
+    z-index: -1;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    border-bottom: 1px solid var(--dark-border);
+    background: rgba(24,24,24,0.9);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--beige);
+    text-decoration: none;
+  }
+  .nav-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 200ms;
+  }
+  .nav-links a:hover { color: var(--beige); }
+
+  /* HERO */
   .hero {
-    background-image: url('images/hero.jpg') !important;
-    background-size: cover; background-position: center;
+    min-height: 100vh;
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
   }
-  .hero-depth {
-    background-image: url('images/hero.jpg') !important;
-    background-size: cover; background-position: center;
+  .hero-top-bar {
+    border-bottom: 1px solid var(--dark-border);
+    padding: 1rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .hero-top {
-    background-image: url('images/hero.jpg') !important;
-    background-size: cover; background-position: center;
+  .hero-top-bar span {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
-  .hero-eyebrow {
-    background-image: url('images/hero.jpg') !important;
-    background-size: cover; background-position: center;
+  .hero-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
   }
+  .hero-headline-wrap {
+    padding: 3rem 3rem 2rem;
+  }
+  .hero-h1 {
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 700;
+    font-size: 11.5vw;
+    letter-spacing: -0.03em;
+    line-height: 0.85;
+    text-transform: uppercase;
+    color: var(--beige);
+    display: block;
+  }
+  .hero-h1-line { display: block; overflow: hidden; }
+  /* Full-width divider headline */
+  .hero-full-type {
+    border-top: 1px solid var(--dark-border);
+    border-bottom: 1px solid var(--dark-border);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .hero-marquee-text {
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 700;
+    font-size: 7vw;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    display: inline-block;
+    padding: 0.4rem 2rem;
+    animation: hmarquee 18s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes hmarquee { from { transform: translateX(0); } to { transform: translateX(-33.33%); } }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--dark-border);
+    margin-top: 2rem;
+  }
+  .hero-bottom-left {
+    padding: 2rem 3rem;
+    border-right: 1px solid var(--dark-border);
+  }
+  .hero-bottom-left p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 400px;
+  }
+  .hero-bottom-left p strong { color: var(--beige); font-weight: 600; }
+  .hero-bottom-right {
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+  }
+  .waitlist-form {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .waitlist-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0.9rem 1.2rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    color: var(--beige);
+    outline: none;
+  }
+  .waitlist-input::placeholder { color: var(--muted); }
+  .waitlist-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 0.9rem 1.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 200ms;
+  }
+  .waitlist-btn:hover { background: #c98a6f; }
+  .hero-count {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .hero-count strong { color: var(--accent); }
+
+  /* STATS ROW */
+  .stats-row {
+    border-top: 1px solid var(--dark-border);
+    border-bottom: 1px solid var(--dark-border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stat-cell {
+    padding: 2rem 3rem;
+    border-right: 1px solid var(--dark-border);
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--beige);
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  /* FEATURE SECTION */
+  .features {
+    padding: 6rem 3rem;
+  }
+  .features-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 4rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--dark-border);
+  }
+  .features-header h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-transform: uppercase;
+  }
+  .features-header h2 em { color: var(--accent); font-style: normal; display: block; }
+  .features-header p {
+    max-width: 360px;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--muted);
+    padding-top: 0.5rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--dark-border);
+  }
+  .feat-card {
+    background: var(--bg);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: background 200ms;
+  }
+  .feat-card:hover { background: #1e1e1e; }
+  .feat-card-large {
+    grid-column: 1 / 3;
+  }
+  .feat-icon {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+  }
+  .feat-title {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--beige);
+  }
+  .feat-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 500px;
+  }
+  .feat-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    width: fit-content;
+  }
+
+  /* IMAGE + QUOTE SECTION */
+  .editorial {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--dark-border);
+    min-height: 560px;
+  }
+  .editorial-img {
+    overflow: hidden;
+    position: relative;
+  }
+  .editorial-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+    transition: transform 700ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .editorial:hover .editorial-img img { transform: scale(1.04); }
+  .editorial-text {
+    padding: 4rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid var(--dark-border);
+  }
+  .editorial-quote {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--beige);
+  }
+  .editorial-quote em { color: var(--accent); font-style: normal; }
+  .editorial-attr {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .editorial-attr-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--beige);
+  }
+  .editorial-attr-role {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    padding: 6rem 3rem;
+    border-top: 1px solid var(--dark-border);
+  }
+  .how-header {
+    display: flex;
+    align-items: baseline;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+  .how-header h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(2rem, 4vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-transform: uppercase;
+  }
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--dark-border);
+  }
+  .how-step {
+    background: var(--bg);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: background 200ms;
+  }
+  .how-step:hover { background: #1e1e1e; }
+  .how-step-num {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+  }
+  .how-step h3 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--beige);
+  }
+  .how-step p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    border-top: 1px solid var(--dark-border);
+    padding: 8rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(220,159,133,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .final-cta-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .final-cta-label::before,
+  .final-cta-label::after {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 1px;
+    background: var(--border);
+  }
+  .final-cta h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(3rem, 7vw, 9rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-transform: uppercase;
+    color: var(--beige);
+    margin-bottom: 2.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .final-cta h2 em { color: var(--accent); font-style: normal; display: block; }
+  .final-cta-form {
+    display: flex;
+    max-width: 480px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+  .final-cta-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.92rem;
+    color: var(--beige);
+    outline: none;
+  }
+  .final-cta-form input::placeholder { color: var(--muted); }
+  .final-cta-form button {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    transition: background 200ms;
+    border-radius: 4px;
+  }
+  .final-cta-form button:hover { background: #c98a6f; }
+  .final-cta-note {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--dark-border);
+    padding: 3.5rem 3rem 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem;
+  }
+  .footer-brand {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--beige);
+    margin-bottom: 0.75rem;
+  }
+  .footer-tagline { font-size: 0.82rem; color: var(--muted); line-height: 1.6; max-width: 260px; }
+  .footer-col h4 { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); opacity: 0.5; margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .footer-col ul li a { font-size: 0.85rem; color: var(--muted); text-decoration: none; transition: color 200ms; }
+  .footer-col ul li a:hover { color: var(--beige); }
+  .footer-bottom {
+    border-top: 1px solid var(--dark-border);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom span { font-size: 0.7rem; color: rgba(182,165,150,0.4); letter-spacing: 0.06em; }
 </style>
 </head>
 <body>
+
+<!-- NOISE -->
+<svg class="noise" xmlns="http://www.w3.org/2000/svg">
+  <filter id="noise-filter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#noise-filter)"/>
+</svg>
 
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">ATELIER</a>
   <ul class="nav-links">
     <li><a href="#">Features</a></li>
-    <li><a href="#">Manifesto</a></li>
-    <li><a href="#">Journal</a></li>
+    <li><a href="#">Process</a></li>
+    <li><a href="#">Pricing</a></li>
   </ul>
-  <div class="nav-badge">Invite Only</div>
+  <span class="nav-label">Private Beta</span>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-depth">
-    <span class="depth-word depth-word-1">ATELIER</span>
-    <span class="depth-word depth-word-2">ATELIER</span>
-    <span class="depth-word depth-word-3">ATELIER</span>
+  <div class="hero-top-bar">
+    <span>Invite-Only &centerdot; 2025</span>
+    <span>3,841 on the waitlist</span>
   </div>
-
-  <div class="hero-top">
-    <div class="hero-eyebrow reveal">The future of creative intelligence — by invitation only</div>
-    <h1 class="hero-h1 reveal delay-1">
-      Design<br>
-      <span class="italic">without</span><br>
-      <span class="coral">limits</span>
-    </h1>
-  </div>
-
-  <div class="hero-bottom">
-    <div class="hero-bottom-col reveal">
-      <div class="hbc-label">What is ATELIER</div>
-      <div class="hbc-content">An AI design intelligence built for those who refuse to create anything ordinary.</div>
+  <div class="hero-main">
+    <div class="hero-headline-wrap reveal">
+      <span class="hero-h1">
+        <span class="hero-h1-line">Design</span>
+        <span class="hero-h1-line">Without</span>
+        <span class="hero-h1-line" style="color:var(--accent);">Limits.</span>
+      </span>
     </div>
-    <div class="hero-bottom-col reveal delay-1">
-      <div class="hbc-label">Access Model</div>
-      <div class="hbc-content">Invitation only. Curated cohorts of 50 designers per month. Apply now.</div>
-    </div>
-    <div class="hero-bottom-col reveal delay-2">
-      <div class="hbc-label">Current Status</div>
-      <div class="hbc-content" style="color:var(--coral)">1,247 on the waitlist — 12 spots remain in April cohort</div>
+    <div class="hero-full-type">
+      <span class="hero-marquee-text">ATELIER &nbsp; ATELIER &nbsp; ATELIER &nbsp; ATELIER &nbsp; ATELIER &nbsp; ATELIER &nbsp; ATELIER &nbsp; ATELIER &nbsp; ATELIER &nbsp;</span>
     </div>
   </div>
-</section>
-
-<!-- WAITLIST FORM -->
-<section class="waitlist-section">
-  <div class="waitlist-left">
-    <div class="waitlist-label reveal">Join the Waitlist</div>
-    <h2 class="waitlist-title reveal delay-1">Created for<br><em>the rare</em><br>mind</h2>
-    <p class="waitlist-desc reveal delay-2">ATELIER is not for everyone. It was built for the designers, directors, and visionaries who understand that the intersection of art and intelligence is where the future lives.</p>
-    <div class="waitlist-stats reveal delay-1">
-      <div class="wl-stat">
-        <div class="wl-stat-num">4,800+</div>
-        <div class="wl-stat-label">Applicants</div>
-      </div>
-      <div class="wl-stat">
-        <div class="wl-stat-num">94%</div>
-        <div class="wl-stat-label">Approval rate denied</div>
-      </div>
-      <div class="wl-stat">
-        <div class="wl-stat-num">12</div>
-        <div class="wl-stat-label">Spots left</div>
-      </div>
+  <div class="hero-bottom reveal" style="transition-delay:0.1s;">
+    <div class="hero-bottom-left">
+      <p>ATELIER is an AI-native design tool built for the generation that grew up on the web. <strong>No templates. No constraints. No compromise.</strong> Generate, iterate, and ship production-ready interfaces from a single workspace.</p>
     </div>
-  </div>
-  <div class="waitlist-right reveal delay-1">
-    <div class="waitlist-form">
-      <div class="form-title">Request an Invitation</div>
-      <p class="form-subtitle">Tell us about your practice. Every application is reviewed by a human.</p>
-      <div class="form-group">
-        <label class="form-label">Full Name</label>
-        <input type="text" class="form-input" placeholder="Your name">
+    <div class="hero-bottom-right">
+      <div class="waitlist-form">
+        <input type="email" class="waitlist-input" placeholder="hello@yourstudio.com">
+        <button class="waitlist-btn">Claim Your Spot</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">Email Address</label>
-        <input type="email" class="form-input" placeholder="your@email.com">
-      </div>
-      <div class="form-group form-select-group">
-        <div>
-          <label class="form-label">Discipline</label>
-          <input type="text" class="form-input" placeholder="Product Design">
-        </div>
-        <div>
-          <label class="form-label">Years of Practice</label>
-          <input type="text" class="form-input" placeholder="e.g. 8 years">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Portfolio / Website</label>
-        <input type="url" class="form-input" placeholder="https://yourwork.com">
-      </div>
-      <button class="form-btn">Submit Application →</button>
-      <p class="form-note">All applications reviewed within 48 hours. No spam, ever.</p>
+      <p class="hero-count"><strong>3,841</strong> designers waiting. Average wait: 6 weeks.</p>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features">
-  <div class="features-header reveal">
-    <h2 class="features-title">What<br><em>ATELIER</em><br>does</h2>
-    <p class="features-desc">An intelligence that understands aesthetics the way a master craftsperson understands material — instinctively, precisely, and with profound taste.</p>
+<!-- STATS ROW -->
+<div class="stats-row reveal">
+  <div class="stat-cell">
+    <div class="stat-num">10x</div>
+    <div class="stat-label">Faster Iteration</div>
   </div>
-  <div class="features-grid">
-    <div class="feat-card reveal">
-      <div class="feat-num">01</div>
-      <div class="feat-icon">◈</div>
-      <div class="feat-title">Generative Design Systems</div>
-      <p class="feat-desc">ATELIER builds entire design systems from a single brief — tokens, components, typographic scales, and spatial rhythm that feels authored, not generated.</p>
-    </div>
-    <div class="feat-card reveal delay-1">
-      <div class="feat-num">02</div>
-      <div class="feat-icon">◉</div>
-      <div class="feat-title">Aesthetic Intelligence</div>
-      <p class="feat-desc">Trained on 200 years of design, art, and architecture. ATELIER understands why Dieter Rams matters and why Memphis is having a moment — and responds accordingly.</p>
-    </div>
-    <div class="feat-card reveal delay-2">
-      <div class="feat-num">03</div>
-      <div class="feat-icon">◎</div>
-      <div class="feat-title">Contextual Iteration</div>
-      <p class="feat-desc">Not just generation — conversation. ATELIER remembers your aesthetic voice, your client's constraints, and your previous sessions to refine, not restart.</p>
-    </div>
-    <div class="feat-card reveal">
-      <div class="feat-num">04</div>
-      <div class="feat-icon">◇</div>
-      <div class="feat-title">Export to Figma & Code</div>
-      <p class="feat-desc">Every output ships as production-ready Figma components, design tokens, or clean CSS. Your handoff workflow stays intact.</p>
-    </div>
-    <div class="feat-card reveal delay-1">
-      <div class="feat-num">05</div>
-      <div class="feat-icon">◆</div>
-      <div class="feat-title">Private & Secure</div>
-      <p class="feat-desc">Your work never trains our models. Every session is private by default. ATELIER has signed SOC 2 Type II and is GDPR compliant.</p>
-    </div>
-    <div class="feat-card reveal delay-2">
-      <div class="feat-num">06</div>
-      <div class="feat-icon">◊</div>
-      <div class="feat-title">Cohort Community</div>
-      <p class="feat-desc">Every ATELIER member is placed in a cohort of 50 designers. Monthly critique sessions, shared prompts, and a private forum for the community.</p>
-    </div>
+  <div class="stat-cell">
+    <div class="stat-num">2k+</div>
+    <div class="stat-label">Beta Designers</div>
   </div>
-</section>
-
-<!-- QUOTE MARQUEE -->
-<div class="quote-marquee">
-  <div class="marquee-track">
-    <span class="marquee-item">Design is not just what it looks like — it's how it works<span class="sep">—</span></span>
-    <span class="marquee-item">The details are not the details. They make the design.<span class="sep">—</span></span>
-    <span class="marquee-item">Good design is as little design as possible<span class="sep">—</span></span>
-    <span class="marquee-item">Design is not just what it looks like — it's how it works<span class="sep">—</span></span>
-    <span class="marquee-item">The details are not the details. They make the design.<span class="sep">—</span></span>
-    <span class="marquee-item">Good design is as little design as possible<span class="sep">—</span></span>
+  <div class="stat-cell">
+    <div class="stat-num">98%</div>
+    <div class="stat-label">Would Recommend</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Templates Provided</div>
   </div>
 </div>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="testimonials-label reveal">Early Access Members</div>
-  <div class="testimonials-grid">
-    <div class="t-card reveal">
-      <div class="t-stars">★★★★★</div>
-      <p class="t-quote">"ATELIER doesn't just generate — it collaborates. It pushed back on my initial brief and offered a direction I wouldn't have found for weeks. That's a first."</p>
-      <div class="t-author-name">Camille Fontaine</div>
-      <div class="t-author-role">Creative Director, Fontaine Studio — Paris</div>
+<!-- FEATURES -->
+<section class="features reveal">
+  <div class="features-header">
+    <h2>What<br>Makes It<br><em>Different</em></h2>
+    <p>Not another Figma clone. Not another AI gimmick. ATELIER rethinks the design tool from scratch — built for how designers actually work in 2025.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card feat-card-large">
+      <div class="feat-icon"><i data-lucide="cpu" style="width:18px;height:18px;"></i></div>
+      <div class="feat-tag"><i data-lucide="zap" style="width:10px;height:10px;"></i> AI-Native Core</div>
+      <div class="feat-title">Intent-Driven Generation</div>
+      <div class="feat-desc">Describe what you need in plain language. ATELIER understands design systems, brand constraints, and visual hierarchy — generating not just pretty pixels, but architecturally sound UI that your engineers can ship.</div>
     </div>
-    <div class="t-card reveal delay-1">
-      <div class="t-stars">★★★★★</div>
-      <p class="t-quote">"I've been skeptical of AI design tools. ATELIER is genuinely different — it has taste. Not trend-chasing taste, but a deep understanding of what makes something beautiful."</p>
-      <div class="t-author-name">Daniel Mercer</div>
-      <div class="t-author-role">Principal Designer, Mercer+Co — New York</div>
+    <div class="feat-card">
+      <div class="feat-icon"><i data-lucide="layers" style="width:18px;height:18px;"></i></div>
+      <div class="feat-title">Living Design System</div>
+      <div class="feat-desc">Every token, every component, every decision — connected. Change a color at the root level and watch it cascade across your entire library in real time.</div>
     </div>
-    <div class="t-card reveal delay-2">
-      <div class="t-stars">★★★★★</div>
-      <p class="t-quote">"The token export alone saved my team two weeks of setup. The system ATELIER built for us was more coherent than anything we'd built manually in years."</p>
-      <div class="t-author-name">Akiko Tanaka</div>
-      <div class="t-author-role">Head of Design, Seiko Digital — Tokyo</div>
+    <div class="feat-card">
+      <div class="feat-icon"><i data-lucide="code-2" style="width:18px;height:18px;"></i></div>
+      <div class="feat-title">Code-Ready Output</div>
+      <div class="feat-desc">Export to React, Vue, or raw CSS with a single command. The output is clean, typed, and ready to drop into your codebase — no cleanup required.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><i data-lucide="users" style="width:18px;height:18px;"></i></div>
+      <div class="feat-title">Real-Time Collaboration</div>
+      <div class="feat-desc">Every cursor, every edit, every comment — synchronized instantly. Designed for distributed teams who can't afford to wait for a file to save.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon"><i data-lucide="history" style="width:18px;height:18px;"></i></div>
+      <div class="feat-title">Infinite Version History</div>
+      <div class="feat-desc">Branch your design like you branch your code. Explore divergent directions, merge the best ideas, and never lose a decision that turned out to matter.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITORIAL / QUOTE -->
+<div class="editorial reveal">
+  <div class="editorial-img">
+    <img src="../../images/creative/creative-1.jpg" alt="Design workspace">
+  </div>
+  <div class="editorial-text">
+    <div class="feat-tag"><i data-lucide="quote" style="width:10px;height:10px;"></i> Beta User</div>
+    <div class="editorial-quote">
+      "ATELIER made me <em>faster</em> than I ever thought possible. But what surprised me was that it made me <em>better</em>."
+    </div>
+    <div class="editorial-attr">
+      <span class="editorial-attr-name">Nadia Christodoulou</span>
+      <span class="editorial-attr-role">Lead Designer, Revolut</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how reveal">
+  <div class="how-header">
+    <h2>From Idea<br>to Interface</h2>
+  </div>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-step-num">01</div>
+      <h3>Describe Your Vision</h3>
+      <p>Type what you need in plain language — or paste a screenshot, a competitor URL, or a rough sketch. ATELIER reads the intent behind the input.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">02</div>
+      <h3>Generate & Iterate</h3>
+      <p>Receive three distinct design directions in under 30 seconds. Merge what works, discard what doesn't, and refine with natural language follow-ups.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">03</div>
+      <h3>Ship to Production</h3>
+      <p>One-click export to your code repository. ATELIER generates typed components with your existing design tokens — no translation layer required.</p>
     </div>
   </div>
 </section>
 
 <!-- FINAL CTA -->
-<section class="cta-final">
-  <div class="cta-ambient"></div>
-  <div class="cta-label reveal">The waitlist is open</div>
-  <h2 class="cta-headline reveal delay-1">Design your<br><em>masterpiece</em></h2>
-  <div class="cta-form-inline reveal delay-2">
-    <input type="email" placeholder="Enter your email address">
-    <button>Request Access →</button>
+<section class="final-cta reveal">
+  <div class="final-cta-bg"></div>
+  <div class="final-cta-label">Join the Waitlist</div>
+  <h2>Your<br>Studio<br><em>Awaits.</em></h2>
+  <div class="final-cta-form">
+    <input type="email" placeholder="studio@yourname.com">
+    <button>Request Access</button>
   </div>
-  <p class="cta-sub reveal">Reviewed by humans. Replied within 48 hours.</p>
+  <p class="final-cta-note">No spam. No promises we can't keep. Access granted in waves.</p>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-logo">ATELIER</div>
-      <p class="footer-desc">The AI design intelligence for those who refuse to create anything ordinary. By invitation only.</p>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Product</div>
-      <ul>
-        <li><a href="#">Features</a></li>
-        <li><a href="#">Cohort Access</a></li>
-        <li><a href="#">Integrations</a></li>
-        <li><a href="#">Changelog</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Company</div>
-      <ul>
-        <li><a href="#">Manifesto</a></li>
-        <li><a href="#">Journal</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Press</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Legal</div>
-      <ul>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms</a></li>
-        <li><a href="#">Security</a></li>
-        <li><a href="#">Cookie Preferences</a></li>
-      </ul>
-    </div>
+  <div>
+    <div class="footer-brand">Atelier</div>
+    <p class="footer-tagline">The design tool for the next generation of visual thinkers. Invite-only, 2025.</p>
   </div>
-  <div class="footer-bottom">
-    <span class="footer-copy">© 2025 ATELIER, Inc. — All rights reserved.</span>
-    <div class="footer-legal">
-      <a href="#">Instagram</a>
-      <a href="#">LinkedIn</a>
-      <a href="#">X / Twitter</a>
-    </div>
+  <div class="footer-col">
+    <h4>Product</h4>
+    <ul>
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Changelog</a></li>
+      <li><a href="#">Roadmap</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Careers</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Legal</h4>
+    <ul>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Security</a></li>
+    </ul>
   </div>
 </footer>
+<div class="footer-bottom">
+  <span>&copy; 2025 ATELIER — All Rights Reserved</span>
+  <span style="font-size:0.7rem;color:rgba(182,165,150,0.3);">Made with intention, not template.</span>
+</div>
 
 <script>
+lucide.createIcons();
 const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-reveals.forEach(el => io.observe(el));
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.05 });
+reveals.forEach(el => obs.observe(el));
 </script>
 </body>
 </html>

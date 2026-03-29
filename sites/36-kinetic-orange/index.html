@@ -1,973 +1,934 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KINETIC — We Move Fast and Make Things</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --orange:  #FF4D00;
-      --orange-d:#d94100;
-      --black:   #0a0a0a;
-      --white:   #f0ede8;
-      --mono:    'Space Mono', monospace;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--mono);
-      background: var(--black);
-      color: var(--white);
-      overflow-x: hidden;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 1.5rem 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--black);
-      border-bottom: 2px solid var(--orange);
-    }
-
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 0.2em;
-      color: var(--white);
-      text-decoration: none;
-    }
-
-    .nav-logo span { color: var(--orange); }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--white);
-      text-decoration: none;
-      border-bottom: 2px solid transparent;
-      padding-bottom: 2px;
-      transition: border-color 0.3s, color 0.3s;
-    }
-
-    .nav-links a:hover { border-color: var(--orange); color: var(--orange); }
-
-    .nav-btn {
-      background: var(--orange);
-      color: var(--black);
-      padding: 0.7rem 1.6rem;
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-decoration: none;
-      transition: background 0.3s;
-      display: inline-block;
-    }
-
-    .nav-btn:hover { background: var(--orange-d); }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr;
-      align-items: center;
-      padding: 7rem 3rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-grid-overlay {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,77,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,77,0,0.04) 1px, transparent 1px);
-      background-size: 80px 80px;
-      pointer-events: none;
-    }
-
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 3rem;
-      align-items: end;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 2rem;
-      border: 2px solid var(--orange);
-      padding: 0.4rem 0.8rem;
-    }
-
-    .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(7rem, 15vw, 22rem);
-      line-height: 0.85;
-      letter-spacing: 0.02em;
-      color: var(--white);
-      text-transform: uppercase;
-    }
-
-    .hero-title .orange-line { color: var(--orange); }
-
-    .hero-title .stroke-line {
-      -webkit-text-stroke: 2px var(--white);
-      color: transparent;
-    }
-
-    .hero-meta {
-      padding-left: 1rem;
-      border-left: 3px solid var(--orange);
-    }
-
-    .hero-meta-desc {
-      font-size: 0.78rem;
-      line-height: 1.8;
-      color: rgba(240,237,232,0.6);
-      margin-bottom: 2rem;
-    }
-
-    .hero-btn {
-      display: inline-block;
-      background: var(--orange);
-      color: var(--black);
-      padding: 1rem 2rem;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .hero-btn:hover { background: var(--orange-d); transform: translate(3px, -3px); }
-
-    .hero-stats {
-      position: absolute;
-      bottom: 3rem;
-      left: 3rem;
-      display: flex;
-      gap: 3rem;
-    }
-
-    .h-stat-val {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      color: var(--orange);
-      line-height: 1;
-    }
-
-    .h-stat-label {
-      font-size: 0.55rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(240,237,232,0.4);
-      margin-top: 0.2rem;
-    }
-
-    /* MARQUEE */
-    .marquee-block {
-      background: var(--orange);
-      padding: 0.8rem 0;
-      overflow: hidden;
-    }
-
-    .marquee-track {
-      display: flex;
-      animation: marquee 18s linear infinite;
-      white-space: nowrap;
-    }
-
-    .marquee-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 2rem;
-      padding: 0 2rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem;
-      letter-spacing: 0.12em;
-      color: var(--black);
-    }
-
-    .m-sep { font-size: 1rem; opacity: 0.5; }
-
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* SERVICES */
-    .services-section {
-      padding: 7rem 3rem;
-      border-top: 2px solid rgba(255,77,0,0.2);
-    }
-
-    .services-inner { max-width: 1400px; margin: 0 auto; }
-
-    .services-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 4rem;
-    }
-
-    .section-tag {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 8vw, 10rem);
-      line-height: 0.88;
-      letter-spacing: 0.03em;
-      color: var(--white);
-    }
-
-    .section-title .s-orange { color: var(--orange); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      background: var(--orange);
-      border: 2px solid var(--orange);
-    }
-
-    .svc-card {
-      background: var(--black);
-      padding: 3rem;
-      transition: background 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .svc-card:hover { background: #0f0f0f; }
-
-    .svc-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 5rem;
-      line-height: 1;
-      color: rgba(255,77,0,0.1);
-      position: absolute;
-      top: 1rem;
-      right: 1.5rem;
-      pointer-events: none;
-    }
-
-    .svc-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.5rem;
-      letter-spacing: 0.05em;
-      color: var(--white);
-      margin-bottom: 1rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .svc-body {
-      font-size: 0.78rem;
-      line-height: 1.8;
-      color: rgba(240,237,232,0.55);
-      margin-bottom: 1.5rem;
-    }
-
-    .svc-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .svc-tag {
-      border: 1px solid rgba(255,77,0,0.4);
-      color: var(--orange);
-      padding: 0.2rem 0.6rem;
-      font-size: 0.55rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    /* PROCESS */
-    .process-section {
-      padding: 7rem 3rem;
-      background: var(--orange);
-    }
-
-    .process-inner { max-width: 1400px; margin: 0 auto; }
-
-    .process-section .section-title { color: var(--black); }
-    .process-section .section-tag { color: var(--black); opacity: 0.6; }
-
-    .process-list {
-      margin-top: 4rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      border-top: 2px solid var(--black);
-    }
-
-    .process-item {
-      display: grid;
-      grid-template-columns: 80px 1fr 200px;
-      align-items: center;
-      padding: 2rem 0;
-      border-bottom: 2px solid rgba(0,0,0,0.2);
-      transition: padding-left 0.3s;
-      cursor: default;
-    }
-
-    .process-item:hover { padding-left: 1rem; }
-
-    .process-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      color: var(--black);
-      opacity: 0.4;
-    }
-
-    .process-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.5rem;
-      letter-spacing: 0.04em;
-      color: var(--black);
-    }
-
-    .process-duration {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      color: rgba(0,0,0,0.5);
-      text-align: right;
-    }
-
-    /* WORK */
-    .work-section { padding: 7rem 3rem; }
-    .work-inner { max-width: 1400px; margin: 0 auto; }
-
-    .work-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: var(--orange);
-      border: 2px solid var(--orange);
-      margin-top: 4rem;
-    }
-
-    .work-card {
-      background: var(--black);
-      padding: 0;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-
-    .work-card:hover { background: #111; }
-
-    .work-card-visual {
-      height: 220px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 5rem;
-      color: rgba(255,77,0,0.15);
-      border-bottom: 2px solid var(--orange);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .work-card-visual::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,77,0,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,77,0,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    .work-card-visual span {
-      position: relative;
-      z-index: 1;
-    }
-
-    .work-card-info { padding: 1.5rem; }
-
-    .wc-category {
-      font-size: 0.55rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 0.4rem;
-    }
-
-    .wc-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 0.05em;
-      color: var(--white);
-    }
-
-    .wc-year {
-      font-size: 0.55rem;
-      color: rgba(240,237,232,0.35);
-      margin-top: 0.25rem;
-    }
-
-    /* TESTIMONIALS */
-    .testimonials-section {
-      padding: 7rem 3rem;
-      background: #0d0d0d;
-      border-top: 2px solid rgba(255,77,0,0.2);
-    }
-
-    .testi-inner { max-width: 1400px; margin: 0 auto; }
-
-    .testi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: rgba(255,77,0,0.3);
-      border: 2px solid rgba(255,77,0,0.3);
-      margin-top: 4rem;
-    }
-
-    .t-card {
-      background: #0d0d0d;
-      padding: 2.5rem;
-      transition: background 0.3s;
-    }
-
-    .t-card:hover { background: #111; }
-
-    .t-score { font-size: 0.8rem; color: var(--orange); letter-spacing: 0.15em; margin-bottom: 1.5rem; }
-
-    .t-text {
-      font-size: 0.78rem;
-      line-height: 1.85;
-      color: rgba(240,237,232,0.6);
-      font-style: italic;
-      margin-bottom: 2rem;
-    }
-
-    .t-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.2rem;
-      letter-spacing: 0.08em;
-      color: var(--white);
-    }
-
-    .t-role {
-      font-size: 0.58rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(240,237,232,0.35);
-      margin-top: 0.2rem;
-    }
-
-    /* ROTATING ELEMENT */
-    .rotating-badge {
-      width: 140px; height: 140px;
-      border: 2px solid var(--orange);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .rotating-badge svg {
-      position: absolute;
-      inset: 0;
-      animation: spin 12s linear infinite;
-    }
-
-    .rotating-badge-inner {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      color: var(--orange);
-      letter-spacing: 0.1em;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* CTA */
-    .cta-section {
-      padding: 8rem 3rem;
-      position: relative;
-      overflow: hidden;
-      border-top: 2px solid var(--orange);
-    }
-
-    .cta-bg-title {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22vw;
-      color: rgba(255,77,0,0.04);
-      white-space: nowrap;
-      pointer-events: none;
-      letter-spacing: 0.02em;
-    }
-
-    .cta-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .cta-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(5rem, 12vw, 16rem);
-      line-height: 0.85;
-      letter-spacing: 0.03em;
-      color: var(--white);
-      margin-bottom: 2rem;
-    }
-
-    .cta-title span { color: var(--orange); }
-
-    .cta-sub {
-      font-size: 0.78rem;
-      line-height: 1.8;
-      color: rgba(240,237,232,0.5);
-      max-width: 45ch;
-      margin: 0 auto 3rem;
-    }
-
-    .cta-btn {
-      display: inline-block;
-      background: var(--orange);
-      color: var(--black);
-      padding: 1.2rem 4rem;
-      font-family: var(--mono);
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .cta-btn:hover { background: var(--orange-d); transform: translate(4px, -4px); }
-
-    /* FOOTER */
-    footer {
-      background: #050505;
-      padding: 4rem 3rem 3rem;
-      border-top: 2px solid var(--orange);
-    }
-
-    .footer-inner { max-width: 1400px; margin: 0 auto; }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      padding-bottom: 3rem;
-      border-bottom: 2px solid rgba(255,77,0,0.2);
-      margin-bottom: 2rem;
-    }
-
-    .f-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      letter-spacing: 0.15em;
-      color: var(--white);
-    }
-
-    .f-logo span { color: var(--orange); }
-
-    .f-tagline {
-      font-size: 0.7rem;
-      line-height: 1.8;
-      color: rgba(240,237,232,0.4);
-      margin-top: 0.75rem;
-      max-width: 28ch;
-    }
-
-    .f-col h4 {
-      font-size: 0.55rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 1.5rem;
-    }
-
-    .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-
-    .f-col a {
-      font-size: 0.72rem;
-      color: rgba(240,237,232,0.4);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .f-col a:hover { color: var(--white); }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .f-copy { font-size: 0.62rem; color: rgba(240,237,232,0.25); }
-
-    .f-social { display: flex; gap: 2rem; }
-    .f-social a { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(240,237,232,0.3); text-decoration: none; transition: color 0.3s; }
-    .f-social a:hover { color: var(--orange); }
-
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 900px) {
-      nav { padding: 1.2rem 1.5rem; }
-      .nav-links { display: none; }
-      .hero { padding: 6rem 1.5rem 3rem; }
-      .hero-inner { grid-template-columns: 1fr; }
-      .hero-meta { display: none; }
-      .hero-stats { position: relative; bottom: auto; left: auto; margin-top: 3rem; }
-      .services-section, .work-section, .testimonials-section, .cta-section { padding: 5rem 1.5rem; }
-      .services-grid { grid-template-columns: 1fr; }
-      .work-grid { grid-template-columns: 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .process-item { grid-template-columns: 60px 1fr; }
-      .process-duration { display: none; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KINETIC — Bold Creative Agency</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --orange: #FF4D00;
+    --black: #000000;
+    --white: #ffffff;
+    --fg-dark: rgba(0,0,0,0.65);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--orange);
+    color: var(--black);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  ::selection { background: var(--black); color: var(--orange); }
+  /* Custom cursor */
+  #cursor {
+    position: fixed;
+    width: 16px; height: 16px;
+    background: var(--black);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width 0.25s, height 0.25s, background 0.25s;
+  }
+  #cursor.on-dark { background: var(--orange); }
+  #cursor.expanded { width: 48px; height: 48px; }
+  /* Archivo Black */
+  .archivo {
+    font-family: 'Archivo Black', sans-serif;
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+  /* Space Mono */
+  .mono {
+    font-family: 'Space Mono', monospace;
+    letter-spacing: -0.02em;
+  }
+  /* NAV — floating pill */
+  nav {
+    position: fixed;
+    top: 24px; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+  }
+  .nav-logo {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--black);
+  }
+  .nav-pill {
+    background: var(--black);
+    border-radius: 999px;
+    padding: 0 28px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+  }
+  .nav-pill a {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0.65;
+    transition: opacity 0.2s;
+  }
+  .nav-pill a:hover { opacity: 1; }
+  .nav-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: -0.01em;
+    color: var(--black);
+    background: var(--white);
+    border: 2px solid var(--black);
+    padding: 11px 20px;
+    border-radius: 999px;
+    cursor: none;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { background: var(--black); color: var(--white); }
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 120px 48px 0;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--black);
+  }
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 60px;
+  }
+  .hero-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: -0.01em;
+    color: var(--fg-dark);
+    border: 2px solid var(--black);
+    padding: 8px 16px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--black);
+    animation: blink 2s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+  .hero-h1 {
+    font-size: clamp(100px, 18vw, 280px);
+    color: var(--black);
+  }
+  .hero-tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    color: var(--fg-dark);
+    max-width: 400px;
+    line-height: 1.65;
+  }
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 40px 0 60px;
+    border-top: 2px solid var(--black);
+    margin-top: auto;
+  }
+  .hero-nums { display: flex; gap: 60px; }
+  .hero-num-n {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 48px;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .hero-num-l {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--fg-dark);
+    letter-spacing: -0.01em;
+    margin-top: 4px;
+  }
+  .hero-btn-wrap { display: flex; gap: 12px; }
+  .btn-black {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: var(--black);
+    color: var(--white);
+    border: 2px solid var(--black);
+    padding: 14px 28px;
+    cursor: none;
+    border-radius: 0;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-black:hover { background: transparent; color: var(--black); }
+  .btn-outline-b {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: transparent;
+    color: var(--black);
+    border: 2px solid var(--black);
+    padding: 14px 28px;
+    cursor: none;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-outline-b:hover { background: var(--black); color: var(--white); }
+  /* Rotating circle element */
+  .spin-circle {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px; height: 200px;
+    border: 2px solid var(--black);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: spin-slow 12s linear infinite;
+  }
+  .spin-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    position: absolute;
+    width: 200px; height: 200px;
+  }
+  .spin-inner {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 22px;
+    letter-spacing: -0.04em;
+    color: var(--black);
+  }
+  @keyframes spin-slow { from{transform:translateY(-50%) rotate(0deg);} to{transform:translateY(-50%) rotate(360deg);} }
+  /* Marquee — black bg */
+  .marquee-black {
+    background: var(--black);
+    overflow: hidden;
+    border-top: 2px solid var(--black);
+    border-bottom: 2px solid var(--black);
+    padding: 18px 0;
+    position: relative;
+    z-index: 2;
+  }
+  .marquee-inner {
+    display: inline-flex;
+    gap: 40px;
+    white-space: nowrap;
+    animation: marquee 18s linear infinite;
+  }
+  .marquee-black:hover .marquee-inner { animation-play-state: paused; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .m-item {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 13px;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .m-dot { color: var(--orange); font-size: 13px; font-family: 'Archivo Black', sans-serif; }
+  /* Skewed section transition */
+  .skew-up {
+    background: var(--black);
+    clip-path: polygon(0 8%, 100% 0, 100% 100%, 0 100%);
+    padding-top: 80px;
+    margin-top: -2px;
+  }
+  .skew-down {
+    background: var(--orange);
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+    padding-bottom: 80px;
+  }
+  /* Work section — black bg */
+  .work {
+    background: var(--black);
+    padding: 100px 48px;
+  }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 2px;
+    background: var(--orange);
+  }
+  .work-h2 {
+    font-size: clamp(64px, 10vw, 140px);
+    color: var(--white);
+    margin-bottom: 60px;
+  }
+  /* Work grid */
+  .work-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .w-item {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    border: 2px solid rgba(255,255,255,0.08);
+  }
+  .w-item img {
+    width: 100%; height: 400px;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(100%) brightness(0.6);
+    transition: filter 0.5s, transform 0.5s;
+  }
+  .w-item:hover img { filter: grayscale(0%) brightness(0.8); transform: scale(1.04); }
+  .w-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .w-item-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 24px;
+  }
+  .w-cat {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .w-name {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 1.1;
+  }
+  /* Orange accent item */
+  .w-item-orange {
+    background: var(--orange);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px;
+  }
+  .w-item-orange .w-accent-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 96px;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: var(--black);
+    line-height: 1;
+  }
+  .w-item-orange .w-accent-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: rgba(0,0,0,0.65);
+  }
+  /* Process — orange bg with timeline */
+  .process {
+    padding: 100px 48px;
+    background: var(--orange);
+  }
+  .process-h2 {
+    font-size: clamp(60px, 9vw, 120px);
+    color: var(--black);
+    margin-bottom: 80px;
+  }
+  /* Timeline */
+  .timeline { display: flex; flex-direction: column; }
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 40px;
+    padding: 40px 0;
+    border-bottom: 2px solid var(--black);
+    cursor: none;
+    transition: transform 0.3s;
+  }
+  .timeline-item:first-child { border-top: 2px solid var(--black); }
+  .timeline-item:hover { transform: translateX(12px); }
+  .tl-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 48px;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.25);
+    line-height: 1;
+  }
+  .tl-content {}
+  .tl-name {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 32px;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 12px;
+  }
+  .tl-desc {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(0,0,0,0.6);
+    max-width: 640px;
+  }
+  /* Services — black bg */
+  .services {
+    background: var(--black);
+    padding: 100px 48px;
+    border-top: 2px solid rgba(255,255,255,0.08);
+  }
+  .svc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  .svc-item {
+    padding: 48px;
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: none;
+    transition: background 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .svc-item:hover { background: rgba(255,77,0,0.08); }
+  .svc-icon { color: var(--orange); }
+  .svc-name {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 26px;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .svc-desc {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.45);
+    max-width: 380px;
+  }
+  .svc-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1px solid rgba(255,77,0,0.3);
+    padding: 4px 10px;
+    width: fit-content;
+    margin-top: auto;
+  }
+  /* Testimonial — orange */
+  .testimonial {
+    background: var(--orange);
+    padding: 100px 80px;
+    border-top: 2px solid var(--black);
+    border-bottom: 2px solid var(--black);
+  }
+  .t-quote {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(28px, 4vw, 56px);
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: var(--black);
+    line-height: 0.95;
+    margin-bottom: 40px;
+  }
+  .t-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: rgba(0,0,0,0.5);
+    letter-spacing: -0.01em;
+  }
+  /* CTA — black */
+  .cta {
+    background: var(--black);
+    padding: 120px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    border-top: 2px solid var(--orange);
+  }
+  .cta-h2 {
+    font-size: clamp(60px, 9vw, 120px);
+    color: var(--white);
+  }
+  .cta-right { display: flex; flex-direction: column; gap: 24px; }
+  .cta-body {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.55);
+  }
+  .btn-orange {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: var(--orange);
+    color: var(--black);
+    border: 2px solid var(--orange);
+    padding: 16px 32px;
+    cursor: none;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex; align-items: center; gap: 10px;
+    width: fit-content;
+  }
+  .btn-orange:hover { background: transparent; color: var(--orange); }
+  .btn-outline-w {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    background: transparent;
+    color: rgba(255,255,255,0.55);
+    border: 2px solid rgba(255,255,255,0.2);
+    padding: 16px 32px;
+    cursor: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-flex; align-items: center; gap: 10px;
+    width: fit-content;
+  }
+  .btn-outline-w:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
+  /* Second marquee — orange on black */
+  .marquee-orange {
+    background: var(--black);
+    overflow: hidden;
+    padding: 20px 0;
+    border-top: 2px solid var(--orange);
+  }
+  .marquee-orange .marquee-inner { animation-direction: reverse; animation-duration: 22s; }
+  .mo-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--orange);
+    letter-spacing: 0.05em;
+  }
+  .mo-dot { color: rgba(255,255,255,0.2); }
+  /* Footer */
+  footer {
+    background: var(--black);
+    border-top: 2px solid rgba(255,255,255,0.08);
+    padding: 80px 80px 40px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 60px;
+  }
+  footer .f-logo {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  footer .f-logo span { color: var(--orange); }
+  footer .f-desc { font-family: 'Space Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.7; }
+  footer h6 {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255,77,0,0.7);
+    margin-bottom: 20px;
+  }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  footer ul a {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  footer ul a:hover { color: var(--orange); }
+  .footer-bottom {
+    background: var(--black);
+    border-top: 2px solid rgba(255,255,255,0.06);
+    padding: 24px 80px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .footer-bottom p {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: -0.01em;
+  }
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">KINETIC<span>.</span></a>
-    <ul class="nav-links">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#process">Process</a></li>
-    </ul>
-    <a href="#cta" class="nav-btn">Start a Project</a>
-  </nav>
+<!-- Custom cursor -->
+<div id="cursor"></div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-grid-overlay"></div>
-    <div class="hero-inner">
-      <div>
-        <div class="hero-badge">Creative Agency · NYC · Est. 2020</div>
-        <h1 class="hero-title">
-          WE MOVE<br>
-          <span class="orange-line">FAST</span><br>
-          <span class="stroke-line">AND MAKE</span><br>
-          THINGS
-        </h1>
-      </div>
-      <div class="hero-meta">
-        <p class="hero-meta-desc">Kinetic is a creative agency that runs on urgency. We build brands, campaigns, and digital products that move — fast, bold, and with intention.</p>
-        <a href="#work" class="hero-btn">View Our Work →</a>
-      </div>
-    </div>
-    <div class="hero-stats">
-      <div>
-        <div class="h-stat-val">140+</div>
-        <div class="h-stat-label">Projects Shipped</div>
-      </div>
-      <div>
-        <div class="h-stat-val">48H</div>
-        <div class="h-stat-label">Avg. Brief to Concept</div>
-      </div>
-      <div>
-        <div class="h-stat-val">5★</div>
-        <div class="h-stat-label">Client Retention</div>
-      </div>
-    </div>
-  </section>
+<!-- Nav — floating pill -->
+<nav>
+  <div class="nav-logo">Kinetic</div>
+  <div class="nav-pill">
+    <a href="#work">Work</a>
+    <a href="#process">Process</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="nav-btn">Start a project <i data-lucide="arrow-right" style="width:12px;height:12px;"></i></button>
+</nav>
 
-  <!-- MARQUEE -->
-  <div class="marquee-block">
-    <div class="marquee-track">
-      <span class="marquee-item">Brand Identity <span class="m-sep">•</span></span>
-      <span class="marquee-item">Web Design <span class="m-sep">•</span></span>
-      <span class="marquee-item">Motion <span class="m-sep">•</span></span>
-      <span class="marquee-item">Strategy <span class="m-sep">•</span></span>
-      <span class="marquee-item">Campaigns <span class="m-sep">•</span></span>
-      <span class="marquee-item">Content <span class="m-sep">•</span></span>
-      <span class="marquee-item">Product Design <span class="m-sep">•</span></span>
-      <span class="marquee-item">Brand Identity <span class="m-sep">•</span></span>
-      <span class="marquee-item">Web Design <span class="m-sep">•</span></span>
-      <span class="marquee-item">Motion <span class="m-sep">•</span></span>
-      <span class="marquee-item">Strategy <span class="m-sep">•</span></span>
-      <span class="marquee-item">Campaigns <span class="m-sep">•</span></span>
-      <span class="marquee-item">Content <span class="m-sep">•</span></span>
-      <span class="marquee-item">Product Design <span class="m-sep">•</span></span>
-    </div>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-top">
+    <div class="hero-badge">Available for new work — Q3 2025</div>
+    <p class="hero-tagline">Kinetic is a creative agency that builds brands with the conviction of someone who means it. Big thinking. Loud execution. Zero apologies.</p>
   </div>
 
-  <!-- SERVICES -->
-  <section class="services-section" id="services">
-    <div class="services-inner">
-      <div class="services-header reveal">
-        <div>
-          <div class="section-tag">// What We Build</div>
-          <h2 class="section-title">OUR<br><span class="s-orange">CRAFT</span></h2>
-        </div>
-        <a href="#cta" class="nav-btn" style="position:relative;top:0;">Work With Us</a>
+  <!-- Rotating circle decoration -->
+  <div class="spin-circle" style="position:absolute;right:80px;top:50%;transform:translateY(-50%);">
+    <svg viewBox="0 0 200 200" style="position:absolute;inset:0;width:200px;height:200px;">
+      <path id="circle-path" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" fill="none"/>
+      <text font-family="Space Mono" font-size="11" letter-spacing="8" fill="rgba(0,0,0,0.6)" text-transform="uppercase">
+        <textPath href="#circle-path">CREATIVE AGENCY * SINCE 2018 * BOLD BY DESIGN * </textPath>
+      </text>
+    </svg>
+    <div class="spin-inner">K</div>
+  </div>
+
+  <h1 class="archivo hero-h1">KINE<br>TIC</h1>
+
+  <div class="hero-bottom">
+    <div class="hero-nums">
+      <div>
+        <div class="hero-num-n">143</div>
+        <div class="hero-num-l">Brands launched</div>
       </div>
-      <div class="services-grid">
-        <div class="svc-card reveal">
-          <div class="svc-num">01</div>
-          <div class="svc-title">Brand Identity</div>
-          <div class="svc-body">We build brand systems that move with intention. From naming and strategy to full visual identity systems, we build brands that are designed to scale and endure.</div>
-          <div class="svc-tags">
-            <span class="svc-tag">Naming</span>
-            <span class="svc-tag">Strategy</span>
-            <span class="svc-tag">Visual Identity</span>
-            <span class="svc-tag">Guidelines</span>
-          </div>
-        </div>
-        <div class="svc-card reveal" style="transition-delay:0.1s">
-          <div class="svc-num">02</div>
-          <div class="svc-title">Digital Experiences</div>
-          <div class="svc-body">Fast, functional, and intentionally designed web experiences. We obsess over performance, accessibility, and visual impact in equal measure.</div>
-          <div class="svc-tags">
-            <span class="svc-tag">Web Design</span>
-            <span class="svc-tag">Development</span>
-            <span class="svc-tag">UX/UI</span>
-          </div>
-        </div>
-        <div class="svc-card reveal" style="transition-delay:0.1s">
-          <div class="svc-num">03</div>
-          <div class="svc-title">Motion & Film</div>
-          <div class="svc-body">We turn strategy into visual energy. Brand films, social content, and motion design systems that stop thumbs and hold attention.</div>
-          <div class="svc-tags">
-            <span class="svc-tag">Animation</span>
-            <span class="svc-tag">Direction</span>
-            <span class="svc-tag">Social</span>
-          </div>
-        </div>
-        <div class="svc-card reveal" style="transition-delay:0.2s">
-          <div class="svc-num">04</div>
-          <div class="svc-title">Growth Campaigns</div>
-          <div class="svc-body">Data-informed creative that actually drives results. Campaign strategy, creative concepting, and production from a single team with a single goal.</div>
-          <div class="svc-tags">
-            <span class="svc-tag">Paid Social</span>
-            <span class="svc-tag">Creative Testing</span>
-            <span class="svc-tag">Analytics</span>
-          </div>
-        </div>
+      <div>
+        <div class="hero-num-n">22</div>
+        <div class="hero-num-l">Industry awards</div>
+      </div>
+      <div>
+        <div class="hero-num-n">7yr</div>
+        <div class="hero-num-l">In the game</div>
       </div>
     </div>
-  </section>
+    <div class="hero-btn-wrap">
+      <button class="btn-black">See our work <i data-lucide="arrow-right" style="width:12px;height:12px;"></i></button>
+      <button class="btn-outline-b">Watch the reel</button>
+    </div>
+  </div>
+</section>
 
-  <!-- PROCESS -->
-  <section class="process-section" id="process">
-    <div class="process-inner">
-      <div class="reveal">
-        <div class="section-tag" style="color:rgba(0,0,0,0.5)"># How We Work</div>
-        <h2 class="section-title" style="color:var(--black)">THE<br>KINETIC<br>METHOD</h2>
-      </div>
-      <div class="process-list">
-        <div class="process-item">
-          <div class="process-num">01</div>
-          <div class="process-name">Brief & Discovery</div>
-          <div class="process-duration">Days 1–2</div>
-        </div>
-        <div class="process-item">
-          <div class="process-num">02</div>
-          <div class="process-name">Strategic Foundation</div>
-          <div class="process-duration">Days 3–5</div>
-        </div>
-        <div class="process-item">
-          <div class="process-num">03</div>
-          <div class="process-name">Creative Concepting</div>
-          <div class="process-duration">Days 6–10</div>
-        </div>
-        <div class="process-item">
-          <div class="process-num">04</div>
-          <div class="process-name">Design & Production</div>
-          <div class="process-duration">Days 11–20</div>
-        </div>
-        <div class="process-item">
-          <div class="process-num">05</div>
-          <div class="process-name">Launch & Handoff</div>
-          <div class="process-duration">Day 21</div>
-        </div>
+<!-- Marquee — black -->
+<div class="marquee-black">
+  <div class="marquee-inner">
+    <span class="m-item">Brand Identity</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Campaign Direction</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Motion Design</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Digital Experiences</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Strategy</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Product Design</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Brand Identity</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Campaign Direction</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Motion Design</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Digital Experiences</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Strategy</span>
+    <span class="m-dot">*</span>
+    <span class="m-item">Product Design</span>
+    <span class="m-dot">*</span>
+  </div>
+</div>
+
+<!-- Work — black bg -->
+<section class="work" id="work">
+  <div class="section-label reveal">Selected work — 2024/2025</div>
+  <h2 class="archivo work-h2 reveal" style="transition-delay:0.05s;">Work<br>that hits.</h2>
+  <div class="work-grid">
+    <div class="w-item reveal">
+      <img src="../../images/creative/creative-1.jpg" alt="Surge — Brand Identity">
+      <div class="w-item-overlay"></div>
+      <div class="w-item-info">
+        <div class="w-cat">Brand Identity / Fintech</div>
+        <div class="w-name">Surge Capital</div>
       </div>
     </div>
-  </section>
-
-  <!-- WORK -->
-  <section class="work-section" id="work">
-    <div class="work-inner">
-      <div class="reveal">
-        <div class="section-tag">// Selected Projects</div>
-        <h2 class="section-title">RECENT<br><span class="s-orange">WORK</span></h2>
-      </div>
-      <div class="work-grid">
-        <div class="work-card reveal">
-          <div class="work-card-visual"><span>01</span></div>
-          <div class="work-card-info">
-            <div class="wc-category">Brand Identity · Web</div>
-            <div class="wc-name">Flux Capital</div>
-            <div class="wc-year">2025</div>
-          </div>
-        </div>
-        <div class="work-card reveal" style="transition-delay:0.1s">
-          <div class="work-card-visual"><span>02</span></div>
-          <div class="work-card-info">
-            <div class="wc-category">Campaign · Motion</div>
-            <div class="wc-name">Apex Fitness</div>
-            <div class="wc-year">2025</div>
-          </div>
-        </div>
-        <div class="work-card reveal" style="transition-delay:0.2s">
-          <div class="work-card-visual"><span>03</span></div>
-          <div class="work-card-info">
-            <div class="wc-category">Product · Strategy</div>
-            <div class="wc-name">Daze Platform</div>
-            <div class="wc-year">2024</div>
-          </div>
-        </div>
+    <div class="w-item-orange reveal" style="transition-delay:0.05s;">
+      <div class="w-accent-num">143<br>brands</div>
+      <div class="w-accent-text">Total launches since 2018 — across fintech, fashion, culture, and hard tech.</div>
+    </div>
+    <div class="w-item reveal" style="transition-delay:0.1s;">
+      <img src="../../images/creative/creative-2.jpg" alt="Velocity — Campaign">
+      <div class="w-item-overlay"></div>
+      <div class="w-item-info">
+        <div class="w-cat">Campaign / Global</div>
+        <div class="w-name">Velocity 2025</div>
       </div>
     </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials-section">
-    <div class="testi-inner">
-      <div class="reveal">
-        <div class="section-tag">// Client Feedback</div>
-        <h2 class="section-title">WHAT THEY<br><span class="s-orange">SAY</span></h2>
-      </div>
-      <div class="testi-grid">
-        <div class="t-card reveal">
-          <div class="t-score">★★★★★</div>
-          <p class="t-text">"Kinetic operates at a speed and standard I didn't think was possible from a creative agency. Concept to launch in 3 weeks, and it looked like we spent 6 months on it."</p>
-          <div class="t-name">Marcus Osei</div>
-          <div class="t-role">Founder, Flux Capital</div>
-        </div>
-        <div class="t-card reveal" style="transition-delay:0.1s">
-          <div class="t-score">★★★★★</div>
-          <p class="t-text">"They gave us work that made us uncomfortable in the best possible way. Bold, unexpected, and exactly what our brand needed to punch out of a crowded category."</p>
-          <div class="t-name">Priya Arora</div>
-          <div class="t-role">CMO, Apex Fitness</div>
-        </div>
-        <div class="t-card reveal" style="transition-delay:0.2s">
-          <div class="t-score">★★★★★</div>
-          <p class="t-text">"Working with Kinetic felt like working with a team that cared more about our success than we did. They pushed back, refined, and delivered something that actually drives results."</p>
-          <div class="t-name">Theo Nakamura</div>
-          <div class="t-role">CEO, Daze Platform</div>
-        </div>
+    <div class="w-item reveal" style="transition-delay:0.15s;">
+      <img src="../../images/creative/creative-3.jpg" alt="Pulse — Digital">
+      <div class="w-item-overlay"></div>
+      <div class="w-item-info">
+        <div class="w-cat">Digital / Health</div>
+        <div class="w-name">Pulse Health</div>
       </div>
     </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-section" id="cta">
-    <div class="cta-bg-title">GO</div>
-    <div class="cta-inner reveal">
-      <div class="section-tag">// Ready?</div>
-      <h2 class="cta-title">
-        LET'S<br><span>MOVE</span>
-      </h2>
-      <p class="cta-sub">We take 4 new projects per month. Tell us what you're building and let's see if we can move fast together.</p>
-      <a href="mailto:go@kinetic.studio" class="cta-btn">[ START A PROJECT ]</a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div>
-          <div class="f-logo">KINETIC<span>.</span></div>
-          <p class="f-tagline">We move fast and make things. Creative agency based in New York City.</p>
-        </div>
-        <div class="f-col">
-          <h4>Services</h4>
-          <ul>
-            <li><a href="#">Brand Identity</a></li>
-            <li><a href="#">Digital</a></li>
-            <li><a href="#">Motion</a></li>
-            <li><a href="#">Campaigns</a></li>
-          </ul>
-        </div>
-        <div class="f-col">
-          <h4>Studio</h4>
-          <ul>
-            <li><a href="#">Work</a></li>
-            <li><a href="#">Process</a></li>
-            <li><a href="#">About</a></li>
-          </ul>
-        </div>
-        <div class="f-col">
-          <h4>Connect</h4>
-          <ul>
-            <li><a href="#">Instagram</a></li>
-            <li><a href="#">Twitter</a></li>
-            <li><a href="#">LinkedIn</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p class="f-copy">© 2025 Kinetic Creative Studio LLC. New York, NY.</p>
-        <div class="f-social">
-          <a href="#">IG</a>
-          <a href="#">TW</a>
-          <a href="#">LI</a>
-        </div>
+    <div class="w-item reveal" style="transition-delay:0.05s;">
+      <img src="../../images/creative/creative-4.jpg" alt="Orbit — Motion">
+      <div class="w-item-overlay"></div>
+      <div class="w-item-info">
+        <div class="w-cat">Motion / Entertainment</div>
+        <div class="w-name">Orbit Studios</div>
       </div>
     </div>
-  </footer>
+    <div class="w-item reveal" style="transition-delay:0.1s;">
+      <img src="../../images/creative/creative-5.jpg" alt="Flare — Fashion">
+      <div class="w-item-overlay"></div>
+      <div class="w-item-info">
+        <div class="w-cat">Identity / Fashion</div>
+        <div class="w-name">Flare Apparel</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <script>
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08 });
-    reveals.forEach(el => obs.observe(el));
-  </script>
+<!-- Process timeline — orange -->
+<section class="process" id="process">
+  <div class="section-label" style="color:rgba(0,0,0,0.45);" class="reveal">
+    <span style="display:block;width:32px;height:2px;background:var(--black);"></span>
+    How we work
+  </div>
+  <h2 class="archivo process-h2 reveal" style="transition-delay:0.05s;">The<br>Kinetic<br>method.</h2>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="tl-num">01</div>
+      <div class="tl-content">
+        <div class="tl-name">Conviction audit</div>
+        <div class="tl-desc">We challenge your brief. Not to be difficult — because the most expensive thing you can do is build the wrong thing with confidence. We spend two hours breaking it before we commit to it.</div>
+      </div>
+    </div>
+    <div class="timeline-item reveal" style="transition-delay:0.05s;">
+      <div class="tl-num">02</div>
+      <div class="tl-content">
+        <div class="tl-name">Strategy sprint</div>
+        <div class="tl-desc">Five days. One decision: what your brand stands for and who it's for. We use competitive mapping, audience forensics, and structured provocation sessions. The output is a single-page positioning doc you can actually use.</div>
+      </div>
+    </div>
+    <div class="timeline-item reveal" style="transition-delay:0.1s;">
+      <div class="tl-num">03</div>
+      <div class="tl-content">
+        <div class="tl-name">Visual direction</div>
+        <div class="tl-desc">Three distinct directions presented — not three variations on one idea. Full visual system exploration across type, color, motion language, and imagery. You pick one. We go deep on it.</div>
+      </div>
+    </div>
+    <div class="timeline-item reveal" style="transition-delay:0.15s;">
+      <div class="tl-num">04</div>
+      <div class="tl-content">
+        <div class="tl-name">Build &amp; ship</div>
+        <div class="tl-desc">We produce the work. Design files, motion assets, guidelines, coded prototypes. Delivered in formats your team can actually use. We stay on call for 90 days after launch.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services — black -->
+<section class="services" id="services">
+  <div class="section-label reveal" style="color:rgba(255,255,255,0.45);">
+    <span style="display:block;width:32px;height:2px;background:var(--orange);"></span>
+    What we do
+  </div>
+  <h2 class="archivo work-h2 reveal" style="transition-delay:0.05s;margin-bottom:60px;">Full<br>spectrum.</h2>
+  <div class="svc-grid">
+    <div class="svc-item reveal">
+      <div class="svc-icon"><i data-lucide="layers" style="width:24px;height:24px;"></i></div>
+      <div class="svc-name">Brand Systems</div>
+      <div class="svc-desc">Full visual identity. Logo, type, color, motion language, and usage documentation. Systems that scale without you.</div>
+      <div class="svc-tag">From $28K</div>
+    </div>
+    <div class="svc-item reveal" style="transition-delay:0.05s;">
+      <div class="svc-icon"><i data-lucide="video" style="width:24px;height:24px;"></i></div>
+      <div class="svc-name">Campaign Direction</div>
+      <div class="svc-desc">Concept, art direction, production oversight, and post. From a 30-second digital ad to a 3-month brand campaign.</div>
+      <div class="svc-tag">From $45K</div>
+    </div>
+    <div class="svc-item reveal">
+      <div class="svc-icon"><i data-lucide="monitor" style="width:24px;height:24px;"></i></div>
+      <div class="svc-name">Digital Experiences</div>
+      <div class="svc-desc">Website design and front-end build. Interactive product showcases. Coded in Webflow or React — not handed off to a dev shop.</div>
+      <div class="svc-tag">From $32K</div>
+    </div>
+    <div class="svc-item reveal" style="transition-delay:0.05s;">
+      <div class="svc-icon"><i data-lucide="zap" style="width:24px;height:24px;"></i></div>
+      <div class="svc-name">Motion Design</div>
+      <div class="svc-desc">Brand motion language. UI micro-animations. Social-first video content. Everything that moves should move with purpose.</div>
+      <div class="svc-tag">From $18K</div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee 2 — reverse, orange on black -->
+<div class="marquee-orange">
+  <div class="marquee-inner">
+    <span class="mo-item">Bold or nothing</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">Built for impact</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">Loud by design</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">Strategy first</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">No safe options</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">Bold or nothing</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">Built for impact</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">Loud by design</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">Strategy first</span>
+    <span class="mo-dot">*</span>
+    <span class="mo-item">No safe options</span>
+    <span class="mo-dot">*</span>
+  </div>
+</div>
+
+<!-- Testimonial -->
+<div class="testimonial reveal">
+  <p class="t-quote">"KINETIC DIDN'T GIVE US A SAFE BRAND. THEY GAVE US THE BRAND WE WERE TOO SCARED TO ASK FOR. SIX MONTHS LATER, WE'RE FIELDING INBOUND CALLS FROM PEOPLE WHO FOUND US BECAUSE THEY COULDN'T IGNORE US."</p>
+  <div class="t-meta" style="margin-top:28px;">Marcus T. — Founder, Surge Capital / Brand identity project, 2024</div>
+</div>
+
+<!-- CTA — black -->
+<section class="cta" id="contact">
+  <h2 class="archivo cta-h2 reveal">Build<br>some<br>thing<br>loud.</h2>
+  <div class="cta-right reveal" style="transition-delay:0.15s;">
+    <p class="cta-body">We take eight projects per year. Applications are reviewed on a rolling basis. If we're a fit, we respond within 48 hours with our rate card and availability.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <button class="btn-orange">Submit your project brief <i data-lucide="arrow-right" style="width:12px;height:12px;"></i></button>
+      <button class="btn-outline-w">hello@kinetic.studio</button>
+    </div>
+    <div style="padding-top:24px;border-top:2px solid rgba(255,255,255,0.1);">
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:rgba(255,255,255,0.3);">London / New York — Available globally</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <div class="f-logo">Kine<span>tic</span></div>
+    <div class="f-desc">Bold creative agency. Building brands with conviction since 2018. London and New York.</div>
+  </div>
+  <div>
+    <h6>Work</h6>
+    <ul>
+      <li><a href="#">Brand Systems</a></li>
+      <li><a href="#">Campaigns</a></li>
+      <li><a href="#">Digital</a></li>
+      <li><a href="#">Motion</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>Agency</h6>
+    <ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Process</a></li>
+      <li><a href="#">Awards</a></li>
+      <li><a href="#">Journal</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>New work</h6>
+    <ul>
+      <li><a href="#">hello@kinetic.studio</a></li>
+      <li><a href="#">+44 20 7946 0303</a></li>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">X / Twitter</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>Kinetic Studio &copy; 2025 — All rights reserved</p>
+  <p>Bold or nothing.</p>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  // Detect dark background sections
+  const darkSections = ['.work', '.services', '.cta', '.marquee-black', '.marquee-orange', '.testimonial', 'footer', '.footer-bottom'];
+  document.querySelectorAll(darkSections.join(',')).forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('on-dark'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('on-dark'));
+  });
+  document.querySelectorAll('a, button, .w-item, .svc-item, .timeline-item').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
+  });
+
+  // Scroll translation on hover for timeline items
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    item.addEventListener('mouseenter', () => item.style.transform = 'translateX(16px) scale(1.01)');
+    item.addEventListener('mouseleave', () => item.style.transform = '');
+  });
+
+  // Reveals
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

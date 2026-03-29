@@ -3,787 +3,597 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>APEX — AI Creative Masterclass</title>
+<title>APEX — AI Creative Masterclass Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+  :root {
+    --bg: #0C0A09;
+    --surface: #1C1917;
+    --lime: #c8f250;
+    --lime-dim: rgba(200,242,80,0.08);
+    --stone: #E7E5E4;
+    --muted: rgba(231,229,228,0.5);
+    --border: rgba(255,255,255,0.08);
+    --newsreader: 'Newsreader', serif;
+    --sans: 'Instrument Sans', sans-serif;
+    --mono: 'Space Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--stone);
+    overflow-x: hidden;
+  }
 
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  /* Noise overlay */
+  .noise {
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.04; pointer-events: none; z-index: 9999;
+    mix-blend-mode: overlay;
+  }
 
-:root{
-  --bg:#141414;
-  --surface:#1c1c1c;
-  --surface2:#242424;
-  --acid:#c8f250;
-  --acid-dim:#9abf1e;
-  --text:#f0ede8;
-  --muted:#6b6b6b;
-  --border:#2e2e2e;
-}
+  /* SKEWED NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,10,9,0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+  .nav-inner {
+    max-width: 1400px; margin: 0 auto;
+    padding: 0 2.5rem; height: 58px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-family: var(--newsreader); font-weight: 300;
+    font-size: 1.6rem; font-style: italic;
+    letter-spacing: -0.03em; color: var(--stone);
+    text-decoration: none;
+  }
+  .logo-dot { color: var(--lime); font-style: normal; }
 
-html{scroll-behavior:smooth}
+  /* Tab navigation */
+  .nav-tabs { display: flex; gap: 0; }
+  .nav-tab {
+    position: relative;
+    font-family: var(--mono); font-size: 0.62rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(231,229,228,0.35); text-decoration: none;
+    padding: 18px 20px;
+    transition: color 0.2s;
+  }
+  .nav-tab::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px; background: var(--lime);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  .nav-tab:hover { color: var(--stone); }
+  .nav-tab:hover::before { transform: scaleX(1); }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Inter',sans-serif;
-  font-size:15px;
-  line-height:1.6;
-  overflow-x:hidden;
-}
+  .btn-lime {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 22px; border-radius: 9999px;
+    background: var(--lime); color: #000;
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  .btn-lime:hover { transform: translateY(-1px); box-shadow: 0 0 20px rgba(200,242,80,0.3); }
+  .btn-lime svg { width: 13px; height: 13px; }
 
-/* ── Noise overlay ── */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:9999;opacity:.4;
-}
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 22px; border-radius: 9999px;
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border);
+    font-family: var(--sans); font-size: 13px;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--stone); }
+  .btn-ghost svg { width: 13px; height: 13px; }
 
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:0 40px;
-  display:flex;align-items:stretch;
-  background:var(--bg);
-  border-bottom:1px solid var(--border);
-}
+  /* Serrated edge mixin */
+  .serrated-top {
+    -webkit-mask-image: radial-gradient(circle at 50% 0%, transparent 20px, black 0),
+      radial-gradient(circle at 0% 0%, transparent 20px, black 0);
+    mask-image: radial-gradient(circle at 50% 0%, transparent 20px, black 0);
+  }
 
-.nav-logo{
-  font-family:'Cormorant Garamond',serif;
-  font-size:22px;font-weight:700;letter-spacing:.08em;
-  color:var(--acid);
-  display:flex;align-items:center;
-  padding-right:40px;
-  border-right:1px solid var(--border);
-  text-decoration:none;
-}
+  .serrated-bottom {
+    position: relative;
+  }
+  .serrated-bottom::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 24px;
+    background: var(--bg);
+    -webkit-mask-image: radial-gradient(circle at 12px 100%, black 11px, transparent 12px);
+    mask-image: radial-gradient(circle at 12px 100%, black 11px, transparent 12px);
+    -webkit-mask-size: 24px 24px;
+    mask-size: 24px 24px;
+    pointer-events: none;
+  }
 
-.nav-tabs{
-  display:flex;align-items:stretch;margin-left:8px;
-}
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
 
-.nav-tab{
-  display:flex;align-items:center;
-  padding:0 22px;
-  font-size:12px;font-weight:500;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--muted);
-  text-decoration:none;
-  border-right:1px solid var(--border);
-  position:relative;
-  transition:color .2s;
-  transform:skewX(-6deg);
-}
-.nav-tab span{display:inline-block;transform:skewX(6deg)}
-.nav-tab:hover{color:var(--text)}
-.nav-tab.active{color:var(--acid)}
-.nav-tab.active::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:var(--acid);
-}
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(12,10,9,0.3) 0%,
+      rgba(12,10,9,0.6) 60%,
+      var(--bg) 100%
+    );
+    z-index: 1;
+  }
 
-.nav-cta{
-  margin-left:auto;display:flex;align-items:center;
-  padding-left:40px;
-}
+  .hero-img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center top;
+    filter: brightness(0.6) contrast(1.1) grayscale(0.15);
+    z-index: 0;
+  }
 
-.btn-acid{
-  background:var(--acid);color:#0a0a0a;
-  font-family:'Inter',sans-serif;
-  font-size:11px;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;
-  padding:10px 22px;
-  border:none;cursor:pointer;
-  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
-  transition:background .2s,transform .1s;
-  text-decoration:none;display:inline-block;
-}
-.btn-acid:hover{background:#d8ff60;transform:translateY(-1px)}
-.btn-acid:active{transform:translateY(0)}
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 1400px; margin: 0 auto; width: 100%;
+    padding: 0 2.5rem 80px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: end;
+  }
 
-.btn-ghost{
-  background:transparent;color:var(--text);
-  font-family:'Inter',sans-serif;
-  font-size:11px;font-weight:500;letter-spacing:.14em;
-  text-transform:uppercase;
-  padding:10px 22px;
-  border:1px solid var(--border);cursor:pointer;
-  transition:border-color .2s,color .2s;
-  text-decoration:none;display:inline-block;
-}
-.btn-ghost:hover{border-color:var(--acid);color:var(--acid)}
+  .hero-eyebrow {
+    font-family: var(--mono); font-size: 0.6rem;
+    text-transform: uppercase; letter-spacing: 0.25em;
+    color: rgba(200,242,80,0.6); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--lime); }
 
-/* ── HERO ── */
-.hero{
-  min-height:100vh;
-  padding:140px 40px 80px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:60px;
-  align-items:center;
-  position:relative;
-  overflow:hidden;
-}
+  .hero-h1 {
+    font-family: var(--newsreader); font-weight: 200;
+    font-size: clamp(48px, 6.5vw, 96px);
+    line-height: 0.93; letter-spacing: -0.03em;
+    margin-bottom: 0;
+  }
+  .hero-h1 em { font-style: italic; color: var(--lime); }
 
-.hero::before{
-  content:'';
-  position:absolute;
-  top:-200px;right:-200px;
-  width:700px;height:700px;
-  background:radial-gradient(circle,rgba(200,242,80,.08) 0%,transparent 70%);
-  pointer-events:none;
-}
+  .hero-right-text {
+    padding-bottom: 8px;
+  }
+  .hero-sub {
+    font-size: 16px; color: var(--muted);
+    line-height: 1.65; margin-bottom: 32px;
+  }
 
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:10px;
-  font-size:11px;font-weight:600;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--acid);
-  margin-bottom:28px;
-}
-.hero-eyebrow::before{
-  content:'';width:30px;height:1px;background:var(--acid);
-}
+  /* Pilot info */
+  .pilot-card {
+    background: rgba(28,25,23,0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 24px;
+  }
+  .pilot-label { font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:rgba(231,229,228,0.25);margin-bottom:10px; }
+  .pilot-row { display:flex;justify-content:space-between;align-items:center; }
+  .pilot-title { font-family:var(--newsreader);font-size:16px;font-weight:300; }
+  .pilot-meta { font-family:var(--mono);font-size:10px;color:var(--lime); }
 
-.hero-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(56px,7vw,96px);
-  font-weight:700;line-height:.95;
-  letter-spacing:-.01em;
-  margin-bottom:32px;
-}
+  /* Program grid */
+  .program-section {
+    max-width: 1400px; margin: 0 auto;
+    padding: 80px 2.5rem;
+  }
+  .sec-label { font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.22em;color:rgba(200,242,80,0.5);margin-bottom:12px; }
+  .sec-h2 {
+    font-family: var(--newsreader); font-weight: 200;
+    font-size: clamp(28px,3.5vw,52px);
+    letter-spacing: -0.03em; line-height: 1.05;
+    margin-bottom: 48px;
+  }
+  .sec-h2 em { font-style: italic; color: var(--lime); }
 
-.hero-title em{
-  font-style:italic;color:var(--acid);
-}
+  /* Track cards — non-uniform layout */
+  .tracks {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 2px;
+  }
+  .track {
+    background: var(--surface); padding: 40px 32px;
+    position: relative; overflow: hidden;
+    transition: background 0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  .track:hover { background: rgba(28,25,23,0.9); }
+  .track.featured {
+    grid-row: span 2;
+    background: rgba(200,242,80,0.04);
+    border: 1px solid rgba(200,242,80,0.12);
+  }
+  .track-num { font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:rgba(231,229,228,0.2);margin-bottom:20px; }
+  .track-icon {
+    width: 44px; height: 44px; border-radius: 24px;
+    background: var(--lime-dim); border: 1px solid rgba(200,242,80,0.15);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px; color: var(--lime);
+  }
+  .track-icon svg { width: 18px; height: 18px; }
+  .track-title {
+    font-family: var(--newsreader); font-weight: 300;
+    font-size: 22px; letter-spacing: -0.02em; line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .track-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .track-weeks {
+    display: inline-block;
+    margin-top: 16px;
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--lime); padding: 4px 10px;
+    border: 1px solid rgba(200,242,80,0.2);
+    border-radius: 9999px;
+  }
 
-.hero-desc{
-  font-size:16px;font-weight:300;
-  color:rgba(240,237,232,.6);
-  line-height:1.7;
-  max-width:440px;
-  margin-bottom:44px;
-}
+  /* Instructor section */
+  .instructor-section {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .instructor-inner {
+    max-width: 1400px; margin: 0 auto;
+    padding: 80px 2.5rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+  }
+  .instructor-img {
+    aspect-ratio: 4/5; overflow: hidden;
+    position: relative;
+  }
+  .instructor-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: grayscale(0.2) contrast(1.1);
+  }
+  .instructor-img-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 16px 20px;
+    background: linear-gradient(transparent, rgba(12,10,9,0.8));
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.18em; color: rgba(231,229,228,0.4);
+  }
 
-.hero-actions{
-  display:flex;gap:14px;align-items:center;
-}
+  .instructor-quote {
+    font-family: var(--newsreader); font-weight: 200;
+    font-style: italic; font-size: clamp(22px,2.5vw,36px);
+    letter-spacing: -0.02em; line-height: 1.3;
+    color: var(--stone); margin-bottom: 28px;
+  }
+  .instructor-name { font-family: var(--sans); font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .instructor-role { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--lime); }
 
-.hero-stat-row{
-  display:flex;gap:40px;margin-top:60px;
-  padding-top:40px;
-  border-top:1px solid var(--border);
-}
-.hero-stat-num{
-  font-family:'Cormorant Garamond',serif;
-  font-size:42px;font-weight:600;color:var(--acid);
-  line-height:1;
-}
-.hero-stat-label{
-  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--muted);margin-top:4px;
-}
+  /* Serrated divider section */
+  .serrated-section {
+    background: var(--surface);
+    padding: 80px 2.5rem;
+    position: relative;
+  }
+  .serrated-section::before {
+    content: '';
+    position: absolute; top: -1px; left: 0; right: 0;
+    height: 24px;
+    background: var(--surface);
+    -webkit-mask-image: radial-gradient(circle at 12px 0%, black 11px, transparent 12px);
+    mask-image: radial-gradient(circle at 12px 0%, black 11px, transparent 12px);
+    -webkit-mask-size: 24px 24px;
+    mask-size: 24px 24px;
+  }
+  .serrated-section::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 24px;
+    background: var(--bg);
+    -webkit-mask-image: radial-gradient(circle at 12px 100%, black 11px, transparent 12px);
+    mask-image: radial-gradient(circle at 12px 100%, black 11px, transparent 12px);
+    -webkit-mask-size: 24px 24px;
+    mask-size: 24px 24px;
+  }
 
-/* Hero visual */
-.hero-visual{
-  position:relative;
-}
-.hero-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  padding:40px;
-  position:relative;
-  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px));
-}
-.hero-card::before{
-  content:'APEX';
-  position:absolute;top:20px;right:30px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:80px;font-weight:700;
-  color:rgba(200,242,80,.04);
-  line-height:1;letter-spacing:-.02em;
-}
-.module-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(200,242,80,.08);
-  border:1px solid rgba(200,242,80,.2);
-  padding:6px 14px;
-  font-size:11px;font-weight:500;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--acid);
-  margin-bottom:24px;
-}
-.module-badge::before{
-  content:'';width:6px;height:6px;border-radius:50%;
-  background:var(--acid);
-  box-shadow:0 0 8px var(--acid);
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{
-  0%,100%{opacity:1;transform:scale(1)}
-  50%{opacity:.5;transform:scale(1.3)}
-}
-.module-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:30px;font-weight:600;
-  line-height:1.2;margin-bottom:20px;
-}
-.module-list{
-  list-style:none;display:flex;flex-direction:column;gap:10px;
-}
-.module-list li{
-  display:flex;align-items:center;gap:12px;
-  font-size:13px;color:rgba(240,237,232,.7);
-  padding:10px 14px;
-  background:var(--surface2);
-  border-left:2px solid var(--border);
-  transition:border-color .2s;
-}
-.module-list li:hover{border-left-color:var(--acid)}
-.module-list li::before{
-  content:'';width:4px;height:4px;
-  background:var(--acid);flex-shrink:0;
-}
+  .stats-grid {
+    max-width: 1400px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 0;
+  }
+  .stat { border-right: 1px solid var(--border); padding: 0 40px; }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: var(--newsreader); font-weight: 300;
+    font-size: 56px; line-height: 1; letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+  .stat-num .lime { color: var(--lime); }
+  .stat-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
 
-/* ── SECTION SHARED ── */
-.section{padding:100px 40px}
+  /* CTA */
+  .cta-section {
+    max-width: 1400px; margin: 0 auto;
+    padding: 120px 2.5rem;
+    text-align: center;
+  }
+  .cta-h2 {
+    font-family: var(--newsreader); font-weight: 200;
+    font-size: clamp(40px,5.5vw,80px);
+    letter-spacing: -0.04em; line-height: 0.95;
+    margin-bottom: 24px;
+  }
+  .cta-h2 em { font-style: italic; color: var(--lime); }
+  .cta-sub { font-size: 16px; color: var(--muted); margin-bottom: 44px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.6; }
 
-.section-label{
-  display:flex;align-items:center;gap:16px;
-  font-size:11px;font-weight:600;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--muted);
-  margin-bottom:60px;
-}
-.section-label::after{
-  content:'';flex:1;height:1px;background:var(--border);
-}
-.section-label span{color:var(--acid)}
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 2.5rem;
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .f-links { display: flex; gap: 28px; flex-wrap: wrap; }
+  .f-links a { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(231,229,228,0.2); text-decoration: none; transition: color 0.2s; }
+  .f-links a:hover { color: var(--lime); }
 
-/* ── FEATURES ── */
-.features{background:var(--surface)}
+  /* Reveal */
+  .reveal { opacity:0;transform:translateY(20px);transition:opacity 0.8s cubic-bezier(0.4,0,0.2,1),transform 0.8s cubic-bezier(0.4,0,0.2,1); }
+  .reveal.visible { opacity:1;transform:none; }
 
-.features-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:var(--border);
-  border:1px solid var(--border);
-}
-
-.feature-card{
-  background:var(--surface);
-  padding:44px 36px;
-  position:relative;
-  overflow:hidden;
-  transition:background .2s;
-}
-.feature-card:hover{background:#1f1f1f}
-.feature-card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:transparent;
-  transition:background .3s;
-}
-.feature-card:hover::before{background:var(--acid)}
-
-.feature-num{
-  font-family:'Cormorant Garamond',serif;
-  font-size:56px;font-weight:700;
-  color:rgba(200,242,80,.08);
-  line-height:1;
-  margin-bottom:24px;
-}
-.feature-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:22px;font-weight:600;
-  margin-bottom:14px;
-  line-height:1.2;
-}
-.feature-desc{
-  font-size:13px;color:var(--muted);
-  line-height:1.7;
-}
-
-/* ── CURRICULUM ── */
-.curriculum{padding:100px 40px}
-
-.curriculum-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:60px;
-  align-items:start;
-}
-
-.curriculum-intro h2{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(36px,4vw,56px);
-  font-weight:700;line-height:1.05;
-  margin-bottom:20px;
-}
-
-.curriculum-intro p{
-  font-size:15px;color:rgba(240,237,232,.6);
-  line-height:1.7;margin-bottom:36px;
-}
-
-.serrated-bar{
-  width:100%;height:20px;
-  background:var(--acid);
-  clip-path:polygon(0% 0%,2% 100%,4% 0%,6% 100%,8% 0%,10% 100%,12% 0%,14% 100%,16% 0%,18% 100%,20% 0%,22% 100%,24% 0%,26% 100%,28% 0%,30% 100%,32% 0%,34% 100%,36% 0%,38% 100%,40% 0%,42% 100%,44% 0%,46% 100%,48% 0%,50% 100%,52% 0%,54% 100%,56% 0%,58% 100%,60% 0%,62% 100%,64% 0%,66% 100%,68% 0%,70% 100%,72% 0%,74% 100%,76% 0%,78% 100%,80% 0%,82% 100%,84% 0%,86% 100%,88% 0%,90% 100%,92% 0%,94% 100%,96% 0%,98% 100%,100% 0%);
-  margin-bottom:36px;
-}
-
-.module-stack{
-  display:flex;flex-direction:column;gap:2px;
-}
-.module-item{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 24px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  cursor:pointer;
-  transition:background .2s,border-color .2s;
-}
-.module-item:hover{background:var(--surface2);border-color:rgba(200,242,80,.3)}
-.module-item-left{display:flex;align-items:center;gap:16px}
-.module-index{
-  font-family:'Cormorant Garamond',serif;
-  font-size:18px;font-weight:600;color:var(--acid);width:28px;
-}
-.module-name{font-size:13px;font-weight:500}
-.module-duration{font-size:11px;color:var(--muted)}
-
-/* ── INSTRUCTORS ── */
-.instructors{background:var(--surface);padding:100px 40px}
-
-.instructor-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:24px;
-}
-
-.instructor-card{
-  background:var(--bg);
-  border:1px solid var(--border);
-  padding:32px;
-  position:relative;
-  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
-  transition:border-color .25s;
-}
-.instructor-card:hover{border-color:rgba(200,242,80,.4)}
-
-.instructor-avatar{
-  width:56px;height:56px;border-radius:50%;
-  background:linear-gradient(135deg,var(--acid),var(--acid-dim));
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Cormorant Garamond',serif;
-  font-size:22px;font-weight:700;color:#0a0a0a;
-  margin-bottom:20px;
-}
-.instructor-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:20px;font-weight:600;margin-bottom:4px;
-}
-.instructor-role{font-size:11px;color:var(--acid);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
-.instructor-bio{font-size:13px;color:var(--muted);line-height:1.6}
-
-/* ── TESTIMONIALS ── */
-.testimonials{padding:100px 40px}
-
-.testimonials-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-}
-
-.testimonial-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  padding:32px;
-  position:relative;
-}
-.testimonial-card::before{
-  content:'"';
-  font-family:'Cormorant Garamond',serif;
-  font-size:80px;font-weight:700;color:var(--acid);
-  opacity:.15;
-  position:absolute;top:10px;left:20px;
-  line-height:1;
-}
-.testimonial-text{
-  font-family:'Cormorant Garamond',serif;
-  font-size:18px;font-style:italic;
-  line-height:1.5;
-  margin-bottom:24px;
-  position:relative;z-index:1;
-}
-.testimonial-author{
-  display:flex;align-items:center;gap:12px;
-}
-.testimonial-dot{
-  width:36px;height:36px;border-radius:50%;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:600;color:var(--acid);
-}
-.testimonial-name{font-size:13px;font-weight:500}
-.testimonial-title{font-size:11px;color:var(--muted)}
-
-/* ── CTA ── */
-.cta-section{
-  padding:120px 40px;
-  background:var(--surface);
-  position:relative;
-  overflow:hidden;
-}
-.cta-section::before{
-  content:'';
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:800px;height:400px;
-  background:radial-gradient(ellipse,rgba(200,242,80,.06) 0%,transparent 70%);
-  pointer-events:none;
-}
-.cta-inner{
-  max-width:700px;margin:0 auto;text-align:center;
-  position:relative;z-index:1;
-}
-.cta-inner h2{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(44px,6vw,72px);
-  font-weight:700;line-height:1.05;
-  margin-bottom:20px;
-}
-.cta-inner p{
-  font-size:16px;color:rgba(240,237,232,.6);
-  margin-bottom:44px;
-}
-.cta-actions{display:flex;gap:14px;justify-content:center}
-
-/* ── FOOTER ── */
-footer{
-  padding:60px 40px 40px;
-  border-top:1px solid var(--border);
-  background:var(--bg);
-}
-.footer-top{
-  display:flex;justify-content:space-between;align-items:flex-start;
-  margin-bottom:48px;
-}
-.footer-logo{
-  font-family:'Cormorant Garamond',serif;
-  font-size:28px;font-weight:700;color:var(--acid);
-  margin-bottom:10px;
-}
-.footer-tagline{font-size:12px;color:var(--muted)}
-.footer-links{
-  display:flex;gap:60px;
-}
-.footer-col-title{
-  font-size:11px;font-weight:600;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--text);
-  margin-bottom:16px;
-}
-.footer-col a{
-  display:block;font-size:13px;color:var(--muted);
-  text-decoration:none;margin-bottom:8px;
-  transition:color .2s;
-}
-.footer-col a:hover{color:var(--acid)}
-.footer-bottom{
-  display:flex;justify-content:space-between;align-items:center;
-  padding-top:32px;border-top:1px solid var(--border);
-  font-size:12px;color:var(--muted);
-}
-
-/* ── REVEAL ANIMATIONS ── */
-.reveal{
-  opacity:0;transform:translateY(30px);
-  transition:opacity .7s ease,transform .7s ease;
-}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-@media(max-width:900px){
-  .hero,.curriculum-grid{grid-template-columns:1fr}
-  .features-grid,.instructor-grid,.testimonials-grid{grid-template-columns:1fr}
-  nav{padding:0 20px}
-  .section,.hero{padding-left:20px;padding-right:20px}
-}
+  @media(max-width:900px) {
+    .hero-content { grid-template-columns:1fr; }
+    .tracks { grid-template-columns:1fr; }
+    .instructor-inner { grid-template-columns:1fr; }
+    .stats-grid { grid-template-columns:1fr 1fr; gap:32px; }
+    .nav-tabs { display:none; }
+  }
 </style>
 </head>
 <body>
+<div class="noise"></div>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">APEX</a>
-  <div class="nav-tabs">
-    <a href="#curriculum" class="nav-tab active"><span>Curriculum</span></a>
-    <a href="#instructors" class="nav-tab"><span>Mentors</span></a>
-    <a href="#proof" class="nav-tab"><span>Alumni</span></a>
-    <a href="#pricing" class="nav-tab"><span>Pricing</span></a>
-  </div>
-  <div class="nav-cta" style="gap:12px">
-    <a href="#" class="btn-ghost">Log in</a>
-    <a href="#" class="btn-acid">Enroll Now</a>
+  <div class="nav-inner">
+    <a href="#" class="logo">APEX<span class="logo-dot">.</span></a>
+    <div class="nav-tabs">
+      <a href="#" class="nav-tab">Curriculum</a>
+      <a href="#" class="nav-tab">Instructors</a>
+      <a href="#" class="nav-tab">Community</a>
+      <a href="#" class="nav-tab">Alumni</a>
+      <a href="#" class="nav-tab">Enterprise</a>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <a href="#" class="btn-ghost" style="font-size:12px;padding:8px 18px;">Sign In</a>
+      <a href="#" class="btn-lime" style="font-size:12px;padding:8px 18px;">
+        <i data-lucide="play"></i>
+        Apply to Apex
+      </a>
+    </div>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Cohort 07 — Now Open</div>
-    <h1 class="hero-title reveal">
-      Learn from<br>the <em>best.</em><br>Become<br>the best.
-    </h1>
-    <p class="hero-desc reveal">
-      APEX is the world's most rigorous AI creative masterclass. Twelve weeks of deep, technical craft — with instructors who built the tools that define the industry.
-    </p>
-    <div class="hero-actions reveal">
-      <a href="#" class="btn-acid">Start Application →</a>
-      <a href="#curriculum" class="btn-ghost">View Curriculum</a>
+  <img class="hero-img" src="../../images/creative/creative-1.jpg" alt="Creative studio">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow">AI Creative Masterclass Platform</div>
+      <h1 class="hero-h1">
+        The craft of<br>
+        <em>making things</em><br>
+        with AI.
+      </h1>
     </div>
-    <div class="hero-stat-row reveal">
-      <div>
-        <div class="hero-stat-num">94%</div>
-        <div class="hero-stat-label">Placement Rate</div>
+    <div class="hero-right-text">
+      <p class="hero-sub">
+        Apex is where serious creative practitioners come to master AI as a medium — not as a shortcut. Eleven-week cohorts, led by practitioners who ship real work.
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="#" class="btn-lime">
+          <i data-lucide="arrow-up-right"></i>
+          Apply for Next Cohort
+        </a>
+        <a href="#" class="btn-ghost">
+          <i data-lucide="play-circle"></i>
+          Watch the Brief
+        </a>
       </div>
-      <div>
-        <div class="hero-stat-num">840+</div>
-        <div class="hero-stat-label">Alumni Worldwide</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">12<span style="font-size:24px">wk</span></div>
-        <div class="hero-stat-label">Intensive Program</div>
-      </div>
-    </div>
-  </div>
-  <div class="hero-visual reveal">
-    <div class="hero-card">
-      <div class="module-badge">Live Now</div>
-      <div class="module-title">Module 04: Generative Systems & Creative Direction</div>
-      <ul class="module-list">
-        <li>Prompt architecture & model behavior</li>
-        <li>Latent space navigation techniques</li>
-        <li>AI-assisted design system creation</li>
-        <li>Real-time workflow integration</li>
-        <li>Ethics of synthetic aesthetics</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features section" id="features">
-  <div class="section-label"><span>01</span> Why APEX</div>
-  <div class="features-grid">
-    <div class="feature-card reveal">
-      <div class="feature-num">01</div>
-      <div class="feature-title">Industry-Tier Mentorship</div>
-      <div class="feature-desc">Work directly with creative directors, AI researchers, and design leads from studios shaping the next decade of digital culture.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-num">02</div>
-      <div class="feature-title">Project-Based Learning</div>
-      <div class="feature-desc">No passive lectures. Every week culminates in a deliverable that goes into your portfolio — reviewed by working professionals.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-num">03</div>
-      <div class="feature-title">Cutting-Edge Toolchain</div>
-      <div class="feature-desc">Full access to proprietary toolkits, private model APIs, and exclusive beta software not available to the general public.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-num">04</div>
-      <div class="feature-title">Global Alumni Network</div>
-      <div class="feature-desc">Join 840+ alumni at Figma, Runway, Apple Design, Google DeepMind, and 200+ leading agencies worldwide.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-num">05</div>
-      <div class="feature-title">Asynchronous-First Design</div>
-      <div class="feature-desc">Built for professionals. Work at your pace, attend live critiques bi-weekly, and access session recordings indefinitely.</div>
-    </div>
-    <div class="feature-card reveal">
-      <div class="feature-num">06</div>
-      <div class="feature-title">Placement Guarantee</div>
-      <div class="feature-desc">94% of APEX graduates land senior roles or launch funded ventures within 90 days of completion. Or we work with you until they do.</div>
-    </div>
-  </div>
-</section>
-
-<!-- CURRICULUM -->
-<section class="curriculum" id="curriculum">
-  <div class="curriculum-grid">
-    <div class="curriculum-intro reveal">
-      <div class="section-label" style="margin-bottom:32px"><span>02</span> Curriculum</div>
-      <h2>Twelve weeks.<br>One hundred crafts.</h2>
-      <p>The APEX curriculum is rebuilt every cohort to reflect the frontier — not the textbook. Each module is co-designed with practitioners actively working at the intersection of AI and design.</p>
-      <div class="serrated-bar"></div>
-      <a href="#" class="btn-acid">Download Syllabus →</a>
-    </div>
-    <div class="module-stack reveal">
-      <div class="module-item">
-        <div class="module-item-left">
-          <div class="module-index">01</div>
-          <div class="module-name">Foundations of AI-Augmented Design</div>
+      <div class="pilot-card">
+        <div class="pilot-label">Next cohort opens</div>
+        <div class="pilot-row">
+          <div>
+            <div class="pilot-title">Spring 2026 — 11 Weeks</div>
+            <div style="font-family:var(--mono);font-size:9px;color:rgba(231,229,228,0.3);margin-top:4px;">April 14 — June 29</div>
+          </div>
+          <div class="pilot-meta">18 seats remaining</div>
         </div>
-        <div class="module-duration">2 wks</div>
-      </div>
-      <div class="module-item">
-        <div class="module-item-left">
-          <div class="module-index">02</div>
-          <div class="module-name">Visual Language & Aesthetic Direction</div>
-        </div>
-        <div class="module-duration">2 wks</div>
-      </div>
-      <div class="module-item">
-        <div class="module-item-left">
-          <div class="module-index">03</div>
-          <div class="module-name">Motion, Systems & Interface Design</div>
-        </div>
-        <div class="module-duration">2 wks</div>
-      </div>
-      <div class="module-item">
-        <div class="module-item-left">
-          <div class="module-index">04</div>
-          <div class="module-name">Generative Systems & Creative Direction</div>
-        </div>
-        <div class="module-duration">2 wks</div>
-      </div>
-      <div class="module-item">
-        <div class="module-item-left">
-          <div class="module-index">05</div>
-          <div class="module-name">Brand Identity in the AI Era</div>
-        </div>
-        <div class="module-duration">2 wks</div>
-      </div>
-      <div class="module-item">
-        <div class="module-item-left">
-          <div class="module-index">06</div>
-          <div class="module-name">Capstone Project & Portfolio Review</div>
-        </div>
-        <div class="module-duration">2 wks</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- INSTRUCTORS -->
-<section class="instructors" id="instructors">
-  <div class="section-label"><span>03</span> Mentors</div>
-  <div class="instructor-grid">
-    <div class="instructor-card reveal">
-      <div class="instructor-avatar">M</div>
-      <div class="instructor-name">Maya Okonkwo</div>
-      <div class="instructor-role">Creative Director, Runway</div>
-      <div class="instructor-bio">Former VP Design at Adobe. Led the visual identity for three of the decade's most-cited AI product launches.</div>
+<!-- TRACKS -->
+<section class="program-section reveal">
+  <div class="sec-label">Curriculum</div>
+  <h2 class="sec-h2">
+    Eleven weeks of practice,<br>
+    <em>not passive watching.</em>
+  </h2>
+  <div class="tracks">
+    <div class="track featured">
+      <div class="track-num">Core / Weeks 1–4</div>
+      <div class="track-icon"><i data-lucide="layers"></i></div>
+      <div class="track-title">Foundations of AI as<br>a creative medium</div>
+      <div class="track-body">The first four weeks dismantle the idea that AI is a button you push. Instead, you'll build a working model of how generative systems think — and learn to direct them with the same intentionality you bring to any other medium.</div>
+      <div style="margin-top:24px;">
+        <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.18em;color:rgba(231,229,228,0.2);margin-bottom:12px;">You'll cover</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);">
+            <i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--lime);flex-shrink:0;"></i>
+            Prompt architecture and system design
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);">
+            <i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--lime);flex-shrink:0;"></i>
+            Model behavior and creative constraints
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);">
+            <i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--lime);flex-shrink:0;"></i>
+            Building a repeatable aesthetic system
+          </div>
+        </div>
+      </div>
+      <span class="track-weeks">4 weeks · 12 live sessions</span>
     </div>
-    <div class="instructor-card reveal">
-      <div class="instructor-avatar">K</div>
-      <div class="instructor-name">Kaito Ishida</div>
-      <div class="instructor-role">AI Research Lead, Google</div>
-      <div class="instructor-bio">Co-author of foundational papers on diffusion model aesthetics. Builds the tools practitioners use daily.</div>
+
+    <div class="track">
+      <div class="track-num">Advanced / Week 5–8</div>
+      <div class="track-icon"><i data-lucide="code-2"></i></div>
+      <div class="track-title">Production pipelines and applied tooling</div>
+      <div class="track-body">From Figma-to-model workflows to custom fine-tuning. How to take AI output from draft to deliverable.</div>
+      <span class="track-weeks">4 weeks</span>
     </div>
-    <div class="instructor-card reveal">
-      <div class="instructor-avatar">S</div>
-      <div class="instructor-name">Sofia Reyes</div>
-      <div class="instructor-role">Founding Partner, Studio Null</div>
-      <div class="instructor-bio">Award-winning art director behind campaigns for Nike, Dior, and Apple. Passionate about AI's role in editorial craft.</div>
+
+    <div class="track">
+      <div class="track-num">Advanced / Week 5–8</div>
+      <div class="track-icon"><i data-lucide="video"></i></div>
+      <div class="track-title">Motion, narrative, and temporal design</div>
+      <div class="track-body">AI-directed animation, video synthesis, and building narrative arcs through generative systems.</div>
+      <span class="track-weeks">4 weeks</span>
+    </div>
+
+    <div class="track">
+      <div class="track-num">Capstone / Week 9–11</div>
+      <div class="track-icon"><i data-lucide="award"></i></div>
+      <div class="track-title">Build and ship a real project</div>
+      <div class="track-body">A client-grade project, completed under instructor review. Every graduate ships something they'd actually put in their portfolio.</div>
+      <span class="track-weeks">3 weeks · public review</span>
+    </div>
+
+    <div class="track">
+      <div class="track-num">Capstone / Week 9–11</div>
+      <div class="track-icon"><i data-lucide="users"></i></div>
+      <div class="track-title">Critique and collective feedback</div>
+      <div class="track-body">Weekly critique sessions with peers and instructors. Not just praise — structured, rigorous feedback that sharpens your eye.</div>
+      <span class="track-weeks">3 weeks · 6 critiques</span>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="proof">
-  <div class="section-label"><span>04</span> Alumni</div>
-  <div class="testimonials-grid">
-    <div class="testimonial-card reveal">
-      <p class="testimonial-text">"APEX didn't just teach me tools. It rebuilt how I think about creative work entirely. I shipped more in the three months after graduation than in the three years before."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-dot">JL</div>
-        <div>
-          <div class="testimonial-name">Jordan Lee</div>
-          <div class="testimonial-title">Senior Designer, Figma</div>
-        </div>
-      </div>
+<!-- INSTRUCTOR -->
+<div class="instructor-section">
+  <div class="instructor-inner reveal">
+    <div class="instructor-img">
+      <img src="../../images/creative/creative-3.jpg" alt="Lead instructor">
+      <div class="instructor-img-label">Fig. 01 — Lead Instructor</div>
     </div>
-    <div class="testimonial-card reveal">
-      <p class="testimonial-text">"The mentorship model is what sets APEX apart. Real feedback from people doing the work — not just explaining it. My portfolio went from 'interesting' to 'when can you start?'"</p>
-      <div class="testimonial-author">
-        <div class="testimonial-dot">AR</div>
-        <div>
-          <div class="testimonial-name">Amara Roth</div>
-          <div class="testimonial-title">Creative Technologist, Apple Design</div>
-        </div>
+    <div>
+      <blockquote class="instructor-quote">
+        "The goal isn't to make AI do your work. It's to make it do work you couldn't do without it — and still have it be unmistakably yours."
+      </blockquote>
+      <div class="instructor-name">Marisol Vega</div>
+      <div class="instructor-role">Lead Instructor, Apex — Director at Studio Forma</div>
+      <div style="margin-top:28px;font-size:14px;color:var(--muted);line-height:1.65;">
+        Marisol has shipped AI-augmented work for Nike, A24, and the Serpentine Gallery. She designed the Apex curriculum over two years of running informal cohorts with practitioners across disciplines.
       </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <p class="testimonial-text">"I came in as a graphic designer. I left as an AI-native creative director. APEX is the only program that operates at the actual frontier — not three years behind it."</p>
-      <div class="testimonial-author">
-        <div class="testimonial-dot">TP</div>
-        <div>
-          <div class="testimonial-name">Thomas Park</div>
-          <div class="testimonial-title">Co-founder, Signal Studio</div>
-        </div>
+      <div style="margin-top:24px;display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:var(--lime);padding:4px 10px;border:1px solid rgba(200,242,80,0.2);border-radius:9999px;">12 Instructors</span>
+        <span style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(231,229,228,0.4);padding:4px 10px;border:1px solid var(--border);border-radius:9999px;">All Active Practitioners</span>
       </div>
     </div>
   </div>
-</section>
+</div>
+
+<!-- SERRATED STATS -->
+<div class="serrated-section">
+  <div class="stats-grid reveal">
+    <div class="stat">
+      <div class="stat-num">96<span class="lime">%</span></div>
+      <div class="stat-label">Alumni rate the program as<br>career-defining</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">11<span class="lime">wk</span></div>
+      <div class="stat-label">Intensive cohort structure,<br>not a passive course</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">840<span class="lime">+</span></div>
+      <div class="stat-label">Graduates across design,<br>motion, and interactive</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">18</div>
+      <div class="stat-label">Seats per cohort — by<br>application only</div>
+    </div>
+  </div>
+</div>
 
 <!-- CTA -->
-<section class="cta-section" id="pricing">
-  <div class="cta-inner reveal">
-    <div class="hero-eyebrow" style="justify-content:center;margin-bottom:20px">Cohort 07 — 12 spots remaining</div>
-    <h2>Your work,<br>elevated.</h2>
-    <p>Applications close April 15th. The next cohort begins May 1st. Twelve weeks to become the creative you were meant to be.</p>
-    <div class="cta-actions">
-      <a href="#" class="btn-acid" style="padding:14px 36px;font-size:12px">Apply for Cohort 07</a>
-      <a href="#" class="btn-ghost" style="padding:14px 36px;font-size:12px">Book a Call</a>
-    </div>
+<div class="cta-section reveal">
+  <div class="sec-label" style="color:rgba(200,242,80,0.5);margin-bottom:14px;">Next cohort: April 2026</div>
+  <h2 class="cta-h2">
+    Make the work<br>
+    <em>only you can make.</em>
+  </h2>
+  <p class="cta-sub">18 seats. Application-only. The next cohort opens April 14.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a href="#" class="btn-lime" style="font-size:15px;padding:14px 30px;">
+      <i data-lucide="arrow-up-right"></i>
+      Submit Your Application
+    </a>
+    <a href="#" class="btn-ghost" style="font-size:15px;padding:14px 30px;">
+      Download the Syllabus
+    </a>
   </div>
-</section>
+</div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-logo">APEX</div>
-      <div class="footer-tagline">The world's most rigorous AI creative masterclass</div>
-    </div>
-    <div class="footer-links">
-      <div class="footer-col">
-        <div class="footer-col-title">Program</div>
-        <a href="#">Curriculum</a>
-        <a href="#">Mentors</a>
-        <a href="#">Alumni</a>
-        <a href="#">FAQ</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Company</div>
-        <a href="#">About</a>
-        <a href="#">Blog</a>
-        <a href="#">Careers</a>
-        <a href="#">Press</a>
-      </div>
-    </div>
+  <a href="#" class="logo" style="font-size:1.2rem;">APEX<span style="color:var(--lime)">.</span></a>
+  <div class="f-links">
+    <a href="#">Curriculum</a>
+    <a href="#">Instructors</a>
+    <a href="#">Alumni</a>
+    <a href="#">Enterprise</a>
+    <a href="#">Blog</a>
   </div>
-  <div class="footer-bottom">
-    <span>© 2024 APEX Creative. All rights reserved.</span>
-    <div style="display:flex;gap:24px">
-      <a href="#" style="color:var(--muted);text-decoration:none">Privacy</a>
-      <a href="#" style="color:var(--muted);text-decoration:none">Terms</a>
-    </div>
-  </div>
+  <div style="font-family:var(--mono);font-size:10px;color:rgba(231,229,228,0.15);">&copy; 2026 Apex Creative Institute</div>
 </footer>
 
 <script>
-const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver((entries) => {
-  entries.forEach((e,i) => {
-    if(e.isIntersecting){
-      setTimeout(()=>e.target.classList.add('visible'),i*80);
-      io.unobserve(e.target);
-    }
-  });
-},{threshold:.1});
-reveals.forEach(el=>io.observe(el));
+  lucide.createIcons();
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>

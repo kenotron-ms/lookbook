@@ -1,630 +1,567 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CONNECT.IO — Integration Platform</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONNECT.IO — Integration Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #060608;
+      --fg: #eeeaf4;
+      --accent: #8b5cf6;
+      --accent2: #a78bfa;
+      --border: rgba(238,234,244,0.08);
+      --mid: rgba(238,234,244,0.45);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ── Orbit container ── */
+    .orbit-wrapper {
+      position: relative;
+      width: 540px;
+      height: 540px;
+      flex-shrink: 0;
+    }
 
-  :root {
-    --bg: #f8fafc;
-    --dark: #0f172a;
-    --accent: #0ea5e9;
-    --accent2: #6366f1;
-    --green: #22c55e;
-    --border: rgba(15,23,42,0.08);
-    --muted: rgba(15,23,42,0.45);
-    --card: #ffffff;
-  }
+    /* ── Center hub ── */
+    .center-hub {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+    .center-logo {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #6d28d9);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 12px rgba(139,92,246,0.08), 0 0 0 24px rgba(139,92,246,0.04), 0 0 60px rgba(139,92,246,0.3);
+    }
 
-  html { scroll-behavior: smooth; }
+    /* ── Rings ── */
+    .ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      border-radius: 50%;
+      border: 1px solid rgba(139,92,246,0.15);
+    }
+    .ring-outer {
+      width: 500px; height: 500px;
+      transform: translate(-50%, -50%);
+      animation: spinCW 22s linear infinite;
+    }
+    .ring-inner {
+      width: 320px; height: 320px;
+      transform: translate(-50%, -50%);
+      animation: spinCCW 28s linear infinite;
+    }
 
-  body {
-    background: var(--bg);
-    color: var(--dark);
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
-  }
+    @keyframes spinCW { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+    @keyframes spinCCW { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(-360deg); } }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 56px;
-    background: rgba(248,250,252,0.9);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo {
-    font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
-    color: var(--dark); text-decoration: none;
-  }
-  .logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a {
-    font-size: 13px; font-weight: 500; color: var(--muted);
-    text-decoration: none; transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--dark); }
-  .nav-group { display: flex; gap: 12px; align-items: center; }
-  .nav-login {
-    font-size: 13px; font-weight: 600; color: var(--dark);
-    text-decoration: none; transition: color 0.2s;
-  }
-  .nav-login:hover { color: var(--accent); }
-  .nav-cta {
-    background: var(--dark); color: #fff;
-    font-size: 13px; font-weight: 700;
-    padding: 10px 22px; border-radius: 8px;
-    text-decoration: none; transition: background 0.2s;
-  }
-  .nav-cta:hover { background: var(--accent); }
+    /* ── Partner nodes on orbit rings ── */
+    /* Outer ring: 8 partners, radius = 250px */
+    .node-outer {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
+    }
+    .node-outer-item {
+      position: absolute;
+      transform-origin: center;
+    }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 120px 56px 60px;
-    text-align: center; position: relative; overflow: hidden;
-  }
-  .hero-chip {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: #fff; border: 1px solid var(--border);
-    border-radius: 40px; padding: 8px 16px; margin-bottom: 36px;
-    font-size: 12px; font-weight: 600; color: var(--dark);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    opacity: 0; animation: up 0.6s ease 0.2s forwards;
-  }
-  .chip-new {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff; font-size: 10px; font-weight: 800;
-    padding: 2px 8px; border-radius: 20px;
-  }
-  .hero-title {
-    font-size: clamp(48px, 8vw, 96px); font-weight: 800;
-    letter-spacing: -0.04em; line-height: 1.0;
-    margin-bottom: 24px;
-    opacity: 0; animation: up 0.7s ease 0.4s forwards;
-  }
-  .hero-title span {
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .hero-sub {
-    font-size: 18px; font-weight: 400; color: var(--muted);
-    max-width: 540px; line-height: 1.7; margin-bottom: 48px;
-    opacity: 0; animation: up 0.7s ease 0.6s forwards;
-  }
-  .hero-ctas {
-    display: flex; gap: 14px;
-    opacity: 0; animation: up 0.7s ease 0.8s forwards;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff; font-size: 15px; font-weight: 700;
-    padding: 15px 36px; border-radius: 10px;
-    text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(14,165,233,0.3); }
-  .btn-secondary {
-    border: 1px solid var(--border); color: var(--dark);
-    background: #fff; font-size: 15px; font-weight: 600;
-    padding: 15px 36px; border-radius: 10px;
-    text-decoration: none; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .btn-secondary:hover { border-color: rgba(14,165,233,0.4); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    /* Each node label counter-rotates so text stays upright */
+    .node-label {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+    }
 
-  /* Background decoration */
-  .hero-bg {
-    position: absolute; inset: 0; pointer-events: none; z-index: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 50% 20%, rgba(14,165,233,0.06) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99,102,241,0.05) 0%, transparent 70%);
-  }
-  .hero > * { position: relative; z-index: 1; }
+    /* Node pill styles */
+    .partner-pill {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px;
+      border: 1px solid rgba(139,92,246,0.25);
+      border-radius: 99px;
+      background: rgba(6,6,8,0.9);
+      backdrop-filter: blur(8px);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      color: var(--fg);
+      white-space: nowrap;
+      cursor: default;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 16px rgba(139,92,246,0.1);
+    }
+    .partner-pill:hover {
+      border-color: rgba(139,92,246,0.5);
+      box-shadow: 0 0 24px rgba(139,92,246,0.2);
+    }
+    .partner-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+    }
 
-  /* ── STATS ── */
-  .stats {
-    padding: 48px 56px;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: #fff;
-  }
-  .stats-inner {
-    max-width: 1100px; margin: 0 auto;
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 0; text-align: center;
-  }
-  .stat { padding: 20px; border-right: 1px solid var(--border); }
-  .stat:last-child { border-right: none; }
-  .stat-num {
-    font-size: 36px; font-weight: 800; letter-spacing: -0.03em;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .stat-label { font-size: 13px; font-weight: 500; color: var(--muted); margin-top: 4px; }
+    /* ── Glow bg ── */
+    .glow-bg {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
 
-  /* ── ROTATING LOGOS SECTION ── */
-  .partners {
-    padding: 100px 56px;
-    text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .partners-tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
-  }
-  .partners-title {
-    font-size: clamp(32px, 5vw, 52px); font-weight: 800;
-    letter-spacing: -0.03em; margin-bottom: 12px;
-  }
-  .partners-sub {
-    font-size: 16px; color: var(--muted); margin-bottom: 80px;
-    max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6;
-  }
+    /* ── Fade up ── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.is-visible { opacity: 1; transform: none; }
 
-  /* Circular rotating orbit */
-  .orbit-container {
-    position: relative;
-    width: 560px; height: 560px;
-    margin: 0 auto 80px;
-  }
-  .orbit-center {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100px; height: 100px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 24px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 20px 60px rgba(14,165,233,0.35);
-    z-index: 2;
-  }
-  .orbit-center span {
-    font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.02em;
-  }
-  .orbit-ring {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    border-radius: 50%;
-    border: 1px dashed rgba(14,165,233,0.2);
-  }
-  .orbit-ring.ring2 {
-    top: 60px; left: 60px; right: 60px; bottom: 60px;
-    border-color: rgba(99,102,241,0.15);
-  }
+    /* ── Clip line ── */
+    .clip-line { overflow: hidden; }
+    .clip-inner { display: block; transform: translateY(108%); transition: transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .clip-line.is-visible .clip-inner { transform: translateY(0); }
 
-  /* Rotating logo wrapper — logos counter-rotate to stay upright */
-  .orbit-logos {
-    position: absolute; inset: 0;
-    animation: orbitSpin 22s linear infinite;
-  }
-  .orbit-logos.reverse { animation: orbitSpinRev 28s linear infinite; }
+    /* ── Badge ── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid rgba(139,92,246,0.3);
+      padding: 4px 12px;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      background: rgba(139,92,246,0.08);
+      color: var(--accent2);
+    }
 
-  .logo-node {
-    position: absolute;
-    width: 64px; height: 64px;
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    display: flex; align-items: center; justify-content: center;
-    /* counter-rotate so logo stays upright */
-    animation: counterSpin 22s linear infinite;
-    transition: box-shadow 0.3s, transform 0.3s;
-    cursor: pointer;
-  }
-  .logo-node:hover {
-    box-shadow: 0 8px 32px rgba(14,165,233,0.2);
-    transform: scale(1.1);
-  }
-  .orbit-logos.reverse .logo-node { animation: counterSpinRev 28s linear infinite; }
+    /* ── Feature row ── */
+    .feature-row {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border);
+      align-items: start;
+    }
 
-  .logo-node span {
-    font-size: 10px; font-weight: 800; letter-spacing: -0.01em;
-    color: var(--dark); text-align: center; line-height: 1.2;
-  }
-  .logo-node .dot { color: var(--accent); }
+    /* ── Stat ── */
+    .stat-num { font-size: clamp(32px, 5vw, 64px); font-weight: 700; letter-spacing: -0.05em; line-height: 1; }
 
-  /* Position 8 logos evenly around a circle */
-  /* Outer ring (280px radius) — 8 logos */
-  .logo-node { --r: 250px; }
-  .ln1  { --a: 0deg; }
-  .ln2  { --a: 45deg; }
-  .ln3  { --a: 90deg; }
-  .ln4  { --a: 135deg; }
-  .ln5  { --a: 180deg; }
-  .ln6  { --a: 225deg; }
-  .ln7  { --a: 270deg; }
-  .ln8  { --a: 315deg; }
+    /* ── Plan card ── */
+    .plan { border: 1px solid var(--border); padding: 2.5rem 2rem; }
+    .plan.active { border-color: rgba(139,92,246,0.4); background: rgba(139,92,246,0.04); }
 
-  .logo-node {
-    top: calc(50% - 32px + sin(var(--a)) * var(--r));
-    left: calc(50% - 32px + cos(var(--a)) * var(--r));
-  }
-
-  /* Inner ring logos */
-  .ln9,.ln10,.ln11,.ln12 { --r: 160px; }
-  .ln9  { --a: 22.5deg; }
-  .ln10 { --a: 112.5deg; }
-  .ln11 { --a: 202.5deg; }
-  .ln12 { --a: 292.5deg; }
-  .ln9,.ln10,.ln11,.ln12 {
-    width: 52px; height: 52px; border-radius: 12px;
-  }
-
-  @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  @keyframes orbitSpinRev { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
-  @keyframes counterSpin { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
-  @keyframes counterSpinRev { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-  /* Marquee logos strip at bottom */
-  .logo-marquee {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 24px 0; overflow: hidden;
-    background: #fff;
-  }
-  .marquee-track {
-    display: flex; gap: 60px; animation: marquee 20s linear infinite;
-    white-space: nowrap;
-  }
-  .marquee-logo {
-    font-size: 14px; font-weight: 800; letter-spacing: -0.01em;
-    color: rgba(15,23,42,0.25); flex-shrink: 0;
-    transition: color 0.2s;
-  }
-  .marquee-logo:hover { color: var(--dark); }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-  /* ── FEATURES ── */
-  .features {
-    padding: 100px 56px;
-    max-width: 1200px; margin: 0 auto;
-  }
-  .feat-header { margin-bottom: 56px; }
-  .feat-tag {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
-  }
-  .feat-title {
-    font-size: clamp(32px, 4.5vw, 52px); font-weight: 800;
-    letter-spacing: -0.03em; line-height: 1.05;
-  }
-  .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .feat-card {
-    background: #fff; border: 1px solid var(--border);
-    border-radius: 16px; padding: 32px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-  }
-  .feat-card:hover {
-    border-color: rgba(14,165,233,0.3);
-    box-shadow: 0 8px 32px rgba(14,165,233,0.1);
-    transform: translateY(-4px);
-  }
-  .feat-icon {
-    width: 44px; height: 44px; border-radius: 10px;
-    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(99,102,241,0.1));
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 20px;
-  }
-  .feat-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
-  .feat-name { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
-  .feat-desc { font-size: 13px; line-height: 1.7; color: var(--muted); }
-
-  /* ── TESTIMONIALS ── */
-  .testimonials { padding: 100px 56px; background: var(--dark); color: #fff; }
-  .testi-inner { max-width: 1200px; margin: 0 auto; }
-  .testi-title {
-    font-size: clamp(32px, 4.5vw, 52px); font-weight: 800;
-    letter-spacing: -0.03em; margin: 16px 0 56px;
-  }
-  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .testi {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px; padding: 32px;
-    transition: border-color 0.3s;
-  }
-  .testi:hover { border-color: rgba(14,165,233,0.3); }
-  .testi-stars { font-size: 13px; color: #fbbf24; margin-bottom: 16px; }
-  .testi-text { font-size: 14px; line-height: 1.75; color: rgba(255,255,255,0.65); margin-bottom: 24px; font-style: italic; }
-  .testi-by { display: flex; gap: 12px; align-items: center; }
-  .testi-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
-  .testi-name { font-size: 13px; font-weight: 700; }
-  .testi-role { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-
-  /* ── CTA ── */
-  .cta { padding: 100px 56px; text-align: center; }
-  .cta h2 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 20px; }
-  .cta h2 span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .cta p { font-size: 17px; color: var(--muted); max-width: 440px; margin: 0 auto 48px; line-height: 1.65; }
-  .cta-form { display: flex; gap: 12px; max-width: 400px; margin: 0 auto; }
-  .cta-input {
-    flex: 1; background: #fff; border: 1px solid var(--border);
-    color: var(--dark); font-family: 'Inter', sans-serif;
-    font-size: 14px; padding: 13px 18px; border-radius: 10px;
-    outline: none; transition: border-color 0.2s;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  }
-  .cta-input:focus { border-color: var(--accent); }
-  .cta-input::placeholder { color: rgba(15,23,42,0.3); }
-
-  /* ── FOOTER ── */
-  footer { background: var(--dark); color: #fff; padding: 40px 56px; border-top: 1px solid rgba(255,255,255,0.06); }
-  .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  .footer-logo { font-size: 16px; font-weight: 800; text-decoration: none; color: #fff; }
-  .footer-logo span { color: var(--accent); }
-  .footer-nav { display: flex; gap: 28px; list-style: none; }
-  .footer-nav a { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
-  .footer-nav a:hover { color: #fff; }
-  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
-
-  @keyframes up {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-</style>
-
-<!-- inject-local -->
-<style>
-  .hero-bg {
-    background-image: url('../../images/tech/tech-1.jpg') !important;
-    background-size: cover; background-position: center;
-  }
-</style>
+    nav a { font-size: 0.78rem; color: rgba(238,234,244,0.4); transition: color 0.3s; letter-spacing: 0.06em; }
+    nav a:hover { color: var(--fg); }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="#" class="logo">CONNECT<span>.IO</span></a>
-  <ul class="nav-links">
-    <li><a href="#integrations">Integrations</a></li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#docs">Docs</a></li>
-  </ul>
-  <div class="nav-group">
-    <a href="#" class="nav-login">Sign In</a>
-    <a href="#" class="nav-cta">Get Started Free →</a>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-chip">
-    <span class="chip-new">NEW</span>
-    Now with 150+ native integrations
-  </div>
-  <h1 class="hero-title">Connect every tool.<br/><span>Ship faster.</span></h1>
-  <p class="hero-sub">CONNECT.IO links your entire tech stack with zero-code integrations and real-time data sync — so your team can focus on building, not plumbing.</p>
-  <div class="hero-ctas">
-    <a href="#" class="btn-primary">Start Free — No Credit Card</a>
-    <a href="#integrations" class="btn-secondary">See Integrations →</a>
-  </div>
-</section>
-
-<!-- STATS -->
-<div class="stats">
-  <div class="stats-inner">
-    <div class="stat"><p class="stat-num">150+</p><p class="stat-label">Native integrations</p></div>
-    <div class="stat"><p class="stat-num">12M</p><p class="stat-label">Events synced daily</p></div>
-    <div class="stat"><p class="stat-num">99.98%</p><p class="stat-label">API uptime</p></div>
-    <div class="stat"><p class="stat-num">4,200+</p><p class="stat-label">Teams connected</p></div>
-  </div>
-</div>
-
-<!-- ROTATING LOGOS / INTEGRATIONS -->
-<section class="partners" id="integrations">
-  <p class="partners-tag">Our Ecosystem</p>
-  <h2 class="partners-title">Connects with everything<br/>your team already uses</h2>
-  <p class="partners-sub" style="margin-bottom:80px;">From CRMs to data warehouses — CONNECT.IO keeps your tools talking to each other automatically.</p>
-
-  <div class="orbit-container">
-    <!-- Outer orbit ring visual -->
-    <div class="orbit-ring"></div>
-    <div class="orbit-ring ring2"></div>
-
-    <!-- Center logo -->
-    <div class="orbit-center">
-      <span>C.IO</span>
+<!-- ══ NAV ══ -->
+<header class="fixed top-0 left-0 right-0 z-50 px-8 py-4 flex items-center justify-between" style="background: rgba(6,6,8,0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);">
+  <div class="flex items-center gap-2">
+    <div style="width:20px;height:20px;background:linear-gradient(135deg,var(--accent),#6d28d9);border-radius:4px;display:flex;align-items:center;justify-content:center;">
+      <i data-lucide="zap" style="width:11px;height:11px;color:#fff;"></i>
     </div>
-
-    <!-- Outer orbit — 8 logos rotating -->
-    <div class="orbit-logos">
-      <div class="logo-node ln1"><span>Sales<span class="dot">.</span>CRM</span></div>
-      <div class="logo-node ln2"><span>Stripe<span class="dot">.</span></span></div>
-      <div class="logo-node ln3"><span>Slack<span class="dot">.</span></span></div>
-      <div class="logo-node ln4"><span>Hub<span class="dot">.</span>Spot</span></div>
-      <div class="logo-node ln5"><span>AWS<span class="dot">.</span>S3</span></div>
-      <div class="logo-node ln6"><span>Notion<span class="dot">.</span></span></div>
-      <div class="logo-node ln7"><span>Linear<span class="dot">.</span></span></div>
-      <div class="logo-node ln8"><span>Sheet<span class="dot">.</span>DB</span></div>
-    </div>
-
-    <!-- Inner orbit — 4 logos counter-rotating -->
-    <div class="orbit-logos reverse">
-      <div class="logo-node ln9"><span>PG<span class="dot">.</span>SQL</span></div>
-      <div class="logo-node ln10"><span>Mix<span class="dot">.</span>pan</span></div>
-      <div class="logo-node ln11"><span>Jira<span class="dot">.</span></span></div>
-      <div class="logo-node ln12"><span>Fig<span class="dot">.</span>ma</span></div>
-    </div>
+    <span class="font-semibold text-sm">CONNECT.IO</span>
   </div>
-
-  <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; max-width:700px; margin:0 auto;">
-    <span style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.04);">Salesforce</span>
-    <span style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.04);">Zendesk</span>
-    <span style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.04);">Intercom</span>
-    <span style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.04);">Segment</span>
-    <span style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.04);">BigQuery</span>
-    <span style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.04);">Snowflake</span>
-    <span style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;color:var(--accent);">+ 144 more →</span>
+  <nav class="hidden md:flex items-center gap-9">
+    <a href="#integrations">Integrations</a>
+    <a href="#platform">Platform</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#docs">Docs</a>
+  </nav>
+  <div class="flex items-center gap-3">
+    <a href="#" class="mono text-xs" style="color: rgba(238,234,244,0.35); letter-spacing: 0.06em;">Sign in</a>
+    <a href="#" class="mono text-xs px-5 py-2.5 transition-all hover:opacity-85" style="background: var(--accent); color: #fff; letter-spacing: 0.06em;">
+      Start Integrating
+    </a>
   </div>
-</section>
+</header>
 
-<!-- MARQUEE -->
-<div class="logo-marquee">
-  <div class="marquee-track">
-    <span class="marquee-logo">Salesforce</span>
-    <span class="marquee-logo">Stripe</span>
-    <span class="marquee-logo">HubSpot</span>
-    <span class="marquee-logo">Slack</span>
-    <span class="marquee-logo">Notion</span>
-    <span class="marquee-logo">Linear</span>
-    <span class="marquee-logo">Jira</span>
-    <span class="marquee-logo">Segment</span>
-    <span class="marquee-logo">Mixpanel</span>
-    <span class="marquee-logo">BigQuery</span>
-    <span class="marquee-logo">Snowflake</span>
-    <span class="marquee-logo">Figma</span>
-    <span class="marquee-logo">Salesforce</span>
-    <span class="marquee-logo">Stripe</span>
-    <span class="marquee-logo">HubSpot</span>
-    <span class="marquee-logo">Slack</span>
-    <span class="marquee-logo">Notion</span>
-    <span class="marquee-logo">Linear</span>
-    <span class="marquee-logo">Jira</span>
-    <span class="marquee-logo">Segment</span>
-    <span class="marquee-logo">Mixpanel</span>
-    <span class="marquee-logo">BigQuery</span>
-    <span class="marquee-logo">Snowflake</span>
-    <span class="marquee-logo">Figma</span>
-  </div>
-</div>
+<!-- ══ HERO ══ -->
+<section class="min-h-screen pt-28 pb-20 px-8 relative overflow-hidden flex flex-col justify-center" style="border-bottom: 1px solid var(--border);">
 
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="feat-header">
-    <p class="feat-tag">Platform Capabilities</p>
-    <h2 class="feat-title">Integration without<br/>the integration tax</h2>
-  </div>
-  <div class="feat-grid">
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      </div>
-      <h3 class="feat-name">Real-Time Sync</h3>
-      <p class="feat-desc">Sub-100ms event propagation between all connected tools. No polling, no delays — pure webhook-driven speed.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      </div>
-      <h3 class="feat-name">Visual Flow Builder</h3>
-      <p class="feat-desc">Drag-and-drop logic builder. If-this-then-that pipelines with branching, filtering, and transformation — no code needed.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      </div>
-      <h3 class="feat-name">Data Transformation</h3>
-      <p class="feat-desc">Map, enrich, and reshape data between systems. Built-in functions, custom JavaScript, and AI-assisted mapping.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-      </div>
-      <h3 class="feat-name">Observability</h3>
-      <p class="feat-desc">Full event log, error tracing, and retry management. Debug any integration failure in under 30 seconds.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      </div>
-      <h3 class="feat-name">Scheduled Triggers</h3>
-      <p class="feat-desc">Cron-based and time-triggered automations. Run nightly reports, weekly digests, or monthly data exports automatically.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">
-        <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-      </div>
-      <h3 class="feat-name">Native API Access</h3>
-      <p class="feat-desc">Go beyond pre-built connectors. Hit any REST or GraphQL endpoint with authenticated sessions managed for you.</p>
-    </div>
-  </div>
-</section>
+  <!-- Background glow -->
+  <div class="glow-bg" style="width:700px;height:700px;background:rgba(139,92,246,0.06);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="testi-inner">
-    <p class="feat-tag" style="color:var(--accent);">Social Proof</p>
-    <h2 class="testi-title">Trusted by engineering<br/>teams worldwide</h2>
-    <div class="testi-grid">
-      <div class="testi">
-        <p class="testi-stars">★★★★★</p>
-        <p class="testi-text">"We replaced 3 custom ETL pipelines and a Zapier subscription with CONNECT.IO in an afternoon. It's insane how good the data mapping is."</p>
-        <div class="testi-by">
-          <div class="testi-av" style="background:linear-gradient(135deg,#0ea5e9,#6366f1);">CT</div>
-          <div><p class="testi-name">Clara Torres</p><p class="testi-role">Engineering Lead, Flowbase</p></div>
+  <div class="max-w-7xl mx-auto w-full relative z-10">
+    <div class="flex flex-col lg:flex-row items-center gap-16 justify-between">
+
+      <!-- Left copy -->
+      <div class="flex-1 max-w-2xl">
+        <div class="badge fade-up mb-8 mono">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;"></span>
+          200+ INTEGRATIONS — LIVE
+        </div>
+
+        <div class="clip-line mb-2">
+          <h1 class="clip-inner font-bold" style="font-size: clamp(40px, 7.5vw, 104px); line-height: 0.88; letter-spacing: -0.05em;">
+            Connect Every
+          </h1>
+        </div>
+        <div class="clip-line" style="transition-delay: 0.12s;">
+          <h1 class="clip-inner font-bold" style="font-size: clamp(40px, 7.5vw, 104px); line-height: 0.88; letter-spacing: -0.05em; color: var(--accent2);">
+            Tool You Use.
+          </h1>
+        </div>
+
+        <p class="fade-up mt-8 text-sm leading-relaxed max-w-md" style="color: rgba(238,234,244,0.5);">
+          CONNECT.IO is the integration layer that eliminates context switching. One API, bidirectional sync, zero glue code — your entire stack communicates in under 5 minutes of setup.
+        </p>
+
+        <div class="fade-up flex flex-col sm:flex-row items-start gap-4 mt-10">
+          <a href="#" class="mono text-xs px-8 py-4 transition-all hover:opacity-85" style="background: var(--accent); color: #fff; letter-spacing: 0.08em;">
+            Connect Your Stack
+          </a>
+          <a href="#integrations" class="mono text-xs px-8 py-4 border transition-colors hover:border-purple-500/40" style="border-color: var(--border); color: rgba(238,234,244,0.55); letter-spacing: 0.08em;">
+            Browse Integrations
+          </a>
+        </div>
+
+        <div class="mt-12 grid grid-cols-3 gap-6 fade-up">
+          <div>
+            <p class="stat-num" style="color: var(--accent2);">200+</p>
+            <p class="mono text-xs mt-1" style="color: rgba(238,234,244,0.3); letter-spacing: 0.08em;">Integrations</p>
+          </div>
+          <div>
+            <p class="stat-num">99.9%</p>
+            <p class="mono text-xs mt-1" style="color: rgba(238,234,244,0.3); letter-spacing: 0.08em;">Uptime</p>
+          </div>
+          <div>
+            <p class="stat-num">5min</p>
+            <p class="mono text-xs mt-1" style="color: rgba(238,234,244,0.3); letter-spacing: 0.08em;">Avg. Setup</p>
+          </div>
         </div>
       </div>
-      <div class="testi">
-        <p class="testi-stars">★★★★★</p>
-        <p class="testi-text">"The Salesforce ↔ Postgres integration would have taken our team 2 weeks to build. CONNECT.IO did it in 20 minutes with zero errors on first run."</p>
-        <div class="testi-by">
-          <div class="testi-av" style="background:linear-gradient(135deg,#22c55e,#16a34a);">AM</div>
-          <div><p class="testi-name">Alex Mitchell</p><p class="testi-role">CTO, Meridian SaaS</p></div>
+
+      <!-- Right: Orbit rings -->
+      <div class="orbit-wrapper">
+        <!-- Glow -->
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(139,92,246,0.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+
+        <!-- Inner ring (4 nodes, CCW 28s) -->
+        <div class="ring ring-inner" id="ring-inner"></div>
+
+        <!-- Outer ring (8 nodes, CW 22s) -->
+        <div class="ring ring-outer" id="ring-outer"></div>
+
+        <!-- Center hub -->
+        <div class="center-hub">
+          <div class="center-logo">
+            <i data-lucide="zap" style="width:32px;height:32px;color:#fff;"></i>
+          </div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;border-radius:50%;border:1px solid rgba(139,92,246,0.2);animation:pulseHub 3s ease-in-out infinite;"></div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;border-radius:50%;border:1px solid rgba(139,92,246,0.1);animation:pulseHub 3s ease-in-out 1s infinite;"></div>
+        </div>
+
+        <!-- Outer ring partner labels (8 partners) -->
+        <div id="outer-labels" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
+
+        <!-- Inner ring partner labels (4 partners) -->
+        <div id="inner-labels" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes pulseHub {
+      0%,100%{opacity:0.5;transform:translate(-50%,-50%) scale(1);}
+      50%{opacity:1;transform:translate(-50%,-50%) scale(1.08);}
+    }
+  </style>
+</section>
+
+<!-- ══ INTEGRATIONS GRID ══ -->
+<section id="integrations" class="py-24 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <p class="mono text-xs mb-3 fade-up" style="color: rgba(238,234,244,0.3); letter-spacing: 0.12em;">01 — INTEGRATIONS</p>
+    <div class="clip-line mb-4">
+      <h2 class="clip-inner font-bold" style="font-size: clamp(28px, 4.5vw, 60px); letter-spacing: -0.04em;">
+        Your stack,<br>already supported.
+      </h2>
+    </div>
+    <p class="fade-up mb-14 text-sm max-w-lg" style="color: rgba(238,234,244,0.45); line-height: 1.7;">
+      From project management to CRM, code deployment to customer support — CONNECT.IO maintains native two-way sync for every tool in your workflow.
+    </p>
+
+    <!-- Category tabs -->
+    <div class="flex flex-wrap gap-3 mb-10 fade-up">
+      <button class="mono text-xs px-4 py-2 border transition-all" style="border-color: var(--accent); background: rgba(139,92,246,0.1); color: var(--accent2); letter-spacing: 0.06em;">All</button>
+      <button class="mono text-xs px-4 py-2 border transition-all hover:border-purple-500/40" style="border-color: var(--border); color: rgba(238,234,244,0.4); letter-spacing: 0.06em;">Productivity</button>
+      <button class="mono text-xs px-4 py-2 border transition-all hover:border-purple-500/40" style="border-color: var(--border); color: rgba(238,234,244,0.4); letter-spacing: 0.06em;">Dev Tools</button>
+      <button class="mono text-xs px-4 py-2 border transition-all hover:border-purple-500/40" style="border-color: var(--border); color: rgba(238,234,244,0.4); letter-spacing: 0.06em;">CRM</button>
+      <button class="mono text-xs px-4 py-2 border transition-all hover:border-purple-500/40" style="border-color: var(--border); color: rgba(238,234,244,0.4); letter-spacing: 0.06em;">Analytics</button>
+      <button class="mono text-xs px-4 py-2 border transition-all hover:border-purple-500/40" style="border-color: var(--border); color: rgba(238,234,244,0.4); letter-spacing: 0.06em;">Communication</button>
+    </div>
+
+    <!-- Integration tiles -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 fade-up">
+      <!-- 12 apps -->
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="message-square" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">Slack</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="layers" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">Notion</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="git-branch" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">GitHub</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="bar-chart-2" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">Salesforce</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="check-square" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">Asana</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="cloud" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">AWS</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="layout" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">Linear</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="calendar" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">Google Cal</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="video" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">Loom</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="database" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">Airtable</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border);">
+        <i data-lucide="bell" style="width:22px;height:22px;color:var(--accent2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.6);letter-spacing:0.06em;">PagerDuty</span>
+      </div>
+      <div class="border p-4 flex flex-col items-center gap-2 cursor-default transition-all hover:border-purple-500/30 hover:bg-purple-500/5" style="border-color:var(--border); position:relative;">
+        <i data-lucide="plus" style="width:22px;height:22px;color:rgba(238,234,244,0.2);"></i>
+        <span class="mono text-xs" style="color:rgba(238,234,244,0.2);letter-spacing:0.06em;">+188 more</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PLATFORM ══ -->
+<section id="platform" class="py-24 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <p class="mono text-xs mb-3 fade-up" style="color: rgba(238,234,244,0.3); letter-spacing: 0.12em;">02 — PLATFORM</p>
+    <div class="clip-line mb-16">
+      <h2 class="clip-inner font-bold" style="font-size: clamp(28px, 4.5vw, 60px); letter-spacing: -0.04em;">
+        One API.<br>Infinite flows.
+      </h2>
+    </div>
+
+    <div class="space-y-0">
+      <div class="feature-row fade-up">
+        <i data-lucide="zap" style="width:18px;height:18px;color:var(--accent);margin-top:2px;"></i>
+        <div>
+          <h3 class="font-semibold mb-1" style="letter-spacing:-0.01em;">Real-time Bidirectional Sync</h3>
+          <p class="text-sm leading-relaxed" style="color:rgba(238,234,244,0.45);max-width:60ch;">Data flows both directions without polling. Changes in Slack reflect in Notion in under 200ms. No webhooks to manage, no rate limit negotiation.</p>
         </div>
       </div>
-      <div class="testi">
-        <p class="testi-stars">★★★★★</p>
-        <p class="testi-text">"The rotating integration display on the website isn't just pretty — it accurately represents how the product actually works. Everything connects."</p>
-        <div class="testi-by">
-          <div class="testi-av" style="background:linear-gradient(135deg,#f59e0b,#d97706);">RK</div>
-          <div><p class="testi-name">Romi Kahn</p><p class="testi-role">Head of Ops, ScaleUp</p></div>
+      <div class="feature-row fade-up">
+        <i data-lucide="shield" style="width:18px;height:18px;color:var(--accent);margin-top:2px;"></i>
+        <div>
+          <h3 class="font-semibold mb-1" style="letter-spacing:-0.01em;">OAuth 2.0 Credential Vault</h3>
+          <p class="text-sm leading-relaxed" style="color:rgba(238,234,244,0.45);max-width:60ch;">All integration credentials are stored in an encrypted vault. Your team never touches raw API keys. Rotate credentials across all integrations in one click.</p>
+        </div>
+      </div>
+      <div class="feature-row fade-up">
+        <i data-lucide="cpu" style="width:18px;height:18px;color:var(--accent);margin-top:2px;"></i>
+        <div>
+          <h3 class="font-semibold mb-1" style="letter-spacing:-0.01em;">Transformation Engine</h3>
+          <p class="text-sm leading-relaxed" style="color:rgba(238,234,244,0.45);max-width:60ch;">Map, filter, and transform any field between systems using a visual builder or inline JavaScript — no backend needed to reshape data mid-flight.</p>
+        </div>
+      </div>
+      <div class="feature-row fade-up">
+        <i data-lucide="activity" style="width:18px;height:18px;color:var(--accent);margin-top:2px;"></i>
+        <div>
+          <h3 class="font-semibold mb-1" style="letter-spacing:-0.01em;">Observability Dashboard</h3>
+          <p class="text-sm leading-relaxed" style="color:rgba(238,234,244,0.45);max-width:60ch;">Every event logged, every failure surfaced, every retry traced. Built-in dead letter queue with instant replay. You always know what moved and when.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta">
-  <h2>Ready to <span>connect</span><br/>your stack?</h2>
-  <p>Join 4,200+ teams using CONNECT.IO to automate their data flows. Free forever for up to 5,000 events/month.</p>
-  <div class="cta-form">
-    <input class="cta-input" type="email" placeholder="your@company.com" />
-    <a href="#" class="btn-primary" style="white-space:nowrap;padding:13px 24px;border-radius:10px;">Get Started →</a>
+<!-- ══ PRICING ══ -->
+<section id="pricing" class="py-24 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <p class="mono text-xs mb-3 fade-up" style="color: rgba(238,234,244,0.3); letter-spacing: 0.12em;">03 — PRICING</p>
+    <div class="clip-line mb-14">
+      <h2 class="clip-inner font-bold" style="font-size: clamp(28px, 4.5vw, 60px); letter-spacing: -0.04em;">
+        Priced on connections,<br>not seats.
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="plan fade-up">
+        <p class="mono text-xs mb-3" style="color:rgba(238,234,244,0.3);letter-spacing:0.1em;">BUILDER</p>
+        <p class="font-bold mb-1" style="font-size:2.5rem;letter-spacing:-0.04em;">$29<span style="font-size:1rem;font-weight:400;color:rgba(238,234,244,0.35);">/mo</span></p>
+        <p class="mono text-xs mb-8" style="color:rgba(238,234,244,0.3);">5 active connections</p>
+        <ul class="space-y-3 mb-10">
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.55);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> 50k events / month</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.55);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> 200+ integrations</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.55);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> Visual flow builder</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.3);"><i data-lucide="minus" style="width:14px;height:14px;color:#333;"></i> Custom transformations</li>
+        </ul>
+        <a href="#" class="block text-center mono text-xs py-3 border transition-all hover:border-purple-500/40" style="border-color:var(--border);letter-spacing:0.06em;color:rgba(238,234,244,0.5);">
+          Start Connecting
+        </a>
+      </div>
+
+      <div class="plan active fade-up" style="transition-delay:0.1s;">
+        <div class="flex items-center justify-between mb-3">
+          <p class="mono text-xs" style="color:var(--accent2);letter-spacing:0.1em;">SCALE</p>
+          <span class="mono text-xs px-2 py-0.5" style="background:rgba(139,92,246,0.15);color:var(--accent2);">POPULAR</span>
+        </div>
+        <p class="font-bold mb-1" style="font-size:2.5rem;letter-spacing:-0.04em;">$149<span style="font-size:1rem;font-weight:400;color:rgba(238,234,244,0.35);">/mo</span></p>
+        <p class="mono text-xs mb-8" style="color:rgba(238,234,244,0.3);">Unlimited connections</p>
+        <ul class="space-y-3 mb-10">
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.7);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> 2M events / month</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.7);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> Custom JS transforms</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.7);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> Priority routing</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.7);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> Full observability</li>
+        </ul>
+        <a href="#" class="block text-center mono text-xs py-3 transition-all hover:opacity-85" style="background:var(--accent);color:#fff;letter-spacing:0.06em;">
+          Connect Your Stack
+        </a>
+      </div>
+
+      <div class="plan fade-up" style="transition-delay:0.2s;">
+        <p class="mono text-xs mb-3" style="color:rgba(238,234,244,0.3);letter-spacing:0.1em;">ENTERPRISE</p>
+        <p class="font-bold mb-1" style="font-size:2.5rem;letter-spacing:-0.04em;">Custom</p>
+        <p class="mono text-xs mb-8" style="color:rgba(238,234,244,0.3);">Unlimited everything</p>
+        <ul class="space-y-3 mb-10">
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.55);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> Dedicated infrastructure</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.55);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> Custom connectors</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.55);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> SSO + SCIM</li>
+          <li class="flex items-center gap-2 text-sm" style="color:rgba(238,234,244,0.55);"><i data-lucide="check" style="width:14px;height:14px;color:var(--accent);"></i> SLA guarantee</li>
+        </ul>
+        <a href="mailto:enterprise@connect.io" class="block text-center mono text-xs py-3 border transition-all hover:border-purple-500/40" style="border-color:var(--border);letter-spacing:0.06em;color:rgba(238,234,244,0.5);">
+          Request Enterprise Demo
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <a href="#" class="footer-logo">CONNECT<span>.IO</span></a>
-    <ul class="footer-nav">
-      <li><a href="#">Integrations</a></li>
-      <li><a href="#">Pricing</a></li>
-      <li><a href="#">Docs</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Status</a></li>
-    </ul>
-    <p class="footer-copy">© 2024 CONNECT.IO Inc.</p>
+<!-- ══ FOOTER ══ -->
+<footer class="py-12 px-8">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="flex items-center gap-2">
+      <div style="width:18px;height:18px;background:linear-gradient(135deg,var(--accent),#6d28d9);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+        <i data-lucide="zap" style="width:10px;height:10px;color:#fff;"></i>
+      </div>
+      <span class="font-semibold text-sm">CONNECT.IO</span>
+    </div>
+    <div class="flex gap-6">
+      <a href="#" class="mono text-xs transition-colors hover:text-white" style="color:rgba(238,234,244,0.3);letter-spacing:0.06em;">Status</a>
+      <a href="#" class="mono text-xs transition-colors hover:text-white" style="color:rgba(238,234,244,0.3);letter-spacing:0.06em;">Docs</a>
+      <a href="#" class="mono text-xs transition-colors hover:text-white" style="color:rgba(238,234,244,0.3);letter-spacing:0.06em;">Privacy</a>
+    </div>
+    <p class="mono text-xs" style="color:rgba(238,234,244,0.15);letter-spacing:0.06em;">&copy; 2025 CONNECT.IO Technologies</p>
   </div>
 </footer>
 
 <script>
-  // Scroll reveal
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.feat-card, .testi, .stat').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = `opacity 0.6s ease ${i * 0.07}s, transform 0.6s ease ${i * 0.07}s`;
-    io.observe(el);
+// ── Build counter-rotating orbit rings with CSS ──
+
+// Outer ring: 8 partners, CW 22s, radius 250px
+const outerPartners = [
+  { name: 'Slack', color: '#E01E5A' },
+  { name: 'GitHub', color: '#a78bfa' },
+  { name: 'Salesforce', color: '#00A1E0' },
+  { name: 'Linear', color: '#5E6AD2' },
+  { name: 'Notion', color: '#f5f5f5' },
+  { name: 'AWS', color: '#FF9900' },
+  { name: 'PagerDuty', color: '#06AC38' },
+  { name: 'Datadog', color: '#632CA6' },
+];
+
+// Inner ring: 4 partners, CCW 28s, radius 160px
+const innerPartners = [
+  { name: 'Jira', color: '#0052CC' },
+  { name: 'HubSpot', color: '#FF7A59' },
+  { name: 'Asana', color: '#F06A6A' },
+  { name: 'Zapier', color: '#FF4A00' },
+];
+
+function buildLabels(partners, radius, containerEl, ringEl, isClockwise) {
+  const cx = 270, cy = 270; // center of 540x540 container
+  const count = partners.length;
+
+  partners.forEach((p, i) => {
+    const baseAngle = (i / count) * 360;
+    const rad = (baseAngle * Math.PI) / 180;
+    const x = cx + radius * Math.cos(rad);
+    const y = cy + radius * Math.sin(rad);
+
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `
+      position: absolute;
+      left: ${x}px; top: ${y}px;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+    `;
+
+    // The label itself counter-rotates to stay upright
+    const inner = document.createElement('div');
+    // Matches ring animation duration and direction but opposite
+    const counterAnim = isClockwise ? 'spinCCW' : 'spinCW';
+    const dur = isClockwise ? '22s' : '28s';
+    inner.style.cssText = `
+      animation: ${counterAnim} ${dur} linear infinite;
+    `;
+
+    const pill = document.createElement('div');
+    pill.className = 'partner-pill';
+    const dot = document.createElement('span');
+    dot.className = 'partner-dot';
+    dot.style.background = p.color;
+    const label = document.createElement('span');
+    label.textContent = p.name;
+    pill.appendChild(dot);
+    pill.appendChild(label);
+    inner.appendChild(pill);
+    wrapper.appendChild(inner);
+    containerEl.appendChild(wrapper);
   });
+}
+
+buildLabels(outerPartners, 250, document.getElementById('outer-labels'), null, true);
+buildLabels(innerPartners, 160, document.getElementById('inner-labels'), null, false);
+
+// ── Intersection observer ──
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.clip-line, .fade-up').forEach(el => io.observe(el));
+document.querySelectorAll('.clip-line, .fade-up').forEach(el => {
+  if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-visible');
+});
+
+lucide.createIcons();
 </script>
 </body>
 </html>

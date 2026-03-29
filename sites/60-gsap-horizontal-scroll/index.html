@@ -3,352 +3,410 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>REAL MAGIC — Premium Refreshment</title>
+<title>REAL MAGIC — Premium Beverage Brand</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Nunito:wght@300;400;500;600;700;800;900&family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#0c0a06;color:#f0ead8;overflow-x:hidden}
 
-:root {
-  --bg: #fdf8f0;
-  --red: #e8192c;
-  --dark-red: #b0111f;
-  --gold: #f5a623;
-  --cream: #fdf8f0;
-  --ink: #1a0a0a;
-  --muted: #7a5a5a;
-  --surface: #fff5e6;
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;height:72px;
+  background:rgba(12,10,6,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(240,234,216,.07);
+}
+.logo{
+  font-family:'Playfair Display',serif;font-weight:700;font-size:1.25rem;
+  letter-spacing:.04em;color:#f0ead8;font-style:italic;
+}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:rgba(240,234,216,.42);text-decoration:none;font-size:.8125rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:#f0ead8}
+.nav-btn{
+  padding:.5rem 1.375rem;
+  border:1px solid rgba(240,234,216,.22);
+  color:rgba(240,234,216,.75);font-size:.75rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  text-decoration:none;transition:border-color .2s,color .2s;
+}
+.nav-btn:hover{border-color:rgba(240,234,216,.6);color:#f0ead8}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:72px 3rem 4rem;text-align:center;
+  background:radial-gradient(ellipse 100% 80% at 50% 30%,rgba(180,120,40,.08) 0%,transparent 60%),
+             radial-gradient(ellipse 60% 60% at 80% 80%,rgba(100,60,20,.06) 0%,transparent 70%),
+             #0c0a06;
+  position:relative;overflow:hidden;
+}
+/* ambient glow ring */
+.hero::before{
+  content:'';position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);
+  width:600px;height:200px;
+  background:radial-gradient(ellipse at center,rgba(200,140,40,.12) 0%,transparent 70%);
+  pointer-events:none;
 }
 
-html { scroll-behavior: smooth; }
-body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
-
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px; height: 68px;
-  background: var(--red);
+.hero-eyebrow{
+  font-size:.625rem;font-weight:500;letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(240,234,216,.35);margin-bottom:1.5rem;
 }
-.nav-logo { font-family: 'Abril Fatface', serif; font-size: 22px; color: white; letter-spacing: 0.02em; }
-.nav-logo span { color: var(--gold); }
-.nav-links { display: flex; gap: 32px; list-style: none; }
-.nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s; }
-.nav-links a:hover { color: white; }
-.nav-cta { background: white; color: var(--red); padding: 10px 22px; border-radius: 100px; font-size: 13px; font-weight: 800; text-decoration: none; transition: all 0.2s; }
-.nav-cta:hover { background: var(--gold); color: white; }
-
-/* HERO */
-.hero {
-  min-height: 100vh; display: flex; align-items: center;
-  padding: 100px 48px 60px; position: relative; overflow: hidden;
-  background: linear-gradient(135deg, var(--red) 0%, var(--dark-red) 60%, #6b0a14 100%);
+.hero-h1{
+  font-family:'Playfair Display',serif;font-size:clamp(3.5rem,9vw,8.5rem);
+  font-weight:400;line-height:.92;letter-spacing:-.01em;color:#f0ead8;
 }
-/* Bubbles */
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background-image:
-    radial-gradient(circle 6px at 15% 20%, rgba(255,255,255,0.15) 0%, transparent 50%),
-    radial-gradient(circle 3px at 30% 60%, rgba(255,255,255,0.12) 0%, transparent 50%),
-    radial-gradient(circle 8px at 50% 15%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle 4px at 70% 40%, rgba(255,255,255,0.18) 0%, transparent 50%),
-    radial-gradient(circle 5px at 85% 75%, rgba(255,255,255,0.12) 0%, transparent 50%),
-    radial-gradient(circle 2px at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%),
-    radial-gradient(circle 7px at 60% 85%, rgba(255,255,255,0.08) 0%, transparent 50%);
+.hero-h1 em{
+  font-style:italic;font-weight:600;
+  background:linear-gradient(135deg,#d4a041 0%,#f0ead8 50%,#c8923a 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.hero-content { position: relative; z-index: 1; max-width: 580px; }
-.hero-script { font-family: 'Dancing Script', cursive; font-size: clamp(32px, 5vw, 52px); color: var(--gold); margin-bottom: 12px; }
-.hero h1 { font-family: 'Abril Fatface', serif; font-size: clamp(56px, 8vw, 96px); color: white; line-height: 1.0; letter-spacing: -1px; margin-bottom: 24px; text-shadow: 0 4px 24px rgba(0,0,0,0.3); }
-.hero h1 span { color: var(--gold); }
-.hero p { font-size: 17px; color: rgba(255,255,255,0.75); line-height: 1.8; max-width: 460px; margin-bottom: 40px; }
-.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
-.btn-white { background: white; color: var(--red); padding: 16px 36px; border-radius: 100px; font-size: 15px; font-weight: 800; text-decoration: none; transition: all 0.2s; }
-.btn-white:hover { background: var(--gold); color: white; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
-.btn-outline-white { background: transparent; color: white; padding: 16px 32px; border-radius: 100px; font-size: 15px; font-weight: 700; text-decoration: none; border: 2px solid rgba(255,255,255,0.4); transition: all 0.2s; }
-.btn-outline-white:hover { border-color: white; }
-
-/* Hero can decoration */
-.hero-can { position: absolute; right: 8%; top: 50%; transform: translateY(-50%); z-index: 1; }
-.can-shape {
-  width: 140px; height: 280px; border-radius: 30px 30px 24px 24px;
-  background: linear-gradient(180deg, var(--red) 0%, #d4151f 30%, #b0111f 70%, #8b0c18 100%);
-  position: relative; box-shadow: -8px 16px 40px rgba(0,0,0,0.4), inset 2px 0 8px rgba(255,255,255,0.1);
-  overflow: hidden;
+.hero-divider{
+  width:3rem;height:1px;background:rgba(212,160,65,.5);
+  margin:2.5rem auto;
 }
-.can-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-.can-logo-main { font-family: 'Abril Fatface', serif; font-size: 20px; color: white; line-height: 1; }
-.can-logo-sub { font-family: 'Dancing Script', cursive; font-size: 14px; color: var(--gold); }
-.can-shine { position: absolute; left: 15%; top: 0; bottom: 0; width: 20%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent); }
-
-/* HORIZONTAL SCROLL / TICKER SECTION */
-.ticker-section {
-  background: var(--ink); padding: 0; overflow: hidden;
-  border-top: 6px solid var(--gold); border-bottom: 6px solid var(--gold);
+.hero-sub{
+  max-width:460px;font-family:'Playfair Display',serif;
+  font-size:1.125rem;font-weight:400;font-style:italic;
+  line-height:1.75;color:rgba(240,234,216,.52);
 }
-.ticker-row { overflow: hidden; position: relative; padding: 20px 0; }
-.ticker-row.row2 { background: var(--red); }
 
-.ticker-track {
-  display: flex; align-items: center; gap: 48px;
-  animation: tickerL 24s linear infinite;
-  width: max-content; white-space: nowrap;
+/* ── TICKER TAPE SECTION ── */
+.ticker-section{
+  padding:0;overflow:hidden;
+  border-top:1px solid rgba(240,234,216,.07);
+  border-bottom:1px solid rgba(240,234,216,.07);
+  background:#0e0b07;
 }
-.ticker-track-r {
-  display: flex; align-items: center; gap: 48px;
-  animation: tickerR 30s linear infinite;
-  width: max-content; white-space: nowrap;
+
+/* Top + bottom rule lines */
+.ticker-wrap{
+  position:relative;
+  padding:2rem 0;
 }
-.ticker-track:hover,
-.ticker-track-r:hover { animation-play-state: paused; }
-
-@keyframes tickerL { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-@keyframes tickerR { from{transform:translateX(-50%)} to{transform:translateX(0)} }
-
-.ticker-word {
-  font-family: 'Abril Fatface', serif; font-size: 32px;
-  color: white; letter-spacing: 0.02em; flex-shrink: 0;
+.ticker-rule{
+  position:absolute;top:50%;left:0;right:0;
+  height:1px;background:rgba(240,234,216,.04);pointer-events:none;
 }
-.ticker-word.gold { color: var(--gold); }
-.ticker-word.red { color: var(--red); }
-.ticker-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
-.ticker-dot.red { background: var(--red); }
-.ticker-dot.white { background: white; }
 
-/* ROW 3 — the main "sentence" scroll */
-.sentence-section {
-  overflow: hidden; background: var(--cream);
-  padding: 0; position: relative;
+.ticker-inner{
+  display:flex;align-items:center;
+  width:max-content;
+  gap:0;
+  animation:ticker-flow 22s linear infinite;
 }
-.sentence-section::before,
-.sentence-section::after {
-  content: ''; position: absolute; top: 0; bottom: 0; width: 200px; z-index: 10; pointer-events: none;
+.ticker-inner:hover{animation-play-state:paused}
+
+@keyframes ticker-flow{
+  0%  {transform:translateX(0)}
+  100%{transform:translateX(-50%)}
 }
-.sentence-section::before { left: 0; background: linear-gradient(90deg, var(--cream), transparent); }
-.sentence-section::after { right: 0; background: linear-gradient(-90deg, var(--cream), transparent); }
 
-.sentence-track {
-  display: flex; align-items: center; gap: 0;
-  animation: sentenceScroll 60s linear infinite;
-  width: max-content; padding: 36px 0;
+/* Word styling */
+.ticker-word{
+  display:inline-flex;align-items:center;
+  padding:0 .75rem;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.25rem,2.5vw,1.75rem);
+  font-weight:400;letter-spacing:.01em;
+  color:rgba(240,234,216,.5);
+  white-space:nowrap;
+  cursor:default;
+  transition:color .25s ease, font-style .25s ease;
+  position:relative;
 }
-.sentence-track:hover { animation-play-state: paused; }
-@keyframes sentenceScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-.sentence-word {
-  font-family: 'Abril Fatface', serif; font-size: clamp(28px, 4vw, 48px);
-  color: var(--ink); padding: 0 14px; flex-shrink: 0; transition: color 0.3s;
+.ticker-word:hover{
+  color:#d4a041;
+  font-style:italic;
 }
-.sentence-word:hover { color: var(--red); }
-.sentence-word.accent { color: var(--red); }
-.sentence-word.gold { color: var(--gold); }
-.sentence-divider { font-family: 'Dancing Script', cursive; font-size: 36px; color: var(--gold); padding: 0 8px; flex-shrink: 0; }
 
-/* PRODUCTS */
-.products-section { padding: 100px 48px; background: var(--bg); }
-.products-inner { max-width: 1100px; margin: 0 auto; }
-.prod-header { text-align: center; margin-bottom: 60px; }
-.prod-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--red); margin-bottom: 12px; }
-.prod-header h2 { font-family: 'Abril Fatface', serif; font-size: clamp(36px, 5vw, 60px); line-height: 1; letter-spacing: -1px; }
-.prod-header h2 span { color: var(--red); }
-.products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-.prod-card { text-align: center; }
-.prod-can {
-  width: 80px; height: 160px; border-radius: 20px 20px 16px 16px; margin: 0 auto 20px;
-  position: relative; overflow: hidden; box-shadow: -4px 8px 20px rgba(0,0,0,0.2);
+/* Key words styled differently */
+.ticker-word.key{
+  font-weight:600;font-style:italic;color:rgba(212,160,65,.7);
 }
-.pc-og { background: linear-gradient(180deg, var(--red) 0%, #8b0c18 100%); }
-.pc-zero { background: linear-gradient(180deg, #1a1a1a 0%, #000 100%); }
-.pc-cherry { background: linear-gradient(180deg, #6b0a3a 0%, #3d0520 100%); }
-.pc-lime { background: linear-gradient(180deg, #1a5c1a 0%, #0a3010 100%); }
-.prod-can-shine { position: absolute; left: 15%; top: 0; bottom: 0; width: 20%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); }
-.prod-name { font-family: 'Abril Fatface', serif; font-size: 18px; margin-bottom: 6px; }
-.prod-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.ticker-word.key:hover{color:#d4a041}
 
-/* STORY SECTION */
-.story-section { padding: 100px 48px; background: var(--red); color: white; }
-.story-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-.story-text .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gold); margin-bottom: 16px; }
-.story-text h2 { font-family: 'Abril Fatface', serif; font-size: clamp(36px, 5vw, 56px); line-height: 1; letter-spacing: -1px; margin-bottom: 24px; }
-.story-text p { font-size: 16px; line-height: 1.8; opacity: 0.85; margin-bottom: 16px; }
-.story-btn { display: inline-block; background: var(--gold); color: white; padding: 14px 36px; border-radius: 100px; font-size: 15px; font-weight: 800; text-decoration: none; transition: all 0.2s; margin-top: 8px; }
-.story-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-.story-numbers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-.story-num { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 28px; text-align: center; }
-.story-num-val { font-family: 'Abril Fatface', serif; font-size: 40px; color: var(--gold); line-height: 1; }
-.story-num-label { font-size: 13px; opacity: 0.7; margin-top: 6px; }
-
-/* TESTIMONIALS */
-.testi-section { padding: 100px 48px; background: var(--surface); }
-.testi-inner { max-width: 1100px; margin: 0 auto; }
-.testi-header { text-align: center; margin-bottom: 60px; }
-.testi-header h2 { font-family: 'Abril Fatface', serif; font-size: clamp(32px, 4vw, 48px); }
-.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.t-card { background: white; border-radius: 16px; padding: 28px; box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
-.t-stars { color: var(--gold); font-size: 16px; letter-spacing: 2px; margin-bottom: 12px; }
-.t-text { font-size: 14px; line-height: 1.8; color: #444; margin-bottom: 18px; }
-.t-name { font-size: 14px; font-weight: 800; }
-.t-handle { font-size: 12px; color: var(--muted); }
-
-/* CTA */
-.cta-section { padding: 100px 48px; background: var(--ink); text-align: center; color: white; }
-.cta-section h2 { font-family: 'Abril Fatface', serif; font-size: clamp(40px, 6vw, 72px); color: var(--gold); line-height: 1; margin-bottom: 20px; }
-.cta-section p { font-size: 18px; opacity: 0.7; max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }
-.cta-btn-red { display: inline-block; background: var(--red); color: white; padding: 18px 48px; border-radius: 100px; font-size: 17px; font-weight: 800; text-decoration: none; transition: all 0.2s; }
-.cta-btn-red:hover { background: var(--dark-red); transform: translateY(-3px); box-shadow: 0 16px 40px rgba(232,25,44,0.4); }
-
-/* FOOTER */
-footer { background: var(--red); padding: 40px 48px; }
-.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: 'Abril Fatface', serif; font-size: 18px; color: white; }
-.footer-logo span { color: var(--gold); }
-.footer-links { display: flex; gap: 24px; list-style: none; }
-.footer-links a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: white; }
-.footer-copy { font-size: 12px; color: rgba(255,255,255,0.4); }
-
-@media(max-width:768px){
-  nav{padding:0 20px;} .nav-links{display:none;}
-  .hero{padding:80px 20px 300px;}
-  .hero-can{right:50%;transform:translateX(50%) translateY(0);top:auto;bottom:-40px;}
-  .products-grid{grid-template-columns:repeat(2,1fr);}
-  .story-inner{grid-template-columns:1fr;}
-  .testi-grid{grid-template-columns:1fr;}
-  .footer-inner{flex-direction:column;gap:20px;text-align:center;}
+/* decorative inline SVG ornaments between phrases */
+.ticker-ornament{
+  display:inline-flex;align-items:center;
+  padding:0 1.5rem;color:rgba(212,160,65,.25);
+  flex-shrink:0;
 }
-</style>
 
-<!-- inject-local -->
-<style>
-  .hero {
-    background-image: url('../../images/creative/creative-1.jpg') !important;
-    background-size: cover; background-position: center;
-  }
+/* ── BRAND NARRATIVE ── */
+.narrative-section{
+  padding:8rem 3rem;
+  background:#0c0a06;
+}
+.narrative-inner{
+  max-width:1080px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:center;
+}
+.narrative-left{}
+.narrative-eyebrow{font-size:.625rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:rgba(212,160,65,.6);margin-bottom:1.75rem}
+.narrative-h2{
+  font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);
+  font-weight:600;line-height:1.15;letter-spacing:-.01em;color:#f0ead8;margin-bottom:1.5rem;
+}
+.narrative-h2 em{font-style:italic;color:#d4a041}
+.narrative-p{font-size:1rem;font-weight:300;line-height:1.85;color:rgba(240,234,216,.48);margin-bottom:1.25rem}
+.narrative-right{display:flex;flex-direction:column;gap:1.5rem}
+
+/* Product attributes */
+.attr-row{
+  display:flex;gap:1.5rem;align-items:flex-start;
+  padding-bottom:1.5rem;border-bottom:1px solid rgba(240,234,216,.06);
+}
+.attr-row:last-child{border-bottom:none;padding-bottom:0}
+.attr-num{
+  font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;
+  line-height:1;color:rgba(212,160,65,.2);flex-shrink:0;width:3rem;
+}
+.attr-body h3{font-size:.9375rem;font-weight:600;color:#f0ead8;margin-bottom:.375rem;letter-spacing:.02em}
+.attr-body p{font-size:.8125rem;font-weight:300;line-height:1.7;color:rgba(240,234,216,.42)}
+
+/* ── COLLECTION ── */
+.collection-section{
+  background:#0e0b07;padding:7rem 3rem;
+  border-top:1px solid rgba(240,234,216,.05);
+}
+.collection-inner{max-width:1080px;margin:0 auto}
+.c-eyebrow{font-size:.625rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:rgba(212,160,65,.5);text-align:center;margin-bottom:.875rem}
+.c-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,2.75rem);font-weight:600;text-align:center;color:#f0ead8;line-height:1.2;margin-bottom:4rem}
+
+.collection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(240,234,216,.05)}
+.col-card{
+  background:#0e0b07;padding:3rem 2.5rem;text-align:center;position:relative;
+  transition:background .3s;
+}
+.col-card:hover{background:rgba(212,160,65,.04)}
+.col-card::before{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:2rem;height:1px;background:#d4a041;opacity:0;transition:opacity .3s,width .3s;
+}
+.col-card:hover::before{opacity:.5;width:4rem}
+
+.col-vessel{
+  width:4rem;height:8rem;margin:0 auto 2rem;
+  background:linear-gradient(180deg,rgba(212,160,65,.15) 0%,rgba(212,160,65,.05) 100%);
+  border:1px solid rgba(212,160,65,.15);
+  position:relative;
+}
+.col-vessel::before{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:2.5rem;height:1rem;
+  background:rgba(212,160,65,.1);border-top:1px solid rgba(212,160,65,.2);
+}
+.col-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:600;color:#f0ead8;margin-bottom:.5rem}
+.col-variety{font-size:.6875rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,160,65,.5);margin-bottom:1.25rem}
+.col-desc{font-size:.8125rem;font-weight:300;line-height:1.75;color:rgba(240,234,216,.38)}
+
+/* ── CTA ── */
+.cta-section{
+  padding:9rem 3rem;text-align:center;
+  background:linear-gradient(180deg,#0c0a06 0%,#100e09 100%);
+  border-top:1px solid rgba(240,234,216,.05);
+}
+.cta-inner{max-width:600px;margin:0 auto}
+.cta-rule{width:3rem;height:1px;background:rgba(212,160,65,.4);margin:0 auto 2.5rem}
+
+/* ── FOOTER ── */
+footer{background:#080602;padding:5rem 3rem 2.5rem;border-top:1px solid rgba(240,234,216,.05)}
+.footer-g{display:grid;grid-template-columns:2fr 1fr 1fr;gap:4rem;max-width:1080px;margin:0 auto}
+.footer-brand p{font-size:.8125rem;line-height:1.9;color:rgba(240,234,216,.28);font-weight:300;max-width:300px;margin-top:1.25rem;font-style:italic;font-family:'Playfair Display',serif}
+.footer-col h4{font-size:.5625rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:rgba(240,234,216,.28);margin-bottom:1.25rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.875rem}
+.footer-col a{text-decoration:none;font-size:.8125rem;color:rgba(240,234,216,.28);font-weight:300;letter-spacing:.04em;transition:color .2s}
+.footer-col a:hover{color:#d4a041}
+.footer-bot{max-width:1080px;margin:3rem auto 0;padding-top:1.5rem;border-top:1px solid rgba(240,234,216,.05);display:flex;justify-content:space-between;font-size:.6875rem;color:rgba(240,234,216,.18);letter-spacing:.06em}
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">REAL <span>MAGIC</span></div>
+  <div class="logo">Real Magic</div>
   <ul class="nav-links">
-    <li><a href="#">Flavors</a></li>
-    <li><a href="#">Story</a></li>
-    <li><a href="#">Sustainability</a></li>
-    <li><a href="#">Shop</a></li>
+    <li><a href="#">Collection</a></li>
+    <li><a href="#">Our Story</a></li>
+    <li><a href="#">Rituals</a></li>
+    <li><a href="#">Trade</a></li>
   </ul>
-  <a href="#" class="nav-cta">Find Near Me</a>
+  <a href="#" class="nav-btn">Find a Stockist</a>
 </nav>
 
+<!-- Hero -->
 <section class="hero">
-  <div class="hero-content">
-    <div class="hero-script">the magic is real</div>
-    <h1>Open a can.<br>Open the <span>world.</span></h1>
-    <p>REAL MAGIC isn't just what's inside the can. It's the feeling of that first perfect sip — cool, crisp, and charged with something you can't quite name.</p>
-    <div class="hero-btns">
-      <a href="#" class="btn-white">Discover the Magic</a>
-      <a href="#" class="btn-outline-white">Our Story</a>
-    </div>
-  </div>
-  <div class="hero-can">
-    <div class="can-shape">
-      <div class="can-shine"></div>
-      <div class="can-logo">
-        <div class="can-logo-main">REAL</div>
-        <div class="can-logo-sub">MAGIC</div>
-      </div>
-    </div>
-  </div>
+  <div class="hero-eyebrow">Crafted with intention &nbsp;&middot;&nbsp; Est. 2019</div>
+  <h1 class="hero-h1">
+    The art<br>of <em>Real Magic</em>
+  </h1>
+  <div class="hero-divider"></div>
+  <p class="hero-sub">
+    Every bottle is an invitation to pause, to share, and to discover what happens when pure ingredients meet honest craft.
+  </p>
 </section>
 
-<!-- TICKER ROW 1 -->
+<!-- Ticker Tape Section -->
 <div class="ticker-section">
-  <div class="ticker-row">
-    <div class="ticker-track" id="ticker1"></div>
-  </div>
-  <div class="ticker-row row2">
-    <div class="ticker-track-r" id="ticker2"></div>
-  </div>
-</div>
-
-<!-- THE SENTENCE — horizontal ticker tape -->
-<div class="sentence-section">
-  <div class="sentence-track" id="sentenceTrack"></div>
-</div>
-
-<!-- PRODUCTS -->
-<section class="products-section">
-  <div class="products-inner">
-    <div class="prod-header">
-      <div class="prod-eyebrow">Our Range</div>
-      <h2>Choose your <span>magic</span></h2>
+  <div class="ticker-wrap">
+    <div class="ticker-rule"></div>
+    <div class="ticker-inner">
+      <!-- Phrase A -->
+      <span class="ticker-word">In</span>
+      <span class="ticker-word">every</span>
+      <span class="ticker-word">bottle,</span>
+      <span class="ticker-ornament">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width=".75" fill="none"/></svg>
+      </span>
+      <span class="ticker-word">discover</span>
+      <span class="ticker-word">the</span>
+      <span class="ticker-word">undeniable</span>
+      <span class="ticker-ornament">
+        <svg width="32" height="8" viewBox="0 0 32 8" fill="none"><line x1="0" y1="4" x2="32" y2="4" stroke="currentColor" stroke-width=".75"/><circle cx="16" cy="4" r="2" fill="currentColor" opacity=".6"/></svg>
+      </span>
+      <span class="ticker-word key">Real</span>
+      <span class="ticker-word key">Magic</span>
+      <span class="ticker-ornament">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3 L10 17 M3 10 L17 10" stroke="currentColor" stroke-width=".75"/></svg>
+      </span>
+      <span class="ticker-word">of</span>
+      <span class="ticker-word">sharing</span>
+      <span class="ticker-word">pure</span>
+      <span class="ticker-ornament">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width=".75" fill="none"/></svg>
+      </span>
+      <span class="ticker-word key">Refreshment</span>
+      <span class="ticker-ornament">
+        <svg width="32" height="8" viewBox="0 0 32 8" fill="none"><line x1="0" y1="4" x2="32" y2="4" stroke="currentColor" stroke-width=".75"/><circle cx="16" cy="4" r="2" fill="currentColor" opacity=".6"/></svg>
+      </span>
+      <span class="ticker-word">that</span>
+      <span class="ticker-word">brings</span>
+      <span class="ticker-word">us</span>
+      <span class="ticker-word key">Together</span>
+      <span class="ticker-ornament" style="padding:0 2.5rem;">
+        <svg width="1" height="32" viewBox="0 0 1 32" fill="none"><line x1=".5" y1="0" x2=".5" y2="32" stroke="currentColor" stroke-width=".75"/></svg>
+      </span>
+      <!-- Phrase B (duplicate for seamless loop) -->
+      <span class="ticker-word">In</span>
+      <span class="ticker-word">every</span>
+      <span class="ticker-word">bottle,</span>
+      <span class="ticker-ornament">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width=".75" fill="none"/></svg>
+      </span>
+      <span class="ticker-word">discover</span>
+      <span class="ticker-word">the</span>
+      <span class="ticker-word">undeniable</span>
+      <span class="ticker-ornament">
+        <svg width="32" height="8" viewBox="0 0 32 8" fill="none"><line x1="0" y1="4" x2="32" y2="4" stroke="currentColor" stroke-width=".75"/><circle cx="16" cy="4" r="2" fill="currentColor" opacity=".6"/></svg>
+      </span>
+      <span class="ticker-word key">Real</span>
+      <span class="ticker-word key">Magic</span>
+      <span class="ticker-ornament">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3 L10 17 M3 10 L17 10" stroke="currentColor" stroke-width=".75"/></svg>
+      </span>
+      <span class="ticker-word">of</span>
+      <span class="ticker-word">sharing</span>
+      <span class="ticker-word">pure</span>
+      <span class="ticker-ornament">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="1.5" fill="currentColor"/><circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width=".75" fill="none"/></svg>
+      </span>
+      <span class="ticker-word key">Refreshment</span>
+      <span class="ticker-ornament">
+        <svg width="32" height="8" viewBox="0 0 32 8" fill="none"><line x1="0" y1="4" x2="32" y2="4" stroke="currentColor" stroke-width=".75"/><circle cx="16" cy="4" r="2" fill="currentColor" opacity=".6"/></svg>
+      </span>
+      <span class="ticker-word">that</span>
+      <span class="ticker-word">brings</span>
+      <span class="ticker-word">us</span>
+      <span class="ticker-word key">Together</span>
+      <span class="ticker-ornament" style="padding:0 2.5rem;">
+        <svg width="1" height="32" viewBox="0 0 1 32" fill="none"><line x1=".5" y1="0" x2=".5" y2="32" stroke="currentColor" stroke-width=".75"/></svg>
+      </span>
     </div>
-    <div class="products-grid">
-      <div class="prod-card">
-        <div class="prod-can pc-og"><div class="prod-can-shine"></div></div>
-        <div class="prod-name">Original</div>
-        <div class="prod-desc">The classic. The one that started it all. Pure refreshment in its most perfect form.</div>
+  </div>
+</div>
+
+<!-- Brand Narrative -->
+<section class="narrative-section">
+  <div class="narrative-inner">
+    <div class="narrative-left">
+      <div class="narrative-eyebrow">Our Philosophy</div>
+      <h2 class="narrative-h2">
+        Magic is not made.<br>
+        It is <em>remembered</em>.
+      </h2>
+      <p class="narrative-p">
+        Real Magic begins with what we refuse to add. No artificial colors. No synthetic flavors. No shortcuts taken in the name of shelf life. Only the honest alchemy of water, botanicals, and time.
+      </p>
+      <p class="narrative-p">
+        Each bottle passes through the hands of a single blending artisan who has dedicated years to understanding the precise moment when ingredients stop being separate things and become something unified.
+      </p>
+      <a href="#" style="display:inline-flex;align-items:center;gap:.625rem;margin-top:2rem;font-size:.75rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,160,65,.7);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#d4a041'" onmouseout="this.style.color='rgba(212,160,65,.7)'">
+          Discover Our Process
+          <i data-lucide="arrow-right" style="width:12px;height:12px;"></i>
+        </a>
+    </div>
+    <div class="narrative-right">
+      <div class="attr-row">
+        <div class="attr-num">01</div>
+        <div class="attr-body">
+          <h3>Cold Maceration</h3>
+          <p>Botanical ingredients steep for a minimum of 72 hours at 4&deg;C, extracting flavor without heat degradation.</p>
+        </div>
       </div>
-      <div class="prod-card">
-        <div class="prod-can pc-zero"><div class="prod-can-shine"></div></div>
-        <div class="prod-name">Zero Sugar</div>
-        <div class="prod-desc">All the magic, none of the sugar. Because every moment deserves a perfect sip.</div>
+      <div class="attr-row">
+        <div class="attr-num">02</div>
+        <div class="attr-body">
+          <h3>Gravity Filtration</h3>
+          <p>No mechanical pressing. Liquid moves by gravity alone, preserving aromatic compounds that pressure destroys.</p>
+        </div>
       </div>
-      <div class="prod-card">
-        <div class="prod-can pc-cherry"><div class="prod-can-shine"></div></div>
-        <div class="prod-name">Wild Cherry</div>
-        <div class="prod-desc">A twist of cherry boldness. Sweet, daring, and impossibly refreshing.</div>
+      <div class="attr-row">
+        <div class="attr-num">03</div>
+        <div class="attr-body">
+          <h3>Hand Numbered</h3>
+          <p>Every bottle is individually numbered by the blending artisan. No batch is larger than 2,400 units.</p>
+        </div>
       </div>
-      <div class="prod-card">
-        <div class="prod-can pc-lime"><div class="prod-can-shine"></div></div>
-        <div class="prod-name">Lime Spark</div>
-        <div class="prod-desc">Bright citrus energy meets our signature refreshment. Wake up every sense.</div>
+      <div class="attr-row">
+        <div class="attr-num">04</div>
+        <div class="attr-body">
+          <h3>Living Water Source</h3>
+          <p>Water sourced from a single mountain spring with a mineral profile that took 12 years to find and verify.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STORY -->
-<section class="story-section">
-  <div class="story-inner">
-    <div class="story-text">
-      <div class="eyebrow">Our Story</div>
-      <h2>70 years of<br>Real Magic</h2>
-      <p>It started with a simple idea: that a drink could bring people together, spark joy, and create moments worth remembering. That idea became REAL MAGIC.</p>
-      <p>Today, in over 90 countries, with billions of servings shared, the magic is more real than ever. Every can holds a universe of moments waiting to happen.</p>
-      <a href="#" class="story-btn">Read Our Story</a>
-    </div>
-    <div class="story-numbers">
-      <div class="story-num"><div class="story-num-val">90+</div><div class="story-num-label">Countries</div></div>
-      <div class="story-num"><div class="story-num-val">70</div><div class="story-num-label">Years of Magic</div></div>
-      <div class="story-num"><div class="story-num-val">2B+</div><div class="story-num-label">Servings/day</div></div>
-      <div class="story-num"><div class="story-num-val">100%</div><div class="story-num-label">Real Ingredients</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testi-section">
-  <div class="testi-inner">
-    <div class="testi-header">
-      <h2>The magic, in their words</h2>
-    </div>
-    <div class="testi-grid">
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">"My morning isn't complete without it. The taste is consistent no matter where in the world I open one. That's genuinely impressive."</p>
-        <div class="t-name">Marco V.</div>
-        <div class="t-handle">@marco.explores · Rome</div>
+<!-- Collection -->
+<section class="collection-section">
+  <div class="collection-inner">
+    <div class="c-eyebrow">Current Release</div>
+    <h2 class="c-title">The 2026 Collection</h2>
+    <div class="collection-grid">
+      <div class="col-card">
+        <div class="col-vessel"></div>
+        <div class="col-name">Solstice Clarity</div>
+        <div class="col-variety">Still &nbsp;&middot;&nbsp; Botanical</div>
+        <p class="col-desc">A precise, luminous expression of elderflower and alpine mint. The bottle you open when everything else quiets down.</p>
       </div>
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">"Wild Cherry is a revelation. I've been an Original loyalist for 20 years and this might have converted me. Almost."</p>
-        <div class="t-name">Sarah T.</div>
-        <div class="t-handle">@sarahtastes · Austin</div>
+      <div class="col-card">
+        <div class="col-vessel" style="height:9rem;"></div>
+        <div class="col-name">Meridian Ember</div>
+        <div class="col-variety">Sparkling &nbsp;&middot;&nbsp; Spiced</div>
+        <p class="col-desc">Three varieties of cardamom, cold-infused with wild citrus peel. Warmth without heat. Complexity without noise.</p>
       </div>
-      <div class="t-card">
-        <div class="t-stars">★★★★★</div>
-        <p class="t-text">"Zero Sugar tastes exactly like the original. I genuinely can't tell the difference and I've tried. That's the real magic."</p>
-        <div class="t-name">Kai W.</div>
-        <div class="t-handle">@kaifitlife · Tokyo</div>
+      <div class="col-card">
+        <div class="col-vessel" style="height:7rem;"></div>
+        <div class="col-name">Abyssal Bloom</div>
+        <div class="col-variety">Still &nbsp;&middot;&nbsp; Dark Floral</div>
+        <p class="col-desc">Black rose, aged with pu-erh and a single drop of cedar oil per bottle. A beverage that asks something of you.</p>
       </div>
     </div>
   </div>
@@ -356,55 +414,58 @@ footer { background: var(--red); padding: 40px 48px; }
 
 <!-- CTA -->
 <section class="cta-section">
-  <h2>Feel the magic today</h2>
-  <p>Find REAL MAGIC at stores near you, or order a case delivered to your door. The magic doesn't wait.</p>
-  <a href="#" class="cta-btn-red">Find REAL MAGIC Near Me</a>
+  <div class="cta-inner">
+    <div class="cta-rule"></div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2.25rem,4vw,3.5rem);font-weight:600;letter-spacing:-.01em;line-height:1.2;color:#f0ead8;margin-bottom:1.25rem;">
+      Find your bottle<br><em>of Real Magic.</em>
+    </h2>
+    <p style="font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:rgba(240,234,216,.42);line-height:1.75;max-width:380px;margin:0 auto 3rem;">
+      Available at 280 independent retailers, select hotel bars, and our flagship pour house in Edinburgh.
+    </p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="#" style="display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 2.5rem;border:1px solid rgba(212,160,65,.4);color:#d4a041;font-size:.75rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;transition:all .2s;" onmouseover="this.style.background='rgba(212,160,65,.08)'" onmouseout="this.style.background='transparent'">
+        <i data-lucide="map-pin" style="width:12px;height:12px;"></i>
+        Find a Stockist
+      </a>
+      <a href="#" style="display:inline-flex;align-items:center;gap:.5rem;padding:.875rem 2.5rem;background:rgba(240,234,216,.06);border:1px solid rgba(240,234,216,.1);color:rgba(240,234,216,.65);font-size:.75rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;transition:all .2s;" onmouseover="this.style.background='rgba(240,234,216,.1)'" onmouseout="this.style.background='rgba(240,234,216,.06)'">
+        Reserve a Case
+      </a>
+    </div>
+  </div>
 </section>
 
+<!-- Footer -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-logo">REAL <span>MAGIC</span></div>
-    <ul class="footer-links">
-      <li><a href="#">Privacy</a></li>
-      <li><a href="#">Terms</a></li>
-      <li><a href="#">Sustainability</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-    <div class="footer-copy">© 2025 Real Magic Beverages Co.</div>
+  <div class="footer-g">
+    <div class="footer-brand">
+      <div style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;font-style:italic;color:#f0ead8;">Real Magic</div>
+      <p>Made slowly, with intention. Shared quickly, with pleasure. Every bottle is a promise kept.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#">The Collection</a></li>
+        <li><a href="#">Our Botanicals</a></li>
+        <li><a href="#">The Water Source</a></li>
+        <li><a href="#">Blending Rituals</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Trade</h4>
+      <ul>
+        <li><a href="#">Wholesale Inquiry</a></li>
+        <li><a href="#">Stockist Map</a></li>
+        <li><a href="#">Press &amp; Media</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>&copy; 2026 Real Magic Ltd. All rights reserved.</span>
+    <span>Made in Scotland &nbsp;&middot;&nbsp; Shipped worldwide</span>
   </div>
 </footer>
 
-<script>
-// Build ticker row 1
-const t1 = document.getElementById('ticker1');
-const words1 = ['REFRESHMENT','✦','MAGIC','✦','TOGETHER','✦','REAL','✦','JOY','✦','SHARE','✦','PURE','✦','SPARKLE','✦'];
-const doubled1 = [...words1, ...words1];
-t1.innerHTML = doubled1.map((w,i) => `<span class="ticker-word${w==='✦'?' gold':''}">${w}</span>`).join('');
-
-// Build ticker row 2
-const t2 = document.getElementById('ticker2');
-const words2 = ['OPEN A CAN','·','OPEN THE WORLD','·','IN EVERY BOTTLE','·','DISCOVER','·','REAL MAGIC','·','SINCE 1955','·'];
-const doubled2 = [...words2, ...words2];
-t2.innerHTML = doubled2.map((w,i) => `<span class="ticker-word${w==='·'?' red':''}">${w}</span>`).join('');
-
-// Build the sentence track — THE MAIN TICKER TAPE
-const sentence = "In every bottle, discover the undeniable Real Magic of sharing pure Refreshment that brings us Together".split(' ');
-const st = document.getElementById('sentenceTrack');
-const accentWords = new Set(['Real','Magic','Refreshment','Together']);
-const dividerWords = ['undeniable','sharing','brings'];
-
-let sentenceHTML = '';
-const fullSentence = [...sentence, ...sentence]; // doubled for seamless
-fullSentence.forEach((word, i) => {
-  const isAccent = accentWords.has(word.replace(/[.,!?]/g,''));
-  const isDiv = dividerWords.includes(word.toLowerCase().replace(/[.,!?]/g,''));
-  const cls = isAccent ? 'accent' : (isDiv ? 'gold' : '');
-  if (i > 0 && i % 7 === 0) {
-    sentenceHTML += `<span class="sentence-divider">—</span>`;
-  }
-  sentenceHTML += `<span class="sentence-word ${cls}">${word}</span>`;
-});
-st.innerHTML = sentenceHTML;
-</script>
+<script>lucide.createIcons();</script>
 </body>
 </html>

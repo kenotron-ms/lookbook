@@ -1,541 +1,585 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>UNIFIED — All-in-One Workspace ROI Calculator</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNIFIED — All-in-One Workspace Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f4ff;
+      --ink: #1a1333;
+      --mid: rgba(26,19,51,0.5);
+      --accent: #6d28d9;
+      --accent2: #7c3aed;
+      --accent-light: rgba(109,40,217,0.08);
+      --border: rgba(26,19,51,0.1);
+      --surface: #ffffff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ── App grid ── */
+    .app-tile {
+      border: 1.5px solid var(--border);
+      padding: 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      background: var(--surface);
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s, transform 0.2s;
+      position: relative;
+    }
+    .app-tile:hover { border-color: rgba(109,40,217,0.3); box-shadow: 0 4px 16px rgba(109,40,217,0.08); transform: translateY(-1px); }
+    .app-tile.selected {
+      border-color: var(--accent);
+      background: rgba(109,40,217,0.06);
+      box-shadow: 0 0 0 3px rgba(109,40,217,0.12);
+    }
+    .app-check {
+      position: absolute; top: -7px; right: -7px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: none; align-items: center; justify-content: center;
+      box-shadow: 0 2px 6px rgba(109,40,217,0.3);
+    }
+    .app-tile.selected .app-check { display: flex; }
+    .app-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.7rem; letter-spacing: 0.04em;
+    }
+    .app-name { font-size: 0.72rem; font-weight: 500; text-align: center; letter-spacing: -0.01em; }
+    .app-cost { font-size: 0.68rem; color: var(--mid); }
 
-  :root {
-    --bg: #f8f9fb;
-    --dark: #0f0f11;
-    --accent: #7c3aed;
-    --accent2: #a855f7;
-    --accent-light: rgba(124,58,237,0.08);
-    --green: #059669;
-    --border: rgba(15,15,17,0.08);
-    --muted: rgba(15,15,17,0.45);
-    --card: #ffffff;
-  }
+    /* ── Slider ── */
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%; height: 4px;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct, 50%), rgba(26,19,51,0.1) var(--pct, 50%));
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 2px 8px rgba(109,40,217,0.3);
+      border: 2px solid #fff;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--dark); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    /* ── Savings display ── */
+    .savings-number {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent), #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 56px;
-    background: rgba(248,249,251,0.92); backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo { font-size: 19px; font-weight: 800; letter-spacing: -0.03em; color: var(--dark); text-decoration: none; }
-  .logo em { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: normal; }
-  .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--dark); }
-  .nav-cta { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 13px; font-weight: 700; padding: 10px 22px; border-radius: 8px; text-decoration: none; transition: opacity 0.2s; }
-  .nav-cta:hover { opacity: 0.88; }
+    /* ── Summary rows ── */
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.875rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+    .summary-row:last-child { border-bottom: none; }
 
-  /* ── HERO ── */
-  .hero {
-    padding: 130px 56px 80px; text-align: center;
-    border-bottom: 1px solid var(--border);
-  }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--accent-light); border: 1px solid rgba(124,58,237,0.2);
-    border-radius: 40px; padding: 7px 16px; margin-bottom: 32px;
-    font-size: 12px; font-weight: 700; color: var(--accent);
-    opacity: 0; animation: up 0.6s ease 0.2s forwards;
-  }
-  .hero-title {
-    font-size: clamp(44px, 7.5vw, 88px); font-weight: 800;
-    letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 24px;
-    opacity: 0; animation: up 0.7s ease 0.4s forwards;
-  }
-  .hero-title em {
-    font-style: normal; display: block;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, #ec4899 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .hero-sub { font-size: 18px; color: var(--muted); max-width: 520px; margin: 0 auto 40px; line-height: 1.7; opacity: 0; animation: up 0.7s ease 0.6s forwards; }
-  .hero-ctas { display: flex; gap: 14px; justify-content: center; opacity: 0; animation: up 0.7s ease 0.8s forwards; }
-  .btn-grad { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-size: 15px; font-weight: 700; padding: 15px 36px; border-radius: 10px; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
-  .btn-grad:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(124,58,237,0.35); }
-  .btn-outline { border: 1px solid var(--border); color: var(--dark); background: var(--card); font-size: 15px; font-weight: 600; padding: 15px 36px; border-radius: 10px; text-decoration: none; transition: border-color 0.2s; }
-  .btn-outline:hover { border-color: var(--accent); }
-  @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* ── Gradient border wrapper ── */
+    .gradient-border {
+      background: linear-gradient(135deg, #7c3aed, #2563eb, #db2777);
+      padding: 2px;
+    }
+    .gradient-inner { background: var(--surface); }
 
-  /* ── ROI CALCULATOR ── */
-  .calculator { padding: 80px 56px 120px; max-width: 1300px; margin: 0 auto; }
-  .calc-header { text-align: center; margin-bottom: 64px; }
-  .calc-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-  .calc-title { font-size: clamp(32px, 4.5vw, 52px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
-  .calc-sub { font-size: 16px; color: var(--muted); }
+    /* ── Fade up ── */
+    .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.is-visible { opacity: 1; transform: none; }
 
-  .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+    /* ── Clip line ── */
+    .clip-line { overflow: hidden; }
+    .clip-inner { display: block; transform: translateY(108%); transition: transform 0.85s cubic-bezier(0.16,1,0.3,1); }
+    .clip-line.is-visible .clip-inner { transform: translateY(0); }
 
-  /* LEFT: Input panel */
-  .calc-inputs { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-  .calc-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    /* ── Nav ── */
+    nav a { font-size: 0.8rem; color: rgba(26,19,51,0.45); transition: color 0.2s; }
+    nav a:hover { color: var(--ink); }
 
-  /* User count slider */
-  .user-input { margin-bottom: 36px; }
-  .user-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
-  .user-label span { font-size: 15px; font-weight: 600; }
-  .user-count { font-size: 32px; font-weight: 800; color: var(--accent); }
-  .user-slider { width: 100%; appearance: none; height: 6px; background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--pct, 20%), #e5e7eb var(--pct, 20%), #e5e7eb 100%); border-radius: 3px; outline: none; cursor: pointer; }
-  .user-slider::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: var(--accent); border: 3px solid #fff; border-radius: 50%; box-shadow: 0 2px 8px rgba(124,58,237,0.35); cursor: pointer; }
-  .slider-range { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--muted); font-weight: 500; }
+    /* ── Badge ── */
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; font-size: 0.68rem; letter-spacing: 0.08em; }
 
-  /* App selection grid */
-  .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 0; }
-  .app-item {
-    background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 14px 12px;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    cursor: pointer; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-    user-select: none; text-align: center;
-  }
-  .app-item.selected {
-    border-color: var(--accent); background: var(--accent-light);
-    box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
-  }
-  .app-emoji { font-size: 22px; }
-  .app-name { font-size: 11px; font-weight: 700; letter-spacing: 0.02em; color: var(--dark); }
-  .app-cost { font-size: 11px; color: var(--muted); font-weight: 500; }
-  .app-check { display: none; width: 18px; height: 18px; background: var(--accent); border-radius: 50%; align-items: center; justify-content: center; }
-  .app-item.selected .app-check { display: flex; }
-  .app-check svg { width: 10px; height: 10px; stroke: #fff; fill: none; stroke-width: 2.5; }
+    /* ── Feature pill ── */
+    .feature-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid var(--border); padding: 6px 14px;
+      font-size: 0.78rem; background: var(--surface);
+      white-space: nowrap;
+    }
 
-  /* RIGHT: Results panel */
-  .calc-results { position: sticky; top: 88px; }
-  .results-card { background: var(--dark); color: #fff; border-radius: 20px; padding: 40px; margin-bottom: 20px; }
-  .results-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
-  .results-total { font-size: 56px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #fff; }
-  .results-period { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.45); }
-  .results-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 10px; margin-bottom: 32px; }
-  .results-divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 28px; }
+    .plan-card { border: 1px solid var(--border); background: var(--surface); padding: 2rem; }
+    .plan-card.active { border-color: var(--accent); background: linear-gradient(135deg, rgba(109,40,217,0.04), rgba(37,99,235,0.02)); }
 
-  .cost-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .cost-row:last-child { margin-bottom: 0; }
-  .cost-name { font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-  .cost-name .emoji { font-size: 16px; }
-  .cost-value { font-size: 14px; font-weight: 700; }
-  .cost-value.red { color: #f87171; }
-  .cost-value.green { color: #34d399; }
-
-  .savings-banner {
-    background: linear-gradient(135deg, rgba(5,150,105,0.15), rgba(16,185,129,0.08));
-    border: 1px solid rgba(52,211,153,0.3);
-    border-radius: 14px; padding: 24px; margin-bottom: 20px;
-    display: flex; align-items: center; gap: 16px;
-  }
-  .savings-icon { font-size: 32px; }
-  .savings-label { font-size: 13px; font-weight: 600; color: var(--green); margin-bottom: 4px; }
-  .savings-amount { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--green); }
-  .savings-period { font-size: 13px; color: var(--muted); }
-
-  .unified-price {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; padding: 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04); margin-bottom: 16px;
-  }
-  .up-left .up-label { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-  .up-left .up-sub { font-size: 12px; color: var(--muted); }
-  .up-right { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); }
-  .up-period { font-size: 13px; font-weight: 400; color: var(--muted); }
-
-  .cta-inline { display: block; text-align: center; font-size: 14px; font-weight: 700; padding: 14px; border-radius: 10px; text-decoration: none; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; transition: opacity 0.2s; }
-  .cta-inline:hover { opacity: 0.88; }
-
-  /* ── WHAT'S INCLUDED ── */
-  .included { padding: 100px 56px; border-top: 1px solid var(--border); }
-  .included-inner { max-width: 1200px; margin: 0 auto; }
-  .inc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-  .inc-title { font-size: clamp(32px, 4.5vw, 52px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 56px; }
-  .inc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .inc-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s; }
-  .inc-card:hover { border-color: rgba(124,58,237,0.3); box-shadow: 0 8px 32px rgba(124,58,237,0.08); transform: translateY(-4px); }
-  .inc-icon { font-size: 28px; margin-bottom: 16px; }
-  .inc-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-  .inc-desc { font-size: 13px; line-height: 1.65; color: var(--muted); }
-  .inc-replaces { font-size: 11px; font-weight: 600; color: var(--accent); margin-top: 12px; }
-
-  /* ── TESTIMONIALS ── */
-  .testimonials { padding: 100px 56px; background: #f0ecff; border-top: 1px solid rgba(124,58,237,0.1); }
-  .testi-inner { max-width: 1200px; margin: 0 auto; }
-  .testi-title { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -0.03em; margin: 16px 0 48px; }
-  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .testi { background: var(--card); border: 1px solid rgba(124,58,237,0.1); border-radius: 16px; padding: 32px; transition: border-color 0.3s, transform 0.3s; }
-  .testi:hover { border-color: var(--accent); transform: translateY(-4px); }
-  .testi-savings { font-size: 28px; font-weight: 800; color: var(--green); margin-bottom: 12px; }
-  .testi-text { font-size: 14px; line-height: 1.75; color: var(--muted); margin-bottom: 24px; font-style: italic; }
-  .testi-by { display: flex; gap: 12px; align-items: center; }
-  .testi-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
-  .testi-name { font-size: 13px; font-weight: 700; }
-  .testi-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-  /* ── CTA ── */
-  .cta { padding: 100px 56px; text-align: center; border-top: 1px solid var(--border); }
-  .cta h2 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; }
-  .cta h2 em { font-style: normal; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .cta p { font-size: 17px; color: var(--muted); max-width: 440px; margin: 0 auto 40px; line-height: 1.65; }
-
-  /* ── FOOTER ── */
-  footer { background: var(--dark); color: #fff; padding: 40px 56px; }
-  .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  .footer-logo { font-size: 16px; font-weight: 800; text-decoration: none; color: #fff; }
-  .footer-logo em { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-style: normal; }
-  .footer-nav { display: flex; gap: 28px; list-style: none; }
-  .footer-nav a { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
-  .footer-nav a:hover { color: #fff; }
-  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
-</style>
-
-<!-- inject-local -->
-<style>
-  .savings-banner {
-    background-image: url('../../images/creative/creative-1.jpg') !important;
-    background-size: cover; background-position: center; opacity: 0.15;
-  }
-</style>
+    @keyframes countUp {
+      from { opacity: 0.4; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .count-animate { animation: countUp 0.35s ease forwards; }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="#" class="logo">UNI<em>FIED</em></a>
-  <ul class="nav-links">
-    <li><a href="#calculator">Calculator</a></li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#">Docs</a></li>
-  </ul>
-  <a href="#" class="nav-cta">Start Free →</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge">💰 Teams save an average of $1,247/month</div>
-  <h1 class="hero-title">
-    Stop paying for<br/><em>10 tools separately.</em>
-  </h1>
-  <p class="hero-sub">UNIFIED replaces your entire productivity stack — project management, docs, chat, CRM, and more — in one workspace at a fraction of the cost.</p>
-  <div class="hero-ctas">
-    <a href="#calculator" class="btn-grad">Calculate Your Savings</a>
-    <a href="#features" class="btn-outline">See What's Inside</a>
+<!-- ══ NAV ══ -->
+<header class="fixed top-0 left-0 right-0 z-50 h-16 px-6 flex items-center justify-between" style="background: rgba(245,244,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);">
+  <div class="flex items-center gap-2">
+    <div style="width:22px;height:22px;background:linear-gradient(135deg,var(--accent),#2563eb);border-radius:5px;display:flex;align-items:center;justify-content:center;">
+      <i data-lucide="layers" style="width:12px;height:12px;color:#fff;"></i>
+    </div>
+    <span class="font-bold text-sm tracking-tight" style="letter-spacing:-0.02em;">UNIFIED</span>
   </div>
-</section>
+  <nav class="hidden md:flex items-center gap-8">
+    <a href="#">Platform</a>
+    <a href="#">Integrations</a>
+    <a href="#calculator">ROI Calculator</a>
+    <a href="#pricing">Pricing</a>
+  </nav>
+  <a href="#" class="text-sm px-5 py-2 font-semibold transition-all hover:opacity-85" style="background:var(--accent);color:#fff;">
+    Replace Your Stack
+  </a>
+</header>
 
-<!-- CALCULATOR -->
-<section class="calculator" id="calculator">
-  <div class="calc-header">
-    <p class="calc-tag">ROI Calculator</p>
-    <h2 class="calc-title">See your savings in real time</h2>
-    <p class="calc-sub">Select the tools you currently pay for and set your team size — we'll show you exactly how much you save.</p>
-  </div>
-
-  <div class="calc-layout">
-    <!-- INPUT SIDE -->
-    <div class="calc-inputs">
-      <div class="user-input">
-        <div class="user-label">
-          <span>Team size</span>
-          <span class="user-count" id="userCount">25</span>
-        </div>
-        <input type="range" class="user-slider" id="userSlider" min="1" max="200" value="25" step="1" />
-        <div class="slider-range"><span>1 user</span><span>50</span><span>100</span><span>200 users</span></div>
-      </div>
-
-      <p class="calc-section-title">Apps you're currently paying for</p>
-      <div class="apps-grid">
-        <div class="app-item selected" data-cost="15" data-name="Notion" onclick="toggleApp(this)">
-          <span class="app-emoji">📝</span>
-          <span class="app-name">Notion</span>
-          <span class="app-cost">$15/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-        <div class="app-item selected" data-cost="12" data-name="Slack" onclick="toggleApp(this)">
-          <span class="app-emoji">💬</span>
-          <span class="app-name">Slack</span>
-          <span class="app-cost">$12/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-        <div class="app-item selected" data-cost="16" data-name="Asana" onclick="toggleApp(this)">
-          <span class="app-emoji">✅</span>
-          <span class="app-name">Asana</span>
-          <span class="app-cost">$16/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-        <div class="app-item" data-cost="25" data-name="HubSpot" onclick="toggleApp(this)">
-          <span class="app-emoji">🔗</span>
-          <span class="app-name">HubSpot</span>
-          <span class="app-cost">$25/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-        <div class="app-item" data-cost="10" data-name="Loom" onclick="toggleApp(this)">
-          <span class="app-emoji">🎥</span>
-          <span class="app-name">Loom</span>
-          <span class="app-cost">$10/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-        <div class="app-item" data-cost="8" data-name="Miro" onclick="toggleApp(this)">
-          <span class="app-emoji">🗺️</span>
-          <span class="app-name">Miro</span>
-          <span class="app-cost">$8/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-        <div class="app-item" data-cost="20" data-name="Figma" onclick="toggleApp(this)">
-          <span class="app-emoji">🎨</span>
-          <span class="app-name">Figma</span>
-          <span class="app-cost">$20/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-        <div class="app-item" data-cost="9" data-name="Zoom" onclick="toggleApp(this)">
-          <span class="app-emoji">📹</span>
-          <span class="app-name">Zoom</span>
-          <span class="app-cost">$9/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-        <div class="app-item" data-cost="14" data-name="Monday" onclick="toggleApp(this)">
-          <span class="app-emoji">📊</span>
-          <span class="app-name">Monday</span>
-          <span class="app-cost">$14/user</span>
-          <div class="app-check"><svg viewBox="0 0 12 12"><path d="M2 6l3 3 5-5"/></svg></div>
-        </div>
-      </div>
+<!-- ══ HERO ══ -->
+<section class="pt-28 pb-20 px-6 text-center" style="border-bottom:1px solid var(--border);">
+  <div class="max-w-4xl mx-auto">
+    <div class="badge fade-up mb-6" style="background:rgba(109,40,217,0.08);color:var(--accent);border:1px solid rgba(109,40,217,0.15);">
+      <i data-lucide="zap" style="width:11px;height:11px;"></i>
+      THE ALL-IN-ONE WORKSPACE
+    </div>
+    <div class="clip-line">
+      <h1 class="clip-inner font-extrabold" style="font-size:clamp(36px,7vw,96px);line-height:0.9;letter-spacing:-0.05em;">
+        Stop Paying for<br>Nine Separate Apps.
+      </h1>
+    </div>
+    <p class="fade-up mt-6 text-sm leading-relaxed max-w-lg mx-auto" style="color:var(--mid);">
+      UNIFIED replaces your project management, docs, chat, CRM, analytics, and automation tools with a single workspace — at a fraction of the combined cost.
+    </p>
+    <div class="fade-up flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+      <a href="#calculator" class="font-semibold text-sm px-8 py-4 transition-all hover:opacity-85" style="background:var(--accent);color:#fff;">
+        Calculate Your Savings
+      </a>
+      <a href="#pricing" class="font-medium text-sm px-8 py-4 border transition-all hover:border-purple-400" style="border-color:var(--border);color:var(--mid);">
+        View Plans
+      </a>
     </div>
 
-    <!-- RESULTS SIDE -->
-    <div class="calc-results">
-      <div class="results-card">
-        <p class="results-label">Your current monthly spend</p>
-        <p class="results-total" id="totalSpend">$0</p>
-        <p class="results-sub" id="totalUsers">for <span id="teamSizeLabel">25</span> users</p>
-        <div class="results-divider"></div>
-        <div id="costBreakdown"></div>
-      </div>
-
-      <div class="savings-banner">
-        <span class="savings-icon">💚</span>
-        <div>
-          <p class="savings-label">Monthly savings with UNIFIED</p>
-          <p class="savings-amount" id="savingsAmount">$0</p>
-          <p class="savings-period" id="savingsYear">($0/year)</p>
-        </div>
-      </div>
-
-      <div class="unified-price">
-        <div class="up-left">
-          <p class="up-label">UNIFIED — Business Plan</p>
-          <p class="up-sub">Everything included, unlimited projects</p>
-        </div>
-        <div class="up-right"><span id="unifiedCost">$0</span><span class="up-period">/mo</span></div>
-      </div>
-
-      <a href="#" class="cta-inline">Start Free Trial — Save immediately →</a>
+    <!-- Trust logos -->
+    <div class="fade-up mt-16 flex flex-wrap items-center justify-center gap-8">
+      <p class="mono text-xs w-full mb-2" style="color:rgba(26,19,51,0.25);letter-spacing:0.1em;">TRUSTED BY 18,000+ TEAMS</p>
+      <span class="feature-pill"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent);"></i> Forma Inc.</span>
+      <span class="feature-pill"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent);"></i> Soleil Platform</span>
+      <span class="feature-pill"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent);"></i> Verdant Capital</span>
+      <span class="feature-pill"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent);"></i> Noire Architecture</span>
+      <span class="feature-pill"><i data-lucide="check" style="width:12px;height:12px;color:var(--accent);"></i> Drift Media</span>
     </div>
   </div>
 </section>
 
-<!-- WHAT'S INCLUDED -->
-<section class="included" id="features">
-  <div class="included-inner">
-    <p class="inc-label">All-in-One Platform</p>
-    <h2 class="inc-title">Everything you need.<br/>None of the overlap.</h2>
-    <div class="inc-grid">
-      <div class="inc-card">
-        <p class="inc-icon">📝</p>
-        <h3 class="inc-name">Docs & Wiki</h3>
-        <p class="inc-desc">Rich-text docs, team wiki, nested pages, embeds, and databases — all searchable in one place.</p>
-        <p class="inc-replaces">Replaces: Notion, Confluence</p>
+<!-- ══ ROI CALCULATOR ══ -->
+<section id="calculator" class="py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="text-center mb-14">
+      <p class="mono text-xs mb-3 fade-up" style="color:rgba(26,19,51,0.35);letter-spacing:0.12em;">ROI CALCULATOR</p>
+      <div class="clip-line">
+        <h2 class="clip-inner font-extrabold" style="font-size:clamp(28px,4.5vw,56px);letter-spacing:-0.04em;">
+          How much are you<br>actually spending?
+        </h2>
       </div>
-      <div class="inc-card">
-        <p class="inc-icon">✅</p>
-        <h3 class="inc-name">Project Management</h3>
-        <p class="inc-desc">Kanban, Gantt, sprints, goals, and automation — for engineering, marketing, and ops teams alike.</p>
-        <p class="inc-replaces">Replaces: Asana, Monday, Jira</p>
+      <p class="fade-up mt-4 text-sm" style="color:var(--mid);">Based on average per-user monthly costs. Select the tools you pay for.</p>
+    </div>
+
+    <div class="gradient-border fade-up" style="margin-bottom: 0;">
+      <div class="gradient-inner">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+
+          <!-- LEFT: App selection + slider -->
+          <div class="p-8" style="border-right:1px solid var(--border);">
+
+            <h3 class="font-semibold text-base mb-6" style="letter-spacing:-0.02em;">Which apps does your team use?</h3>
+
+            <!-- App grid: 9 apps -->
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-8" id="app-grid">
+
+              <div class="app-tile" data-id="slack" data-cost="9" data-name="Slack" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#4A154B;color:#fff;">SL</div>
+                <span class="app-name">Slack</span>
+                <span class="app-cost">$9/user</span>
+              </div>
+
+              <div class="app-tile" data-id="notion" data-cost="10" data-name="Notion" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#1a1333;color:#fff;">NO</div>
+                <span class="app-name">Notion</span>
+                <span class="app-cost">$10/user</span>
+              </div>
+
+              <div class="app-tile" data-id="asana" data-cost="11" data-name="Asana" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#f06a6a;color:#fff;">AS</div>
+                <span class="app-name">Asana</span>
+                <span class="app-cost">$11/user</span>
+              </div>
+
+              <div class="app-tile selected" data-id="jira" data-cost="8" data-name="Jira" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#0052CC;color:#fff;">JR</div>
+                <span class="app-name">Jira</span>
+                <span class="app-cost">$8/user</span>
+              </div>
+
+              <div class="app-tile selected" data-id="loom" data-cost="12" data-name="Loom" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#625DF5;color:#fff;">LM</div>
+                <span class="app-name">Loom</span>
+                <span class="app-cost">$12/user</span>
+              </div>
+
+              <div class="app-tile" data-id="monday" data-cost="16" data-name="Monday" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#F65F5C;color:#fff;">MN</div>
+                <span class="app-name">Monday</span>
+                <span class="app-cost">$16/user</span>
+              </div>
+
+              <div class="app-tile selected" data-id="gdrive" data-cost="13" data-name="Google Drive" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#34A853;color:#fff;">GD</div>
+                <span class="app-name">Google Drive</span>
+                <span class="app-cost">$13/user</span>
+              </div>
+
+              <div class="app-tile" data-id="airtable" data-cost="20" data-name="Airtable" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#FCB400;color:#fff;">AT</div>
+                <span class="app-name">Airtable</span>
+                <span class="app-cost">$20/user</span>
+              </div>
+
+              <div class="app-tile" data-id="linear" data-cost="8" data-name="Linear" onclick="toggleApp(this)">
+                <div class="app-check"><i data-lucide="check" style="width:10px;height:10px;color:#fff;"></i></div>
+                <div class="app-icon" style="background:#5E6AD2;color:#fff;">LN</div>
+                <span class="app-name">Linear</span>
+                <span class="app-cost">$8/user</span>
+              </div>
+
+            </div>
+
+            <!-- User count slider -->
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <label class="font-medium text-sm" style="letter-spacing:-0.01em;">Team size</label>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-2xl" id="user-count-display" style="letter-spacing:-0.05em;">50</span>
+                  <span class="text-sm" style="color:var(--mid);">members</span>
+                </div>
+              </div>
+              <input type="range" id="user-slider" min="5" max="500" step="5" value="50" oninput="updateCalc()" />
+              <div class="flex justify-between mt-1">
+                <span class="mono text-xs" style="color:rgba(26,19,51,0.3);">5</span>
+                <span class="mono text-xs" style="color:rgba(26,19,51,0.3);">500</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Results -->
+          <div class="p-8 flex flex-col justify-between">
+
+            <div>
+              <h3 class="font-semibold text-base mb-6" style="letter-spacing:-0.02em;">Your current spending</h3>
+
+              <!-- Selected apps list -->
+              <div id="selected-apps-list" class="space-y-0 mb-4">
+                <!-- Populated by JS -->
+              </div>
+
+              <!-- Totals -->
+              <div class="space-y-0 mb-8" style="border-top:2px solid var(--border);padding-top:0.75rem;">
+                <div class="summary-row">
+                  <span style="color:var(--mid);">Current annual spend</span>
+                  <span class="font-bold" id="total-current">$0</span>
+                </div>
+                <div class="summary-row" style="border-color:rgba(109,40,217,0.15);">
+                  <span style="color:var(--mid);">Unified for <span id="users-inline">50</span> members</span>
+                  <span class="font-semibold" id="unified-cost" style="color:var(--accent);">$0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Savings hero -->
+            <div>
+              <p class="mono text-xs mb-2" style="color:rgba(26,19,51,0.35);letter-spacing:0.1em;">YOU SAVE ANNUALLY</p>
+              <div class="savings-number" id="savings-display">$0</div>
+
+              <p class="text-sm mt-3 mb-6" id="savings-desc" style="color:var(--mid);line-height:1.6;">
+                Select your tools above to see your projected savings.
+              </p>
+
+              <a href="#pricing" class="block text-center font-semibold text-sm py-4 px-8 transition-all hover:opacity-85 w-full" style="background:var(--accent);color:#fff;">
+                Switch to Unified — Save This Amount
+              </a>
+              <p class="text-center mono text-xs mt-3" style="color:rgba(26,19,51,0.25);">30-day migration guarantee. Cancel anytime.</p>
+            </div>
+
+          </div>
+        </div>
       </div>
-      <div class="inc-card">
-        <p class="inc-icon">💬</p>
-        <h3 class="inc-name">Team Chat</h3>
-        <p class="inc-desc">Channels, threads, DMs, and shared spaces with search, reactions, and smart notifications.</p>
-        <p class="inc-replaces">Replaces: Slack, Teams</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ PLATFORM FEATURES ══ -->
+<section class="py-20 px-6" style="border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="max-w-6xl mx-auto">
+    <p class="mono text-xs mb-3 fade-up" style="color:rgba(26,19,51,0.35);letter-spacing:0.12em;">THE PLATFORM</p>
+    <div class="clip-line mb-14">
+      <h2 class="clip-inner font-extrabold" style="font-size:clamp(28px,4.5vw,56px);letter-spacing:-0.04em;">
+        Everything. One workspace.
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-5">
+
+      <div class="plan-card fade-up">
+        <i data-lucide="layout" style="width:18px;height:18px;color:var(--accent);margin-bottom:1rem;"></i>
+        <h3 class="font-semibold mb-2" style="letter-spacing:-0.01em;">Project Management</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--mid);">Kanban, list, timeline, and calendar views. Task dependencies, automations, and workload balancing. Replaces Jira, Asana, Monday.</p>
       </div>
-      <div class="inc-card">
-        <p class="inc-icon">📊</p>
-        <h3 class="inc-name">Analytics & Dashboards</h3>
-        <p class="inc-desc">Custom reports, team metrics, goal tracking, and OKR dashboards — no SQL required.</p>
-        <p class="inc-replaces">Replaces: Looker, Metabase</p>
+
+      <div class="plan-card fade-up" style="transition-delay:0.1s;">
+        <i data-lucide="file-text" style="width:18px;height:18px;color:var(--accent);margin-bottom:1rem;"></i>
+        <h3 class="font-semibold mb-2" style="letter-spacing:-0.01em;">Docs &amp; Wikis</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--mid);">Rich documents with embedded databases, templates, and real-time collaboration. Replaces Notion, Confluence.</p>
       </div>
-      <div class="inc-card">
-        <p class="inc-icon">🎥</p>
-        <h3 class="inc-name">Video & Screen Record</h3>
-        <p class="inc-desc">Async video messages, screen recording, and clips — embedded directly in tasks and docs.</p>
-        <p class="inc-replaces">Replaces: Loom, Vidyard</p>
+
+      <div class="plan-card fade-up" style="transition-delay:0.2s;">
+        <i data-lucide="message-square" style="width:18px;height:18px;color:var(--accent);margin-bottom:1rem;"></i>
+        <h3 class="font-semibold mb-2" style="letter-spacing:-0.01em;">Messaging</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--mid);">Channels, DMs, and thread-based conversation linked directly to tasks and projects. Replaces Slack, Teams.</p>
       </div>
-      <div class="inc-card">
-        <p class="inc-icon">🔗</p>
-        <h3 class="inc-name">CRM Lite</h3>
-        <p class="inc-desc">Contact management, pipeline tracking, and email sequences — for growing sales teams.</p>
-        <p class="inc-replaces">Replaces: HubSpot CRM (free)</p>
+
+      <div class="plan-card fade-up">
+        <i data-lucide="bar-chart-2" style="width:18px;height:18px;color:var(--accent);margin-bottom:1rem;"></i>
+        <h3 class="font-semibold mb-2" style="letter-spacing:-0.01em;">Analytics</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--mid);">Custom dashboards, velocity tracking, and executive reporting across every project and team. Replaces Datadog, Looker.</p>
       </div>
-      <div class="inc-card">
-        <p class="inc-icon">🗺️</p>
-        <h3 class="inc-name">Whiteboard</h3>
-        <p class="inc-desc">Infinite canvas for brainstorming, flowcharts, wireframes, and retros — real-time multiplayer.</p>
-        <p class="inc-replaces">Replaces: Miro, FigJam</p>
+
+      <div class="plan-card fade-up" style="transition-delay:0.1s;">
+        <i data-lucide="zap" style="width:18px;height:18px;color:var(--accent);margin-bottom:1rem;"></i>
+        <h3 class="font-semibold mb-2" style="letter-spacing:-0.01em;">Automations</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--mid);">No-code trigger-action rules, cross-workspace flows, and AI-suggested automations. Replaces Zapier, Make.</p>
       </div>
-      <div class="inc-card">
-        <p class="inc-icon">⚡</p>
-        <h3 class="inc-name">Automations & AI</h3>
-        <p class="inc-desc">Smart workflows, AI writing assistance, meeting summaries, and no-code integrations built in.</p>
-        <p class="inc-replaces">Replaces: Zapier, Make</p>
+
+      <div class="plan-card fade-up" style="transition-delay:0.2s;">
+        <i data-lucide="database" style="width:18px;height:18px;color:var(--accent);margin-bottom:1rem;"></i>
+        <h3 class="font-semibold mb-2" style="letter-spacing:-0.01em;">Databases</h3>
+        <p class="text-sm leading-relaxed" style="color:var(--mid);">Structured relational databases with linked fields, views, and forms. Replaces Airtable, Smartsheet.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section id="pricing" class="py-20 px-6" style="border-bottom:1px solid var(--border);">
+  <div class="max-w-5xl mx-auto">
+    <p class="mono text-xs mb-3 fade-up" style="color:rgba(26,19,51,0.35);letter-spacing:0.12em;">PRICING</p>
+    <div class="clip-line mb-14">
+      <h2 class="clip-inner font-extrabold" style="font-size:clamp(28px,4.5vw,56px);letter-spacing:-0.04em;">
+        One price.<br>Everything included.
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="plan-card fade-up">
+        <p class="mono text-xs mb-3" style="color:rgba(26,19,51,0.35);letter-spacing:0.1em;">SOLO</p>
+        <p class="font-extrabold mb-1" style="font-size:2.5rem;letter-spacing:-0.05em;">$0</p>
+        <p class="text-xs mb-8" style="color:var(--mid);">1 member, forever</p>
+        <ul class="space-y-2 mb-10 text-sm" style="color:var(--mid);">
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> All 9 workspace modules</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> 5 GB storage</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> 100 automation actions</li>
+        </ul>
+        <a href="#" class="block text-center text-sm py-3 border font-medium transition-all hover:bg-gray-50" style="border-color:var(--border);">
+          Create Free Account
+        </a>
+      </div>
+
+      <div class="plan-card active fade-up" style="transition-delay:0.1s;">
+        <div class="flex items-center justify-between mb-3">
+          <p class="mono text-xs" style="color:var(--accent);letter-spacing:0.1em;">TEAM</p>
+          <span class="mono text-xs px-2 py-0.5" style="background:rgba(109,40,217,0.12);color:var(--accent);">BEST VALUE</span>
+        </div>
+        <p class="font-extrabold mb-1" style="font-size:2.5rem;letter-spacing:-0.05em;">$12<span style="font-size:1rem;font-weight:400;color:var(--mid);">/user/mo</span></p>
+        <p class="text-xs mb-8" style="color:var(--mid);">Billed annually</p>
+        <ul class="space-y-2 mb-10 text-sm" style="color:rgba(26,19,51,0.7);">
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> Unlimited members</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> All 9 workspace modules</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> Unlimited storage</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> 25K automation actions</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> Advanced analytics</li>
+        </ul>
+        <a href="#" class="block text-center text-sm py-3 font-semibold transition-all hover:opacity-85" style="background:var(--accent);color:#fff;">
+          Consolidate Your Stack
+        </a>
+      </div>
+
+      <div class="plan-card fade-up" style="transition-delay:0.2s;">
+        <p class="mono text-xs mb-3" style="color:rgba(26,19,51,0.35);letter-spacing:0.1em;">ENTERPRISE</p>
+        <p class="font-extrabold mb-1" style="font-size:2.5rem;letter-spacing:-0.05em;">Custom</p>
+        <p class="text-xs mb-8" style="color:var(--mid);">Volume pricing</p>
+        <ul class="space-y-2 mb-10 text-sm" style="color:var(--mid);">
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> All Team features</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> SSO + SCIM</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> Dedicated migration support</li>
+          <li class="flex gap-2 items-center"><i data-lucide="check" style="width:13px;height:13px;color:var(--accent);"></i> 99.9% SLA</li>
+        </ul>
+        <a href="#" class="block text-center text-sm py-3 border font-medium transition-all hover:bg-gray-50" style="border-color:var(--border);">
+          Request a Proposal
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="testi-inner">
-    <p class="inc-label">Real Savings. Real Teams.</p>
-    <h2 class="testi-title">Teams that switched<br/>to UNIFIED</h2>
-    <div class="testi-grid">
-      <div class="testi">
-        <p class="testi-savings">$2,400/mo saved</p>
-        <p class="testi-text">"We had 7 tools before UNIFIED. Now we have one. The calculator undersold it — we actually saved more because we cancelled 2 tools we forgot we were paying for."</p>
-        <div class="testi-by">
-          <div class="testi-av" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">KL</div>
-          <div><p class="testi-name">Kai Larsson</p><p class="testi-role">CTO, BlueScale (42 team members)</p></div>
-        </div>
+<!-- ══ FOOTER ══ -->
+<footer class="py-12 px-6">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="flex items-center gap-2">
+      <div style="width:18px;height:18px;background:linear-gradient(135deg,var(--accent),#2563eb);border-radius:4px;display:flex;align-items:center;justify-content:center;">
+        <i data-lucide="layers" style="width:10px;height:10px;color:#fff;"></i>
       </div>
-      <div class="testi">
-        <p class="testi-savings">$890/mo saved</p>
-        <p class="testi-text">"As a 12-person startup, every dollar matters. UNIFIED cut our SaaS spend by 70% and the onboarding was shockingly fast. Up and running in an afternoon."</p>
-        <div class="testi-by">
-          <div class="testi-av" style="background:linear-gradient(135deg,#059669,#10b981);">NP</div>
-          <div><p class="testi-name">Nina Park</p><p class="testi-role">Founder, Orbit Startups</p></div>
-        </div>
-      </div>
-      <div class="testi">
-        <p class="testi-savings">$5,100/mo saved</p>
-        <p class="testi-text">"130 seats, 9 different SaaS tools replaced. Finance was over the moon. The team was skeptical but now they wouldn't go back for anything."</p>
-        <div class="testi-by">
-          <div class="testi-av" style="background:linear-gradient(135deg,#dc2626,#ef4444);">MJ</div>
-          <div><p class="testi-name">Marcus Jones</p><p class="testi-role">VP Ops, Stratum Corp</p></div>
-        </div>
-      </div>
+      <span class="font-bold text-sm" style="letter-spacing:-0.02em;">UNIFIED</span>
     </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta">
-  <h2>Stop the<br/><em>subscription sprawl.</em></h2>
-  <p>Join 12,000+ teams that replaced their entire stack with UNIFIED. Free trial, no credit card needed.</p>
-  <div class="hero-ctas">
-    <a href="#" class="btn-grad">Start Free — 14 Days</a>
-    <a href="#calculator" class="btn-outline">Recalculate Savings</a>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <a href="#" class="footer-logo">UNI<em>FIED</em></a>
-    <ul class="footer-nav">
-      <li><a href="#">Features</a></li>
-      <li><a href="#">Pricing</a></li>
-      <li><a href="#">Migrations</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-    <p class="footer-copy">© 2024 UNIFIED Inc.</p>
+    <div class="flex gap-6">
+      <a href="#" class="text-xs transition-colors hover:text-black" style="color:var(--mid);">Privacy</a>
+      <a href="#" class="text-xs transition-colors hover:text-black" style="color:var(--mid);">Terms</a>
+      <a href="#" class="text-xs transition-colors hover:text-black" style="color:var(--mid);">Status</a>
+    </div>
+    <p class="mono text-xs" style="color:rgba(26,19,51,0.2);">&copy; 2025 Unified Workspace Inc.</p>
   </div>
 </footer>
 
 <script>
-  const UNIFIED_PRICE_PER_USER = 12; // $12/user/month
-
-  function getUsers() { return parseInt(document.getElementById('userSlider').value); }
-
-  function getSelectedApps() {
-    return [...document.querySelectorAll('.app-item.selected')].map(el => ({
-      name: el.dataset.name,
-      cost: parseFloat(el.dataset.cost),
-      emoji: el.querySelector('.app-emoji').textContent
-    }));
-  }
-
-  function updateCalc() {
-    const users = getUsers();
-    const apps = getSelectedApps();
-    const totalCost = apps.reduce((sum, a) => sum + a.cost * users, 0);
-    const unifiedCost = UNIFIED_PRICE_PER_USER * users;
-    const savings = Math.max(0, totalCost - unifiedCost);
-
-    // Update slider visual
-    const slider = document.getElementById('userSlider');
-    const pct = ((users - 1) / 199 * 100).toFixed(1);
-    slider.style.setProperty('--pct', pct + '%');
-
-    document.getElementById('userCount').textContent = users;
-    document.getElementById('teamSizeLabel').textContent = users;
-    document.getElementById('totalSpend').textContent = '$' + totalCost.toLocaleString();
-    document.getElementById('savingsAmount').textContent = '$' + savings.toLocaleString();
-    document.getElementById('savingsYear').textContent = '($' + (savings * 12).toLocaleString() + '/year)';
-    document.getElementById('unifiedCost').textContent = '$' + unifiedCost.toLocaleString();
-
-    // Breakdown
-    const bd = document.getElementById('costBreakdown');
-    if (apps.length === 0) {
-      bd.innerHTML = '<p style="font-size:13px;color:rgba(255,255,255,0.35);text-align:center;padding:16px 0;">Select apps above to see breakdown</p>';
-    } else {
-      bd.innerHTML = apps.map(a => `
-        <div class="cost-row">
-          <span class="cost-name"><span class="emoji">${a.emoji}</span>${a.name}</span>
-          <span class="cost-value red">$${(a.cost * users).toLocaleString()}</span>
-        </div>
-      `).join('') + `
-        <div style="height:1px;background:rgba(255,255,255,0.08);margin:16px 0;"></div>
-        <div class="cost-row">
-          <span class="cost-name"><span class="emoji">⚡</span>UNIFIED replaces all</span>
-          <span class="cost-value green">$${unifiedCost.toLocaleString()}</span>
-        </div>
-      `;
-    }
-  }
+  // ── App data ──
+  const UNIFIED_PER_USER_MONTH = 12;
 
   function toggleApp(el) {
     el.classList.toggle('selected');
+    lucide.createIcons(); // refresh check icons
     updateCalc();
   }
 
-  document.getElementById('userSlider').addEventListener('input', updateCalc);
-  updateCalc(); // init
+  function formatMoney(n) {
+    return '$' + Math.round(n).toLocaleString();
+  }
 
-  // Scroll reveal
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
-      }
-    });
+  function updateCalc() {
+    const tiles = document.querySelectorAll('.app-tile');
+    const selected = Array.from(tiles).filter(t => t.classList.contains('selected'));
+    const users = parseInt(document.getElementById('user-slider').value);
+
+    // Update slider fill
+    const slider = document.getElementById('user-slider');
+    const min = parseInt(slider.min), max = parseInt(slider.max);
+    const pct = ((users - min) / (max - min)) * 100;
+    slider.style.setProperty('--pct', pct + '%');
+
+    document.getElementById('user-count-display').textContent = users;
+    document.getElementById('users-inline').textContent = users;
+
+    // Cost per user per month
+    const sumPerUser = selected.reduce((s, t) => s + parseFloat(t.dataset.cost), 0);
+    const currentAnnual = sumPerUser * users * 12;
+    const unifiedAnnual = UNIFIED_PER_USER_MONTH * users * 12;
+    const savings = Math.max(0, currentAnnual - unifiedAnnual);
+
+    // Selected apps list
+    const listEl = document.getElementById('selected-apps-list');
+    listEl.innerHTML = '';
+    if (selected.length === 0) {
+      listEl.innerHTML = '<p class="text-sm py-2" style="color:rgba(26,19,51,0.3);font-style:italic;">No apps selected yet</p>';
+    } else {
+      selected.forEach(t => {
+        const row = document.createElement('div');
+        row.className = 'summary-row';
+        const cost = parseFloat(t.dataset.cost) * users * 12;
+        row.innerHTML = `<span style="color:var(--mid);">${t.dataset.name}</span><span class="font-medium">${formatMoney(cost)}/yr</span>`;
+        listEl.appendChild(row);
+      });
+    }
+
+    // Totals
+    document.getElementById('total-current').textContent = formatMoney(currentAnnual) + '/yr';
+    document.getElementById('unified-cost').textContent = formatMoney(unifiedAnnual) + '/yr';
+
+    // Savings
+    const savingsEl = document.getElementById('savings-display');
+    savingsEl.classList.remove('count-animate');
+    void savingsEl.offsetWidth;
+    savingsEl.textContent = formatMoney(savings);
+    savingsEl.classList.add('count-animate');
+
+    const descEl = document.getElementById('savings-desc');
+    if (savings > 0) {
+      const pct = Math.round(((currentAnnual - unifiedAnnual) / currentAnnual) * 100);
+      descEl.textContent = `Consolidating to Unified saves your ${users}-person team ${formatMoney(savings)} per year — a ${pct}% reduction in tooling spend.`;
+    } else if (selected.length > 0) {
+      descEl.textContent = 'Your selected tools are already cost-efficient. Unified adds consolidation, reduced context-switching, and a single support contract.';
+    } else {
+      descEl.textContent = 'Select the tools your team pays for to calculate your projected savings.';
+    }
+  }
+
+  // Initial run
+  updateCalc();
+
+  // ── Intersection observer ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
   }, { threshold: 0.1 });
-  document.querySelectorAll('.inc-card, .testi').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = `opacity 0.6s ease ${i * 0.06}s, transform 0.6s ease ${i * 0.06}s`;
-    io.observe(el);
+  document.querySelectorAll('.clip-line, .fade-up').forEach(el => io.observe(el));
+  document.querySelectorAll('.clip-line, .fade-up').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-visible');
   });
+
+  lucide.createIcons();
 </script>
 </body>
 </html>

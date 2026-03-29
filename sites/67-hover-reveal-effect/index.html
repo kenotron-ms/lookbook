@@ -1,672 +1,497 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>REVEAL.CO — Creative Agency</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REVEAL.CO — Creative Agency</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --fg: #f2ede8;
+      --accent: #ff3c2e;
+      --border: rgba(242,237,232,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: none;
+      overflow-x: hidden;
+    }
+    .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
+    .mono { font-family: 'Space Mono', monospace; }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ── Custom cursor ── */
+    #cursor {
+      position: fixed; z-index: 9999; pointer-events: none;
+      width: 60px; height: 60px;
+      transform: translate(-50%,-50%);
+      mix-blend-mode: difference;
+      transition: width 0.3s ease, height 0.3s ease, opacity 0.3s;
+    }
+    #cursor-dot {
+      position: fixed; z-index: 9999; pointer-events: none;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--fg);
+      transform: translate(-50%,-50%);
+      transition: transform 0.05s;
+    }
+    #cursor-ring {
+      width: 100%; height: 100%; border-radius: 50%;
+      border: 1.5px solid rgba(242,237,232,0.6);
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s;
+    }
+    body:hover #cursor { opacity: 1; }
 
-  :root {
-    --bg: #0a0a09;
-    --cream: #f2ede3;
-    --accent: #d4ff00;
-    --border: rgba(242,237,227,0.08);
-    --muted: rgba(242,237,227,0.4);
-  }
+    /* ── Portfolio rows hover reveal ── */
+    .portfolio-row {
+      position: relative;
+      border-top: 1px solid var(--border);
+      overflow: hidden;
+      cursor: none;
+    }
+    .portfolio-row:last-child { border-bottom: 1px solid var(--border); }
+    .portfolio-row-inner {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      padding: 2rem 0;
+      transition: padding-left 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .portfolio-row:hover .portfolio-row-inner { padding-left: 1.5rem; }
 
-  html { scroll-behavior: smooth; }
+    /* Reveal overlay via ::before */
+    .portfolio-row::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+      opacity: 0.18;
+    }
+    .portfolio-row:hover::before { transform: scaleX(1); }
 
-  body {
-    background: var(--bg);
-    color: var(--cream);
-    font-family: 'Manrope', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
+    .portfolio-row[data-img="1"]::before { background-image: url('../../images/creative/creative-1.jpg'); }
+    .portfolio-row[data-img="2"]::before { background-image: url('../../images/creative/creative-2.jpg'); }
+    .portfolio-row[data-img="3"]::before { background-image: url('../../images/creative/creative-3.jpg'); }
+    .portfolio-row[data-img="4"]::before { background-image: url('../../images/creative/creative-4.jpg'); }
+    .portfolio-row[data-img="5"]::before { background-image: url('../../images/creative/creative-5.jpg'); }
+    .portfolio-row[data-img="6"]::before { background-image: url('../../images/creative/creative-6.jpg'); }
 
-  /* Custom cursor */
-  .cursor {
-    position: fixed; z-index: 9999;
-    width: 12px; height: 12px;
-    background: var(--accent); border-radius: 50%;
-    pointer-events: none; transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s, background 0.3s;
-    mix-blend-mode: difference;
-  }
-  .cursor.hovering { width: 80px; height: 80px; }
+    /* Hover text color */
+    .portfolio-row .row-title { transition: color 0.3s; }
+    .portfolio-row:hover .row-title { color: #fff; }
+    .portfolio-row .row-arrow {
+      opacity: 0; transform: rotate(-45deg) scale(0.8);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .portfolio-row:hover .row-arrow { opacity: 1; transform: rotate(0deg) scale(1); }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 24px 56px;
-  }
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px; letter-spacing: 0.1em;
-    color: var(--cream); text-decoration: none;
-  }
-  .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 40px; list-style: none; }
-  .nav-links a {
-    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
-    color: var(--muted); text-decoration: none; text-transform: uppercase;
-    position: relative; transition: color 0.2s;
-  }
-  .nav-links a::after {
-    content: ''; position: absolute; bottom: -2px; left: 0;
-    width: 0; height: 1px; background: var(--accent);
-    transition: width 0.3s;
-  }
-  .nav-links a:hover { color: var(--cream); }
-  .nav-links a:hover::after { width: 100%; }
-  .nav-avail {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
-    color: var(--accent);
-  }
-  .avail-dot {
-    width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
-    animation: pulse 2s ease infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+    /* ── Clip line ── */
+    .clip-line { overflow: hidden; }
+    .clip-inner { display: block; transform: translateY(110%); transition: transform 0.85s cubic-bezier(0.16,1,0.3,1); }
+    .clip-line.is-visible .clip-inner { transform: translateY(0); }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 56px 72px;
-    position: relative; overflow: hidden;
-  }
-  .hero-bg-text {
-    position: absolute;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(180px, 26vw, 380px);
-    letter-spacing: -0.02em; line-height: 1;
-    color: rgba(242,237,227,0.025);
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
-    white-space: nowrap; pointer-events: none;
-    user-select: none;
-  }
-  .hero-eyebrow {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.25em;
-    text-transform: uppercase; color: var(--accent);
-    margin-bottom: 24px;
-    opacity: 0; animation: up 0.7s ease 0.2s forwards;
-  }
-  .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(80px, 14vw, 180px);
-    line-height: 0.88; letter-spacing: 0.02em;
-    opacity: 0; animation: up 0.8s ease 0.4s forwards;
-  }
-  .hero-title .line2 { color: var(--accent); }
-  .hero-bottom {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-top: 48px;
-    opacity: 0; animation: up 0.7s ease 0.7s forwards;
-  }
-  .hero-sub {
-    font-size: 15px; font-weight: 300; line-height: 1.8;
-    color: var(--muted); max-width: 360px;
-  }
-  .hero-btns { display: flex; gap: 14px; }
-  .btn-lime {
-    background: var(--accent); color: #0a0a09;
-    font-size: 13px; font-weight: 800; letter-spacing: 0.06em;
-    padding: 15px 32px; text-decoration: none; text-transform: uppercase;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .btn-lime:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(212,255,0,0.3); }
-  .btn-outline {
-    border: 1px solid var(--border); color: var(--cream);
-    font-size: 13px; font-weight: 600; letter-spacing: 0.06em;
-    padding: 15px 32px; text-decoration: none; text-transform: uppercase;
-    transition: border-color 0.2s;
-  }
-  .btn-outline:hover { border-color: rgba(242,237,227,0.25); }
+    /* ── Fade up ── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.is-visible { opacity: 1; transform: none; }
 
-  @keyframes up {
-    from { opacity: 0; transform: translateY(32px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    /* ── delay helpers ── */
+    .d-1 { transition-delay: 0.1s !important; }
+    .d-2 { transition-delay: 0.2s !important; }
+    .d-3 { transition-delay: 0.3s !important; }
+    .d-4 { transition-delay: 0.4s !important; }
 
-  /* ── PORTFOLIO WITH HOVER REVEAL ── */
-  .portfolio {
-    padding: 0 56px 100px;
-    max-width: 100%;
-  }
-  .portfolio-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 56px;
-    border-top: 1px solid var(--border);
-    padding-top: 56px;
-  }
-  .section-label {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--accent);
-  }
-  .section-heading {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 5vw, 60px); letter-spacing: 0.04em;
-    margin-top: 10px;
-  }
-  .view-all {
-    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--muted);
-    text-decoration: none; transition: color 0.2s;
-  }
-  .view-all:hover { color: var(--accent); }
+    /* ── Image reveal card ── */
+    .reveal-card {
+      position: relative; overflow: hidden;
+    }
+    .reveal-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: saturate(0.8);
+      transition: filter 0.5s, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-card:hover img { filter: saturate(1); transform: scale(1.04); }
+    .reveal-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.7) 0%, transparent 60%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.5rem;
+    }
 
-  /* HOVER REVEAL ROWS */
-  .project-list { display: flex; flex-direction: column; }
-  .project-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 28px 0;
-    border-bottom: 1px solid var(--border);
-    position: relative; overflow: hidden;
-    cursor: none;
-    transition: padding-left 0.4s cubic-bezier(0.16,1,0.3,1);
-  }
-  .project-row:first-child { border-top: 1px solid var(--border); }
-  .project-row:hover { padding-left: 24px; }
-  .project-row:hover .proj-title { color: var(--accent); }
-  .project-row:hover .proj-reveal { opacity: 1; transform: scale(1); }
-  .proj-left { display: flex; align-items: center; gap: 28px; flex: 1; }
-  .proj-num {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
-    color: var(--accent); width: 36px; flex-shrink: 0;
-  }
-  .proj-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(28px, 4vw, 52px); letter-spacing: 0.03em;
-    transition: color 0.3s;
-  }
-  .proj-tags { display: flex; gap: 8px; }
-  .proj-tag {
-    font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--muted);
-    border: 1px solid var(--border); padding: 4px 10px;
-  }
-  .proj-year {
-    font-size: 13px; font-weight: 500; color: var(--muted);
-    flex-shrink: 0;
-  }
-  /* Hover-reveal image */
-  .proj-reveal {
-    position: absolute; right: 80px; top: 50%;
-    transform: translateY(-50%) scale(0.85);
-    width: 220px; height: 150px;
-    overflow: hidden; pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1);
-    z-index: 10;
-  }
-  .proj-reveal-img {
-    width: 100%; height: 100%;
-    transition: transform 0.4s;
-  }
-  .project-row:hover .proj-reveal-img { transform: scale(1.05); }
-  .reveal-c1 { background: linear-gradient(135deg, #1a1a0a, #3d3d00); }
-  .reveal-c2 { background: linear-gradient(135deg, #0a1a1a, #003d3d); }
-  .reveal-c3 { background: linear-gradient(135deg, #1a0a1a, #3d003d); }
-  .reveal-c4 { background: linear-gradient(135deg, #0a0a1a, #00003d); }
-  .reveal-c5 { background: linear-gradient(135deg, #1a0a0a, #3d0000); }
+    /* ── Service pill ── */
+    .pill {
+      display: inline-block;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.8rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .pill:hover { border-color: var(--accent); background: rgba(255,60,46,0.08); }
 
-  /* ── SERVICES ── */
-  .services {
-    padding: 100px 56px;
-    background: #0f0f0d;
-    border-top: 1px solid var(--border);
-  }
-  .services-inner { max-width: 1400px; margin: 0 auto; }
-  .services-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1px; background: var(--border);
-    border: 1px solid var(--border);
-    margin-top: 56px;
-  }
-  .svc-card {
-    background: #0f0f0d; padding: 44px 36px;
-    position: relative; overflow: hidden;
-    transition: background 0.3s;
-  }
-  .svc-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: var(--accent); transform: translateY(101%);
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-    z-index: 0;
-  }
-  .svc-card:hover::before { transform: translateY(0); }
-  .svc-card:hover .svc-num,
-  .svc-card:hover .svc-title,
-  .svc-card:hover .svc-desc { color: var(--bg); }
-  .svc-card > * { position: relative; z-index: 1; }
-  .svc-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 13px; letter-spacing: 0.15em;
-    color: var(--accent); margin-bottom: 32px;
-    transition: color 0.3s;
-  }
-  .svc-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px; letter-spacing: 0.04em;
-    margin-bottom: 16px; transition: color 0.3s;
-  }
-  .svc-desc {
-    font-size: 13px; line-height: 1.75; color: var(--muted);
-    transition: color 0.3s;
-  }
-
-  /* ── HOVER REVEAL NAV DEMO ── */
-  .reveal-demo {
-    padding: 100px 56px;
-    border-top: 1px solid var(--border);
-  }
-  .reveal-demo-inner { max-width: 1400px; margin: 0 auto; }
-  .reveal-links { display: flex; flex-direction: column; gap: 0; }
-  .reveal-link-item {
-    display: flex; align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-    position: relative; overflow: visible;
-    cursor: none; gap: 24px;
-  }
-  .reveal-link-item:first-child { border-top: 1px solid var(--border); }
-  .rl-tag {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--accent); width: 72px; flex-shrink: 0;
-  }
-  .rl-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(24px, 3.5vw, 44px); letter-spacing: 0.04em;
-    transition: color 0.25s, letter-spacing 0.3s;
-    flex: 1;
-  }
-  .reveal-link-item:hover .rl-name { color: var(--accent); letter-spacing: 0.08em; }
-  .rl-preview {
-    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
-    width: 180px; height: 120px; overflow: hidden;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s cubic-bezier(0.16,1,0.3,1);
-    z-index: 10;
-  }
-  .reveal-link-item:hover .rl-preview { opacity: 1; }
-  .rl-preview-fill { width: 100%; height: 100%; }
-
-  /* ── TESTIMONIALS ── */
-  .testimonials {
-    padding: 100px 56px;
-    background: #0f0f0d;
-    border-top: 1px solid var(--border);
-  }
-  .testi-inner { max-width: 1400px; margin: 0 auto; }
-  .testi-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr);
-    gap: 24px; margin-top: 56px;
-  }
-  .testi-box {
-    border: 1px solid var(--border); padding: 40px;
-    transition: border-color 0.3s;
-  }
-  .testi-box:hover { border-color: rgba(212,255,0,0.25); }
-  .testi-q {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(20px, 2.5vw, 28px); letter-spacing: 0.03em;
-    line-height: 1.3; margin-bottom: 28px; color: var(--cream);
-  }
-  .testi-by { display: flex; align-items: center; gap: 14px; }
-  .testi-av {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--accent); display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 800; color: var(--bg);
-  }
-  .testi-name { font-size: 13px; font-weight: 700; }
-  .testi-role { font-size: 11px; color: var(--muted); margin-top: 3px; }
-
-  /* ── CTA ── */
-  .cta {
-    padding: 140px 56px;
-    text-align: center;
-    border-top: 1px solid var(--border);
-    position: relative; overflow: hidden;
-  }
-  .cta-bg-text {
-    position: absolute;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(100px, 20vw, 280px);
-    color: rgba(212,255,0,0.03);
-    top: 50%; left: 50%; transform: translate(-50%,-50%);
-    white-space: nowrap; pointer-events: none; letter-spacing: -0.02em;
-    user-select: none;
-  }
-  .cta h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(64px, 11vw, 140px);
-    line-height: 0.9; letter-spacing: 0.02em;
-    position: relative; z-index: 1; margin-bottom: 36px;
-  }
-  .cta h2 em { color: var(--accent); font-style: normal; display: block; }
-  .cta p {
-    font-size: 16px; font-weight: 300; color: var(--muted);
-    max-width: 400px; margin: 0 auto 48px; line-height: 1.7;
-    position: relative; z-index: 1;
-  }
-  .cta-actions { display: flex; gap: 16px; justify-content: center; position: relative; z-index: 1; }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 40px 56px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px; letter-spacing: 0.1em;
-    color: var(--cream); text-decoration: none;
-  }
-  .footer-logo span { color: var(--accent); }
-  .footer-nav { display: flex; gap: 32px; list-style: none; }
-  .footer-nav a {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--muted);
-    text-decoration: none; transition: color 0.2s;
-  }
-  .footer-nav a:hover { color: var(--cream); }
-  .footer-copy { font-size: 11px; color: rgba(242,237,227,0.2); }
-</style>
+    /* ── Nav ── */
+    nav a { font-size: 0.78rem; color: rgba(242,237,232,0.4); transition: color 0.3s; letter-spacing: 0.08em; }
+    nav a:hover { color: var(--fg); }
+  </style>
 </head>
 <body>
 
-<!-- Cursor -->
-<div class="cursor" id="cursor"></div>
+<!-- Custom cursor -->
+<div id="cursor"><div id="cursor-ring"></div></div>
+<div id="cursor-dot"></div>
 
-<nav>
-  <a href="#" class="nav-logo">REVEAL<span>.</span>CO</a>
-  <ul class="nav-links">
-    <li><a href="#work">Work</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#studio">Studio</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="nav-avail"><span class="avail-dot"></span>Available Q3 2024</div>
-</nav>
+<!-- ══ NAV ══ -->
+<header class="fixed top-0 left-0 right-0 z-50 px-8 py-5 flex items-center justify-between" style="background: rgba(10,10,10,0.9); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);">
+  <a href="#" class="display text-2xl tracking-wide">REVEAL.CO</a>
+  <nav class="hidden md:flex items-center gap-10">
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#studio">Studio</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a href="#contact" class="mono text-xs px-5 py-2.5 border transition-all hover:bg-red-500 hover:border-red-500" style="border-color: rgba(242,237,232,0.2); letter-spacing: 0.06em; color: var(--fg);">
+    Start a Project
+  </a>
+</header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg-text">REVEAL</div>
-  <p class="hero-eyebrow">Creative Agency · London / New York</p>
-  <h1 class="hero-title">
-    <span class="line1">WE DON'T</span><br/>
-    <span class="line2">DESIGN.</span><br/>
-    <span class="line3">WE REVEAL.</span>
-  </h1>
-  <div class="hero-bottom">
-    <p class="hero-sub">REVEAL.CO is a creative agency for brands that refuse to blend in. We make the invisible visible — hover to see what we mean.</p>
-    <div class="hero-btns">
-      <a href="#work" class="btn-lime">See the Work</a>
-      <a href="#contact" class="btn-outline">Get in Touch</a>
+<!-- ══ HERO ══ -->
+<section class="min-h-screen pt-28 pb-16 px-8 flex flex-col justify-between" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto w-full">
+
+    <div class="flex items-center gap-3 mb-14 fade-up">
+      <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent);"></div>
+      <span class="mono text-xs" style="color: var(--accent); letter-spacing: 0.14em;">CREATIVE AGENCY — SINCE 2018</span>
     </div>
-  </div>
-</section>
 
-<!-- PORTFOLIO — HOVER REVEAL ROWS -->
-<section class="portfolio" id="work">
-  <div class="portfolio-header">
+    <div class="mb-8">
+      <div class="clip-line">
+        <h1 class="clip-inner display" style="font-size: clamp(72px, 14vw, 200px); line-height: 0.85;">
+          We Make
+        </h1>
+      </div>
+      <div class="clip-line d-1">
+        <h1 class="clip-inner display" style="font-size: clamp(72px, 14vw, 200px); line-height: 0.85; color: var(--accent);">
+          Things
+        </h1>
+      </div>
+      <div class="clip-line d-2">
+        <h1 class="clip-inner display" style="font-size: clamp(72px, 14vw, 200px); line-height: 0.85; color: rgba(242,237,232,0.2);">
+          Impossible.
+        </h1>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row items-start justify-between gap-8 mt-12">
+      <p class="fade-up d-3 max-w-sm text-sm leading-relaxed" style="color: rgba(242,237,232,0.5);">
+        REVEAL is a creative agency that transforms brand moments into cultural statements. We work with founders, cultural institutions, and category-defining companies.
+      </p>
+      <div class="fade-up d-4 flex flex-col items-start gap-2">
+        <p class="mono text-xs" style="color: rgba(242,237,232,0.25); letter-spacing: 0.1em;">HOVER THE PORTFOLIO ROWS BELOW</p>
+        <p class="mono text-xs" style="color: rgba(242,237,232,0.15); letter-spacing: 0.08em;">to reveal selected work</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Stats -->
+  <div class="max-w-7xl mx-auto w-full mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 pt-8 border-t fade-up" style="border-color: var(--border);">
     <div>
-      <p class="section-label">Selected Projects</p>
-      <h2 class="section-heading">Work That Speaks</h2>
+      <p class="display text-5xl" style="color: var(--accent);">87</p>
+      <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.3); letter-spacing: 0.08em;">AWARDS</p>
     </div>
-    <a href="#" class="view-all">View All →</a>
+    <div>
+      <p class="display text-5xl">14</p>
+      <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.3); letter-spacing: 0.08em;">YEARS</p>
+    </div>
+    <div>
+      <p class="display text-5xl">220+</p>
+      <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.3); letter-spacing: 0.08em;">PROJECTS</p>
+    </div>
+    <div>
+      <p class="display text-5xl">12</p>
+      <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.3); letter-spacing: 0.08em;">COUNTRIES</p>
+    </div>
   </div>
-  <div class="project-list">
+</section>
 
-    <div class="project-row">
-      <div class="proj-left">
-        <span class="proj-num">01</span>
-        <span class="proj-title">HELIO ENERGY</span>
-        <div class="proj-tags">
-          <span class="proj-tag">Brand Identity</span>
-          <span class="proj-tag">Campaign</span>
+<!-- ══ PORTFOLIO — HOVER REVEAL ══ -->
+<section id="work" class="px-8 py-16" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="flex items-end justify-between mb-10">
+      <p class="mono text-xs fade-up" style="color: rgba(242,237,232,0.3); letter-spacing: 0.12em;">SELECTED WORK — 2022–2025</p>
+      <a href="#" class="mono text-xs fade-up" style="color: rgba(242,237,232,0.3); letter-spacing: 0.08em; text-decoration: underline; text-underline-offset: 4px;">Full archive</a>
+    </div>
+
+    <!-- Each row reveals its image on hover -->
+    <div class="portfolio-row" data-img="1">
+      <div class="portfolio-row-inner">
+        <span class="mono text-xs" style="color: rgba(242,237,232,0.2);">01</span>
+        <div>
+          <h3 class="display row-title" style="font-size: clamp(28px, 5vw, 64px); line-height: 1;">Forma Identity</h3>
+          <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.4); letter-spacing: 0.08em;">Brand Strategy &middot; Visual Identity &middot; 2025</p>
         </div>
-      </div>
-      <span class="proj-year">2024</span>
-      <div class="proj-reveal">
-        <div class="proj-reveal-img reveal-c1"></div>
+        <div class="flex items-center gap-3 row-arrow">
+          <i data-lucide="arrow-up-right" style="width:18px; height:18px; color: var(--accent);"></i>
+        </div>
       </div>
     </div>
 
-    <div class="project-row">
-      <div class="proj-left">
-        <span class="proj-num">02</span>
-        <span class="proj-title">STRATA BANK</span>
-        <div class="proj-tags">
-          <span class="proj-tag">Digital</span>
-          <span class="proj-tag">Motion</span>
+    <div class="portfolio-row" data-img="2">
+      <div class="portfolio-row-inner">
+        <span class="mono text-xs" style="color: rgba(242,237,232,0.2);">02</span>
+        <div>
+          <h3 class="display row-title" style="font-size: clamp(28px, 5vw, 64px); line-height: 1;">Noire Campaign</h3>
+          <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.4); letter-spacing: 0.08em;">Art Direction &middot; Photography &middot; 2024</p>
         </div>
-      </div>
-      <span class="proj-year">2024</span>
-      <div class="proj-reveal">
-        <div class="proj-reveal-img reveal-c2"></div>
+        <div class="flex items-center gap-3 row-arrow">
+          <i data-lucide="arrow-up-right" style="width:18px; height:18px; color: var(--accent);"></i>
+        </div>
       </div>
     </div>
 
-    <div class="project-row">
-      <div class="proj-left">
-        <span class="proj-num">03</span>
-        <span class="proj-title">OBSIDIAN LABS</span>
-        <div class="proj-tags">
-          <span class="proj-tag">Product</span>
-          <span class="proj-tag">UI/UX</span>
+    <div class="portfolio-row" data-img="3">
+      <div class="portfolio-row-inner">
+        <span class="mono text-xs" style="color: rgba(242,237,232,0.2);">03</span>
+        <div>
+          <h3 class="display row-title" style="font-size: clamp(28px, 5vw, 64px); line-height: 1;">Soleil Platform</h3>
+          <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.4); letter-spacing: 0.08em;">Product Identity &middot; Motion &middot; 2024</p>
         </div>
-      </div>
-      <span class="proj-year">2023</span>
-      <div class="proj-reveal">
-        <div class="proj-reveal-img reveal-c3"></div>
+        <div class="flex items-center gap-3 row-arrow">
+          <i data-lucide="arrow-up-right" style="width:18px; height:18px; color: var(--accent);"></i>
+        </div>
       </div>
     </div>
 
-    <div class="project-row">
-      <div class="proj-left">
-        <span class="proj-num">04</span>
-        <span class="proj-title">NOVA FASHION</span>
-        <div class="proj-tags">
-          <span class="proj-tag">Editorial</span>
-          <span class="proj-tag">Retail</span>
+    <div class="portfolio-row" data-img="4">
+      <div class="portfolio-row-inner">
+        <span class="mono text-xs" style="color: rgba(242,237,232,0.2);">04</span>
+        <div>
+          <h3 class="display row-title" style="font-size: clamp(28px, 5vw, 64px); line-height: 1;">Drift Editorial</h3>
+          <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.4); letter-spacing: 0.08em;">Editorial Design &middot; Web &middot; 2024</p>
         </div>
-      </div>
-      <span class="proj-year">2023</span>
-      <div class="proj-reveal">
-        <div class="proj-reveal-img reveal-c4"></div>
+        <div class="flex items-center gap-3 row-arrow">
+          <i data-lucide="arrow-up-right" style="width:18px; height:18px; color: var(--accent);"></i>
+        </div>
       </div>
     </div>
 
-    <div class="project-row">
-      <div class="proj-left">
-        <span class="proj-num">05</span>
-        <span class="proj-title">ATLAS COLLECTIVE</span>
-        <div class="proj-tags">
-          <span class="proj-tag">Strategy</span>
-          <span class="proj-tag">Spatial</span>
+    <div class="portfolio-row" data-img="5">
+      <div class="portfolio-row-inner">
+        <span class="mono text-xs" style="color: rgba(242,237,232,0.2);">05</span>
+        <div>
+          <h3 class="display row-title" style="font-size: clamp(28px, 5vw, 64px); line-height: 1;">Verdant Launch</h3>
+          <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.4); letter-spacing: 0.08em;">Brand Launch &middot; Campaigns &middot; 2023</p>
+        </div>
+        <div class="flex items-center gap-3 row-arrow">
+          <i data-lucide="arrow-up-right" style="width:18px; height:18px; color: var(--accent);"></i>
         </div>
       </div>
-      <span class="proj-year">2023</span>
-      <div class="proj-reveal">
-        <div class="proj-reveal-img reveal-c5"></div>
+    </div>
+
+    <div class="portfolio-row" data-img="6">
+      <div class="portfolio-row-inner">
+        <span class="mono text-xs" style="color: rgba(242,237,232,0.2);">06</span>
+        <div>
+          <h3 class="display row-title" style="font-size: clamp(28px, 5vw, 64px); line-height: 1;">Monochrome</h3>
+          <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.4); letter-spacing: 0.08em;">Full Brand System &middot; Print &middot; 2023</p>
+        </div>
+        <div class="flex items-center gap-3 row-arrow">
+          <i data-lucide="arrow-up-right" style="width:18px; height:18px; color: var(--accent);"></i>
+        </div>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="services" id="services">
-  <div class="services-inner">
-    <p class="section-label">What We Do</p>
-    <h2 class="section-heading">Craft at every<br/>touchpoint</h2>
-    <div class="services-grid">
-      <div class="svc-card">
-        <p class="svc-num">01 — Strategy</p>
-        <h3 class="svc-title">Brand Strategy</h3>
-        <p class="svc-desc">Positioning, narrative, naming, and competitive differentiation — the thinking that makes everything else coherent.</p>
+<!-- ══ CASE STUDY GRID (image reveal cards) ══ -->
+<section class="py-20 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <p class="mono text-xs mb-10 fade-up" style="color: rgba(242,237,232,0.3); letter-spacing: 0.12em;">FEATURED CASES</p>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+
+      <!-- Large card -->
+      <div class="md:col-span-7 reveal-card fade-up" style="height: 520px;">
+        <img src="../../images/creative/creative-2.jpg" alt="Noire Architecture" />
+        <div class="reveal-card-overlay">
+          <div class="pill mb-3" style="width: fit-content;">2024</div>
+          <h3 class="display text-4xl">Noire Architecture</h3>
+          <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.5); letter-spacing: 0.08em;">BRAND IDENTITY</p>
+        </div>
       </div>
-      <div class="svc-card">
-        <p class="svc-num">02 — Identity</p>
-        <h3 class="svc-title">Visual Identity</h3>
-        <p class="svc-desc">Logos, typefaces, color systems, and graphic languages that express what words alone never could.</p>
-      </div>
-      <div class="svc-card">
-        <p class="svc-num">03 — Motion</p>
-        <h3 class="svc-title">Motion & Film</h3>
-        <p class="svc-desc">Kinetic identities, campaign films, and brand animations — stories told through movement and time.</p>
-      </div>
-      <div class="svc-card">
-        <p class="svc-num">04 — Digital</p>
-        <h3 class="svc-title">Digital Experiences</h3>
-        <p class="svc-desc">Websites, apps, and interactive installations that reveal your brand through every interaction.</p>
-      </div>
-      <div class="svc-card">
-        <p class="svc-num">05 — Spatial</p>
-        <h3 class="svc-title">Spatial Design</h3>
-        <p class="svc-desc">Environments, exhibitions, and retail spaces that are unmistakably yours from the moment you enter.</p>
-      </div>
-      <div class="svc-card">
-        <p class="svc-num">06 — Campaign</p>
-        <h3 class="svc-title">Campaign Direction</h3>
-        <p class="svc-desc">Art direction and creative production for advertising, editorial, and social — ideas with visual teeth.</p>
+
+      <!-- Right column -->
+      <div class="md:col-span-5 flex flex-col gap-4">
+        <div class="reveal-card fade-up" style="height: 248px;">
+          <img src="../../images/creative/creative-4.jpg" alt="Drift Magazine" />
+          <div class="reveal-card-overlay">
+            <div class="pill mb-2" style="width: fit-content;">2024</div>
+            <h3 class="display text-3xl">Drift Magazine</h3>
+            <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.5); letter-spacing: 0.08em;">EDITORIAL</p>
+          </div>
+        </div>
+        <div class="reveal-card fade-up" style="height: 248px;">
+          <img src="../../images/creative/creative-6.jpg" alt="Monochrome Studio" />
+          <div class="reveal-card-overlay">
+            <div class="pill mb-2" style="width: fit-content;">2023</div>
+            <h3 class="display text-3xl">Monochrome</h3>
+            <p class="mono text-xs mt-1" style="color: rgba(242,237,232,0.5); letter-spacing: 0.08em;">BRAND SYSTEM</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOVER REVEAL DEMO: NAV LINKS -->
-<section class="reveal-demo" id="studio">
-  <div class="reveal-demo-inner">
-    <p class="section-label">Interactive Reveal Demo</p>
-    <h2 class="section-heading">Hover to reveal</h2>
-    <p style="font-size:14px;color:var(--muted);margin:16px 0 48px;max-width:400px;line-height:1.7;">
-      This is the interaction we use throughout our work — content concealed until curiosity takes over.
+<!-- ══ SERVICES ══ -->
+<section id="services" class="py-20 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <div class="clip-line mb-16">
+      <h2 class="clip-inner display" style="font-size: clamp(40px, 8vw, 110px); line-height: 0.85;">
+        What We Reveal
+      </h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px" style="border: 1px solid var(--border);">
+      <div class="p-8 fade-up" style="border-right: 1px solid var(--border);">
+        <i data-lucide="layers" style="width:18px; height:18px; color:var(--accent); margin-bottom:1.5rem;"></i>
+        <h3 class="display text-2xl mb-3">Brand</h3>
+        <p class="text-xs leading-relaxed" style="color:rgba(242,237,232,0.45);">Identity systems built to endure across every medium and era.</p>
+      </div>
+      <div class="p-8 fade-up d-1" style="border-right: 1px solid var(--border);">
+        <i data-lucide="film" style="width:18px; height:18px; color:var(--accent); margin-bottom:1.5rem;"></i>
+        <h3 class="display text-2xl mb-3">Motion</h3>
+        <p class="text-xs leading-relaxed" style="color:rgba(242,237,232,0.45);">Animation and motion design that carries brand voice into time.</p>
+      </div>
+      <div class="p-8 fade-up d-2" style="border-right: 1px solid var(--border);">
+        <i data-lucide="monitor" style="width:18px; height:18px; color:var(--accent); margin-bottom:1.5rem;"></i>
+        <h3 class="display text-2xl mb-3">Digital</h3>
+        <p class="text-xs leading-relaxed" style="color:rgba(242,237,232,0.45);">Websites and interfaces where design and code are inseparable.</p>
+      </div>
+      <div class="p-8 fade-up d-3">
+        <i data-lucide="camera" style="width:18px; height:18px; color:var(--accent); margin-bottom:1.5rem;"></i>
+        <h3 class="display text-2xl mb-3">Direction</h3>
+        <p class="text-xs leading-relaxed" style="color:rgba(242,237,232,0.45);">Art direction for campaigns, lookbooks, and cultural moments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STUDIO ══ -->
+<section id="studio" class="py-20 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    <div>
+      <p class="mono text-xs mb-4 fade-up" style="color: rgba(242,237,232,0.3); letter-spacing: 0.12em;">THE STUDIO</p>
+      <div class="clip-line mb-6">
+        <h2 class="clip-inner display" style="font-size: clamp(40px, 6vw, 84px); line-height: 0.88;">
+          Small by<br>Design.
+        </h2>
+      </div>
+      <p class="text-sm leading-relaxed mb-8 fade-up" style="color: rgba(242,237,232,0.5); max-width: 44ch;">
+        REVEAL operates as a tight-knit studio of twelve — strategists, designers, and technologists who believe constraints produce creativity. We do not take more than eight projects at a time. Every client gets the senior team.
+      </p>
+      <div class="space-y-4 fade-up">
+        <div class="flex items-center gap-4">
+          <div style="width: 32px; height: 1px; background: var(--accent);"></div>
+          <p class="mono text-xs" style="color: rgba(242,237,232,0.5); letter-spacing: 0.08em;">12 specialists</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <div style="width: 32px; height: 1px; background: var(--accent);"></div>
+          <p class="mono text-xs" style="color: rgba(242,237,232,0.5); letter-spacing: 0.08em;">Amsterdam, New York, Tokyo</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <div style="width: 32px; height: 1px; background: var(--accent);"></div>
+          <p class="mono text-xs" style="color: rgba(242,237,232,0.5); letter-spacing: 0.08em;">Open to projects worldwide</p>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-card fade-up" style="height: 480px;">
+      <img src="../../images/creative/creative-5.jpg" alt="REVEAL Studio" style="filter: saturate(0.6) contrast(1.1);" />
+      <div class="reveal-card-overlay" style="background: linear-gradient(135deg, rgba(255,60,46,0.08), rgba(10,10,10,0.5));">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact" class="py-20 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto text-center">
+    <p class="mono text-xs mb-6 fade-up" style="color: rgba(242,237,232,0.3); letter-spacing: 0.12em;">NEW WORK — LIMITED AVAILABILITY</p>
+    <div class="clip-line mb-6">
+      <h2 class="clip-inner display" style="font-size: clamp(48px, 10vw, 140px); line-height: 0.85;">
+        Let's Work.
+      </h2>
+    </div>
+    <p class="text-sm mb-10 fade-up" style="color: rgba(242,237,232,0.4); max-width: 40ch; margin-left: auto; margin-right: auto; line-height: 1.8;">
+      We have two project slots open for Q3 2025. Reach out with your brief and we will respond within 48 hours.
     </p>
-    <div class="reveal-links">
-      <div class="reveal-link-item">
-        <span class="rl-tag">Identity</span>
-        <span class="rl-name">Brand System Design</span>
-        <div class="rl-preview">
-          <div class="rl-preview-fill" style="background:linear-gradient(135deg,#d4ff00,#a8cc00);"></div>
-        </div>
-      </div>
-      <div class="reveal-link-item">
-        <span class="rl-tag">Motion</span>
-        <span class="rl-name">Film & Animation</span>
-        <div class="rl-preview">
-          <div class="rl-preview-fill" style="background:linear-gradient(135deg,#1a1a1a,#444);"></div>
-        </div>
-      </div>
-      <div class="reveal-link-item">
-        <span class="rl-tag">Digital</span>
-        <span class="rl-name">Web Experience</span>
-        <div class="rl-preview">
-          <div class="rl-preview-fill" style="background:linear-gradient(135deg,#001a2e,#003d5c);"></div>
-        </div>
-      </div>
-      <div class="reveal-link-item">
-        <span class="rl-tag">Spatial</span>
-        <span class="rl-name">Environmental Branding</span>
-        <div class="rl-preview">
-          <div class="rl-preview-fill" style="background:linear-gradient(135deg,#1a0d00,#4d2800);"></div>
-        </div>
-      </div>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-up">
+      <a href="mailto:work@reveal.co" class="display text-3xl transition-colors hover:text-red-500" style="letter-spacing: 0.04em;">work@reveal.co</a>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="about">
-  <div class="testi-inner">
-    <p class="section-label">What Clients Say</p>
-    <h2 class="section-heading">Words from the work</h2>
-    <div class="testi-grid">
-      <div class="testi-box">
-        <p class="testi-q">"REVEAL.CO didn't just rebrand us — they revealed who we actually were. The hover interactions on our site have a 340% higher engagement rate than before."</p>
-        <div class="testi-by">
-          <div class="testi-av">NK</div>
-          <div>
-            <p class="testi-name">Nadia Kowalski</p>
-            <p class="testi-role">CEO, Helio Energy</p>
-          </div>
-        </div>
-      </div>
-      <div class="testi-box">
-        <p class="testi-q">"The subtlety of their work is what gets you. Nothing is overdone. Everything has a reason. They've ruined every other agency for us — in the best way."</p>
-        <div class="testi-by">
-          <div class="testi-av" style="background:#333;color:var(--accent);">JF</div>
-          <div>
-            <p class="testi-name">James Fowler</p>
-            <p class="testi-role">Brand Director, Atlas Collective</p>
-          </div>
-        </div>
-      </div>
+<!-- ══ FOOTER ══ -->
+<footer class="py-12 px-8">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <p class="display text-2xl">REVEAL.CO</p>
+    <div class="flex gap-6">
+      <a href="#" class="mono text-xs transition-colors hover:text-white" style="color:rgba(242,237,232,0.3); letter-spacing:0.08em;">Instagram</a>
+      <a href="#" class="mono text-xs transition-colors hover:text-white" style="color:rgba(242,237,232,0.3); letter-spacing:0.08em;">LinkedIn</a>
+      <a href="#" class="mono text-xs transition-colors hover:text-white" style="color:rgba(242,237,232,0.3); letter-spacing:0.08em;">Are.na</a>
     </div>
+    <p class="mono text-xs" style="color:rgba(242,237,232,0.15); letter-spacing:0.06em;">&copy; 2025 REVEAL.CO</p>
   </div>
-</section>
-
-<!-- CTA -->
-<section class="cta" id="contact">
-  <div class="cta-bg-text">REVEAL</div>
-  <h2>Let's<br/><em>reveal</em><br/>yours.</h2>
-  <p>We take on 6 projects per quarter. Availability is limited. Let's talk before it's gone.</p>
-  <div class="cta-actions">
-    <a href="#" class="btn-lime">Start a Project</a>
-    <a href="#" class="btn-outline">hello@reveal.co</a>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <a href="#" class="footer-logo">REVEAL<span>.</span>CO</a>
-  <ul class="footer-nav">
-    <li><a href="#">Work</a></li>
-    <li><a href="#">Services</a></li>
-    <li><a href="#">Studio</a></li>
-    <li><a href="#">Journal</a></li>
-  </ul>
-  <p class="footer-copy">© 2024 REVEAL.CO — London · New York</p>
 </footer>
 
 <script>
-  // Custom cursor
+  // ── Custom cursor ──
   const cursor = document.getElementById('cursor');
-  let mx = 0, my = 0;
+  const cursorDot = document.getElementById('cursor-dot');
+  let cx = 0, cy = 0, tx = 0, ty = 0;
+
   document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top = my + 'px';
-  });
-  document.querySelectorAll('.project-row, .reveal-link-item, .svc-card, a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+    tx = e.clientX; ty = e.clientY;
+    cursor.style.left = tx + 'px'; cursor.style.top = ty + 'px';
+    cursorDot.style.left = tx + 'px'; cursorDot.style.top = ty + 'px';
   });
 
-  // Scroll reveal
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
-      }
+  // Enlarge on hover over links
+  document.querySelectorAll('a, button, .portfolio-row').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '90px'; cursor.style.height = '90px';
+      document.getElementById('cursor-ring').style.borderColor = 'rgba(255,60,46,0.5)';
     });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.project-row, .svc-card, .testi-box, .reveal-link-item').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = `opacity 0.55s ease ${i * 0.06}s, transform 0.55s ease ${i * 0.06}s`;
-    io.observe(el);
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '60px'; cursor.style.height = '60px';
+      document.getElementById('cursor-ring').style.borderColor = 'rgba(242,237,232,0.6)';
+    });
   });
+
+  // ── Intersection observer ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.clip-line, .fade-up').forEach(el => io.observe(el));
+  document.querySelectorAll('.clip-line, .fade-up').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-visible');
+  });
+
+  lucide.createIcons();
 </script>
 </body>
 </html>

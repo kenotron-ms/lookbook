@@ -3,461 +3,868 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AURA OS — Your Workspace, Redesigned</title>
+<title>AURA OS — The Operating System for Deep Work</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Epilogue:wght@300;400;500;700;900&display=swap');
+  :root {
+    --canvas: #0a0a0c;
+    --paper: #e8e6e1;
+    --gold: #d4c5a2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::selection { background: var(--gold); color: var(--canvas); }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --void: #080808;
-  --dark: #0F0F0F;
-  --surface: #161616;
-  --panel: #1C1C1C;
-  --cream: #E8E2D6;
-  --cream-dim: rgba(232,226,214,0.5);
-  --cream-ghost: rgba(232,226,214,0.08);
-  --border: rgba(232,226,214,0.1);
-  --border-mid: rgba(232,226,214,0.18);
-  --muted: rgba(232,226,214,0.35);
-  --accent: #C4975A;
-  --accent-dim: rgba(196,151,90,0.15);
-}
-html { scroll-behavior: smooth; }
-body {
-  background: var(--void);
-  color: var(--cream);
-  font-family: 'Epilogue', sans-serif;
-  font-size: 14px;
-  line-height: 1.65;
-  font-weight: 300;
-  overflow-x: hidden;
-}
+  body {
+    background: var(--canvas);
+    color: var(--paper);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
 
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0; z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28px 72px;
-  transition: all 0.5s ease;
-}
-nav.scrolled { background: rgba(8,8,8,0.95); border-bottom: 1px solid var(--border); padding: 18px 72px; backdrop-filter: blur(20px); }
-.nav-logo {
-  font-family: 'Cormorant', serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  color: var(--cream);
-  text-decoration: none;
-}
-.nav-center { display: flex; gap: 48px; list-style: none; }
-.nav-center a {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.2s;
-  text-transform: uppercase;
-}
-.nav-center a:hover { color: var(--cream); }
-.nav-right { display: flex; gap: 16px; align-items: center; }
-.btn-nav-ghost {
-  font-size: 12px;
-  color: var(--muted);
-  text-decoration: none;
-  padding: 8px 24px;
-  border: 1px solid var(--border);
-  transition: all 0.3s;
-}
-.btn-nav-ghost:hover { color: var(--cream); border-color: var(--border-mid); }
-.btn-nav-accent {
-  font-size: 12px;
-  background: var(--accent);
-  color: var(--void);
-  text-decoration: none;
-  padding: 8px 24px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  transition: opacity 0.2s;
-}
-.btn-nav-accent:hover { opacity: 0.85; }
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
 
-/* HERO — MANIFESTO STYLE */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 140px 72px 100px;
-  position: relative;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-}
-.hero-grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(232,226,214,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232,226,214,0.03) 1px, transparent 1px);
-  background-size: 80px 80px;
-  pointer-events: none;
-}
-.hero-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, transparent 30%, var(--void) 80%);
-  pointer-events: none;
-}
-.hero-content { position: relative; z-index: 2; }
-.hero-vol {
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 60px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  justify-content: center;
-}
-.hero-vol::before, .hero-vol::after { content: '—'; }
-.hero-h1 {
-  font-family: 'Cormorant', serif;
-  font-size: clamp(72px, 11vw, 160px);
-  font-weight: 300;
-  line-height: 0.9;
-  letter-spacing: -0.025em;
-  color: var(--cream);
-  margin-bottom: 0;
-}
-.hero-h1 em {
-  font-style: italic;
-  color: var(--accent);
-}
-.hero-divider {
-  width: 1px;
-  height: 80px;
-  background: linear-gradient(180deg, var(--border-mid), transparent);
-  margin: 40px auto;
-}
-.hero-tagline {
-  font-family: 'Cormorant', serif;
-  font-size: clamp(22px, 3vw, 36px);
-  font-weight: 300;
-  font-style: italic;
-  color: var(--muted);
-  margin-bottom: 60px;
-  max-width: 700px;
-}
-.hero-cta { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; }
-.btn-hero-main {
-  display: inline-block;
-  background: var(--cream);
-  color: var(--void);
-  padding: 18px 52px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.btn-hero-main:hover { opacity: 0.85; }
-.btn-hero-outline {
-  display: inline-block;
-  border: 1px solid var(--border-mid);
-  color: var(--cream);
-  padding: 18px 52px;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: border-color 0.3s;
-}
-.btn-hero-outline:hover { border-color: var(--cream); }
-.hero-os-preview {
-  position: relative;
-  margin-top: 100px;
-  z-index: 2;
-}
-.os-window {
-  background: rgba(22,22,22,0.8);
-  backdrop-filter: blur(40px);
-  border: 1px solid var(--border-mid);
-  border-radius: 12px;
-  overflow: hidden;
-  max-width: 800px;
-  margin: 0 auto;
-  box-shadow: 0 0 0 1px var(--border), 0 40px 80px rgba(0,0,0,0.7);
-}
-.os-titlebar {
-  height: 40px;
-  background: rgba(232,226,214,0.04);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  gap: 8px;
-}
-.os-btn { width: 12px; height: 12px; border-radius: 50%; }
-.os-btn-r { background: #FF5F57; }
-.os-btn-y { background: #FFBD2E; }
-.os-btn-g { background: #28C840; }
-.os-titlebar-title { flex: 1; text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
-.os-body { display: grid; grid-template-columns: 200px 1fr; min-height: 280px; }
-.os-sidebar {
-  background: rgba(232,226,214,0.02);
-  border-right: 1px solid var(--border);
-  padding: 20px 16px;
-}
-.os-sidebar-item {
-  padding: 8px 12px;
-  font-size: 12px;
-  color: var(--muted);
-  border-radius: 6px;
-  margin-bottom: 2px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: default;
-}
-.os-sidebar-item.active { background: rgba(232,226,214,0.08); color: var(--cream); }
-.os-sidebar-icon { width: 14px; height: 14px; border-radius: 3px; background: currentColor; opacity: 0.4; }
-.os-sidebar-item.active .os-sidebar-icon { opacity: 0.8; background: var(--accent); }
-.os-content { padding: 24px; }
-.os-content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.os-widget {
-  background: rgba(232,226,214,0.04);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-}
-.os-widget-label { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 8px; }
-.os-widget-val { font-family: 'Cormorant', serif; font-size: 28px; font-weight: 300; color: var(--cream); }
-.os-text-lines { margin-top: 12px; }
-.os-text-line { height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 6px; }
+  .font-serif { font-family: 'Fraunces', serif; }
+  .font-sans { font-family: 'Manrope', sans-serif; }
 
-/* EDITORIAL SPREAD */
-.editorial {
-  padding: 120px 72px;
-  border-bottom: 1px solid var(--border);
-}
-.editorial-grid {
-  display: grid;
-  grid-template-columns: 1fr 1px 1fr;
-  gap: 80px;
-  align-items: start;
-}
-.ed-divider { background: var(--border); }
-.ed-left {}
-.ed-issue { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 40px; }
-.ed-h2 { font-family: 'Cormorant', serif; font-size: clamp(44px,6vw,80px); font-weight: 300; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 40px; }
-.ed-h2 em { font-style: italic; color: var(--accent); }
-.ed-body { font-size: 15px; color: var(--muted); line-height: 1.9; margin-bottom: 24px; }
-.ed-pull {
-  font-family: 'Cormorant', serif;
-  font-size: 26px;
-  font-weight: 300;
-  font-style: italic;
-  color: var(--cream);
-  border-left: 2px solid var(--accent);
-  padding-left: 28px;
-  margin: 40px 0;
-  line-height: 1.4;
-}
-.ed-right {}
-.feature-list { list-style: none; margin-top: 48px; }
-.feature-item {
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  gap: 24px;
-  padding: 28px 0;
-  border-bottom: 1px solid var(--border);
-  transition: all 0.3s;
-}
-.feature-item:first-child { border-top: 1px solid var(--border); }
-.feature-item:hover { padding-left: 8px; }
-.feature-num { font-family: 'Cormorant', serif; font-size: 24px; font-weight: 300; color: var(--muted); }
-.feature-name { font-family: 'Epilogue', sans-serif; font-size: 16px; font-weight: 500; color: var(--cream); margin-bottom: 8px; }
-.feature-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    mix-blend-mode: difference;
+  }
+  .nav-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .nav-brand-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--paper);
+  }
+  .nav-brand-sub {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .nav-link {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--paper);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .nav-link:hover { border-color: var(--gold); }
 
-/* MANIFESTO SECTION */
-.manifesto {
-  padding: 160px 72px;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-  background: var(--dark);
-  position: relative;
-  overflow: hidden;
-}
-.manifesto-h2 {
-  font-family: 'Cormorant', serif;
-  font-size: clamp(48px, 8vw, 120px);
-  font-weight: 300;
-  line-height: 1.0;
-  letter-spacing: -0.03em;
-  color: var(--cream);
-  margin-bottom: 0;
-}
-.manifesto-h2 em { font-style: italic; color: var(--accent); }
-.manifesto-statements {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  margin-top: 80px;
-  text-align: left;
-}
-.manifesto-stmt { background: var(--dark); padding: 48px 40px; }
-.stmt-num { font-family: 'Cormorant', serif; font-size: 48px; font-weight: 300; color: rgba(232,226,214,0.1); margin-bottom: 20px; }
-.stmt-h3 { font-family: 'Cormorant', serif; font-size: 28px; font-weight: 400; margin-bottom: 16px; }
-.stmt-p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    padding: 8rem 3rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('../../images/tech/tech-1.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.06;
+    filter: grayscale(100%);
+  }
+  .hero-headline {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(4rem, 11vw, 13rem);
+    font-weight: 900;
+    line-height: 0.87;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    position: relative;
+    z-index: 1;
+  }
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-left: 4rem;
+    padding-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-pull-quote {
+    font-family: 'Fraunces', serif;
+    font-size: 1.35rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--gold);
+    margin-bottom: 2.5rem;
+    max-width: 360px;
+  }
+  .hero-meta {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(232, 230, 225, 0.4);
+  }
 
-/* TESTIMONIALS */
-.testimonials {
-  padding: 120px 72px;
-  border-bottom: 1px solid var(--border);
-}
-.test-header { margin-bottom: 80px; }
-.test-h2 { font-family: 'Cormorant', serif; font-size: clamp(36px,5vw,64px); font-weight: 300; font-style: italic; line-height: 1.1; }
-.test-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
-.test-feature { background: var(--surface); padding: 64px; }
-.test-mini-col { background: var(--dark); }
-.test-feature-mark { font-family: 'Cormorant', serif; font-size: 96px; line-height: 0.8; color: var(--accent); opacity: 0.4; margin-bottom: 24px; }
-.test-feature-text { font-family: 'Cormorant', serif; font-size: 26px; font-weight: 300; font-style: italic; line-height: 1.45; color: var(--cream); margin-bottom: 40px; }
-.test-feature-author { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.test-mini { padding: 40px; border-bottom: 1px solid var(--border); }
-.test-mini:last-child { border-bottom: none; }
-.test-mini-text { font-family: 'Cormorant', serif; font-size: 20px; font-weight: 300; font-style: italic; color: rgba(232,226,214,0.65); line-height: 1.5; margin-bottom: 16px; }
-.test-mini-author { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-/* CTA MANIFESTO */
-.cta-final {
-  padding: 180px 72px;
-  text-align: center;
-  background: var(--void);
-  position: relative;
-  overflow: hidden;
-}
-.cta-final-accent {
-  position: absolute;
-  width: 600px; height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(196,151,90,0.08) 0%, transparent 70%);
-  top: 50%; left: 50%; transform: translate(-50%,-50%);
-  pointer-events: none;
-}
-.cta-final-h2 {
-  font-family: 'Cormorant', serif;
-  font-size: clamp(64px, 10vw, 140px);
-  font-weight: 300;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  color: var(--cream);
-  position: relative;
-  margin-bottom: 48px;
-}
-.cta-final-h2 em { font-style: italic; color: var(--accent); }
-.cta-final-sub { font-size: 16px; color: var(--muted); max-width: 500px; margin: 0 auto 64px; line-height: 1.8; position: relative; }
-.cta-btns { display: flex; gap: 20px; justify-content: center; position: relative; }
-.cta-note { font-size: 12px; color: rgba(232,226,214,0.2); margin-top: 32px; position: relative; }
+  /* Manifesto section */
+  .manifesto {
+    background: var(--canvas);
+    padding: 8rem 3rem;
+    border-top: 1px solid rgba(232, 230, 225, 0.1);
+  }
+  .manifesto-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .manifesto-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 0.5rem;
+  }
+  .manifesto-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+  .manifesto-para {
+    font-family: 'Manrope', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(232, 230, 225, 0.8);
+    max-width: 680px;
+  }
+  .manifesto-para:nth-child(2) { margin-left: 5rem; }
+  .manifesto-para:nth-child(3) { margin-left: 2rem; }
+  .drop-cap::first-letter {
+    font-family: 'Fraunces', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 0.7;
+    float: left;
+    margin-right: 0.15em;
+    margin-top: 0.05em;
+    color: var(--gold);
+  }
 
-/* FOOTER */
-footer { background: var(--void); border-top: 1px solid var(--border); padding: 80px 72px 40px; }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 60px; border-bottom: 1px solid var(--border); }
-.footer-brand { font-family: 'Cormorant', serif; font-size: 24px; font-weight: 300; letter-spacing: 0.15em; color: var(--cream); margin-bottom: 16px; }
-.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.8; max-width: 260px; }
-.footer-col-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0.5; margin-bottom: 20px; }
-.footer-links { list-style: none; }
-.footer-links li { margin-bottom: 10px; }
-.footer-links a { font-size: 13px; color: rgba(232,226,214,0.3); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: var(--cream); }
-.footer-bottom { display: flex; justify-content: space-between; padding-top: 40px; font-size: 12px; color: rgba(232,226,214,0.2); }
+  /* OS Window Mockup */
+  .os-section {
+    padding: 6rem 3rem;
+    background: #080809;
+  }
+  .os-section-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  .os-window {
+    max-width: 1100px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 60px 120px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .os-titlebar {
+    background: #1a1a1e;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .traffic-lights {
+    display: flex;
+    gap: 6px;
+  }
+  .tl {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .tl-red { background: #ff5f57; }
+  .tl-yellow { background: #febc2e; }
+  .tl-green { background: #28c840; }
+  .os-title-text {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(232,230,225,0.5);
+    flex: 1;
+    text-align: center;
+  }
+  .os-body {
+    display: grid;
+    grid-template-columns: 220px 1fr 260px;
+    height: 500px;
+    background: #0d0d10;
+  }
+  /* Sidebar */
+  .os-sidebar {
+    background: #111115;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    padding: 1.25rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .os-sidebar-section {
+    padding: 0.5rem 1rem 0.25rem;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(212, 197, 162, 0.4);
+  }
+  .os-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 1rem;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(232,230,225,0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .os-sidebar-item.active {
+    background: rgba(212,197,162,0.08);
+    color: var(--gold);
+    border-left: 2px solid var(--gold);
+  }
+  .os-sidebar-item i { width: 14px; height: 14px; }
+  /* Main canvas */
+  .os-canvas {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow: hidden;
+  }
+  .os-canvas-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--paper);
+  }
+  .os-doc-line {
+    height: 0.75rem;
+    border-radius: 2px;
+    background: rgba(232,230,225,0.08);
+  }
+  .os-doc-line.short { width: 60%; }
+  .os-doc-line.medium { width: 85%; }
+  .os-doc-line.full { width: 100%; }
+  .os-doc-line.accent { background: rgba(212,197,162,0.15); width: 40%; }
+  .os-inline-tool {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.625rem 0.875rem;
+    background: rgba(212,197,162,0.06);
+    border: 1px solid rgba(212,197,162,0.1);
+    border-radius: 4px;
+    width: fit-content;
+  }
+  .os-inline-tool span {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.7rem;
+    color: var(--gold);
+  }
+  /* Right panel */
+  .os-panel {
+    background: #0f0f12;
+    border-left: 1px solid rgba(255,255,255,0.05);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .os-panel-header {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(212,197,162,0.5);
+  }
+  .os-widget {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 6px;
+    padding: 0.875rem;
+  }
+  .os-widget-title {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: rgba(232,230,225,0.4);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .os-focus-bar {
+    height: 4px;
+    background: rgba(232,230,225,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .os-focus-fill {
+    height: 100%;
+    width: 73%;
+    background: linear-gradient(90deg, var(--gold), rgba(212,197,162,0.4));
+    border-radius: 2px;
+  }
+  .os-stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+  .os-stat-val {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--paper);
+  }
+  .os-stat-lbl {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.6rem;
+    color: rgba(232,230,225,0.3);
+    margin-top: 2px;
+  }
 
-.fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
-.fade-in.visible { opacity: 1; transform: none; }
+  /* Pull quote */
+  .pull-quote-section {
+    padding: 8rem 3rem;
+    text-align: center;
+    border-top: 1px solid rgba(232,230,225,0.08);
+    border-bottom: 1px solid rgba(232,230,225,0.08);
+  }
+  .pull-quote-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 3rem;
+  }
+  .pull-quote-text {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.25;
+    color: var(--paper);
+    max-width: 900px;
+    margin: 0 auto 3rem;
+  }
+  .pull-quote-attr {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
 
-@media (max-width: 900px) {
-  nav { padding: 20px 24px; }
-  .nav-center { display: none; }
-  .hero { padding: 100px 24px 60px; }
-  .editorial-grid { grid-template-columns: 1fr; gap: 40px; }
-  .ed-divider { display: none; }
-  .manifesto-statements { grid-template-columns: 1fr; }
-  .test-layout { grid-template-columns: 1fr; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-}
-</style>
+  /* Features bento */
+  .features-section {
+    padding: 8rem 3rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .features-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .features-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: var(--paper);
+  }
+  .features-sub {
+    font-size: 0.875rem;
+    color: rgba(232,230,225,0.4);
+    max-width: 280px;
+    text-align: right;
+    line-height: 1.6;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5px;
+    background: rgba(232,230,225,0.08);
+  }
+  .feat-card {
+    background: var(--canvas);
+    padding: 3rem;
+    transition: background 0.4s;
+  }
+  .feat-card:hover { background: #0f0f13; }
+  .feat-card.large {
+    grid-row: span 2;
+    padding: 4rem;
+  }
+  .feat-number {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+  }
+  .feat-icon {
+    margin-bottom: 1.5rem;
+    color: var(--gold);
+  }
+  .feat-icon i { width: 28px; height: 28px; }
+  .feat-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--paper);
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+  .feat-card.large .feat-name { font-size: 2.5rem; }
+  .feat-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(232,230,225,0.5);
+  }
+  .feat-card.large .feat-desc { font-size: 1.05rem; max-width: 340px; }
 
-<!-- inject-local -->
-<style>
-  .hero-grid-bg {
-    background-image: url('../../images/tech/tech-1.jpg') !important;
-    background-size: cover; background-position: center; opacity: 0.2;
+  /* Comparison */
+  .comparison-section {
+    padding: 8rem 3rem;
+    border-top: 1px solid rgba(232,230,225,0.08);
+  }
+  .comparison-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+  }
+  .comp-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+  .comp-label.before { color: rgba(232,230,225,0.3); }
+  .comp-label.after { color: var(--gold); }
+  .comp-item {
+    padding: 1.25rem 0;
+    border-top: 1px solid rgba(232,230,225,0.07);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .comp-col-before .comp-item { color: rgba(232,230,225,0.35); }
+  .comp-col-after .comp-item { color: rgba(232,230,225,0.85); }
+  .comp-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .comp-divider-line {
+    width: 1px;
+    height: 100%;
+    background: rgba(232,230,225,0.1);
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    border-top: 1px solid rgba(232,230,225,0.08);
+    border-bottom: 1px solid rgba(232,230,225,0.08);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .stat-item {
+    padding: 4rem 3rem;
+    border-right: 1px solid rgba(232,230,225,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    color: var(--paper);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.85rem;
+    color: rgba(232,230,225,0.4);
+    line-height: 1.5;
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 10rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-bg-text {
+    position: absolute;
+    font-family: 'Fraunces', serif;
+    font-size: 25vw;
+    font-weight: 900;
+    color: rgba(232,230,225,0.02);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .cta-heading {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--paper);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-sub {
+    font-size: 1rem;
+    color: rgba(232,230,225,0.4);
+    margin-bottom: 3.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-form {
+    display: flex;
+    gap: 0;
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: rgba(232,230,225,0.06);
+    border: 1px solid rgba(232,230,225,0.15);
+    border-right: none;
+    color: var(--paper);
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    border-radius: 2px 0 0 2px;
+  }
+  .cta-input::placeholder { color: rgba(232,230,225,0.25); }
+  .cta-btn {
+    padding: 1rem 2rem;
+    background: var(--gold);
+    color: var(--canvas);
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 2px 2px 0;
+    transition: background 0.3s;
+  }
+  .cta-btn:hover { background: var(--paper); }
+  .cta-fine {
+    font-size: 0.75rem;
+    color: rgba(232,230,225,0.25);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Footer */
+  footer {
+    padding: 2.5rem 3rem;
+    border-top: 1px solid rgba(232,230,225,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-brand {
+    font-family: 'Fraunces', serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: rgba(232,230,225,0.3);
+    letter-spacing: 0.1em;
+  }
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+  }
+  .footer-links a {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(232,230,225,0.25);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 3rem; }
+    .hero-right { padding-left: 0; }
+    .manifesto-grid { grid-template-columns: 1fr; }
+    .manifesto-para:nth-child(2), .manifesto-para:nth-child(3) { margin-left: 0; }
+    .os-body { grid-template-columns: 1fr; height: auto; }
+    .os-sidebar, .os-panel { display: none; }
+    .features-grid { grid-template-columns: 1fr; }
+    .feat-card.large { grid-row: span 1; }
+    .comparison-inner { grid-template-columns: 1fr; }
+    .comp-divider { display: none; }
+    .stats-bar { grid-template-columns: 1fr; }
+    .stat-item { border-right: none; border-bottom: 1px solid rgba(232,230,225,0.08); }
+    .cta-form { flex-direction: column; }
+    .cta-input { border-right: 1px solid rgba(232,230,225,0.15); border-radius: 2px; }
+    .cta-btn { border-radius: 2px; }
+    footer { flex-direction: column; gap: 1.5rem; }
   }
 </style>
 </head>
 <body>
 
-<nav id="mainNav">
-  <a href="#" class="nav-logo">AURA OS</a>
-  <ul class="nav-center">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#manifesto">Manifesto</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#changelog">Changelog</a></li>
-  </ul>
-  <div class="nav-right">
-    <a href="#" class="btn-nav-ghost">Sign In</a>
-    <a href="#" class="btn-nav-accent">Join Waitlist</a>
+<!-- Sticky Navigation -->
+<nav>
+  <div class="nav-brand">
+    <span class="nav-brand-name">AURA</span>
+    <span class="nav-brand-sub">OS / 001</span>
   </div>
+  <a href="#waitlist" class="nav-link">Request Access</a>
 </nav>
 
-<!-- HERO -->
+<!-- Hero -->
 <section class="hero">
-  <div class="hero-grid-bg"></div>
-  <div class="hero-vignette"></div>
-  <div class="hero-content">
-    <p class="hero-vol">The Operating System for Deep Work</p>
-    <h1 class="hero-h1">Your workspace,<br><em>redesigned.</em></h1>
-    <div class="hero-divider"></div>
-    <p class="hero-tagline">"We built AURA OS for the people who think in systems — and live in their tools."</p>
-    <div class="hero-cta">
-      <a href="#" class="btn-hero-main">Join the Waitlist</a>
-      <a href="#features" class="btn-hero-outline">Read the Manifesto</a>
+  <div class="hero-bg"></div>
+  <div class="hero-left" style="position:relative;z-index:1;">
+    <p class="reveal" style="font-size:0.7rem;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;">The Operating System for Deep Work</p>
+    <h1 class="hero-headline reveal" style="transition-delay:0.1s">
+      WORK AT<br>
+      THE SPEED<br>
+      OF THOUGHT.
+    </h1>
+  </div>
+  <div class="hero-right reveal" style="transition-delay:0.25s">
+    <p class="hero-pull-quote">"Not another app. The layer beneath them all."</p>
+    <p class="hero-meta">AURA OS v1.0 &mdash; Available Q3 2026</p>
+  </div>
+</section>
+
+<!-- Manifesto -->
+<section class="manifesto">
+  <div class="manifesto-grid">
+    <div>
+      <p class="manifesto-label reveal">Manifesto</p>
+    </div>
+    <div class="manifesto-body">
+      <p class="manifesto-para drop-cap reveal">
+        Every application you use today was built to own your attention. They silo your work, fracture your context, and train you to be managed by notifications rather than driven by intention. AURA OS was built on a single premise: your tools should be invisible.
+      </p>
+      <p class="manifesto-para reveal" style="transition-delay:0.15s">
+        Deep work is not a productivity hack. It is the only mode in which extraordinary things are made. Yet the digital environment we inhabit has been engineered against it &mdash; layer upon layer of interruption sold as feature. We have inverted the model.
+      </p>
+      <p class="manifesto-para reveal" style="transition-delay:0.3s">
+        AURA operates at the OS layer, below your applications, above your intentions. It does not ask for your workflow. It learns your cadence, preserves your context across every tool, and removes everything that is not your work.
+      </p>
     </div>
   </div>
-  <div class="hero-os-preview fade-in">
-    <div class="os-window">
-      <div class="os-titlebar">
-        <div class="os-btn os-btn-r"></div>
-        <div class="os-btn os-btn-y"></div>
-        <div class="os-btn os-btn-g"></div>
-        <div class="os-titlebar-title">AURA OS — Deep Work Mode</div>
+</section>
+
+<!-- OS Window Mockup -->
+<section class="os-section">
+  <p class="os-section-label reveal">The Interface</p>
+  <div class="os-window reveal" style="transition-delay:0.1s">
+    <div class="os-titlebar">
+      <div class="traffic-lights">
+        <div class="tl tl-red"></div>
+        <div class="tl tl-yellow"></div>
+        <div class="tl tl-green"></div>
       </div>
-      <div class="os-body">
-        <div class="os-sidebar">
-          <div class="os-sidebar-item active"><div class="os-sidebar-icon"></div>Overview</div>
-          <div class="os-sidebar-item"><div class="os-sidebar-icon"></div>Focus</div>
-          <div class="os-sidebar-item"><div class="os-sidebar-icon"></div>Archive</div>
-          <div class="os-sidebar-item"><div class="os-sidebar-icon"></div>Canvas</div>
-          <div class="os-sidebar-item"><div class="os-sidebar-icon"></div>Graph</div>
+      <p class="os-title-text">AURA OS &mdash; Focus Shell &mdash; Q3 Strategy Document</p>
+    </div>
+    <div class="os-body">
+      <!-- Sidebar -->
+      <div class="os-sidebar">
+        <p class="os-sidebar-section">Spaces</p>
+        <div class="os-sidebar-item active">
+          <i data-lucide="layers"></i>
+          <span>Strategy</span>
         </div>
-        <div class="os-content">
-          <div class="os-content-grid">
-            <div class="os-widget"><div class="os-widget-label">FOCUS SESSION</div><div class="os-widget-val">2:34</div></div>
-            <div class="os-widget"><div class="os-widget-label">OPEN CONTEXTS</div><div class="os-widget-val">7</div></div>
-            <div class="os-widget" style="grid-column:1/-1;">
-              <div class="os-widget-label">CURRENT THREAD — Q2 Product Strategy</div>
-              <div class="os-text-lines">
-                <div class="os-text-line" style="width:90%"></div>
-                <div class="os-text-line" style="width:75%"></div>
-                <div class="os-text-line" style="width:60%"></div>
-              </div>
+        <div class="os-sidebar-item">
+          <i data-lucide="edit-3"></i>
+          <span>Writing</span>
+        </div>
+        <div class="os-sidebar-item">
+          <i data-lucide="bar-chart-2"></i>
+          <span>Analysis</span>
+        </div>
+        <div class="os-sidebar-item">
+          <i data-lucide="link"></i>
+          <span>Research</span>
+        </div>
+        <p class="os-sidebar-section">Recent</p>
+        <div class="os-sidebar-item">
+          <i data-lucide="file-text"></i>
+          <span>Q3 OKRs</span>
+        </div>
+        <div class="os-sidebar-item">
+          <i data-lucide="zap"></i>
+          <span>Meeting Notes</span>
+        </div>
+        <div class="os-sidebar-item">
+          <i data-lucide="database"></i>
+          <span>Product Spec</span>
+        </div>
+      </div>
+      <!-- Main canvas -->
+      <div class="os-canvas">
+        <p class="os-canvas-title">Q3 Strategy Document</p>
+        <div class="os-inline-tool">
+          <i data-lucide="cpu" style="width:12px;height:12px;color:var(--gold)"></i>
+          <span>Neural Sync active &mdash; 4 sources connected</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem">
+          <div class="os-doc-line full"></div>
+          <div class="os-doc-line medium"></div>
+          <div class="os-doc-line full"></div>
+          <div class="os-doc-line short"></div>
+          <div style="height:0.5rem"></div>
+          <div class="os-doc-line accent"></div>
+          <div style="height:0.5rem"></div>
+          <div class="os-doc-line full"></div>
+          <div class="os-doc-line medium"></div>
+          <div class="os-doc-line full"></div>
+          <div class="os-doc-line full"></div>
+          <div class="os-doc-line short"></div>
+          <div style="height:0.5rem"></div>
+          <div class="os-doc-line full"></div>
+          <div class="os-doc-line medium"></div>
+        </div>
+        <div style="display:flex;gap:0.5rem;margin-top:auto">
+          <div style="background:rgba(212,197,162,0.05);border:1px solid rgba(212,197,162,0.1);border-radius:3px;padding:0.375rem 0.625rem;font-size:0.65rem;font-family:'Manrope',sans-serif;color:rgba(212,197,162,0.5);">Focus Mode: ON</div>
+          <div style="background:rgba(212,197,162,0.05);border:1px solid rgba(212,197,162,0.1);border-radius:3px;padding:0.375rem 0.625rem;font-size:0.65rem;font-family:'Manrope',sans-serif;color:rgba(212,197,162,0.5);">3h 24m in flow</div>
+        </div>
+      </div>
+      <!-- Right panel -->
+      <div class="os-panel">
+        <p class="os-panel-header">Context</p>
+        <div class="os-widget">
+          <p class="os-widget-title">Focus Score</p>
+          <div class="os-focus-bar"><div class="os-focus-fill"></div></div>
+          <div class="os-stat-row">
+            <div><p class="os-stat-val">73%</p><p class="os-stat-lbl">Flow Depth</p></div>
+            <div style="text-align:right"><p class="os-stat-val">3.2h</p><p class="os-stat-lbl">Unbroken</p></div>
+          </div>
+        </div>
+        <div class="os-widget">
+          <p class="os-widget-title">Space Memory</p>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <div style="display:flex;align-items:center;gap:0.5rem">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>
+              <span style="font-size:0.7rem;font-family:'Manrope',sans-serif;color:rgba(232,230,225,0.4)">7 docs linked</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem">
+              <div style="width:6px;height:6px;border-radius:50%;background:rgba(212,197,162,0.3);flex-shrink:0"></div>
+              <span style="font-size:0.7rem;font-family:'Manrope',sans-serif;color:rgba(232,230,225,0.4)">3 apps active</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem">
+              <div style="width:6px;height:6px;border-radius:50%;background:rgba(212,197,162,0.15);flex-shrink:0"></div>
+              <span style="font-size:0.7rem;font-family:'Manrope',sans-serif;color:rgba(232,230,225,0.4)">Auto-saved</span>
+            </div>
+          </div>
+        </div>
+        <div class="os-widget">
+          <p class="os-widget-title">Velocity Keys</p>
+          <div style="display:flex;flex-direction:column;gap:0.375rem">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:0.68rem;font-family:'Manrope',sans-serif;color:rgba(232,230,225,0.35)">Switch Space</span>
+              <span style="font-size:0.65rem;font-family:'Manrope',sans-serif;color:var(--gold);background:rgba(212,197,162,0.08);padding:2px 6px;border-radius:2px;">&#8984;K</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:0.68rem;font-family:'Manrope',sans-serif;color:rgba(232,230,225,0.35)">Focus Shell</span>
+              <span style="font-size:0.65rem;font-family:'Manrope',sans-serif;color:var(--gold);background:rgba(212,197,162,0.08);padding:2px 6px;border-radius:2px;">&#8984;&#8679;F</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:0.68rem;font-family:'Manrope',sans-serif;color:rgba(232,230,225,0.35)">Neural Sync</span>
+              <span style="font-size:0.65rem;font-family:'Manrope',sans-serif;color:var(--gold);background:rgba(212,197,162,0.08);padding:2px 6px;border-radius:2px;">&#8984;&#8997;N</span>
             </div>
           </div>
         </div>
@@ -466,138 +873,140 @@ footer { background: var(--void); border-top: 1px solid var(--border); padding: 
   </div>
 </section>
 
-<!-- EDITORIAL SPREAD -->
-<section class="editorial fade-in" id="features">
-  <div class="editorial-grid">
-    <div class="ed-left">
-      <p class="ed-issue">Issue 001 · The Productivity Crisis</p>
-      <h2 class="ed-h2">The tools multiplied.<br>The work got <em>harder.</em></h2>
-      <p class="ed-body">The average knowledge worker runs eleven different applications in a single day. They context-switch an estimated 300 times. Each switch costs between four and twenty-three minutes of recovered focus time. The mathematics are catastrophic.</p>
-      <blockquote class="ed-pull">"AURA OS doesn't ask you to change how you work. It remaps your environment to how you already think."</blockquote>
-      <p class="ed-body">AURA OS is not another productivity app. It is an operating system layer that sits below your existing tools and above your file system — a unified context engine that remembers what you were doing, where you were, and why it mattered.</p>
-      <a href="#" class="btn-hero-main" style="margin-top:20px;display:inline-block;">Read the Full Research</a>
-    </div>
-    <div class="ed-divider"></div>
-    <div class="ed-right">
-      <p style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;margin-top:48px;">Core Systems</p>
-      <ul class="feature-list">
-        <li class="feature-item"><span class="feature-num">01</span><div><p class="feature-name">Context Engine</p><p class="feature-desc">Automatically saves your workspace state — open files, cursor position, active research, related notes — and restores it instantly. Zero friction context-switching.</p></div></li>
-        <li class="feature-item"><span class="feature-num">02</span><div><p class="feature-name">Deep Focus Mode</p><p class="feature-desc">An OS-level focus mode that removes all notifications, dims irrelevant applications, and tracks your uninterrupted work streaks with millisecond precision.</p></div></li>
-        <li class="feature-item"><span class="feature-num">03</span><div><p class="feature-name">Thought Graph</p><p class="feature-desc">Every note, document, search, and message is indexed into a personal knowledge graph. Ask it anything. Find the connection you forgot you'd made.</p></div></li>
-        <li class="feature-item"><span class="feature-num">04</span><div><p class="feature-name">Canvas Layer</p><p class="feature-desc">An infinite spatial canvas that overlays any application. Drag content from anywhere, arrange by thought rather than folder, and export as structured documents.</p></div></li>
-        <li class="feature-item"><span class="feature-num">05</span><div><p class="feature-name">Temporal Archive</p><p class="feature-desc">A complete, searchable history of everything you've worked on — not just files, but the context around them. Recreate the state of your mind from any past date.</p></div></li>
-      </ul>
-    </div>
-  </div>
+<!-- Pull Quote -->
+<section class="pull-quote-section">
+  <div class="pull-quote-rule reveal"></div>
+  <p class="pull-quote-text reveal" style="transition-delay:0.1s">
+    "The workspace should disappear.<br>Only your work should remain."
+  </p>
+  <p class="pull-quote-attr reveal" style="transition-delay:0.2s">AURA OS &mdash; Design Principle 001</p>
+  <div class="pull-quote-rule reveal" style="transition-delay:0.3s;margin-top:3rem;margin-bottom:0"></div>
 </section>
 
-<!-- MANIFESTO -->
-<section class="manifesto fade-in" id="manifesto">
-  <h2 class="manifesto-h2">The work<br>that <em>matters</em><br>deserves more.</h2>
-  <div class="manifesto-statements">
-    <div class="manifesto-stmt">
-      <div class="stmt-num">I</div>
-      <h3 class="stmt-h3">Against Notification Tyranny</h3>
-      <p class="stmt-p">Every notification is a hostile takeover of your attention. AURA OS treats your focus as infrastructure — not a setting to toggle, but a system to protect at the architectural level.</p>
+<!-- Features Bento -->
+<section style="padding:8rem 3rem">
+  <div style="max-width:1300px;margin:0 auto">
+    <div class="features-header reveal">
+      <h2 class="features-title">Four<br>principles.<br>One layer.</h2>
+      <p class="features-sub">AURA doesn't add to your stack. It operates beneath it, reshaping how every tool you already own behaves.</p>
     </div>
-    <div class="manifesto-stmt">
-      <div class="stmt-num">II</div>
-      <h3 class="stmt-h3">For Spatial Thinking</h3>
-      <p class="stmt-p">Human cognition is spatial. Tab-based interfaces are not. AURA OS returns working memory to its natural form — a canvas of thought that you navigate by proximity, not alphabetical order.</p>
-    </div>
-    <div class="manifesto-stmt">
-      <div class="stmt-num">III</div>
-      <h3 class="stmt-h3">Memory as Infrastructure</h3>
-      <p class="stmt-p">The knowledge you generate at work is yours — permanently, searchably, structurally. AURA OS treats your intellectual history as infrastructure, not ephemera.</p>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials fade-in">
-  <div class="test-header">
-    <h2 class="test-h2">From the waitlist.<br>From the beta.</h2>
-  </div>
-  <div class="test-layout">
-    <div class="test-feature">
-      <div class="test-feature-mark">"</div>
-      <p class="test-feature-text">I got my first three hours of uninterrupted deep work in fourteen months. I had stopped believing that was possible in a remote-first world. AURA OS proved me wrong in the first week.</p>
-      <p class="test-feature-author">— Dr. James H., Professor of Cognitive Systems, MIT</p>
-    </div>
-    <div class="test-mini-col">
-      <div class="test-mini">
-        <p class="test-mini-text">"The Context Engine is the most technically thoughtful piece of software I've encountered in five years. It doesn't feel like a feature — it feels like an OS primitive that should have always existed."</p>
-        <p class="test-mini-author">— Priya M., Staff Engineer, Infrastructure</p>
+    <div class="features-grid reveal" style="transition-delay:0.1s">
+      <!-- Large card -->
+      <div class="feat-card large">
+        <p class="feat-number">01</p>
+        <div class="feat-icon"><i data-lucide="shield-off"></i></div>
+        <h3 class="feat-name">Focus Shell</h3>
+        <p class="feat-desc">A single keystroke removes every application, notification, and ambient distraction from your environment. Not minimized. Not hidden. Genuinely absent. Focus Shell suspends non-essential processes at the OS level so your machine runs as if only your work exists.</p>
+        <div style="margin-top:2.5rem;display:flex;align-items:center;gap:0.75rem">
+          <div style="width:40px;height:1px;background:var(--gold)"></div>
+          <span style="font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold)">Activate: &#8984;&#8679;F</span>
+        </div>
       </div>
-      <div class="test-mini">
-        <p class="test-mini-text">"I've used Notion, Roam, Obsidian, Logseq. The Thought Graph is better than all of them — because it builds itself."</p>
-        <p class="test-mini-author">— Lucas T., Writer & Researcher, Paris</p>
+      <!-- Small cards -->
+      <div class="feat-card">
+        <p class="feat-number">02</p>
+        <div class="feat-icon"><i data-lucide="cpu"></i></div>
+        <h3 class="feat-name">Neural Sync</h3>
+        <p class="feat-desc">Context flows between every app you use. Your writing informs your calendar. Your meeting notes surface in your code editor. Intelligence without the chatbot.</p>
       </div>
-      <div class="test-mini">
-        <p class="test-mini-text">"The Temporal Archive is my second brain, except I didn't have to build it. It just accumulated, silently, exactly as I needed it to."</p>
-        <p class="test-mini-author">— Mira C., Creative Director, Berlin</p>
+      <div class="feat-card">
+        <p class="feat-number">03</p>
+        <div class="feat-icon"><i data-lucide="archive"></i></div>
+        <h3 class="feat-name">Space Memory</h3>
+        <p class="feat-desc">Every workspace state is preserved exactly as you left it. Return to a context from three weeks ago in under two seconds, fully restored.</p>
+      </div>
+      <div class="feat-card">
+        <p class="feat-number">04</p>
+        <div class="feat-icon"><i data-lucide="command"></i></div>
+        <h3 class="feat-name">Velocity Keys</h3>
+        <p class="feat-desc">A keyboard-first command layer across every application. One shortcut language for your entire machine. 127 apps, one muscle memory.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FINAL CTA -->
-<section class="cta-final fade-in" id="pricing">
-  <div class="cta-final-accent"></div>
-  <h2 class="cta-final-h2">The workspace you<br>deserve has been<br><em>waiting.</em></h2>
-  <p class="cta-final-sub">AURA OS is in private beta. Join the waitlist for early access. We're onboarding 200 users per week, starting with those who need it most.</p>
-  <div class="cta-btns">
-    <a href="#" class="btn-hero-main">Join the Waitlist</a>
-    <a href="#" class="btn-hero-outline">View System Requirements</a>
+<!-- Comparison -->
+<section class="comparison-section">
+  <div style="max-width:1200px;margin:0 auto 5rem">
+    <p class="reveal" style="font-size:0.65rem;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Reality Check</p>
+    <h2 class="reveal" style="font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:800;color:var(--paper);transition-delay:0.1s">The cost of fragmentation.</h2>
   </div>
-  <p class="cta-note">Available for macOS 14+. Windows and Linux support in 2025. iOS companion app in beta.</p>
+  <div class="comparison-inner reveal" style="transition-delay:0.2s">
+    <div class="comp-col-before">
+      <p class="comp-label before">Before AURA</p>
+      <div class="comp-item">17 apps open across 3 desktops, none of them talking to each other.</div>
+      <div class="comp-item">Slack notifications arrive during the deepest parts of a writing session. Context is lost. It takes 23 minutes to return.</div>
+      <div class="comp-item">You finish a meeting, open your notes app, and spend 8 minutes finding what you were thinking before it started.</div>
+      <div class="comp-item">Three tools for writing. Two for research. One for communication. None with a shared command vocabulary.</div>
+      <div class="comp-item">Keyboard shortcuts are different in every application. Your fingers never fully relax into a rhythm.</div>
+    </div>
+    <div class="comp-divider">
+      <div class="comp-divider-line"></div>
+    </div>
+    <div class="comp-col-after">
+      <p class="comp-label after">After AURA</p>
+      <div class="comp-item">One unified layer. Every app remains, but AURA provides a single context model across all of them.</div>
+      <div class="comp-item">Focus Shell suspends all interruptions at the OS level. Notifications queue silently and surface on your terms, between work blocks.</div>
+      <div class="comp-item">Space Memory restores your exact pre-meeting context in 1.8 seconds. All tabs, all documents, the cursor position.</div>
+      <div class="comp-item">Neural Sync creates a live knowledge graph from every tool. Information moves to where you need it, automatically.</div>
+      <div class="comp-item">Velocity Keys gives your entire machine a single keyboard language. One shortcut scheme. Every application responds.</div>
+    </div>
+  </div>
 </section>
 
+<!-- Stats bar -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <p class="stat-number">94%</p>
+    <p class="stat-label">Reduction in context switching<br>reported by early access members</p>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.1s">
+    <p class="stat-number">3.2h</p>
+    <p class="stat-label">Average additional deep work<br>recovered per day</p>
+  </div>
+  <div class="stat-item reveal" style="transition-delay:0.2s">
+    <p class="stat-number">127</p>
+    <p class="stat-label">Applications unified<br>under a single command layer</p>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section" id="waitlist">
+  <div class="cta-bg-text">AURA</div>
+  <p class="reveal" style="font-size:0.7rem;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem">Limited Early Access</p>
+  <h2 class="cta-heading reveal" style="transition-delay:0.1s">JOIN THE<br>WAITLIST</h2>
+  <p class="cta-sub reveal" style="transition-delay:0.2s">AURA OS launches Q3 2026. The first 1,000 members receive Founding Member access &mdash; lifetime pricing, private onboarding, and direct access to the team.</p>
+  <div class="cta-form reveal" style="transition-delay:0.3s">
+    <input type="email" class="cta-input" placeholder="your@email.com">
+    <button class="cta-btn">Secure Your Workspace</button>
+  </div>
+  <p class="cta-fine reveal" style="transition-delay:0.4s">No credit card required &mdash; first 1,000 members receive Founding Member access</p>
+</section>
+
+<!-- Footer -->
 <footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-brand">AURA OS</div>
-      <p class="footer-desc">The operating system layer for deep work. Built for people who think in systems and live in their tools. Private beta, 2024.</p>
-    </div>
-    <div>
-      <p class="footer-col-label">Product</p>
-      <ul class="footer-links">
-        <li><a href="#">Context Engine</a></li>
-        <li><a href="#">Deep Focus</a></li>
-        <li><a href="#">Thought Graph</a></li>
-        <li><a href="#">Canvas Layer</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-label">Company</p>
-      <ul class="footer-links">
-        <li><a href="#">Manifesto</a></li>
-        <li><a href="#">Research</a></li>
-        <li><a href="#">Changelog</a></li>
-        <li><a href="#">Careers</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-label">Access</p>
-      <ul class="footer-links">
-        <li><a href="#">Join Waitlist</a></li>
-        <li><a href="#">Beta Access</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">hello@auraos.co</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2024 Aura Systems Inc. All rights reserved.</span>
-    <span>Your workspace, redesigned.</span>
+  <p class="footer-brand">AURA OS &mdash; 2026</p>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Research</a>
+    <a href="#">Contact</a>
   </div>
 </footer>
 
 <script>
-const nav = document.getElementById('mainNav');
-window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', scrollY > 60); });
-const obs = new IntersectionObserver(e => e.forEach(i => { if(i.isIntersecting) i.target.classList.add('visible'); }), { threshold: 0.07 });
-document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  lucide.createIcons();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
 </script>
 </body>
 </html>

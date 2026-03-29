@@ -3,928 +3,788 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PULSE DESIGN — Know What Works</title>
+<title>PULSE DESIGN — Analytics for People Who Care About Design</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --yellow: #FFE17C;
-  --charcoal: #171E19;
-  --charcoal-mid: #222B23;
-  --green: #3A5A3F;
-  --green-light: #5A8A5F;
-  --white: #FAFAFA;
-  --cream: #F5F2EA;
-  --gray: #888;
-  --mid: #555;
-  --border: 1px solid rgba(23,30,25,0.12);
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--white);
-  color: var(--charcoal);
-  font-family: 'DM Sans', sans-serif;
-  overflow-x: hidden;
-}
-
-/* ── REVEAL ── */
-.reveal { opacity:0; transform:translateY(32px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
-.reveal.visible { opacity:1; transform:translateY(0); }
-.d1 { transition-delay:0.1s; }
-.d2 { transition-delay:0.2s; }
-
-/* ── NAV ── */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  background: var(--charcoal);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 48px;
-  height: 60px;
-  border-bottom: 1px solid #2a2a2a;
-}
-
-.nav-logo {
-  font-family: 'Anton', sans-serif;
-  font-size: 20px;
-  letter-spacing: 0.08em;
-  color: var(--yellow);
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 32px;
-  list-style: none;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: rgba(250,242,234,0.5);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-
-.nav-links a:hover { color: var(--cream); }
-
-.btn-nav {
-  background: var(--yellow);
-  color: var(--charcoal);
-  padding: 10px 24px;
-  font-family: 'Anton', sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-
-.btn-nav:hover { background: var(--yellow); opacity: 0.85; }
-
-/* ── HERO ── */
-.hero {
-  background: var(--charcoal);
-  color: var(--cream);
-  min-height: 90vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow: hidden;
-}
-
-.hero-left {
-  padding: 80px 60px 80px 48px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-right: 1px solid #2a2a2a;
-}
-
-.hero-eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--yellow);
-  font-weight: 600;
-  margin-bottom: 28px;
-}
-
-.hero-h1 {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(72px, 9vw, 140px);
-  line-height: 0.9;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  margin-bottom: 32px;
-}
-
-.hero-h1 .outline {
-  color: transparent;
-  -webkit-text-stroke: 2px var(--cream);
-  opacity: 0.4;
-}
-
-.hero-h1 .yellow { color: var(--yellow); }
-
-.hero-desc {
-  font-size: 16px;
-  line-height: 1.8;
-  color: rgba(245,242,234,0.65);
-  max-width: 440px;
-  margin-bottom: 48px;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 60px;
-}
-
-.btn-hero {
-  background: var(--yellow);
-  color: var(--charcoal);
-  padding: 18px 44px;
-  font-family: 'Anton', sans-serif;
-  font-size: 15px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-
-.btn-hero:hover { opacity: 0.85; }
-
-.btn-ghost {
-  color: rgba(245,242,234,0.6);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(245,242,234,0.3);
-  padding-bottom: 2px;
-}
-
-.hero-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: #2a2a2a;
-  border: 1px solid #2a2a2a;
-}
-
-.hero-metric {
-  background: var(--charcoal-mid);
-  padding: 24px;
-}
-
-.hm-val {
-  font-family: 'Anton', sans-serif;
-  font-size: 36px;
-  letter-spacing: 0.02em;
-  color: var(--yellow);
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.hm-label {
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(245,242,234,0.4);
-}
-
-.hero-right {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  background: #2a2a2a;
-}
-
-/* Dashboard preview tiles */
-.dash-tile {
-  flex: 1;
-  background: var(--charcoal-mid);
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.dash-tile-label {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(245,242,234,0.35);
-  margin-bottom: 16px;
-}
-
-.dash-tile-big {
-  font-family: 'Anton', sans-serif;
-  font-size: 52px;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  color: var(--yellow);
-}
-
-.dash-tile-sub {
-  font-size: 12px;
-  color: rgba(245,242,234,0.5);
-  margin-top: 8px;
-}
-
-.sparkline {
-  width: 100%;
-  height: 48px;
-  margin-top: 16px;
-}
-
-.dash-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  flex: 1;
-}
-
-.dash-mini {
-  background: var(--charcoal-mid);
-  padding: 24px;
-}
-
-.dm-label {
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(245,242,234,0.35);
-  margin-bottom: 10px;
-}
-
-.dm-val {
-  font-family: 'Anton', sans-serif;
-  font-size: 32px;
-  color: var(--cream);
-}
-
-.dm-arrow {
-  font-size: 11px;
-  color: #4CAF50;
-  margin-top: 4px;
-}
-
-/* ── FEATURES BENTO ── */
-.bento {
-  padding: 80px 48px;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: auto auto auto;
-  gap: 12px;
-}
-
-.b-card {
-  padding: 44px 36px;
-  border: 1px solid rgba(23,30,25,0.1);
-  background: var(--white);
-  transition: border-color 0.3s, box-shadow 0.3s;
-  cursor: default;
-}
-
-.b-card:hover { border-color: var(--charcoal); box-shadow: 0 4px 24px rgba(23,30,25,0.08); }
-
-.b-c1 { grid-column: span 7; }
-.b-c2 { grid-column: span 5; background: var(--yellow); }
-.b-c3 { grid-column: span 4; background: var(--charcoal); color: var(--cream); }
-.b-c4 { grid-column: span 4; }
-.b-c5 { grid-column: span 4; }
-.b-c6 { grid-column: span 5; background: var(--cream); }
-.b-c7 { grid-column: span 7; }
-
-.b-num {
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--yellow);
-  margin-bottom: 20px;
-  font-weight: 600;
-}
-
-.b-c1 .b-num { color: var(--yellow); background: var(--charcoal); padding: 4px 10px; width: fit-content; }
-.b-c3 .b-num { color: rgba(255,225,124,0.6); }
-.b-c4 .b-num, .b-c5 .b-num, .b-c7 .b-num { color: var(--green); }
-.b-c6 .b-num { color: var(--charcoal); opacity: 0.5; }
-
-.b-title {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(24px, 2.5vw, 36px);
-  line-height: 1;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-}
-
-.b-c2 .b-title { color: var(--charcoal); }
-.b-c3 .b-title { color: var(--cream); }
-
-.b-desc {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--mid);
-}
-
-.b-c2 .b-desc { color: rgba(23,30,25,0.65); }
-.b-c3 .b-desc { color: rgba(245,242,234,0.6); }
-
-/* ── GRID PATTERN SECTION ── */
-.grid-section {
-  position: relative;
-  overflow: hidden;
-  background: var(--charcoal);
-  padding: 100px 48px;
-}
-
-.grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,225,124,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,225,124,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-.grid-content {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-
-.grid-left .section-eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--yellow);
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.grid-left .section-title {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(52px, 6vw, 90px);
-  line-height: 0.9;
-  text-transform: uppercase;
-  color: var(--cream);
-  margin-bottom: 28px;
-}
-
-.grid-left .section-desc {
-  font-size: 15px;
-  line-height: 1.8;
-  color: rgba(245,242,234,0.6);
-  max-width: 440px;
-  margin-bottom: 40px;
-}
-
-.btn-yellow {
-  background: var(--yellow);
-  color: var(--charcoal);
-  padding: 16px 40px;
-  font-family: 'Anton', sans-serif;
-  font-size: 14px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  display: inline-block;
-  transition: opacity 0.2s;
-}
-
-.btn-yellow:hover { opacity: 0.85; }
-
-.grid-right {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: #2a2a2a;
-  border: 1px solid #2a2a2a;
-}
-
-.gr-item {
-  background: var(--charcoal-mid);
-  padding: 32px 24px;
-}
-
-.gr-num {
-  font-family: 'Anton', sans-serif;
-  font-size: 48px;
-  color: var(--yellow);
-  line-height: 1;
-  margin-bottom: 8px;
-}
-
-.gr-label {
-  font-size: 11px;
-  color: rgba(245,242,234,0.45);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-/* ── TESTIMONIALS ── */
-.testimonials {
-  padding: 100px 48px;
-  border-top: var(--border);
-}
-
-.t-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 60px;
-}
-
-.t-main-title {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(48px, 6vw, 80px);
-  line-height: 0.9;
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
-}
-
-.t-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-}
-
-.t-card {
-  padding: 40px 32px;
-  border: 1px solid rgba(23,30,25,0.1);
-  transition: border-color 0.3s;
-}
-
-.t-card:hover { border-color: var(--charcoal); }
-
-.t-card.accent { background: var(--charcoal); color: var(--cream); }
-.t-card.yellow { background: var(--yellow); }
-
-.t-quote {
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--mid);
-  margin-bottom: 28px;
-  font-style: italic;
-}
-
-.t-card.accent .t-quote { color: rgba(245,242,234,0.6); }
-.t-card.yellow .t-quote { color: rgba(23,30,25,0.7); }
-
-.t-author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.t-ava {
-  width: 38px;
-  height: 38px;
-  background: var(--charcoal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Anton', sans-serif;
-  font-size: 13px;
-  color: var(--yellow);
-  flex-shrink: 0;
-}
-
-.t-card.accent .t-ava { background: var(--yellow); color: var(--charcoal); }
-.t-card.yellow .t-ava { background: var(--charcoal); color: var(--yellow); }
-
-.t-name {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.t-role { font-size: 11px; color: var(--gray); margin-top: 2px; }
-.t-card.accent .t-role { color: rgba(245,242,234,0.4); }
-
-/* ── CTA ── */
-.cta-section {
-  background: var(--yellow);
-  padding: 120px 48px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-
-.cta-left {}
-
-.cta-eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(23,30,25,0.5);
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.cta-h2 {
-  font-family: 'Anton', sans-serif;
-  font-size: clamp(64px, 8vw, 110px);
-  line-height: 0.9;
-  text-transform: uppercase;
-  color: var(--charcoal);
-  margin-bottom: 32px;
-}
-
-.cta-desc {
-  font-size: 16px;
-  line-height: 1.7;
-  color: rgba(23,30,25,0.65);
-  max-width: 460px;
-}
-
-.cta-right {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.cta-form input {
-  width: 100%;
-  background: rgba(23,30,25,0.08);
-  border: 1px solid rgba(23,30,25,0.2);
-  color: var(--charcoal);
-  padding: 16px 20px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.2s;
-  margin-bottom: 12px;
-}
-
-.cta-form input::placeholder { color: rgba(23,30,25,0.35); }
-.cta-form input:focus { border-color: var(--charcoal); }
-
-.btn-cta {
-  width: 100%;
-  background: var(--charcoal);
-  color: var(--yellow);
-  border: none;
-  padding: 20px 32px;
-  font-family: 'Anton', sans-serif;
-  font-size: 16px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-cta:hover { opacity: 0.85; }
-
-.cta-note {
-  font-size: 11px;
-  color: rgba(23,30,25,0.45);
-  text-align: center;
-  letter-spacing: 0.08em;
-}
-
-/* ── FOOTER ── */
-footer {
-  background: var(--charcoal);
-  color: var(--cream);
-  padding: 64px 48px 36px;
-}
-
-.footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px;
-  padding-bottom: 48px;
-  border-bottom: 1px solid #2a2a2a;
-}
-
-.footer-logo {
-  font-family: 'Anton', sans-serif;
-  font-size: 28px;
-  letter-spacing: 0.06em;
-  color: var(--yellow);
-  margin-bottom: 12px;
-}
-
-.footer-desc { font-size: 13px; color: #555; line-height: 1.7; max-width: 260px; }
-
-.footer-col-title {
-  font-size: 9px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: #555;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 10px; }
-.footer-col ul li a { font-size: 13px; color: #666; text-decoration: none; transition: color 0.2s; }
-.footer-col ul li a:hover { color: var(--yellow); }
-
-.footer-bottom {
-  margin-top: 36px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-copy { font-size: 11px; color: #444; }
-
-.footer-legal a {
-  font-size: 11px;
-  color: #444;
-  text-decoration: none;
-  margin-left: 20px;
-  transition: color 0.2s;
-}
-
-.footer-legal a:hover { color: var(--yellow); }
-</style>
-
-<!-- inject-local -->
-<style>
-  .grid-bg {
-    background-image: url('../../images/creative/creative-1.jpg') !important;
-    background-size: cover; background-position: center;
+  :root {
+    --yellow: #ffe17c;
+    --charcoal: #171e19;
+    --dark-gray: #272727;
+    --sage: #b7c6c2;
+    --white: #ffffff;
+    --black: #000000;
   }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: var(--white); color: var(--charcoal); font-family: 'Satoshi', sans-serif; scroll-behavior: smooth; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--white); }
+  ::-webkit-scrollbar-thumb { background: var(--charcoal); }
+
+  /* GRID PATTERN */
+  .grid-bg {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, rgba(183,198,194,0.2) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(183,198,194,0.2) 1px, transparent 1px);
+  }
+
+  /* YELLOW HIGHLIGHT ROTATE */
+  .highlight-word {
+    position: relative;
+    display: inline-block;
+  }
+  .highlight-word::before {
+    content: '';
+    position: absolute;
+    inset: -2px -4px;
+    background: var(--yellow);
+    transform: rotate(-1.5deg) skewX(-2deg);
+    z-index: -1;
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 600ms cubic-bezier(0.4,0,0.2,1), transform 600ms cubic-bezier(0.4,0,0.2,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 64px;
+    background: var(--white);
+    border-bottom: 1px solid rgba(23,30,25,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+  }
+  .nav-logo {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: rgba(23,30,25,0.55);
+    text-decoration: none;
+    transition: color 200ms;
+  }
+  .nav-links a:hover { color: var(--charcoal); }
+  .nav-cta {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    background: var(--charcoal);
+    padding: 0.6rem 1.5rem;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 200ms;
+  }
+  .nav-cta:hover { background: var(--dark-gray); }
+
+  /* HERO */
+  .hero {
+    min-height: 90vh;
+    padding: 5rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(23,30,25,0.1);
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    border: 1px solid rgba(23,30,25,0.2);
+    padding: 0.35rem 0.9rem;
+    border-radius: 9999px;
+    margin-bottom: 2.5rem;
+    align-self: flex-start;
+  }
+  .hero-badge .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--yellow);
+    border-radius: 50%;
+    border: 1.5px solid var(--charcoal);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
+
+  .hero-h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(4rem, 9vw, 11rem);
+    letter-spacing: 0.01em;
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    max-width: 1000px;
+    margin-bottom: 3rem;
+  }
+  .hero-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: flex-end;
+  }
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(23,30,25,0.65);
+    max-width: 460px;
+  }
+  .hero-desc strong { color: var(--charcoal); font-weight: 700; }
+  .hero-cta-group { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
+  .btn-primary {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--charcoal);
+    background: var(--yellow);
+    padding: 0.9rem 2.2rem;
+    text-decoration: none;
+    border: 1.5px solid var(--charcoal);
+    border-radius: 4px;
+    transition: background 200ms, transform 150ms;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn-primary:hover { background: #f5d56a; transform: translateY(-1px); }
+  .btn-ghost {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(23,30,25,0.55);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 200ms;
+  }
+  .btn-ghost:hover { color: var(--charcoal); }
+  .hero-number-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    border: 1px solid rgba(23,30,25,0.1);
+    padding: 2rem;
+    border-radius: 8px;
+    background: rgba(255,225,124,0.06);
+  }
+  .hero-num { font-family: 'Anton', sans-serif; font-size: 2.5rem; letter-spacing: 0.02em; line-height: 1; }
+  .hero-num-label { font-size: 0.72rem; font-weight: 700; color: rgba(23,30,25,0.5); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* SOCIAL PROOF */
+  .social-proof {
+    background: var(--charcoal);
+    padding: 1.5rem 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    overflow: hidden;
+  }
+  .sp-track {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    animation: spMarquee 25s linear infinite;
+    width: max-content;
+  }
+  .sp-item {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(183,198,194,0.55);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .sp-sep { width: 4px; height: 4px; background: var(--yellow); border-radius: 50%; }
+  @keyframes spMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* PROBLEM/SOLUTION SPLIT */
+  .problem-solution {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid rgba(23,30,25,0.1);
+  }
+  .prob-panel {
+    padding: 5rem 2.5rem;
+    background: var(--white);
+    border-right: 1px solid rgba(23,30,25,0.1);
+  }
+  .sol-panel {
+    padding: 5rem 2.5rem;
+    background: var(--charcoal);
+    color: var(--white);
+  }
+  .panel-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .prob-panel .panel-label { color: rgba(23,30,25,0.45); }
+  .sol-panel .panel-label { color: var(--sage); }
+  .panel-label::before { content: ''; display: block; width: 1.5rem; height: 1.5px; background: currentColor; }
+  .panel-h {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(2rem, 4vw, 4.5rem);
+    letter-spacing: 0.02em;
+    line-height: 0.88;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .prob-panel .panel-h { color: var(--charcoal); }
+  .sol-panel .panel-h { color: var(--yellow); }
+  .panel-items { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem; }
+  .panel-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+  .prob-panel .panel-item { color: rgba(23,30,25,0.65); }
+  .sol-panel .panel-item { color: rgba(255,255,255,0.7); }
+  .panel-item-icon { flex-shrink: 0; margin-top: 0.1rem; }
+  .prob-panel .panel-item-icon { color: rgba(23,30,25,0.35); }
+  .sol-panel .panel-item-icon { color: var(--yellow); }
+
+  /* BENTO FEATURES */
+  .bento {
+    padding: 5rem 2.5rem;
+    background: var(--white);
+    border-bottom: 1px solid rgba(23,30,25,0.1);
+  }
+  .bento-header {
+    margin-bottom: 3rem;
+  }
+  .bento-header h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 6rem);
+    letter-spacing: 0.02em;
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: var(--charcoal);
+  }
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+  }
+  .bc { border: 1px solid rgba(23,30,25,0.1); padding: 2rem; display: flex; flex-direction: column; gap: 1rem; border-radius: 8px; transition: border-color 300ms cubic-bezier(0.4,0,0.2,1), box-shadow 300ms cubic-bezier(0.4,0,0.2,1); }
+  .bc:hover { border-color: var(--charcoal); box-shadow: 0 4px 20px rgba(23,30,25,0.08); }
+  .bc-yellow { background: var(--yellow); border-color: var(--charcoal); }
+  .bc-dark { background: var(--charcoal); border-color: var(--charcoal); color: var(--white); }
+  .bc-6 { grid-column: span 6; }
+  .bc-4 { grid-column: span 4; }
+  .bc-8 { grid-column: span 8; }
+  .bc-3 { grid-column: span 3; }
+  .bc-9 { grid-column: span 9; }
+  .bc-12 { grid-column: span 12; }
+  .bc-icon {
+    width: 40px; height: 40px;
+    background: rgba(23,30,25,0.06);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--charcoal);
+    flex-shrink: 0;
+  }
+  .bc-dark .bc-icon { background: rgba(255,255,255,0.08); color: var(--yellow); }
+  .bc-yellow .bc-icon { background: rgba(23,30,25,0.1); }
+  .bc-title { font-family: 'Anton', sans-serif; font-size: 1.3rem; letter-spacing: 0.02em; line-height: 1.1; text-transform: uppercase; }
+  .bc-dark .bc-title { color: var(--white); }
+  .bc-desc { font-size: 0.85rem; line-height: 1.65; color: rgba(23,30,25,0.6); }
+  .bc-dark .bc-desc { color: rgba(183,198,194,0.7); }
+  .bc-big-num { font-family: 'Anton', sans-serif; font-size: 4rem; letter-spacing: 0.02em; line-height: 1; color: var(--charcoal); }
+  .bc-yellow .bc-big-num { color: var(--charcoal); }
+  .bc-dark .bc-big-num { color: var(--yellow); }
+
+  /* PROCESS */
+  .process {
+    padding: 5rem 2.5rem;
+    background: var(--charcoal);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .process h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    letter-spacing: 0.02em;
+    line-height: 0.88;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 3rem;
+  }
+  .process h2 em { color: var(--yellow); font-style: normal; }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .process-step {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: background 200ms;
+  }
+  .process-step:last-child { border-right: none; }
+  .process-step:hover { background: rgba(255,255,255,0.03); }
+  .step-num {
+    font-family: 'Anton', sans-serif;
+    font-size: 5rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: rgba(255,225,124,0.15);
+  }
+  .step-title {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .step-desc { font-size: 0.85rem; line-height: 1.7; color: var(--sage); }
+
+  /* IMAGE EDITORIAL */
+  .editorial {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 560px;
+    border-bottom: 1px solid rgba(23,30,25,0.1);
+  }
+  .ed-img { overflow: hidden; }
+  .ed-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 700ms cubic-bezier(0.4,0,0.2,1);
+    display: block;
+    filter: saturate(0.9);
+  }
+  .editorial:hover .ed-img img { transform: scale(1.04); }
+  .ed-content {
+    padding: 5rem 3.5rem;
+    background: var(--yellow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid var(--charcoal);
+  }
+  .ed-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(23,30,25,0.55);
+  }
+  .ed-headline {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(2.5rem, 4.5vw, 5rem);
+    letter-spacing: 0.02em;
+    line-height: 0.88;
+    text-transform: uppercase;
+    color: var(--charcoal);
+  }
+  .ed-body {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: rgba(23,30,25,0.7);
+    max-width: 400px;
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    padding: 7rem 2.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(23,30,25,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, rgba(183,198,194,0.15) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(183,198,194,0.15) 1px, transparent 1px);
+    z-index: 0;
+  }
+  .final-cta h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(3rem, 8vw, 10rem);
+    letter-spacing: 0.02em;
+    line-height: 0.85;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 2.5rem;
+  }
+  .final-cta h2 em { color: transparent; -webkit-text-stroke: 2px var(--charcoal); font-style: normal; }
+  .final-cta-email {
+    display: flex;
+    max-width: 480px;
+    margin: 0 auto;
+    border: 1.5px solid var(--charcoal);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+  .final-cta-email input {
+    flex: 1;
+    background: var(--white);
+    border: none;
+    padding: 1rem 1.2rem;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--charcoal);
+    outline: none;
+  }
+  .final-cta-email input::placeholder { color: rgba(23,30,25,0.4); }
+  .final-cta-email button {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--charcoal);
+    background: var(--yellow);
+    border: none;
+    padding: 1rem 1.8rem;
+    cursor: pointer;
+    border-left: 1.5px solid var(--charcoal);
+    transition: background 200ms;
+  }
+  .final-cta-email button:hover { background: #f5d56a; }
+
+  /* FOOTER */
+  footer {
+    background: var(--charcoal);
+    padding: 4rem 2.5rem 2rem;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 2rem;
+  }
+  .footer-brand {
+    font-family: 'Anton', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+  .footer-tagline { font-size: 0.82rem; line-height: 1.65; color: rgba(183,198,194,0.55); max-width: 260px; }
+  .footer-col h4 { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(183,198,194,0.4); margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .footer-col ul li a { font-size: 0.85rem; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 200ms; }
+  .footer-col ul li a:hover { color: var(--sage); }
+  .footer-bottom { display: flex; justify-content: space-between; }
+  .footer-bottom span { font-size: 0.7rem; color: rgba(255,255,255,0.2); letter-spacing: 0.06em; }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">PULSE DESIGN</a>
+  <a href="#" class="nav-logo">Pulse Design</a>
   <ul class="nav-links">
     <li><a href="#">Features</a></li>
-    <li><a href="#">Integrations</a></li>
     <li><a href="#">Pricing</a></li>
+    <li><a href="#">Docs</a></li>
     <li><a href="#">Blog</a></li>
   </ul>
-  <a href="#" class="btn-nav">Start Free →</a>
+  <a href="#" class="nav-cta">Request Access</a>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow reveal">Design Analytics Platform</div>
-    <h1 class="hero-h1 reveal d1">
-      KNOW<br>
-      WHAT<br>
-      <span class="yellow">WORKS</span>
-    </h1>
-    <p class="hero-desc reveal d2">PULSE DESIGN shows you exactly which design decisions move the needle — heatmaps, A/B analysis, session recordings, and AI-powered design recommendations.</p>
-    <div class="hero-actions reveal d2">
-      <a href="#" class="btn-hero">Get Started Free</a>
-      <a href="#" class="btn-ghost">Watch Demo →</a>
-    </div>
-    <div class="hero-metrics reveal">
-      <div class="hero-metric">
-        <div class="hm-val">+41%</div>
-        <div class="hm-label">Avg. CVR lift</div>
-      </div>
-      <div class="hero-metric">
-        <div class="hm-val">22k</div>
-        <div class="hm-label">Design teams</div>
-      </div>
-      <div class="hero-metric">
-        <div class="hm-val">99ms</div>
-        <div class="hm-label">Tracking latency</div>
-      </div>
-    </div>
+<section class="hero grid-bg reveal">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Design Analytics — In Private Beta
   </div>
-  <div class="hero-right">
-    <div class="dash-tile">
-      <div>
-        <div class="dash-tile-label">Conversion Rate — Hero CTA</div>
-        <div class="dash-tile-big">8.4%</div>
-        <div class="dash-tile-sub">↑ +2.1% vs. previous variant</div>
+  <h1 class="hero-h1">
+    Analytics<br>Built for<br><span class="highlight-word">Designers.</span>
+  </h1>
+  <div class="hero-split">
+    <div>
+      <p class="hero-desc">PULSE tracks how users interact with your design — heatmaps, component-level engagement, session flows — and speaks the language of <strong>design tokens, not SQL queries.</strong> Built for design-led teams who ship fast and measure rigorously.</p>
+      <div class="hero-cta-group" style="margin-top:2rem;">
+        <a href="#" class="btn-primary">Request Early Access <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></a>
+        <a href="#" class="btn-ghost">See how it works <i data-lucide="play" style="width:14px;height:14px;"></i></a>
       </div>
-      <svg class="sparkline" viewBox="0 0 300 48" preserveAspectRatio="none">
-        <polyline points="0,40 40,30 80,35 120,18 160,22 200,10 240,15 300,4" fill="none" stroke="#FFE17C" stroke-width="2"/>
-        <polyline points="0,40 40,30 80,35 120,18 160,22 200,10 240,15 300,4 300,48 0,48" fill="rgba(255,225,124,0.06)" stroke="none"/>
-      </svg>
     </div>
-    <div class="dash-row">
-      <div class="dash-mini">
-        <div class="dm-label">Scroll Depth</div>
-        <div class="dm-val">64%</div>
-        <div class="dm-arrow">↑ 8% vs last week</div>
+    <div class="hero-number-block">
+      <div>
+        <div class="hero-num" style="font-family:'Anton',sans-serif;">4.2M</div>
+        <div class="hero-num-label">Events / Day</div>
       </div>
-      <div class="dash-mini">
-        <div class="dm-label">Click-Through</div>
-        <div class="dm-val">12.1%</div>
-        <div class="dm-arrow">↑ 3.4% vs previous</div>
+      <div>
+        <div class="hero-num" style="font-family:'Anton',sans-serif;">&lt;50ms</div>
+        <div class="hero-num-label">Event Latency</div>
       </div>
-      <div class="dash-mini">
-        <div class="dm-label">A/B Winner</div>
-        <div class="dm-val" style="color:var(--yellow); font-size:22px;">Variant B</div>
-        <div class="dm-arrow">97% confidence</div>
+      <div>
+        <div class="hero-num" style="font-family:'Anton',sans-serif;">340+</div>
+        <div class="hero-num-label">Design Teams</div>
       </div>
-      <div class="dash-mini">
-        <div class="dm-label">Sessions</div>
-        <div class="dm-val">142K</div>
-        <div class="dm-arrow">This week</div>
+      <div>
+        <div class="hero-num" style="font-family:'Anton',sans-serif;">99.9%</div>
+        <div class="hero-num-label">Uptime SLA</div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- SOCIAL PROOF -->
+<div class="social-proof">
+  <div class="sp-track">
+    <span class="sp-item">Figma Integration <span class="sp-sep"></span></span>
+    <span class="sp-item">Design Token Tracking <span class="sp-sep"></span></span>
+    <span class="sp-item">Component Heatmaps <span class="sp-sep"></span></span>
+    <span class="sp-item">Framer Sync <span class="sp-sep"></span></span>
+    <span class="sp-item">Privacy-First <span class="sp-sep"></span></span>
+    <span class="sp-item">No Sampling <span class="sp-sep"></span></span>
+    <span class="sp-item">Self-Hostable <span class="sp-sep"></span></span>
+    <span class="sp-item">Figma Integration <span class="sp-sep"></span></span>
+    <span class="sp-item">Design Token Tracking <span class="sp-sep"></span></span>
+    <span class="sp-item">Component Heatmaps <span class="sp-sep"></span></span>
+    <span class="sp-item">Framer Sync <span class="sp-sep"></span></span>
+    <span class="sp-item">Privacy-First <span class="sp-sep"></span></span>
+    <span class="sp-item">No Sampling <span class="sp-sep"></span></span>
+    <span class="sp-item">Self-Hostable <span class="sp-sep"></span></span>
+  </div>
+</div>
+
+<!-- PROBLEM / SOLUTION -->
+<div class="problem-solution reveal">
+  <div class="prob-panel">
+    <div class="panel-label">The Problem</div>
+    <h2 class="panel-h">Analytics<br>Weren't Built<br>for Design</h2>
+    <div class="panel-items">
+      <div class="panel-item">
+        <span class="panel-item-icon"><i data-lucide="x-circle" style="width:16px;height:16px;"></i></span>
+        Your analytics tool reports page views. It has no concept of a component, a design token, or a visual hierarchy.
+      </div>
+      <div class="panel-item">
+        <span class="panel-item-icon"><i data-lucide="x-circle" style="width:16px;height:16px;"></i></span>
+        Heatmaps show you clicks, not attention. They can't tell you why users missed your primary CTA.
+      </div>
+      <div class="panel-item">
+        <span class="panel-item-icon"><i data-lucide="x-circle" style="width:16px;height:16px;"></i></span>
+        You redesign in Figma. Your data lives in a separate world. There's no connection between decisions and outcomes.
+      </div>
+    </div>
+  </div>
+  <div class="sol-panel">
+    <div class="panel-label">The Solution</div>
+    <h2 class="panel-h">Pulse<br>Speaks<br>Design</h2>
+    <div class="panel-items">
+      <div class="panel-item">
+        <span class="panel-item-icon"><i data-lucide="check-circle" style="width:16px;height:16px;"></i></span>
+        Every tracked event maps to a named component from your design system — not a DOM element.
+      </div>
+      <div class="panel-item">
+        <span class="panel-item-icon"><i data-lucide="check-circle" style="width:16px;height:16px;"></i></span>
+        Attention heatmaps use eye-tracking inference, not just click data. Know what users saw, not just what they tapped.
+      </div>
+      <div class="panel-item">
+        <span class="panel-item-icon"><i data-lucide="check-circle" style="width:16px;height:16px;"></i></span>
+        Figma sync links your design decisions to live behavioral data. Ship with confidence, iterate with evidence.
+      </div>
+    </div>
+    <a href="#" class="btn-primary" style="border-color:var(--yellow);">Compare to the Alternative</a>
+  </div>
+</div>
 
 <!-- BENTO FEATURES -->
-<section class="bento">
-  <div class="b-card b-c1 reveal">
-    <div class="b-num">01</div>
-    <h3 class="b-title">Visual Heatmaps<br>& Click Maps</h3>
-    <p class="b-desc">See exactly where users look, click, and scroll. Identify dead zones, rage clicks, and hidden friction in your design — all in real time without performance impact.</p>
+<section class="bento reveal">
+  <div class="bento-header">
+    <h2>The<br><span class="highlight-word">Feature</span><br>Set</h2>
   </div>
-  <div class="b-card b-c2 reveal d1">
-    <div class="b-num">02</div>
-    <h3 class="b-title">A/B Testing<br>Built In</h3>
-    <p class="b-desc">Spin up design experiments without a developer. Test copy, colors, layouts, and entire flows with statistical confidence scoring.</p>
-  </div>
-  <div class="b-card b-c3 reveal">
-    <div class="b-num">03</div>
-    <h3 class="b-title">AI Design<br>Recommendations</h3>
-    <p class="b-desc">PULSE AI analyzes your sessions and tells you exactly what to change and why — with confidence scores and predicted impact before you build a single pixel.</p>
-  </div>
-  <div class="b-card b-c4 reveal d1">
-    <div class="b-num">04</div>
-    <h3 class="b-title">Session<br>Recordings</h3>
-    <p class="b-desc">Watch real user sessions. Filter by frustrated users, conversion failures, or high-value segments.</p>
-  </div>
-  <div class="b-card b-c5 reveal d2">
-    <div class="b-num">05</div>
-    <h3 class="b-title">Figma<br>Integration</h3>
-    <p class="b-desc">See live performance data directly in your Figma files. Design with context. Ship with confidence.</p>
-  </div>
-  <div class="b-card b-c6 reveal">
-    <div class="b-num">06</div>
-    <h3 class="b-title">Funnel<br>Analysis</h3>
-    <p class="b-desc">Track every step of your user journey. Find where they drop. Fix the right problem, not the loudest one.</p>
-  </div>
-  <div class="b-card b-c7 reveal d1">
-    <div class="b-num">07</div>
-    <h3 class="b-title">Real-Time Dashboard + Slack Alerts</h3>
-    <p class="b-desc">Get notified instantly when a metric moves. Live dashboards for your whole team with custom alerting thresholds and weekly AI-generated performance digests delivered to Slack.</p>
-  </div>
-</section>
-
-<!-- GRID SECTION -->
-<section class="grid-section">
-  <div class="grid-bg"></div>
-  <div class="grid-content">
-    <div class="grid-left">
-      <div class="section-eyebrow reveal">The Numbers</div>
-      <h2 class="section-title reveal d1">DESIGNED<br>FOR SCALE</h2>
-      <p class="section-desc reveal d2">PULSE DESIGN handles tens of millions of sessions per month without slowing your app by a single millisecond. Enterprise-grade infrastructure, startup-grade simplicity.</p>
-      <a href="#" class="btn-yellow reveal d2">See All Features →</a>
+  <div class="bento-grid">
+    <div class="bc bc-yellow bc-8">
+      <div class="bc-icon"><i data-lucide="layers" style="width:20px;height:20px;"></i></div>
+      <div class="bc-title">Component-Level Analytics</div>
+      <p class="bc-desc">Track engagement at the design system component level — Button, Card, Modal — not raw DOM nodes. Map data back to your Figma library automatically.</p>
     </div>
-    <div class="grid-right reveal d1">
-      <div class="gr-item">
-        <div class="gr-num">50M+</div>
-        <div class="gr-label">Sessions/month</div>
-      </div>
-      <div class="gr-item">
-        <div class="gr-num">99.9%</div>
-        <div class="gr-label">Uptime SLA</div>
-      </div>
-      <div class="gr-item">
-        <div class="gr-num">22k</div>
-        <div class="gr-label">Design teams</div>
-      </div>
-      <div class="gr-item">
-        <div class="gr-num">&lt;1ms</div>
-        <div class="gr-label">SDK overhead</div>
-      </div>
+    <div class="bc bc-4">
+      <div class="bc-big-num">100%</div>
+      <div class="bc-title">No Sampling</div>
+      <p class="bc-desc">Every event captured. No statistical guessing on small datasets.</p>
+    </div>
+    <div class="bc bc-4">
+      <div class="bc-icon"><i data-lucide="eye" style="width:20px;height:20px;"></i></div>
+      <div class="bc-title">Attention Heatmaps</div>
+      <p class="bc-desc">Inferred visual attention across your UI, not just where people click.</p>
+    </div>
+    <div class="bc bc-dark bc-4">
+      <div class="bc-icon"><i data-lucide="figma" style="width:20px;height:20px;"></i></div>
+      <div class="bc-title">Figma Sync</div>
+      <p class="bc-desc">Connect your live components to Figma frames. See which designs perform.</p>
+    </div>
+    <div class="bc bc-4">
+      <div class="bc-icon"><i data-lucide="route" style="width:20px;height:20px;"></i></div>
+      <div class="bc-title">Session Flows</div>
+      <p class="bc-desc">Visual paths through your product, rendered in the language of your design system.</p>
+    </div>
+    <div class="bc bc-dark bc-6">
+      <div class="bc-big-num">&lt;50ms</div>
+      <div class="bc-title">Event Latency</div>
+      <p class="bc-desc">Sub-50ms event ingestion. Zero performance impact on your product. No data sampling required.</p>
+    </div>
+    <div class="bc bc-6">
+      <div class="bc-icon"><i data-lucide="shield" style="width:20px;height:20px;"></i></div>
+      <div class="bc-title">Privacy-First by Default</div>
+      <p class="bc-desc">No PII collected. No third-party trackers. GDPR-compliant out of the box. Self-hostable for regulated industries.</p>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="t-header reveal">
-    <h2 class="t-main-title">DESIGNERS<br>SHIP SMARTER</h2>
-    <a href="#" style="text-decoration:none; font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--charcoal); border-bottom:1px solid var(--charcoal); padding-bottom:2px;">All Reviews →</a>
-  </div>
-  <div class="t-grid">
-    <div class="t-card accent reveal">
-      <p class="t-quote">"PULSE showed us that our hero image was getting zero attention while our secondary CTA had massive engagement. We flipped the layout. Conversion jumped 38%."</p>
-      <div class="t-author">
-        <div class="t-ava">TK</div>
-        <div>
-          <div class="t-name">Tara Kim</div>
-          <div class="t-role">VP Design, Canopy Financial</div>
-        </div>
-      </div>
+<!-- PROCESS -->
+<section class="process reveal">
+  <h2>Installed in<br><em>Minutes.</em><br>Insights<br>Same Day.</h2>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Add the Script</div>
+      <p class="step-desc">One script tag. Automatic component detection for React, Vue, and Svelte. Zero configuration for standard setups.</p>
     </div>
-    <div class="t-card reveal d1">
-      <p class="t-quote">"The Figma integration alone is worth the subscription. Seeing real click data overlaid on my designs while I'm still in the file — that's a game-changer for decision-making."</p>
-      <div class="t-author">
-        <div class="t-ava">RS</div>
-        <div>
-          <div class="t-name">Rahul Sharma</div>
-          <div class="t-role">Lead Product Designer, Flux</div>
-        </div>
-      </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-title">Connect Figma</div>
+      <p class="step-desc">OAuth with your Figma account. Pulse maps your live components to your design library automatically.</p>
     </div>
-    <div class="t-card yellow reveal d2">
-      <p class="t-quote">"We cut our design review cycle from 3 weeks to 4 days. Every decision is backed by data now, not opinion. PULSE made us a faster, smarter team."</p>
-      <div class="t-author">
-        <div class="t-ava">LN</div>
-        <div>
-          <div class="t-name">Lena Novak</div>
-          <div class="t-role">Head of UX, Novalabs</div>
-        </div>
-      </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Read the Data</div>
+      <p class="step-desc">Your dashboard surfaces component performance, attention maps, and session flows within hours of installation.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-title">Ship Better Design</div>
+      <p class="step-desc">Make design decisions backed by behavioral evidence. Stop guessing which variant performs. Know.</p>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-left reveal">
-    <div class="cta-eyebrow">Start today</div>
-    <h2 class="cta-h2">SHIP WITH<br>CERTAINTY</h2>
-    <p class="cta-desc">Join 22,000 design teams making smarter decisions with real data. 14-day free trial. No credit card required.</p>
+<!-- EDITORIAL -->
+<div class="editorial reveal">
+  <div class="ed-img">
+    <img src="../../images/creative/creative-2.jpg" alt="Analytics dashboard">
   </div>
-  <div class="cta-right reveal d1">
-    <div class="cta-form">
-      <input type="email" placeholder="Enter your work email">
-      <button class="btn-cta">Start Free Trial →</button>
-    </div>
-    <p class="cta-note">14 days free · No credit card · Cancel anytime</p>
+  <div class="ed-content">
+    <div class="ed-eyebrow">Design + Data — Finally United</div>
+    <h2 class="ed-headline">What You<br>Design<br>Matters.</h2>
+    <p class="ed-body">Design decisions are business decisions. PULSE gives design-led teams the evidence to advocate for their choices and the precision to know when they're wrong.</p>
+    <a href="#" class="btn-primary">Start Measuring <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></a>
   </div>
+</div>
+
+<!-- FINAL CTA -->
+<section class="final-cta reveal">
+  <h2>Know What<br><em>Works.</em></h2>
+  <div class="final-cta-email">
+    <input type="email" placeholder="design@yourstudio.com">
+    <button>Request Access</button>
+  </div>
+  <p style="font-size:0.72rem;color:rgba(23,30,25,0.45);margin-top:1rem;position:relative;z-index:1;">By invite. 340 design teams already inside. Average wait: 2 weeks.</p>
 </section>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-top">
     <div>
-      <div class="footer-logo">PULSE DESIGN</div>
-      <p class="footer-desc">Design analytics that shows you exactly what works. Used by 22,000+ design teams worldwide.</p>
+      <div class="footer-brand">Pulse Design</div>
+      <p class="footer-tagline">Design analytics for teams who ship. Component-level tracking, attention heatmaps, and Figma sync in one workspace.</p>
     </div>
     <div class="footer-col">
-      <div class="footer-col-title">Product</div>
+      <h4>Product</h4>
       <ul>
-        <li><a href="#">Heatmaps</a></li>
-        <li><a href="#">A/B Testing</a></li>
-        <li><a href="#">Session Recordings</a></li>
-        <li><a href="#">AI Recommendations</a></li>
-        <li><a href="#">Figma Plugin</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Integrations</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Changelog</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <div class="footer-col-title">Company</div>
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Case Studies</a></li>
+        <li><a href="#">Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
       <ul>
         <li><a href="#">About</a></li>
-        <li><a href="#">Blog</a></li>
         <li><a href="#">Careers</a></li>
         <li><a href="#">Press</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
     </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Legal</div>
-      <ul>
-        <li><a href="#">Privacy</a></li>
-        <li><a href="#">Terms</a></li>
-        <li><a href="#">Security</a></li>
-        <li><a href="#">Status</a></li>
-      </ul>
-    </div>
   </div>
   <div class="footer-bottom">
-    <span class="footer-copy">© 2025 PULSE DESIGN, Inc. All rights reserved.</span>
-    <div class="footer-legal">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-    </div>
+    <span>&copy; 2025 Pulse Design Inc. — All Rights Reserved</span>
+    <span style="font-size:0.68rem;color:rgba(255,255,255,0.18);letter-spacing:0.06em;">Privacy &nbsp;&centerdot;&nbsp; Terms &nbsp;&centerdot;&nbsp; Security</span>
   </div>
 </footer>
 
 <script>
+lucide.createIcons();
 const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
-reveals.forEach(el => io.observe(el));
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.05 });
+reveals.forEach(el => obs.observe(el));
 </script>
 </body>
 </html>

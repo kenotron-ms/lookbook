@@ -3,402 +3,556 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPOTLIGHT — The Dark-Mode Design Tool</title>
+<title>SPOTLIGHT — Dark Mode Design Tool</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700;800&display=swap');
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#080808;color:#f0f0f0;overflow-x:hidden}
 
-:root {
-  --bg: #0c0c12;
-  --surface: #13131e;
-  --border: rgba(255,255,255,0.07);
-  --text: #d8d8f0;
-  --muted: rgba(216,216,240,0.4);
-  --purple: #9060ff;
-  --pink: #ff4d9e;
-  --cyan: #00d8ff;
-  --yellow: #ffc840;
-  --green: #00e87c;
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;height:64px;
+  background:rgba(8,8,8,.8);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.logo{
+  font-family:'Sora',sans-serif;font-weight:800;font-size:1rem;
+  letter-spacing:.2em;text-transform:uppercase;color:#f0f0f0;
+}
+.nav-links{display:flex;gap:2.25rem;list-style:none}
+.nav-links a{color:rgba(240,240,240,.4);text-decoration:none;font-size:.8125rem;font-weight:400;letter-spacing:.06em;transition:color .2s}
+.nav-links a:hover{color:#f0f0f0}
+.nav-btn{
+  padding:.5rem 1.25rem;
+  border:1px solid rgba(240,240,240,.18);
+  color:rgba(240,240,240,.75);font-size:.8125rem;font-weight:500;letter-spacing:.05em;
+  text-decoration:none;transition:border-color .2s,color .2s;
+}
+.nav-btn:hover{border-color:rgba(240,240,240,.5);color:#f0f0f0}
+
+/* ── SPOTLIGHT HERO ── */
+.spotlight-hero{
+  position:relative;
+  height:100vh;min-height:700px;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:64px;
 }
 
-html { scroll-behavior: smooth; }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
-
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px; height: 64px;
-  background: rgba(12,12,18,0.85); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+/* Colorful product UI layer — revealed by spotlight */
+.ui-layer{
+  position:absolute;inset:0;z-index:1;
+  background:#111;
+  display:grid;grid-template-columns:240px 1fr;
 }
-.nav-logo { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
-.nav-logo span { color: var(--purple); }
-.nav-links { display: flex; gap: 32px; list-style: none; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s; }
-.nav-links a:hover { color: var(--text); }
-.nav-cta { background: var(--purple); color: white; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s; }
-.nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
-
-/* HERO */
-.hero {
-  min-height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 80px 48px 60px; text-align: center; position: relative; overflow: hidden;
+.ui-sidebar{
+  background:linear-gradient(180deg,#161622 0%,#1a1a2e 100%);
+  padding:1.5rem 1rem;
+  border-right:1px solid rgba(255,255,255,.06);
+  display:flex;flex-direction:column;gap:.875rem;
+  overflow:hidden;
 }
-.hero-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--purple); margin-bottom: 24px; }
-.hero h1 { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(48px, 7vw, 86px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.0; margin-bottom: 20px; }
-.hero h1 span { color: var(--purple); }
-.hero p { font-size: 17px; color: var(--muted); max-width: 520px; line-height: 1.8; margin-bottom: 40px; }
-.hero-actions { display: flex; gap: 14px; justify-content: center; margin-bottom: 60px; }
-.btn-purple { background: var(--purple); color: white; padding: 14px 32px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 30px rgba(144,96,255,0.35); }
-.btn-purple:hover { opacity: 0.85; transform: translateY(-2px); box-shadow: 0 0 50px rgba(144,96,255,0.5); }
-.btn-outline { background: transparent; color: var(--text); padding: 14px 32px; border-radius: 10px; font-size: 15px; font-weight: 600; text-decoration: none; border: 1px solid var(--border); transition: all 0.2s; }
-.btn-outline:hover { border-color: rgba(255,255,255,0.2); }
-
-/* SPOTLIGHT INTERACTION */
-.spotlight-container {
-  position: relative; width: 100%; max-width: 900px;
-  border-radius: 20px; overflow: hidden; cursor: none;
-  border: 1px solid var(--border);
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+.ui-sidebar-logo{
+  font-family:'Sora',sans-serif;font-size:.875rem;font-weight:700;letter-spacing:.15em;
+  color:#f0f0f0;margin-bottom:.5rem;padding-bottom:1rem;
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
-.spotlight-colorful {
-  /* The colorful UI underneath */
-  background: linear-gradient(135deg, #1a0a2e 0%, #0a1a3e 30%, #0a2e1a 60%, #2e1a0a 100%);
-  padding: 40px; min-height: 400px;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+.ui-nav-item{
+  display:flex;align-items:center;gap:.625rem;
+  padding:.5rem .625rem;font-size:.75rem;font-weight:500;
+  color:rgba(240,240,240,.5);cursor:default;
+  transition:background .2s;
 }
-.ui-card { border-radius: 12px; padding: 20px; }
-.ui-card.uc1 { background: linear-gradient(135deg, rgba(144,96,255,0.3), rgba(255,77,158,0.2)); border: 1px solid rgba(144,96,255,0.3); }
-.ui-card.uc2 { background: linear-gradient(135deg, rgba(0,216,255,0.2), rgba(0,232,124,0.15)); border: 1px solid rgba(0,216,255,0.25); }
-.ui-card.uc3 { background: linear-gradient(135deg, rgba(255,200,64,0.2), rgba(255,77,158,0.15)); border: 1px solid rgba(255,200,64,0.25); }
-.ui-card.uc4 { background: linear-gradient(135deg, rgba(0,232,124,0.2), rgba(0,216,255,0.15)); border: 1px solid rgba(0,232,124,0.25); grid-column: span 2; }
-.ui-card.uc5 { background: linear-gradient(135deg, rgba(255,77,158,0.2), rgba(144,96,255,0.15)); border: 1px solid rgba(255,77,158,0.25); }
-
-.uc-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
-.uc-val { font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 800; line-height: 1; }
-.uc-sub { font-size: 11px; margin-top: 6px; opacity: 0.5; }
-.uc-bar { height: 6px; border-radius: 3px; margin-top: 14px; background: rgba(255,255,255,0.1); overflow: hidden; }
-.uc-bar-fill { height: 100%; border-radius: 3px; }
-.uc1 .uc-val { color: var(--purple); } .uc1 .uc-bar-fill { background: var(--purple); width: 72%; }
-.uc2 .uc-val { color: var(--cyan); } .uc2 .uc-bar-fill { background: var(--cyan); width: 88%; }
-.uc3 .uc-val { color: var(--yellow); }
-.uc4 .uc-val { color: var(--green); }
-.uc5 .uc-val { color: var(--pink); } .uc5 .uc-bar-fill { background: var(--pink); width: 54%; }
-
-/* Dark overlay with spotlight hole */
-.spotlight-overlay {
-  position: absolute; inset: 0; pointer-events: none;
-  background: rgba(12,12,18,0.94);
-  -webkit-mask-image: radial-gradient(circle var(--spot-r, 0px) at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 60%, black 80%);
-  mask-image: radial-gradient(circle var(--spot-r, 0px) at var(--spot-x, 50%) var(--spot-y, 50%), transparent 0%, transparent 60%, black 80%);
-  transition: --spot-r 0.2s ease;
+.ui-nav-item.active{
+  background:rgba(124,58,237,.2);color:#a78bfa;
 }
-.spotlight-cursor {
-  position: absolute; pointer-events: none; z-index: 10;
-  width: 40px; height: 40px; border-radius: 50%;
-  border: 2px solid rgba(144,96,255,0.6);
-  transform: translate(-50%, -50%);
-  transition: transform 0.05s ease;
-  display: none;
+.ui-nav-item svg{width:14px;height:14px;flex-shrink:0}
+
+.ui-main{
+  position:relative;overflow:hidden;
+  background:#0e0e18;
 }
-.spotlight-hint {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  text-align: center; pointer-events: none; z-index: 5; transition: opacity 0.3s;
+.ui-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.875rem 1.5rem;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.02);
 }
-.spotlight-hint-icon { font-size: 32px; margin-bottom: 10px; }
-.spotlight-hint-text { font-size: 13px; color: var(--muted); }
-
-/* FEATURES */
-.features-section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
-.section-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--purple); margin-bottom: 12px; }
-.section-h { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 800; letter-spacing: -1.5px; margin-bottom: 60px; }
-.section-h span { color: var(--purple); }
-.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.feat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.3s; }
-.feat-card:hover { border-color: rgba(144,96,255,0.25); transform: translateY(-4px); }
-.feat-icon { font-size: 26px; margin-bottom: 16px; }
-.feat-card h3 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 10px; }
-.feat-card p { font-size: 13px; color: var(--muted); line-height: 1.8; }
-
-/* SHOWCASE GRID */
-.showcase-section { padding: 80px 48px; background: var(--surface); }
-.showcase-inner { max-width: 1100px; margin: 0 auto; }
-.showcase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
-.showcase-item { border-radius: 20px; overflow: hidden; border: 1px solid var(--border); position: relative; padding: 36px; min-height: 220px; }
-.si-1 { background: linear-gradient(135deg, rgba(144,96,255,0.15) 0%, rgba(255,77,158,0.08) 100%); }
-.si-2 { background: linear-gradient(135deg, rgba(0,216,255,0.1) 0%, rgba(0,232,124,0.08) 100%); }
-.si-3 { background: linear-gradient(135deg, rgba(255,200,64,0.1) 0%, rgba(255,77,158,0.08) 100%); }
-.si-4 { background: linear-gradient(135deg, rgba(144,96,255,0.08) 0%, rgba(0,216,255,0.1) 100%); }
-.si-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 12px; }
-.si-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-.si-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
-
-/* TESTIMONIALS */
-.testi-section { padding: 100px 48px; max-width: 1100px; margin: 0 auto; }
-.testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
-.t-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
-.t-stars { font-size: 13px; color: var(--yellow); margin-bottom: 12px; }
-.t-text { font-size: 13px; line-height: 1.8; color: var(--muted); margin-bottom: 16px; }
-.t-text strong { color: var(--text); }
-.t-name { font-size: 13px; font-weight: 600; }
-.t-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-/* CTA */
-.cta-section { padding: 120px 48px; text-align: center; position: relative; overflow: hidden; }
-.cta-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(144,96,255,0.12) 0%, transparent 70%); pointer-events: none; }
-.cta-section h2 { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(36px, 5vw, 60px); font-weight: 800; letter-spacing: -2px; margin-bottom: 16px; position: relative; z-index: 1; }
-.cta-section h2 span { color: var(--purple); }
-.cta-section p { color: var(--muted); font-size: 17px; max-width: 480px; margin: 0 auto 40px; line-height: 1.7; position: relative; z-index: 1; }
-.cta-btn { display: inline-block; background: var(--purple); color: white; padding: 18px 48px; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 40px rgba(144,96,255,0.3); position: relative; z-index: 1; }
-.cta-btn:hover { opacity: 0.85; transform: translateY(-3px); box-shadow: 0 0 70px rgba(144,96,255,0.5); }
-.cta-note { margin-top: 14px; font-size: 12px; color: var(--muted); position: relative; z-index: 1; }
-
-/* FOOTER */
-footer { border-top: 1px solid var(--border); padding: 40px 48px; }
-.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 16px; }
-.footer-logo span { color: var(--purple); }
-.footer-links { display: flex; gap: 24px; list-style: none; }
-.footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: var(--text); }
-.footer-copy { font-size: 12px; color: var(--muted); }
-
-@media(max-width:768px){
-  nav{padding:0 20px;} .nav-links{display:none;}
-  .hero{padding:80px 20px 40px;}
-  .spotlight-colorful{grid-template-columns:1fr 1fr;}
-  .features-grid,.showcase-grid,.testi-grid{grid-template-columns:1fr;}
-  .footer-inner{flex-direction:column;gap:20px;text-align:center;}
+.ui-breadcrumb{font-size:.75rem;color:rgba(240,240,240,.35)}
+.ui-actions{display:flex;gap:.5rem}
+.ui-action-btn{
+  padding:.25rem .75rem;font-size:.6875rem;font-weight:600;letter-spacing:.08em;
+  cursor:default;
 }
+.ua-pub{background:#7c3aed;color:#fff}
+.ua-shr{border:1px solid rgba(255,255,255,.12);color:rgba(240,240,240,.6)}
+
+/* Canvas area with colored components */
+.ui-canvas{
+  padding:1.5rem;display:flex;flex-direction:column;gap:1rem;height:calc(100% - 44px);overflow:hidden;
+}
+.canvas-row{display:flex;gap:1rem;flex-shrink:0}
+.canvas-card{
+  flex:1;padding:1.25rem;
+  font-size:.75rem;font-weight:500;
+  position:relative;overflow:hidden;
+}
+.cc-1{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff}
+.cc-2{background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:#fff}
+.cc-3{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff}
+.cc-4{background:linear-gradient(135deg,#10b981,#059669);color:#fff}
+.cc-5{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(240,240,240,.6)}
+.canvas-chart{
+  background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.2);
+  padding:1.25rem;flex-shrink:0;
+}
+.chart-bar{
+  display:flex;align-items:flex-end;gap:.375rem;height:80px;
+  margin-top:.75rem;
+}
+.bar{flex:1;background:linear-gradient(to top,#7c3aed,#a78bfa);opacity:.7;transition:opacity .2s}
+
+/* Dark overlay — with spotlight mask */
+.dark-overlay{
+  position:absolute;inset:0;z-index:2;
+  background:#080808;
+  mask-image:radial-gradient(circle 0px at 50% 50%, transparent 0%, black 0%);
+  -webkit-mask-image:radial-gradient(circle 0px at 50% 50%, transparent 0%, black 0%);
+  transition:mask-image 50ms linear;
+  pointer-events:none;
+}
+
+/* Hero text on top */
+.hero-content{
+  position:absolute;inset:0;z-index:3;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.hero-text-box{text-align:center;max-width:680px;padding:2rem}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid rgba(124,58,237,.3);background:rgba(124,58,237,.08);
+  padding:.375rem 1rem;
+  font-size:.6875rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:#a78bfa;margin-bottom:2rem;
+}
+.hero-h1{
+  font-family:'Sora',sans-serif;font-size:clamp(2.75rem,7vw,6rem);
+  font-weight:800;line-height:.98;letter-spacing:-.035em;color:#f0f0f0;
+}
+.hero-h1 span{
+  background:linear-gradient(135deg,#a78bfa,#38bdf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-hint{
+  margin-top:1.5rem;
+  font-size:.875rem;color:rgba(240,240,240,.38);font-weight:300;letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+/* ── FEATURES SECTION ── */
+.features-section{background:#0a0a0a;padding:7rem 3rem;border-top:1px solid rgba(255,255,255,.05)}
+.feat-inner{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:.6875rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#a78bfa;margin-bottom:.875rem}
+.section-h{font-family:'Sora',sans-serif;font-size:clamp(1.75rem,3vw,2.875rem);font-weight:700;letter-spacing:-.025em;color:#f0f0f0;line-height:1.12}
+
+.feat-table{display:flex;flex-direction:column;gap:0;margin-top:3.5rem;border:1px solid rgba(255,255,255,.07)}
+.feat-row{
+  display:grid;grid-template-columns:260px 1fr 1fr;align-items:stretch;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.feat-row:last-child{border-bottom:none}
+.feat-name{
+  padding:2rem;border-right:1px solid rgba(255,255,255,.05);
+  display:flex;flex-direction:column;justify-content:center;
+  background:rgba(255,255,255,.015);
+}
+.feat-name h3{font-size:1rem;font-weight:600;color:#f0f0f0;letter-spacing:-.01em;margin-bottom:.375rem}
+.feat-name p{font-size:.75rem;color:rgba(240,240,240,.35);font-weight:300}
+.feat-cell{padding:2rem;border-right:1px solid rgba(255,255,255,.05)}
+.feat-cell:last-child{border-right:none}
+.feat-cell-label{font-size:.625rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,240,240,.3);margin-bottom:.875rem}
+.feat-cell-val{font-size:.875rem;color:rgba(240,240,240,.65);font-weight:300;line-height:1.7}
+
+/* ── DARK TOOLS GRID ── */
+.tools-section{background:#080808;padding:7rem 3rem;border-top:1px solid rgba(255,255,255,.05)}
+.tools-inner{max-width:1080px;margin:0 auto}
+.tools-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;margin-top:3.5rem;
+  border:1px solid rgba(255,255,255,.07);
+}
+.tool-cell{
+  padding:2.5rem;
+  border-right:1px solid rgba(255,255,255,.05);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  transition:background .3s;
+}
+.tool-cell:nth-child(3n){border-right:none}
+.tool-cell:nth-last-child(-n+3){border-bottom:none}
+.tool-cell:hover{background:rgba(124,58,237,.04)}
+.tool-icon{color:#a78bfa;opacity:.75;margin-bottom:1.25rem}
+.tool-title{font-size:.9375rem;font-weight:600;color:#f0f0f0;margin-bottom:.625rem;letter-spacing:-.01em}
+.tool-desc{font-size:.8125rem;color:rgba(240,240,240,.42);font-weight:300;line-height:1.75}
+
+/* ── PRICING SECTION ── */
+.pricing-section{background:#0d0d0d;padding:7rem 3rem;border-top:1px solid rgba(255,255,255,.05)}
+.pricing-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:rgba(255,255,255,.07);
+  max-width:900px;margin:3.5rem auto 0;
+}
+.plan{background:#0d0d0d;padding:3rem}
+.plan-name{font-size:.6875rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,240,240,.4);margin-bottom:1.5rem}
+.plan-price{
+  font-family:'Sora',sans-serif;font-size:3.5rem;font-weight:700;
+  letter-spacing:-.03em;color:#f0f0f0;margin-bottom:.25rem;
+}
+.plan-price sub{font-size:1rem;font-weight:400;color:rgba(240,240,240,.4);vertical-align:middle}
+.plan-desc{font-size:.875rem;color:rgba(240,240,240,.42);font-weight:300;line-height:1.7;margin:1.25rem 0 2rem}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.plan-features li{display:flex;align-items:center;gap:.625rem;font-size:.875rem;color:rgba(240,240,240,.65)}
+.plan-features li svg{color:#a78bfa;flex-shrink:0}
+.plan-cta{
+  display:inline-block;margin-top:2.5rem;
+  padding:.875rem 2rem;
+  font-size:.875rem;font-weight:600;letter-spacing:.05em;
+  text-decoration:none;
+  transition:all .2s;
+}
+.plan-cta-free{border:1px solid rgba(255,255,255,.15);color:rgba(240,240,240,.7)}
+.plan-cta-free:hover{border-color:rgba(255,255,255,.35);color:#f0f0f0}
+.plan-cta-pro{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff}
+.plan-cta-pro:hover{opacity:.88}
+.plan.featured{background:rgba(124,58,237,.05)}
+
+/* ── FOOTER ── */
+footer{background:#050505;padding:4rem 3rem 2rem;border-top:1px solid rgba(255,255,255,.05)}
+.footer-g{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1080px;margin:0 auto}
+.footer-brand p{font-size:.8125rem;line-height:1.85;color:rgba(240,240,240,.3);font-weight:300;max-width:270px;margin-top:1rem}
+.footer-col h4{font-size:.625rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,240,240,.28);margin-bottom:1.25rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.footer-col a{text-decoration:none;font-size:.8125rem;color:rgba(240,240,240,.3);font-weight:300;transition:color .2s}
+.footer-col a:hover{color:#a78bfa}
+.footer-bot{max-width:1080px;margin:2.5rem auto 0;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;font-size:.75rem;color:rgba(240,240,240,.18)}
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">SPOT<span>LIGHT</span></div>
+  <div class="logo">Spotlight</div>
   <ul class="nav-links">
-    <li><a href="#">Features</a></li>
-    <li><a href="#">Templates</a></li>
-    <li><a href="#">Community</a></li>
+    <li><a href="#">Tools</a></li>
+    <li><a href="#">Components</a></li>
+    <li><a href="#">Teams</a></li>
     <li><a href="#">Pricing</a></li>
   </ul>
-  <a href="#" class="nav-cta">Try for Free</a>
+  <a href="#" class="nav-btn">Open in Browser</a>
 </nav>
 
-<section class="hero">
-  <div class="hero-eyebrow">Dark-Mode Design Tool</div>
-  <h1>Design in the<br><span>dark</span>. Ship in the light.</h1>
-  <p>SPOTLIGHT is the design tool built for the age of dark mode. Move your cursor over the preview to see what's hidden beneath the surface.</p>
-  <div class="hero-actions">
-    <a href="#" class="btn-purple">Get Started Free</a>
-    <a href="#" class="btn-outline">See all Features</a>
-  </div>
-
-  <!-- SPOTLIGHT INTERACTIVE ELEMENT -->
-  <div class="spotlight-container" id="spotlightContainer">
-    <div class="spotlight-colorful">
-      <div class="ui-card uc1">
-        <div class="uc-title">Revenue MTD</div>
-        <div class="uc-val">$84.2K</div>
-        <div class="uc-sub">↑ 18.3% vs last month</div>
-        <div class="uc-bar"><div class="uc-bar-fill"></div></div>
+<!-- Spotlight Hero -->
+<div class="spotlight-hero" id="spotlightHero">
+  <!-- Colorful UI layer underneath -->
+  <div class="ui-layer">
+    <div class="ui-sidebar">
+      <div class="ui-sidebar-logo">SPOTLIGHT</div>
+      <div class="ui-nav-item active">
+        <i data-lucide="layout-dashboard" style="width:14px;height:14px;"></i>
+        Dashboard
       </div>
-      <div class="ui-card uc2">
-        <div class="uc-title">Active Users</div>
-        <div class="uc-val">12,840</div>
-        <div class="uc-sub">↑ 7.2% this week</div>
-        <div class="uc-bar"><div class="uc-bar-fill"></div></div>
+      <div class="ui-nav-item">
+        <i data-lucide="layers" style="width:14px;height:14px;"></i>
+        Components
       </div>
-      <div class="ui-card uc3">
-        <div class="uc-title">NPS Score</div>
-        <div class="uc-val">78</div>
-        <div class="uc-sub">World class tier</div>
+      <div class="ui-nav-item">
+        <i data-lucide="palette" style="width:14px;height:14px;"></i>
+        Tokens
       </div>
-      <div class="ui-card uc4">
-        <div class="uc-title">Conversion Rate</div>
-        <div class="uc-val">4.87%</div>
-        <div class="uc-sub">↑ 1.2 pts — best ever performance across all cohorts and acquisition channels</div>
+      <div class="ui-nav-item">
+        <i data-lucide="type" style="width:14px;height:14px;"></i>
+        Typography
       </div>
-      <div class="ui-card uc5">
-        <div class="uc-title">Churn Rate</div>
-        <div class="uc-val">1.2%</div>
-        <div class="uc-sub">↓ 0.3 pts — excellent</div>
-        <div class="uc-bar"><div class="uc-bar-fill"></div></div>
+      <div class="ui-nav-item">
+        <i data-lucide="git-branch" style="width:14px;height:14px;"></i>
+        Versions
+      </div>
+      <div class="ui-nav-item">
+        <i data-lucide="share-2" style="width:14px;height:14px;"></i>
+        Share
       </div>
     </div>
-    <div class="spotlight-overlay" id="spotlightOverlay"></div>
-    <div class="spotlight-cursor" id="spotlightCursor"></div>
-    <div class="spotlight-hint" id="spotlightHint">
-      <div class="spotlight-hint-icon">🔦</div>
-      <div class="spotlight-hint-text">Move your cursor to reveal the UI</div>
+    <div class="ui-main">
+      <div class="ui-topbar">
+        <div class="ui-breadcrumb">Design System &rsaquo; Components &rsaquo; Buttons</div>
+        <div class="ui-actions">
+          <button class="ui-action-btn ua-shr">Share</button>
+          <button class="ui-action-btn ua-pub">Publish</button>
+        </div>
+      </div>
+      <div class="ui-canvas">
+        <div class="canvas-row">
+          <div class="canvas-card cc-1" style="flex:2;">
+            <div style="font-size:.625rem;font-weight:700;letter-spacing:.15em;opacity:.7;margin-bottom:.75rem;">PRIMARY BUTTON</div>
+            <div style="font-size:.875rem;font-weight:600;">Activate Platform</div>
+          </div>
+          <div class="canvas-card cc-2">
+            <div style="font-size:.625rem;font-weight:700;letter-spacing:.15em;opacity:.7;margin-bottom:.75rem;">SECONDARY</div>
+            <div style="font-size:.875rem;font-weight:600;">View Docs</div>
+          </div>
+          <div class="canvas-card cc-3">
+            <div style="font-size:.625rem;font-weight:700;letter-spacing:.15em;opacity:.7;margin-bottom:.75rem;">DANGER</div>
+            <div style="font-size:.875rem;font-weight:600;">Delete</div>
+          </div>
+        </div>
+        <div class="canvas-row">
+          <div class="canvas-card cc-4">
+            <div style="font-size:.625rem;font-weight:700;letter-spacing:.15em;opacity:.7;margin-bottom:.75rem;">SUCCESS</div>
+            <div style="font-size:.875rem;font-weight:600;">Saved</div>
+          </div>
+          <div class="canvas-card cc-5" style="flex:3;">
+            <div style="font-size:.625rem;font-weight:700;letter-spacing:.15em;margin-bottom:.75rem;">TOKEN REFERENCE</div>
+            <div style="font-size:.75rem;font-family:monospace;line-height:2;color:rgba(240,240,240,.5);">
+              --color-primary: #7c3aed<br>
+              --color-accent: #38bdf8<br>
+              --radius-base: 0px
+            </div>
+          </div>
+        </div>
+        <div class="canvas-chart">
+          <div style="font-size:.625rem;font-weight:700;letter-spacing:.15em;color:rgba(240,240,240,.4);">COMPONENT USAGE &mdash; LAST 30 DAYS</div>
+          <div class="chart-bar">
+            <div class="bar" style="height:45%"></div>
+            <div class="bar" style="height:70%"></div>
+            <div class="bar" style="height:55%"></div>
+            <div class="bar" style="height:90%"></div>
+            <div class="bar" style="height:65%"></div>
+            <div class="bar" style="height:80%"></div>
+            <div class="bar" style="height:100%"></div>
+            <div class="bar" style="height:75%"></div>
+            <div class="bar" style="height:60%"></div>
+            <div class="bar" style="height:85%"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- FEATURES -->
+  <!-- Dark overlay with spotlight mask -->
+  <div class="dark-overlay" id="darkOverlay"></div>
+
+  <!-- Hero text (always on top) -->
+  <div class="hero-content">
+    <div class="hero-text-box">
+      <div class="hero-eyebrow">
+        <i data-lucide="spotlight" style="width:10px;height:10px;"></i>
+        Dark Mode Design Tool
+      </div>
+      <h1 class="hero-h1">
+        Design in<br>
+        <span>the dark.</span>
+      </h1>
+      <p class="hero-hint">
+        <i data-lucide="mouse-pointer" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:6px;"></i>
+        Move your cursor to reveal what&rsquo;s underneath
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Features -->
 <section class="features-section">
-  <div class="section-eyebrow">Core Features</div>
-  <h2 class="section-h">Everything you need<br>to design in the <span>dark</span></h2>
-  <div class="features-grid">
-    <div class="feat-card">
-      <div class="feat-icon">🎨</div>
-      <h3>Dark-First Palettes</h3>
-      <p>Pre-built color systems optimized for dark mode contrast, accessibility, and visual elegance out of the box.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">✨</div>
-      <h3>Glow & Blur Effects</h3>
-      <p>Native neon glow, glassmorphism, and bloom effects — no plugins needed, all parametrically controlled.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">🔦</div>
-      <h3>Spotlight Components</h3>
-      <p>A full library of spotlight, reveal, and mask interaction components ready to drop into any design.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">🌙</div>
-      <h3>Light/Dark Toggle</h3>
-      <p>Design in parallel modes simultaneously. Preview both with a single keystroke and generate tokens for each.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">⚡</div>
-      <h3>Dev Handoff</h3>
-      <p>Export to Tailwind, CSS variables, or code-ready design tokens. Your engineers get exactly what they need.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon">🤝</div>
-      <h3>Real-Time Collaboration</h3>
-      <p>Multiplayer editing with presence indicators, live cursors, and async comment threads across every frame.</p>
-    </div>
-  </div>
-</section>
-
-<!-- SHOWCASE -->
-<section class="showcase-section">
-  <div class="showcase-inner">
-    <div class="section-eyebrow">Built For</div>
-    <h2 class="section-h">Every kind of <span>dark-mode</span> project</h2>
-    <div class="showcase-grid">
-      <div class="showcase-item si-1">
-        <div class="si-label">SaaS Dashboards</div>
-        <div class="si-title">Command-center UIs</div>
-        <div class="si-desc">Design analytics, monitoring, and operations dashboards that look powerful and feel authoritative.</div>
+  <div class="feat-inner">
+    <div class="eyebrow">Dark-First Workflow</div>
+    <h2 class="section-h">Designed for the way<br>your team actually works.</h2>
+    <div class="feat-table">
+      <div class="feat-row">
+        <div class="feat-name">
+          <h3>Token-First Design</h3>
+          <p>Semantic tokens, not raw values</p>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-cell-label">What it solves</div>
+          <div class="feat-cell-val">Stop copy-pasting hex codes. Define values once in your token system and propagate changes instantly across every component in your library.</div>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-cell-label">Dark mode specific</div>
+          <div class="feat-cell-val">Every token has a light and dark alias. Switch modes mid-prototype to validate contrast ratios before handoff.</div>
+        </div>
       </div>
-      <div class="showcase-item si-2">
-        <div class="si-label">Developer Tools</div>
-        <div class="si-title">IDEs &amp; CLIs</div>
-        <div class="si-desc">Terminal-inspired interfaces with mono typography, syntax color systems, and command surfaces.</div>
+      <div class="feat-row">
+        <div class="feat-name">
+          <h3>Live Component Preview</h3>
+          <p>Real-time rendering on device</p>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-cell-label">What it solves</div>
+          <div class="feat-cell-val">The gap between Figma and production is a trust problem. SPOTLIGHT renders components using your actual codebase, in the browser, in real time.</div>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-cell-label">Dark mode specific</div>
+          <div class="feat-cell-val">Preview alongside your live app. What you see in SPOTLIGHT is exactly what ships — no interpretation, no guessing.</div>
+        </div>
       </div>
-      <div class="showcase-item si-3">
-        <div class="si-label">Entertainment &amp; Gaming</div>
-        <div class="si-title">Immersive experiences</div>
-        <div class="si-desc">Game UIs, streaming platforms, and entertainment apps where dark mode is the only mode.</div>
-      </div>
-      <div class="showcase-item si-4">
-        <div class="si-label">Creative Tools</div>
-        <div class="si-title">Design &amp; editing software</div>
-        <div class="si-desc">Video, audio, and photo editing UIs — optimized for reduced eye strain and color accuracy.</div>
+      <div class="feat-row">
+        <div class="feat-name">
+          <h3>Accessibility Layer</h3>
+          <p>WCAG compliance, built in</p>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-cell-label">What it solves</div>
+          <div class="feat-cell-val">Dark mode UI fails accessibility checks 3x more often than light mode. SPOTLIGHT flags contrast violations as you design, not after.</div>
+        </div>
+        <div class="feat-cell">
+          <div class="feat-cell-label">Dark mode specific</div>
+          <div class="feat-cell-val">Simulated cataracts, deuteranopia, and low-light conditions. See your UI through the eyes of every user.</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="testi-section">
-  <div class="section-eyebrow">Testimonials</div>
-  <h2 class="section-h">Dark-mode designers <span>love it</span></h2>
-  <div class="testi-grid">
-    <div class="t-card">
-      <div class="t-stars">★★★★★</div>
-      <p class="t-text">"SPOTLIGHT's glow component library <strong>saved our team 3 sprints</strong>. We finally ship dark-mode UIs faster than light-mode."</p>
-      <div class="t-name">Felix R.</div>
-      <div class="t-role">Lead Designer, DataPulse</div>
-    </div>
-    <div class="t-card">
-      <div class="t-stars">★★★★★</div>
-      <p class="t-text">"The spotlight mask interaction I shipped in 20 minutes with SPOTLIGHT's components <strong>went viral on Twitter</strong>. It usually takes days."</p>
-      <div class="t-name">Yuna C.</div>
-      <div class="t-role">Product Designer, Nocturn AI</div>
-    </div>
-    <div class="t-card">
-      <div class="t-stars">★★★★★</div>
-      <p class="t-text">"Finally a tool that <strong>starts dark and thinks dark</strong>. Every other tool treats dark mode as an afterthought. Not SPOTLIGHT."</p>
-      <div class="t-name">Marcus O.</div>
-      <div class="t-role">Freelance UI Specialist</div>
+<!-- Tools grid -->
+<section class="tools-section">
+  <div class="tools-inner">
+    <div class="eyebrow">Tools</div>
+    <h2 class="section-h" style="max-width:480px;">Everything a dark-first designer needs. Nothing extra.</h2>
+    <div class="tools-grid">
+      <div class="tool-cell">
+        <i data-lucide="contrast" class="tool-icon" style="width:24px;height:24px;"></i>
+        <div class="tool-title">Contrast Analyzer</div>
+        <p class="tool-desc">Real-time WCAG 2.2 contrast checking as you design. Fail states surface immediately — before they reach code review.</p>
+      </div>
+      <div class="tool-cell">
+        <i data-lucide="sliders-horizontal" class="tool-icon" style="width:24px;height:24px;"></i>
+        <div class="tool-title">Token Editor</div>
+        <p class="tool-desc">Edit semantic tokens with live preview across your entire component library. Changes cascade — no manual find-and-replace.</p>
+      </div>
+      <div class="tool-cell">
+        <i data-lucide="eye" class="tool-icon" style="width:24px;height:24px;"></i>
+        <div class="tool-title">Spotlight View</div>
+        <p class="tool-desc">Isolate any component against any background. Understand exactly how elevation, shadow, and opacity behave in dark contexts.</p>
+      </div>
+      <div class="tool-cell">
+        <i data-lucide="code-2" class="tool-icon" style="width:24px;height:24px;"></i>
+        <div class="tool-title">Code Sync</div>
+        <p class="tool-desc">Bidirectional sync with your design tokens file. Edit in the tool, commit to git. Design and code stay permanently aligned.</p>
+      </div>
+      <div class="tool-cell">
+        <i data-lucide="users" class="tool-icon" style="width:24px;height:24px;"></i>
+        <div class="tool-title">Multiplayer Sessions</div>
+        <p class="tool-desc">Co-design in real time. Shared cursors, component annotations, and approval workflows with full audit trail.</p>
+      </div>
+      <div class="tool-cell">
+        <i data-lucide="package" class="tool-icon" style="width:24px;height:24px;"></i>
+        <div class="tool-title">Component Publisher</div>
+        <p class="tool-desc">Publish versioned component packages directly to npm or your private registry from inside the tool. One click, zero config.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-glow"></div>
-  <h2>Design darker.<br>Ship <span>brighter</span>.</h2>
-  <p>Join 40,000+ designers who've switched to the dark side. Free plan includes everything you need to get started.</p>
-  <a href="#" class="cta-btn">Start Designing Free</a>
-  <p class="cta-note">Free plan · No credit card · Upgrade anytime</p>
+<!-- Pricing -->
+<section class="pricing-section">
+  <div style="max-width:1080px;margin:0 auto;">
+    <div class="eyebrow" style="text-align:center;">Pricing</div>
+    <h2 class="section-h" style="text-align:center;max-width:100%;">Clear tiers. No surprises.</h2>
+    <div class="pricing-grid">
+      <div class="plan">
+        <div class="plan-name">Studio</div>
+        <div class="plan-price">$49<sub>/mo per seat</sub></div>
+        <p class="plan-desc">For designers working solo or in small teams who ship fast and need real-time dark mode validation.</p>
+        <ul class="plan-features">
+          <li><i data-lucide="check" style="width:14px;height:14px;"></i> Unlimited projects</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;"></i> Token Editor + Contrast Analyzer</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;"></i> 5 team members</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;"></i> GitHub + Figma sync</li>
+        </ul>
+        <a href="#" class="plan-cta plan-cta-free">Start a 14-Day Trial</a>
+      </div>
+      <div class="plan featured">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">Custom<sub></sub></div>
+        <p class="plan-desc">For design systems teams who own a codebase others build on. Audit trails, SSO, and dedicated infrastructure.</p>
+        <ul class="plan-features">
+          <li><i data-lucide="check" style="width:14px;height:14px;"></i> Everything in Studio</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;"></i> Unlimited seats + SSO</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;"></i> Private component registry</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;"></i> SOC 2 Type II, SLA guarantee</li>
+        </ul>
+        <a href="#" class="plan-cta plan-cta-pro">Talk to the Team</a>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- Footer -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-logo">SPOT<span>LIGHT</span></div>
-    <ul class="footer-links">
-      <li><a href="#">Privacy</a></li>
-      <li><a href="#">Terms</a></li>
-      <li><a href="#">Blog</a></li>
-    </ul>
-    <div class="footer-copy">© 2025 Spotlight Design Inc.</div>
+  <div class="footer-g">
+    <div class="footer-brand">
+      <div style="font-family:'Sora',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.2em;text-transform:uppercase;color:#f0f0f0;">SPOTLIGHT</div>
+      <p>The design tool built for dark mode from the ground up. No light-mode-first assumptions. No afterthought dark themes.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#">Token Editor</a></li>
+        <li><a href="#">Contrast Analyzer</a></li>
+        <li><a href="#">Code Sync</a></li>
+        <li><a href="#">Component Publisher</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">Design Tokens Guide</a></li>
+        <li><a href="#">Dark Mode Handbook</a></li>
+        <li><a href="#">Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Security</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>&copy; 2026 Spotlight Design Inc. All rights reserved.</span>
+    <span>Privacy &nbsp;&middot;&nbsp; Terms</span>
   </div>
 </footer>
 
 <script>
-const container = document.getElementById('spotlightContainer');
-const overlay = document.getElementById('spotlightOverlay');
-const cursor = document.getElementById('spotlightCursor');
-const hint = document.getElementById('spotlightHint');
-let entered = false;
+  const overlay = document.getElementById('darkOverlay');
+  const hero = document.getElementById('spotlightHero');
+  const RADIUS = 180;
 
-container.addEventListener('mouseenter', () => {
-  cursor.style.display = 'block';
-  if (!entered) { hint.style.opacity = '0'; entered = true; }
-  overlay.style.setProperty('--spot-r', '110px');
-});
-
-container.addEventListener('mouseleave', () => {
-  cursor.style.display = 'none';
-  overlay.style.setProperty('--spot-r', '0px');
-  if (!entered) hint.style.opacity = '1';
-});
-
-container.addEventListener('mousemove', (e) => {
-  const rect = container.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const xPct = (x / rect.width) * 100;
-  const yPct = (y / rect.height) * 100;
-
-  overlay.style.setProperty('--spot-x', xPct + '%');
-  overlay.style.setProperty('--spot-y', yPct + '%');
-
-  cursor.style.left = x + 'px';
-  cursor.style.top = y + 'px';
-});
-
-// Also expand on scroll
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      // Animate spotlight to center on load
-      overlay.style.setProperty('--spot-x', '50%');
-      overlay.style.setProperty('--spot-y', '50%');
-      overlay.style.setProperty('--spot-r', '80px');
-      setTimeout(() => { overlay.style.setProperty('--spot-r', '0px'); }, 1200);
-    }
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const mask = `radial-gradient(circle ${RADIUS}px at ${x}px ${y}px, transparent 0%, rgba(8,8,8,0.15) 60%, black 100%)`;
+    overlay.style.maskImage = mask;
+    overlay.style.webkitMaskImage = mask;
   });
-}, { threshold: 0.5 });
-obs.observe(container);
+
+  hero.addEventListener('mouseleave', () => {
+    const mask = `radial-gradient(circle 0px at 50% 50%, transparent 0%, black 0%)`;
+    overlay.style.maskImage = mask;
+    overlay.style.webkitMaskImage = mask;
+  });
+
+  lucide.createIcons();
 </script>
 </body>
 </html>

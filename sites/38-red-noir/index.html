@@ -1,850 +1,675 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>REDLINE — Protect What Matters</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --black:   #050507;
-      --dark:    #0a0a0f;
-      --panel:   #0f0f18;
-      --glass:   rgba(15,15,24,0.65);
-      --border:  rgba(255,255,255,0.06);
-      --red:     #e63946;
-      --red-d:   #c1121f;
-      --red-glow:rgba(230,57,70,0.15);
-      --white:   #f1f0f5;
-      --gray:    #666672;
-      --gray-l:  #9898aa;
-      --accent:  rgba(230,57,70,0.08);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--black);
-      color: var(--white);
-      overflow-x: hidden;
-    }
-
-    /* Ambient glow */
-    .ambient {
-      position: fixed;
-      border-radius: 50%;
-      pointer-events: none;
-      filter: blur(100px);
-      z-index: 0;
-    }
-
-    .amb-1 {
-      width: 700px; height: 700px;
-      background: rgba(230,57,70,0.05);
-      top: -200px; right: -200px;
-    }
-
-    .amb-2 {
-      width: 400px; height: 400px;
-      background: rgba(150,100,230,0.03);
-      bottom: 100px; left: -100px;
-    }
-
-    /* Grain */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.03;
-      pointer-events: none;
-      z-index: 9998;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 1.4rem 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(5,5,7,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--white);
-      text-decoration: none;
-    }
-
-    .nav-logo .red { color: var(--red); }
-
-    .nav-center {
-      display: flex;
-      gap: 2.5rem;
-    }
-
-    .nav-center a {
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gray-l);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .nav-center a:hover { color: var(--white); }
-
-    .nav-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(230,57,70,0.1);
-      border: 1px solid rgba(230,57,70,0.25);
-      padding: 0.4rem 1rem;
-      border-radius: 2rem;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--red);
-    }
-
-    .nav-badge-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--red);
-      animation: pulse-r 2s infinite;
-    }
-
-    @keyframes pulse-r {
-      0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(230,57,70,0.4); }
-      50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(230,57,70,0); }
-    }
-
-    .nav-cta {
-      background: var(--red);
-      color: var(--white);
-      padding: 0.65rem 1.5rem;
-      border-radius: 0.4rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .nav-cta:hover { background: var(--red-d); transform: translateY(-1px); }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 8rem 3rem 5rem;
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--red);
-      border: 1px solid rgba(230,57,70,0.3);
-      background: rgba(230,57,70,0.07);
-      padding: 0.4rem 1rem;
-      border-radius: 2rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .hero-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: clamp(5rem, 12vw, 16rem);
-      font-weight: 700;
-      line-height: 0.85;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 2rem;
-    }
-
-    .hero-title .red { color: var(--red); }
-
-    .hero-title .stroke {
-      -webkit-text-stroke: 1px rgba(241,240,245,0.15);
-      color: transparent;
-    }
-
-    .hero-desc {
-      font-size: 1rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray-l);
-      max-width: 52ch;
-      margin: 0 auto 3.5rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-red {
-      display: inline-block;
-      background: var(--red);
-      color: var(--white);
-      padding: 0.9rem 2.5rem;
-      border-radius: 0.4rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-    }
-
-    .btn-red:hover { background: var(--red-d); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(230,57,70,0.3); }
-
-    .btn-ghost {
-      display: inline-block;
-      background: var(--glass);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      color: var(--white);
-      padding: 0.9rem 2.5rem;
-      border-radius: 0.4rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-decoration: none;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-
-    .btn-ghost:hover { border-color: rgba(230,57,70,0.35); transform: translateY(-2px); }
-
-    /* Threat display */
-    .threat-bar {
-      margin-top: 4rem;
-      width: 100%;
-      max-width: 780px;
-      background: var(--glass);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 0.8rem;
-      overflow: hidden;
-    }
-
-    .threat-header {
-      padding: 1rem 1.5rem;
-      background: rgba(230,57,70,0.07);
-      border-bottom: 1px solid rgba(230,57,70,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .threat-title {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--red);
-    }
-
-    .threat-count {
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: var(--gray-l);
-      font-family: 'Rajdhani', sans-serif;
-    }
-
-    .threat-list { padding: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; }
-
-    .threat-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 0.4rem;
-      padding: 0.7rem 1rem;
-    }
-
-    .ti-left { display: flex; align-items: center; gap: 0.75rem; }
-    .ti-sev { width: 8px; height: 8px; border-radius: 50%; }
-    .sev-critical { background: var(--red); }
-    .sev-high { background: #f77f00; }
-    .sev-medium { background: #fcbf49; }
-
-    .ti-name { font-size: 0.72rem; color: var(--white); font-weight: 500; }
-    .ti-type { font-size: 0.6rem; color: var(--gray); margin-left: 0.5rem; }
-    .ti-status { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
-    .st-blocked { color: var(--red); }
-    .st-patched { color: #4caf87; }
-    .st-monitoring { color: #fcbf49; }
-
-    /* STATS */
-    .stats-section {
-      padding: 5rem 3rem;
-      border-top: 1px solid var(--border);
-      position: relative;
-      z-index: 2;
-    }
-
-    .stats-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-
-    .stat-glass {
-      background: var(--glass);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 0.8rem;
-      padding: 2.5rem;
-      text-align: center;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-
-    .stat-glass:hover { border-color: rgba(230,57,70,0.25); transform: translateY(-4px); }
-
-    .stat-val {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 3.5rem;
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1;
-    }
-
-    .stat-val .red { color: var(--red); }
-
-    .stat-label {
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray);
-      margin-top: 0.5rem;
-    }
-
-    /* FEATURES */
-    .features-section {
-      padding: 7rem 3rem;
-      border-top: 1px solid var(--border);
-      position: relative;
-      z-index: 2;
-    }
-
-    .features-inner { max-width: 1400px; margin: 0 auto; }
-
-    .features-header { margin-bottom: 4rem; }
-
-    .section-tag {
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .section-tag::before {
-      content: '';
-      display: block;
-      width: 20px; height: 1px;
-      background: var(--red);
-    }
-
-    .section-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: clamp(3rem, 6vw, 7rem);
-      font-weight: 700;
-      line-height: 0.9;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-      color: var(--white);
-    }
-
-    .section-title .red { color: var(--red); }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    .feat-card {
-      background: var(--glass);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 0.8rem;
-      padding: 2.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s, transform 0.4s;
-    }
-
-    .feat-card:hover { border-color: rgba(230,57,70,0.25); transform: translateY(-6px); }
-
-    .feat-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: transparent;
-      transition: background 0.3s;
-    }
-
-    .feat-card:hover::after { background: var(--red); }
-
-    .feat-icon {
-      width: 48px; height: 48px;
-      background: rgba(230,57,70,0.1);
-      border: 1px solid rgba(230,57,70,0.2);
-      border-radius: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.8rem;
-    }
-
-    .feat-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 0.75rem;
-    }
-
-    .feat-body {
-      font-size: 0.87rem;
-      font-weight: 300;
-      line-height: 1.75;
-      color: var(--gray-l);
-    }
-
-    /* TESTIMONIALS */
-    .testimonials-section {
-      padding: 7rem 3rem;
-      border-top: 1px solid var(--border);
-      position: relative;
-      z-index: 2;
-    }
-
-    .testi-inner { max-width: 1400px; margin: 0 auto; }
-
-    .testi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 4rem;
-    }
-
-    .t-card {
-      background: var(--glass);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 0.8rem;
-      padding: 2.5rem;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-
-    .t-card:hover { border-color: rgba(230,57,70,0.25); transform: translateY(-4px); }
-
-    .t-stars { color: var(--red); letter-spacing: 0.12em; margin-bottom: 1.5rem; font-size: 0.85rem; }
-
-    .t-text {
-      font-size: 0.9rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray-l);
-      font-style: italic;
-      margin-bottom: 2rem;
-    }
-
-    .t-author { display: flex; align-items: center; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-
-    .t-ava {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: rgba(230,57,70,0.15);
-      border: 1px solid rgba(230,57,70,0.3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--red);
-      flex-shrink: 0;
-    }
-
-    .t-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
-    .t-role { font-size: 0.7rem; color: var(--gray); margin-top: 0.15rem; }
-
-    /* CTA */
-    .cta-section {
-      padding: 8rem 3rem;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .cta-glow {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 800px; height: 500px;
-      background: radial-gradient(ellipse, rgba(230,57,70,0.07) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .cta-inner { position: relative; z-index: 1; }
-
-    .cta-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: clamp(4rem, 10vw, 14rem);
-      font-weight: 700;
-      line-height: 0.85;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 2rem;
-    }
-
-    .cta-title .red { color: var(--red); }
-    .cta-title .stroke {
-      -webkit-text-stroke: 1px rgba(241,240,245,0.15);
-      color: transparent;
-    }
-
-    .cta-sub {
-      font-size: 1rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray-l);
-      max-width: 48ch;
-      margin: 0 auto 3rem;
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--dark);
-      padding: 4rem 3rem 3rem;
-      border-top: 1px solid var(--border);
-      position: relative;
-      z-index: 2;
-    }
-
-    .footer-inner { max-width: 1400px; margin: 0 auto; }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      padding-bottom: 3rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-    }
-
-    .f-logo {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--white);
-      margin-bottom: 0.75rem;
-    }
-
-    .f-logo .red { color: var(--red); }
-
-    .f-tagline { font-size: 0.85rem; font-weight: 300; color: var(--gray); line-height: 1.7; max-width: 28ch; }
-
-    .f-col h4 { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray); margin-bottom: 1.5rem; }
-    .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-    .f-col a { font-size: 0.85rem; font-weight: 300; color: rgba(241,240,245,0.5); text-decoration: none; transition: color 0.3s; }
-    .f-col a:hover { color: var(--red); }
-
-    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
-    .f-copy { font-size: 0.72rem; color: var(--gray); }
-
-    .f-certs { display: flex; gap: 0.75rem; }
-    .cert {
-      font-size: 0.58rem; font-weight: 600; letter-spacing: 0.1em;
-      color: var(--red); border: 1px solid rgba(230,57,70,0.2);
-      background: rgba(230,57,70,0.06); padding: 0.25rem 0.6rem; border-radius: 2rem;
-    }
-
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 900px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-center, .nav-badge { display: none; }
-      .hero { padding: 6rem 1.5rem 4rem; }
-      .stats-inner { grid-template-columns: 1fr 1fr; }
-      .features-section, .testimonials-section, .cta-section { padding: 5rem 1.5rem; }
-      .features-grid { grid-template-columns: 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REDLINE — AI Security Intelligence Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050507;
+    --dark: #0a0a0f;
+    --panel: #0f0f18;
+    --red: #e63946;
+    --red-dim: rgba(230,57,70,0.1);
+    --red-glow: rgba(230,57,70,0.18);
+    --glass-bg: rgba(15,15,24,0.65);
+    --glass-border: rgba(255,255,255,0.06);
+    --white: #f1f0f5;
+    --muted: #66667a;
+    --gray-l: #9898aa;
+    --mono: 'JetBrains Mono', monospace;
+    --manrope: 'Manrope', sans-serif;
+    --inter: 'Inter', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--inter);
+    background: var(--bg);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* Grain */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 9999;
+  }
+
+  /* Ambient */
+  .amb { position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0; }
+  .amb-1 { width:700px;height:700px;background:rgba(230,57,70,0.05);top:-200px;right:-200px; }
+  .amb-2 { width:350px;height:350px;background:rgba(80,40,140,0.04);bottom:100px;left:-80px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0;left:0;right:0; z-index:100;
+    padding: 0 2.5rem; height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(5,5,7,0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .logo {
+    font-family: var(--manrope); font-weight: 800;
+    font-size: 1.1rem; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none;
+    color: var(--white);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-mark {
+    width: 26px; height: 26px;
+    background: var(--red); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+  }
+  .nav-links { display:flex; gap:2rem; list-style:none; }
+  .nav-links a {
+    font-family: var(--mono); font-size: 0.64rem;
+    color: var(--muted); text-decoration: none;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--red); }
+
+  .btn-red {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 20px; border-radius: 5px;
+    background: var(--red); color: #fff;
+    font-family: var(--manrope); font-size: 13px; font-weight: 700;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn-red:hover { opacity: 0.87; transform: translateY(-1px); box-shadow: 0 0 24px var(--red-glow); }
+  .btn-red svg { width:13px;height:13px; }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 20px; border-radius: 5px;
+    background: transparent; color: var(--gray-l);
+    border: 1px solid var(--glass-border);
+    font-size: 13px; text-decoration: none; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.18); color: var(--white); }
+  .btn-ghost svg { width:13px;height:13px; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; padding: 120px 2.5rem 80px;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; z-index: 1;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 12px;
+    background: rgba(230,57,70,0.07);
+    border: 1px solid rgba(230,57,70,0.18);
+    border-radius: 3px;
+    font-family: var(--mono); font-size: 0.6rem;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    color: var(--red); margin-bottom: 36px; width: fit-content;
+  }
+  .badge-dot { width:5px;height:5px;border-radius:50%;background:var(--red);animation:blink-red 1.4s step-end infinite; }
+  @keyframes blink-red { 50%{opacity:0.2} }
+
+  .hero-h1 {
+    font-family: var(--manrope);
+    font-size: clamp(44px, 6.5vw, 96px);
+    font-weight: 800; line-height: 0.93;
+    letter-spacing: -0.04em;
+    max-width: 820px;
+    margin-bottom: 28px;
+  }
+  .hero-h1 em { color: var(--red); font-style: normal; }
+
+  .hero-sub {
+    font-size: 17px; font-weight: 300;
+    color: rgba(241,240,245,0.45); line-height: 1.65;
+    max-width: 500px; margin-bottom: 44px;
+  }
+  .hero-actions { display:flex;gap:12px;flex-wrap:wrap; }
+
+  /* Threat dashboard */
+  .dashboard-wrap {
+    max-width: 1200px; margin: 0 auto 0;
+    padding: 0 2.5rem 80px;
+    position: relative; z-index: 1;
+  }
+  .dashboard {
+    background: var(--dark);
+    border: 1px solid rgba(230,57,70,0.12);
+    border-radius: 12px; overflow: hidden;
+  }
+  .dash-header {
+    background: rgba(230,57,70,0.05);
+    border-bottom: 1px solid rgba(230,57,70,0.1);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .dash-title {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: rgba(241,240,245,0.4);
+  }
+  .dash-status {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--red);
+  }
+  .status-dot { width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+  .dash-body { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+
+  .dash-col {
+    border-right: 1px solid rgba(255,255,255,0.04);
+    padding: 20px;
+  }
+  .dash-col:last-child { border-right: none; }
+
+  .dash-col-label {
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    color: rgba(241,240,245,0.2); margin-bottom: 14px;
+  }
+
+  /* Threat items */
+  .threat-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 4px; margin-bottom: 6px;
+    position: relative;
+  }
+  .threat-item.critical { border-left: 2px solid var(--red); }
+  .threat-item.warning { border-left: 2px solid #f59e0b; }
+  .threat-item.info { border-left: 2px solid #3b82f6; }
+
+  .threat-icon { flex-shrink: 0; margin-top: 2px; }
+  .threat-icon svg { width:12px;height:12px; }
+  .threat-icon.crit svg { color: var(--red); }
+  .threat-icon.warn svg { color: #f59e0b; }
+  .threat-icon.info-c svg { color: #3b82f6; }
+
+  .threat-name {
+    font-family: var(--mono); font-size: 11px;
+    color: rgba(241,240,245,0.7); line-height: 1.3;
+    flex: 1;
+  }
+  .threat-time {
+    font-family: var(--mono); font-size: 9px;
+    color: rgba(241,240,245,0.2); white-space: nowrap;
+  }
+
+  /* Score ring */
+  .score-wrap {
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; padding: 24px;
+  }
+  .score-ring {
+    width: 100px; height: 100px; border-radius: 50%;
+    background: conic-gradient(var(--red) 0% 82%, rgba(255,255,255,0.06) 82% 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; margin-bottom: 12px;
+  }
+  .score-inner {
+    width: 78px; height: 78px; border-radius: 50%;
+    background: var(--dark);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  .score-num {
+    font-family: var(--manrope); font-size: 22px; font-weight: 800;
+    color: var(--red); line-height: 1;
+  }
+  .score-label { font-family:var(--mono);font-size:7px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted); }
+
+  /* Stats bar */
+  .stat-bar { display:flex; border-top:1px solid rgba(255,255,255,0.04); }
+  .stat-bar-item {
+    flex:1; padding:20px; text-align:center;
+    border-right: 1px solid rgba(255,255,255,0.04);
+  }
+  .stat-bar-item:last-child { border-right:none; }
+  .sbi-num { font-family:var(--manrope);font-size:24px;font-weight:800;line-height:1; }
+  .sbi-label { font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(241,240,245,0.25);margin-top:4px; }
+
+  /* IMAGE section */
+  .img-noir {
+    width: 100%; aspect-ratio: 16/7;
+    object-fit: cover; display: block;
+    filter: brightness(0.55) contrast(1.1);
+    border-radius: 0;
+  }
+  .img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--bg) 0%, transparent 40%, transparent 60%, var(--bg) 100%),
+                linear-gradient(180deg, transparent 60%, var(--bg) 100%);
+    z-index: 2;
+  }
+  .img-wrap { position:relative; }
+
+  /* HOW IT WORKS */
+  .section { padding: 80px 2.5rem; max-width:1200px;margin:0 auto; }
+  .sec-label {
+    font-family: var(--mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.2em;
+    color: rgba(230,57,70,0.55); margin-bottom: 12px;
+  }
+  .sec-h2 {
+    font-family: var(--manrope);
+    font-size: clamp(28px,3.5vw,48px);
+    font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
+    margin-bottom: 60px;
+  }
+
+  /* Steps */
+  .steps { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:1px; background:rgba(255,255,255,0.04); }
+  .step {
+    background: var(--bg); padding: 36px 28px;
+    position: relative;
+  }
+  .step-num {
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.2em;
+    color: rgba(241,240,245,0.2); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .step-num::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: rgba(255,255,255,0.05);
+  }
+  .step-icon {
+    width: 44px; height: 44px;
+    background: rgba(230,57,70,0.08);
+    border: 1px solid rgba(230,57,70,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px; color: var(--red);
+  }
+  .step-icon svg { width:18px;height:18px; }
+  .step-title {
+    font-family: var(--manrope); font-size: 16px; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 8px;
+  }
+  .step-body { font-size:13px;color:rgba(241,240,245,0.38);line-height:1.65; }
+
+  /* Capability cards */
+  .cap-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:rgba(255,255,255,0.04); }
+  .cap-card {
+    background: var(--bg); padding: 36px;
+    position: relative; overflow: hidden;
+    transition: background 0.2s;
+  }
+  .cap-card:hover { background: rgba(230,57,70,0.03); }
+  .cap-card::before {
+    content:''; position:absolute; top:0;left:0;right:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(230,57,70,0.2), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .cap-card:hover::before { opacity:1; }
+
+  .cap-label { font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.18em;color:rgba(241,240,245,0.2);margin-bottom:20px; }
+  .cap-icon { width:40px;height:40px;border-radius:8px;background:rgba(230,57,70,0.07);border:1px solid rgba(230,57,70,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--red); }
+  .cap-icon svg { width:17px;height:17px; }
+  .cap-title { font-family:var(--manrope);font-size:20px;font-weight:700;letter-spacing:-0.03em;line-height:1.2;margin-bottom:10px; }
+  .cap-body { font-size:13px;color:rgba(241,240,245,0.38);line-height:1.65; }
+
+  /* Noir image panels */
+  .noir-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px; }
+  .noir-panel {
+    aspect-ratio:3/4; background:#0a0a12;
+    overflow:hidden; position:relative;
+  }
+  .noir-panel img { width:100%;height:100%;object-fit:cover;filter:brightness(0.45) contrast(1.2) grayscale(0.3);transition:filter 0.4s; }
+  .noir-panel:hover img { filter:brightness(0.55) contrast(1.2) grayscale(0.1); }
+  .noir-panel-label {
+    position:absolute; bottom:0;left:0;right:0;
+    padding:20px 20px 16px;
+    background: linear-gradient(transparent, rgba(5,5,7,0.9));
+    font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.15em;
+    color:rgba(241,240,245,0.4);
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 120px 2.5rem;
+    text-align: center;
+    position: relative; z-index:1;
+    background: linear-gradient(180deg, transparent, rgba(230,57,70,0.03) 50%, transparent);
+  }
+  .cta-h2 {
+    font-family: var(--manrope);
+    font-size: clamp(38px,5vw,72px);
+    font-weight: 800; letter-spacing:-0.04em; line-height:0.95;
+    margin-bottom: 20px;
+  }
+  .cta-sub { font-size:16px;color:rgba(241,240,245,0.38);max-width:440px;margin:0 auto 44px;line-height:1.6; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--glass-border);
+    padding: 44px 2.5rem;
+    display: flex; align-items:center; justify-content:space-between;
+    flex-wrap: wrap; gap:20px;
+    max-width:1200px; margin:0 auto;
+  }
+  .f-links { display:flex;gap:28px;flex-wrap:wrap; }
+  .f-links a {
+    font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.14em;
+    color:rgba(241,240,245,0.18);text-decoration:none;transition:color 0.2s;
+  }
+  .f-links a:hover { color:var(--red); }
+
+  /* Reveal */
+  .reveal { opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease; }
+  .reveal.visible { opacity:1;transform:none; }
+
+  @media(max-width:768px) {
+    .dash-body { grid-template-columns:1fr; }
+    .steps { grid-template-columns:1fr; }
+    .cap-grid { grid-template-columns:1fr; }
+    .noir-grid { grid-template-columns:1fr; }
+    nav { padding:0 1.2rem; }
+    .nav-links { display:none; }
+    .hero,.section { padding-left:1.2rem;padding-right:1.2rem; }
+  }
+</style>
 </head>
 <body>
-  <div class="ambient amb-1"></div>
-  <div class="ambient amb-2"></div>
+<div class="amb amb-1"></div>
+<div class="amb amb-2"></div>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">RED<span class="red">LINE</span></a>
-    <div class="nav-center">
-      <a href="#features">Platform</a>
-      <a href="#security">Security</a>
-      <a href="#compliance">Compliance</a>
-      <a href="#pricing">Pricing</a>
-    </div>
-    <div style="display:flex;align-items:center;gap:1rem;">
-      <div class="nav-badge"><div class="nav-badge-dot"></div>Live Threat Monitor</div>
-      <a href="#cta" class="nav-cta">Get Protected</a>
-    </div>
-  </nav>
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-mark"><i data-lucide="shield-alert" style="width:13px;height:13px;"></i></div>
+    REDLINE
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Threat Intel</a></li>
+    <li><a href="#">Monitoring</a></li>
+    <li><a href="#">Response</a></li>
+    <li><a href="#">Platform</a></li>
+    <li><a href="#">Enterprise</a></li>
+  </ul>
+  <div style="display:flex;gap:10px;">
+    <a href="#" class="btn-ghost" style="padding:7px 16px;font-size:12px;font-family:var(--mono);">Sign In</a>
+    <a href="#" class="btn-red">
+      <i data-lucide="shield"></i>
+      Request a Threat Audit
+    </a>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-chip">AI-Powered Security Platform</div>
-    <h1 class="hero-title">
-      PROTECT<br>WHAT<br><span class="red">MATTERS</span>
-    </h1>
-    <p class="hero-desc">Redline is an AI-native security platform that detects, analyzes, and neutralizes threats before they become breaches. Real-time protection for the modern threat landscape.</p>
-    <div class="hero-actions">
-      <a href="#cta" class="btn-red">Start Free Trial</a>
-      <a href="#features" class="btn-ghost">See How It Works</a>
-    </div>
-    <div class="threat-bar">
-      <div class="threat-header">
-        <div class="threat-title">⚠ Live Threat Intelligence Feed</div>
-        <div class="threat-count">2,847 threats blocked today</div>
-      </div>
-      <div class="threat-list">
-        <div class="threat-item">
-          <div class="ti-left"><div class="ti-sev sev-critical"></div><div class="ti-name">SQL Injection Attempt <span class="ti-type">/ auth-api</span></div></div>
-          <div class="ti-status st-blocked">Blocked</div>
-        </div>
-        <div class="threat-item">
-          <div class="ti-left"><div class="ti-sev sev-high"></div><div class="ti-name">Credential Stuffing <span class="ti-type">/ login-service</span></div></div>
-          <div class="ti-status st-blocked">Blocked</div>
-        </div>
-        <div class="threat-item">
-          <div class="ti-left"><div class="ti-sev sev-high"></div><div class="ti-name">CVE-2024-8192 <span class="ti-type">/ nginx</span></div></div>
-          <div class="ti-status st-patched">Patched</div>
-        </div>
-        <div class="threat-item">
-          <div class="ti-left"><div class="ti-sev sev-medium"></div><div class="ti-name">Anomalous API Usage <span class="ti-type">/ data-service</span></div></div>
-          <div class="ti-status st-monitoring">Monitoring</div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    Live threat monitoring — 2.4M events analyzed today
+  </div>
+  <h1 class="hero-h1">
+    AI that hunts threats<br>
+    before they <em>surface.</em>
+  </h1>
+  <p class="hero-sub">
+    Redline's adversarial intelligence engine correlates signals across your entire attack surface in real-time, predicting breach vectors hours before they activate.
+  </p>
+  <div class="hero-actions">
+    <a href="#" class="btn-red" style="font-size:14px;padding:13px 26px;">
+      <i data-lucide="scan"></i>
+      Audit Your Infrastructure
+    </a>
+    <a href="#" class="btn-ghost" style="font-size:14px;padding:13px 26px;font-family:var(--inter);">
+      <i data-lucide="play"></i>
+      See Live Threat Board
+    </a>
+  </div>
+</section>
 
-  <!-- STATS -->
-  <section class="stats-section">
-    <div class="stats-inner">
-      <div class="stat-glass reveal">
-        <div class="stat-val">99.8<span class="red">%</span></div>
-        <div class="stat-label">Threat Detection Rate</div>
-      </div>
-      <div class="stat-glass reveal" style="transition-delay:0.1s">
-        <div class="stat-val">&lt;1<span class="red">ms</span></div>
-        <div class="stat-label">Detection Latency</div>
-      </div>
-      <div class="stat-glass reveal" style="transition-delay:0.2s">
-        <div class="stat-val">4.2<span class="red">B</span></div>
-        <div class="stat-label">Events Analyzed Daily</div>
-      </div>
-      <div class="stat-glass reveal" style="transition-delay:0.3s">
-        <div class="stat-val">0<span class="red">%</span></div>
-        <div class="stat-label">False Positive Rate</div>
-      </div>
+<!-- THREAT DASHBOARD -->
+<div class="dashboard-wrap reveal">
+  <div class="dashboard">
+    <div class="dash-header">
+      <span class="dash-title">Redline Threat Intelligence Dashboard — Live</span>
+      <span class="dash-status"><div class="status-dot"></div> 3 Critical Alerts Active</span>
     </div>
-  </section>
+    <div class="dash-body">
+      <!-- Active Threats -->
+      <div class="dash-col">
+        <div class="dash-col-label">Active Threats</div>
+        <div class="threat-item critical">
+          <div class="threat-icon crit"><i data-lucide="zap"></i></div>
+          <div class="threat-name">SQL injection attempt<br><span style="color:rgba(241,240,245,0.3)">172.16.4.82 → prod-db-01</span></div>
+          <div class="threat-time">0:12s</div>
+        </div>
+        <div class="threat-item critical">
+          <div class="threat-icon crit"><i data-lucide="wifi-off"></i></div>
+          <div class="threat-name">Lateral movement detected<br><span style="color:rgba(241,240,245,0.3)">auth-svc → internal APIs</span></div>
+          <div class="threat-time">1:44s</div>
+        </div>
+        <div class="threat-item warning">
+          <div class="threat-icon warn"><i data-lucide="alert-triangle"></i></div>
+          <div class="threat-name">Unusual data exfil volume<br><span style="color:rgba(241,240,245,0.3)">s3-bucket-exports</span></div>
+          <div class="threat-time">4:20s</div>
+        </div>
+        <div class="threat-item info">
+          <div class="threat-icon info-c"><i data-lucide="info"></i></div>
+          <div class="threat-name">Port scan: 443, 22, 8080<br><span style="color:rgba(241,240,245,0.3)">91.198.174.33</span></div>
+          <div class="threat-time">6:01s</div>
+        </div>
+      </div>
 
-  <!-- FEATURES -->
-  <section class="features-section" id="features">
-    <div class="features-inner">
-      <div class="features-header reveal">
-        <div class="section-tag">Platform Features</div>
-        <h2 class="section-title">SECURITY<br>THAT NEVER<br><span class="red">SLEEPS</span></h2>
-      </div>
-      <div class="features-grid">
-        <div class="feat-card reveal">
-          <div class="feat-icon">🛡️</div>
-          <div class="feat-title">AI Threat Detection</div>
-          <div class="feat-body">Our behavioral AI models analyze every event in real-time, detecting novel attack patterns that signature-based tools miss entirely. Trained on 10 years of breach data.</div>
-        </div>
-        <div class="feat-card reveal" style="transition-delay:0.1s">
-          <div class="feat-icon">🔍</div>
-          <div class="feat-title">Deep Packet Inspection</div>
-          <div class="feat-body">Full-stack network analysis at wire speed. Identify encrypted threats, C2 communications, and data exfiltration attempts without sacrificing performance.</div>
-        </div>
-        <div class="feat-card reveal" style="transition-delay:0.2s">
-          <div class="feat-icon">⚡</div>
-          <div class="feat-title">Automated Response</div>
-          <div class="feat-body">From detection to containment in under 100ms. Automated playbooks isolate compromised systems, revoke credentials, and alert your team — all without human intervention.</div>
-        </div>
-        <div class="feat-card reveal">
-          <div class="feat-icon">📋</div>
-          <div class="feat-title">Compliance Automation</div>
-          <div class="feat-body">Continuous compliance monitoring for SOC 2, ISO 27001, PCI-DSS, and HIPAA. Auto-generated evidence packages make audits painless and fast.</div>
-        </div>
-        <div class="feat-card reveal" style="transition-delay:0.1s">
-          <div class="feat-icon">🌐</div>
-          <div class="feat-title">Global Threat Intelligence</div>
-          <div class="feat-body">Real-time threat feeds from our global sensor network. Know about emerging attack vectors before they target your infrastructure.</div>
-        </div>
-        <div class="feat-card reveal" style="transition-delay:0.2s">
-          <div class="feat-icon">🔗</div>
-          <div class="feat-title">Zero-Friction Integration</div>
-          <div class="feat-body">Deploy in under 15 minutes with native integrations for AWS, Azure, GCP, and 200+ security tools. No agents, no reboots, no downtime required.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials-section">
-    <div class="testi-inner">
-      <div class="reveal">
-        <div class="section-tag">Customer Stories</div>
-        <h2 class="section-title">PROTECTED.<br>PROVEN.<br><span class="red">TRUSTED.</span></h2>
-      </div>
-      <div class="testi-grid">
-        <div class="t-card reveal">
-          <div class="t-stars">★★★★★</div>
-          <p class="t-text">"Redline stopped a ransomware payload before it executed — in 47ms. Our previous tool didn't detect it at all. The difference is extraordinary and the ROI is obvious."</p>
-          <div class="t-author">
-            <div class="t-ava">MJ</div>
-            <div>
-              <div class="t-name">Marcus Johnson</div>
-              <div class="t-role">CISO, FinEdge Capital</div>
+      <!-- Threat Score -->
+      <div class="dash-col" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
+        <div class="dash-col-label" style="text-align:center;">Threat Score</div>
+        <div class="score-wrap">
+          <div class="score-ring">
+            <div class="score-inner">
+              <div class="score-num">82</div>
+              <div class="score-label">/ 100</div>
             </div>
           </div>
+          <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--red);">High Risk</div>
         </div>
-        <div class="t-card reveal" style="transition-delay:0.1s">
-          <div class="t-stars">★★★★★</div>
-          <p class="t-text">"We're in healthcare. A single breach would be catastrophic. Redline gives us the certainty we need — real-time detection, zero false positives, and compliance evidence on demand."</p>
-          <div class="t-author">
-            <div class="t-ava">SE</div>
-            <div>
-              <div class="t-name">Sandra Ellis</div>
-              <div class="t-role">CTO, MedCore Health Systems</div>
-            </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:3px;">
+            <span style="font-family:var(--mono);font-size:10px;color:rgba(241,240,245,0.4);">Attack surface</span>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--red);">EXPANDED</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:3px;">
+            <span style="font-family:var(--mono);font-size:10px;color:rgba(241,240,245,0.4);">Exposure window</span>
+            <span style="font-family:var(--mono);font-size:10px;color:#f59e0b;">2h 14m</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:3px;">
+            <span style="font-family:var(--mono);font-size:10px;color:rgba(241,240,245,0.4);">Containment</span>
+            <span style="font-family:var(--mono);font-size:10px;color:#3b82f6;">IN PROGRESS</span>
           </div>
         </div>
-        <div class="t-card reveal" style="transition-delay:0.2s">
-          <div class="t-stars">★★★★★</div>
-          <p class="t-text">"We migrated from three separate security vendors to Redline. Costs dropped 60%, coverage improved dramatically, and our SOC team can finally sleep. Remarkable platform."</p>
-          <div class="t-author">
-            <div class="t-ava">PK</div>
-            <div>
-              <div class="t-name">Peter Koch</div>
-              <div class="t-role">VP Engineering, Vault Commerce</div>
-            </div>
+      </div>
+
+      <!-- AI Analysis -->
+      <div class="dash-col">
+        <div class="dash-col-label">AI Prediction Layer</div>
+        <div style="background:rgba(230,57,70,0.04);border:1px solid rgba(230,57,70,0.1);border-radius:6px;padding:14px;margin-bottom:12px;">
+          <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(230,57,70,0.5);margin-bottom:6px;">Next likely vector</div>
+          <div style="font-family:var(--mono);font-size:11px;color:rgba(241,240,245,0.6);line-height:1.5;">Privilege escalation via misconfigured IAM role attached to lambda-worker-3</div>
+          <div style="margin-top:8px;font-family:var(--mono);font-size:9px;color:rgba(241,240,245,0.25);">Confidence: 91.4%</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(241,240,245,0.2);margin-bottom:8px;">Recommended Actions</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;gap:8px;font-family:var(--mono);font-size:10px;color:rgba(241,240,245,0.4);align-items:flex-start;">
+            <i data-lucide="chevron-right" style="width:11px;height:11px;color:var(--red);flex-shrink:0;margin-top:2px;"></i>
+            Rotate IAM credentials on lambda-worker-3 immediately
+          </div>
+          <div style="display:flex;gap:8px;font-family:var(--mono);font-size:10px;color:rgba(241,240,245,0.4);align-items:flex-start;">
+            <i data-lucide="chevron-right" style="width:11px;height:11px;color:var(--red);flex-shrink:0;margin-top:2px;"></i>
+            Block IP range 172.16.4.0/24 at perimeter
+          </div>
+          <div style="display:flex;gap:8px;font-family:var(--mono);font-size:10px;color:rgba(241,240,245,0.4);align-items:flex-start;">
+            <i data-lucide="chevron-right" style="width:11px;height:11px;color:#f59e0b;flex-shrink:0;margin-top:2px;"></i>
+            Enforce MFA on all admin accounts within 30m
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- CTA -->
-  <section class="cta-section" id="cta">
-    <div class="cta-glow"></div>
-    <div class="cta-inner reveal">
-      <div class="section-tag" style="justify-content:center;margin-bottom:2rem">14-Day Free Trial</div>
-      <h2 class="cta-title">
-        <span class="stroke">DRAW YOUR</span><br><span class="red">REDLINE</span>
-      </h2>
-      <p class="cta-sub">Start protecting your infrastructure today. Full platform access, no credit card required, enterprise-grade security from day one.</p>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-        <a href="#" class="btn-red">Start Free Trial</a>
-        <a href="#" class="btn-ghost">Schedule a Demo</a>
+    <!-- Stats bar -->
+    <div class="stat-bar">
+      <div class="stat-bar-item">
+        <div class="sbi-num" style="color:var(--red)">2.4M</div>
+        <div class="sbi-label">Events Today</div>
+      </div>
+      <div class="stat-bar-item">
+        <div class="sbi-num">3</div>
+        <div class="sbi-label">Critical Alerts</div>
+      </div>
+      <div class="stat-bar-item">
+        <div class="sbi-num" style="color:#3b82f6">148ms</div>
+        <div class="sbi-label">Avg Response Time</div>
+      </div>
+      <div class="stat-bar-item">
+        <div class="sbi-num" style="color:#22c55e">94.2%</div>
+        <div class="sbi-label">Threats Blocked</div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div>
-          <div class="f-logo">RED<span class="red">LINE</span></div>
-          <p class="f-tagline">AI-powered security that protects what matters. Detect, respond, and protect — at machine speed.</p>
-        </div>
-        <div class="f-col">
-          <h4>Platform</h4>
-          <ul>
-            <li><a href="#">Threat Detection</a></li>
-            <li><a href="#">Network Security</a></li>
-            <li><a href="#">Compliance</a></li>
-            <li><a href="#">Integrations</a></li>
-          </ul>
-        </div>
-        <div class="f-col">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Press</a></li>
-          </ul>
-        </div>
-        <div class="f-col">
-          <h4>Resources</h4>
-          <ul>
-            <li><a href="#">Documentation</a></li>
-            <li><a href="#">API Reference</a></li>
-            <li><a href="#">Status</a></li>
-            <li><a href="#">Support</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p class="f-copy">© 2025 Redline Security Inc. All rights reserved.</p>
-        <div class="f-certs">
-          <span class="cert">SOC 2</span>
-          <span class="cert">ISO 27001</span>
-          <span class="cert">FedRAMP</span>
-        </div>
+<!-- IMAGE STRIP -->
+<div class="img-wrap" style="overflow:hidden;margin:80px 0 0;">
+  <div class="img-overlay"></div>
+  <img class="img-noir" src="../../images/noir/noir-1.jpg" alt="Threat intelligence">
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;text-align:center;">
+    <div>
+      <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.2em;color:rgba(230,57,70,0.6);margin-bottom:12px;">The threat landscape</div>
+      <div style="font-family:var(--manrope);font-size:clamp(32px,4vw,56px);font-weight:800;letter-spacing:-0.04em;line-height:0.95;color:var(--white);">
+        Every second counts.<br>
+        <span style="color:var(--red);">Every signal matters.</span>
       </div>
     </div>
-  </footer>
+  </div>
+</div>
 
-  <script>
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08 });
-    reveals.forEach(el => obs.observe(el));
-  </script>
+<!-- HOW IT WORKS -->
+<div class="section reveal">
+  <div class="sec-label">How Redline Works</div>
+  <h2 class="sec-h2">From signal to containment<br>in under 4 minutes.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon"><i data-lucide="radio"></i></div>
+      <div class="step-title">Continuous signal ingestion</div>
+      <div class="step-body">Redline monitors network traffic, auth logs, API calls, and cloud configs at 2.4M events per day with zero data egress.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon"><i data-lucide="brain"></i></div>
+      <div class="step-title">Adversarial AI correlation</div>
+      <div class="step-body">Our model cross-references signals against 14 threat actor profiles and 40,000 known attack patterns to surface non-obvious chains.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon"><i data-lucide="bell-ring"></i></div>
+      <div class="step-title">Prioritized threat scoring</div>
+      <div class="step-body">Each alert carries a risk score, blast radius estimate, and confidence level — no alert fatigue from undifferentiated noise.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-icon"><i data-lucide="shield-check"></i></div>
+      <div class="step-title">Guided containment playbooks</div>
+      <div class="step-body">Step-by-step remediation paths with one-click actions for firewall rules, credential rotation, and quarantine — approved by your team.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CAPABILITIES -->
+<div class="section" style="padding-top:0;">
+  <div class="sec-label">Platform Capabilities</div>
+  <h2 class="sec-h2">Built for the attack surface<br>your team actually has.</h2>
+  <div class="cap-grid reveal">
+    <div class="cap-card">
+      <div class="cap-label">01 / Detection</div>
+      <div class="cap-icon"><i data-lucide="scan-line"></i></div>
+      <div class="cap-title">Zero-day behavioral fingerprinting</div>
+      <div class="cap-body">Redline identifies novel attack patterns by modeling behavioral deviations from established baselines, not known signatures. It flags what other tools miss.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-label">02 / Intelligence</div>
+      <div class="cap-icon"><i data-lucide="globe"></i></div>
+      <div class="cap-title">Real-time darknet & OSINT feed synthesis</div>
+      <div class="cap-body">We monitor 340+ threat actor forums, paste sites, and leak repositories, automatically correlating external IOCs with your internal asset inventory.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-label">03 / Automation</div>
+      <div class="cap-icon"><i data-lucide="workflow"></i></div>
+      <div class="cap-title">Autonomous response with human approval gates</div>
+      <div class="cap-body">Pre-approved response actions execute in milliseconds. Anything outside defined scope requires analyst sign-off — always humans in the loop at decision nodes.</div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-label">04 / Compliance</div>
+      <div class="cap-icon"><i data-lucide="file-check"></i></div>
+      <div class="cap-title">Continuous compliance posture for SOC 2, ISO, NIST</div>
+      <div class="cap-body">Automated evidence collection and posture scoring for 12 frameworks, with audit-ready exports that your compliance team can hand to auditors without translation.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section reveal">
+  <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.2em;color:rgba(230,57,70,0.45);margin-bottom:16px;">Don't wait for the breach.</div>
+  <h2 class="cta-h2">
+    Know before they<br>
+    <span style="color:var(--red)">strike.</span>
+  </h2>
+  <p class="cta-sub">Redline connects to your existing cloud stack in under 20 minutes. Your first threat audit runs automatically.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a href="#" class="btn-red" style="font-size:15px;padding:14px 30px;">
+      <i data-lucide="scan"></i>
+      Run a Free Infrastructure Audit
+    </a>
+    <a href="#" class="btn-ghost" style="font-size:15px;padding:14px 30px;font-family:var(--inter);">
+      Talk to a Security Engineer
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo">
+    <div class="logo-mark" style="width:22px;height:22px;"><i data-lucide="shield-alert" style="width:11px;height:11px;"></i></div>
+    REDLINE
+  </a>
+  <div class="f-links">
+    <a href="#">Platform</a>
+    <a href="#">Threat Intel</a>
+    <a href="#">Documentation</a>
+    <a href="#">Status</a>
+    <a href="#">Security Blog</a>
+    <a href="#">Careers</a>
+  </div>
+  <div style="font-family:var(--mono);font-size:10px;color:rgba(241,240,245,0.15);">&copy; 2026 Redline Security, Inc.</div>
+</footer>
+
+<script>
+  lucide.createIcons();
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

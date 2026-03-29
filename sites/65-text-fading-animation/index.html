@@ -1,642 +1,592 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FADE.STUDIO — Branding Studio</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=Inter:wght@300;400;500&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FADE.STUDIO — Branding & Motion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Syne+Mono&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #090909;
+      --fg: #f0ede8;
+      --mid: rgba(240,237,232,0.45);
+      --accent: #d4ff00;
+      --border: rgba(240,237,232,0.1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    .display { font-family: 'Syne', sans-serif; }
+    .mono { font-family: 'Syne Mono', monospace; }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ── Clipping mask slide-in ── */
+    .clip-line { overflow: hidden; }
+    .clip-inner {
+      display: block;
+      transform: translateY(108%);
+      transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .clip-line.is-visible .clip-inner { transform: translateY(0); }
 
-  :root {
-    --bg: #0c0c0c;
-    --fg: #efefef;
-    --accent: #ff3b00;
-    --dim: rgba(239,239,239,0.38);
-    --border: rgba(239,239,239,0.07);
-  }
+    /* stagger utility */
+    .d-100 { transition-delay: 0.1s !important; }
+    .d-200 { transition-delay: 0.2s !important; }
+    .d-300 { transition-delay: 0.3s !important; }
+    .d-400 { transition-delay: 0.4s !important; }
+    .d-500 { transition-delay: 0.5s !important; }
+    .d-600 { transition-delay: 0.6s !important; }
+    .d-700 { transition-delay: 0.7s !important; }
 
-  html { scroll-behavior: smooth; }
+    /* ── Fade up utility ── */
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.is-visible { opacity: 1; transform: none; }
 
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
-  }
+    /* ── Custom cursor ── */
+    #cursor-outer {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid rgba(212,255,0,0.5); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.12s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s;
+    }
+    #cursor-inner {
+      position: fixed; width: 5px; height: 5px;
+      background: var(--accent); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.06s;
+    }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 24px 52px;
-    background: rgba(12,12,12,0.85);
-    backdrop-filter: blur(24px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 17px; font-weight: 800; letter-spacing: 0.12em;
-    color: var(--fg); text-decoration: none;
-  }
-  .logo em { color: var(--accent); font-style: normal; }
-  .nav-links { display: flex; gap: 40px; list-style: none; }
-  .nav-links a {
-    font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
-    color: var(--dim); text-decoration: none; text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--fg); }
-  .nav-btn {
-    font-family: 'Syne', sans-serif;
-    background: var(--accent); color: #fff;
-    font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
-    padding: 10px 24px; text-decoration: none; text-transform: uppercase;
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
-    transition: opacity 0.2s;
-  }
-  .nav-btn:hover { opacity: 0.85; }
+    /* ── Work grid ── */
+    .work-item {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      cursor: none;
+      transition: padding-left 0.4s ease;
+    }
+    .work-item:hover { padding-left: 1.5rem; }
+    .work-item:hover .work-arrow { opacity: 1; transform: rotate(0deg); }
+    .work-arrow { opacity: 0; transform: rotate(-45deg); transition: opacity 0.3s, transform 0.3s; }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 52px 80px;
-    position: relative; overflow: hidden;
-  }
+    /* ── Image reveal on work hover ── */
+    .work-preview {
+      position: fixed; pointer-events: none; z-index: 100;
+      width: 280px; height: 200px; overflow: hidden;
+      opacity: 0; transform: scale(0.92) rotate(-2deg);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .work-preview.active { opacity: 1; transform: scale(1) rotate(1.5deg); }
+    .work-preview img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.7); }
 
-  /* Clip-mask slide-in for oversized heading */
-  .fade-headline {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(80px, 14vw, 200px);
-    font-weight: 800; line-height: 0.88;
-    letter-spacing: -0.04em;
-    position: relative; z-index: 2;
-    margin-bottom: 48px;
-  }
-  .clip-line {
-    display: block;
-    overflow: hidden;
-  }
-  .clip-inner {
-    display: block;
-    transform: translateY(102%);
-    animation: clipReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  .clip-line:nth-child(1) .clip-inner { animation-delay: 0.15s; }
-  .clip-line:nth-child(2) .clip-inner { animation-delay: 0.35s; color: var(--accent); }
-  .clip-line:nth-child(3) .clip-inner { animation-delay: 0.55s; }
+    /* ── Marquee ── */
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-track { display: flex; width: max-content; animation: marquee 18s linear infinite; }
 
-  @keyframes clipReveal {
-    to { transform: translateY(0); }
-  }
+    /* ── Service cards ── */
+    .service-card {
+      border: 1px solid var(--border);
+      padding: 2rem;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .service-card:hover { border-color: rgba(212,255,0,0.4); background: rgba(212,255,0,0.03); }
 
-  .hero-bottom {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    position: relative; z-index: 2;
-    opacity: 0; animation: fadeIn 0.8s ease 1.1s forwards;
-  }
-  .hero-desc {
-    font-size: 15px; font-weight: 300; line-height: 1.75;
-    color: var(--dim); max-width: 380px;
-  }
-  .hero-ctas { display: flex; gap: 14px; align-items: center; }
-  .btn-red {
-    background: var(--accent); color: #fff;
-    font-family: 'Syne', sans-serif;
-    font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
-    padding: 16px 36px; text-decoration: none; text-transform: uppercase;
-    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
-    transition: transform 0.2s;
-  }
-  .btn-red:hover { transform: translateY(-3px); }
-  .btn-line {
-    font-family: 'Syne', sans-serif;
-    border: 1px solid var(--border); color: var(--fg);
-    font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
-    padding: 16px 36px; text-decoration: none; text-transform: uppercase;
-    transition: border-color 0.2s;
-  }
-  .btn-line:hover { border-color: rgba(239,239,239,0.3); }
+    /* ── Nav ── */
+    nav a {
+      position: relative; font-size: 0.8rem; letter-spacing: 0.08em;
+      color: rgba(240,237,232,0.55);
+      transition: color 0.3s;
+    }
+    nav a:hover { color: var(--fg); }
 
-  /* Background noise texture */
-  .hero-bg {
-    position: absolute; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse 50% 70% at 80% 50%, rgba(255,59,0,0.06) 0%, transparent 70%),
-      radial-gradient(ellipse 30% 40% at 10% 90%, rgba(255,59,0,0.04) 0%, transparent 70%);
-  }
-
-  /* ── TICKER ── */
-  .ticker {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 18px 0; overflow: hidden;
-    background: var(--accent);
-  }
-  .ticker-inner { display: flex; gap: 64px; animation: roll 20s linear infinite; white-space: nowrap; }
-  .ticker-inner span {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: #fff; flex-shrink: 0;
-  }
-  @keyframes roll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── WORK GRID ── */
-  .work {
-    padding: 100px 52px;
-    max-width: 1400px; margin: 0 auto;
-  }
-  .work-header {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-bottom: 48px;
-  }
-  .section-tag {
-    font-family: 'Syne Mono', monospace;
-    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 12px;
-  }
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(32px, 4.5vw, 52px); font-weight: 800;
-    letter-spacing: -0.02em; line-height: 1.05;
-  }
-  .all-work {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--dim);
-    text-decoration: none; border-bottom: 1px solid var(--border);
-    padding-bottom: 2px; transition: color 0.2s, border-color 0.2s;
-  }
-  .all-work:hover { color: var(--fg); border-color: var(--fg); }
-
-  .work-grid { display: grid; grid-template-columns: 7fr 5fr; gap: 16px; }
-  .work-grid-right { display: grid; grid-template-rows: 1fr 1fr; gap: 16px; }
-  .work-card {
-    background: var(--border);
-    border: 1px solid var(--border);
-    aspect-ratio: 16/10; position: relative; overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-  }
-  .work-card.tall { aspect-ratio: unset; height: 100%; }
-  .work-card:hover { transform: scale(0.98); }
-  .work-card-inner {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    justify-content: flex-end; padding: 28px;
-    background: linear-gradient(to top, rgba(12,12,12,0.9) 0%, transparent 60%);
-    transition: opacity 0.3s;
-  }
-  .work-card-label {
-    font-family: 'Syne Mono', monospace;
-    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 8px;
-  }
-  .work-card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 22px; font-weight: 800; letter-spacing: -0.02em;
-  }
-  .work-card-bg {
-    position: absolute; inset: 0; z-index: 0;
-    transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
-  }
-  .work-card:hover .work-card-bg { transform: scale(1.05); }
-  .work-card-inner { z-index: 1; }
-
-  /* Color fills for mock project images */
-  .bg1 { background: linear-gradient(135deg, #1a0a05 0%, #3d1500 100%); }
-  .bg2 { background: linear-gradient(135deg, #050a1a 0%, #0a1f3d 100%); }
-  .bg3 { background: linear-gradient(135deg, #0a0f05 0%, #1a2f0a 100%); }
-  .bg4 { background: linear-gradient(135deg, #1a1a05 0%, #3d3d00 100%); }
-
-  /* ── SERVICES ── */
-  .services {
-    padding: 100px 52px;
-    border-top: 1px solid var(--border);
-    background: #111;
-  }
-  .services-inner { max-width: 1400px; margin: 0 auto; }
-  .services-list { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: 64px; }
-  .service-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 28px 0;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: padding-left 0.3s;
-  }
-  .service-row:hover { padding-left: 16px; }
-  .service-row:first-child { border-top: 1px solid var(--border); }
-  .service-num {
-    font-family: 'Syne Mono', monospace;
-    font-size: 11px; color: var(--accent); letter-spacing: 0.1em;
-    width: 48px; flex-shrink: 0;
-  }
-  .service-name {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(20px, 3vw, 32px); font-weight: 800;
-    letter-spacing: -0.02em; flex: 1;
-  }
-  .service-tags { display: flex; gap: 8px; }
-  .service-tag {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--dim);
-    border: 1px solid var(--border); padding: 5px 12px;
-    transition: color 0.2s, border-color 0.2s;
-  }
-  .service-row:hover .service-tag { color: var(--fg); border-color: rgba(239,239,239,0.2); }
-  .service-arrow { font-size: 20px; color: var(--accent); transition: transform 0.3s; }
-  .service-row:hover .service-arrow { transform: translateX(6px); }
-
-  /* ── TESTIMONIALS ── */
-  .social-proof {
-    padding: 100px 52px;
-    border-top: 1px solid var(--border);
-  }
-  .social-inner { max-width: 1400px; margin: 0 auto; }
-  .stats-row {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--border);
-    border: 1px solid var(--border);
-    margin: 64px 0;
-  }
-  .stat-box {
-    background: var(--bg); padding: 40px 32px;
-    transition: background 0.3s;
-  }
-  .stat-box:hover { background: #141414; }
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 56px; font-weight: 800; line-height: 1;
-    letter-spacing: -0.03em; margin-bottom: 8px;
-  }
-  .stat-num em { color: var(--accent); font-style: normal; }
-  .stat-label { font-size: 13px; font-weight: 400; color: var(--dim); }
-  .testi-strip {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-  }
-  .testi-item {
-    border: 1px solid var(--border); padding: 40px;
-    transition: border-color 0.3s;
-  }
-  .testi-item:hover { border-color: var(--accent); }
-  .testi-text {
-    font-family: 'Syne', sans-serif;
-    font-size: 18px; font-weight: 600; line-height: 1.5;
-    letter-spacing: -0.02em; margin-bottom: 28px;
-  }
-  .testi-by { display: flex; align-items: center; gap: 14px; }
-  .testi-circle {
-    width: 40px; height: 40px;
-    background: var(--accent); border-radius: 50%;
-    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800;
-    display: flex; align-items: center; justify-content: center; color: #fff;
-  }
-  .testi-who { font-size: 13px; font-weight: 600; }
-  .testi-where { font-size: 11px; color: var(--dim); margin-top: 2px; }
-
-  /* ── CTA ── */
-  .cta {
-    padding: 120px 52px;
-    background: var(--accent);
-    text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .cta::before {
-    content: 'FADE';
-    position: absolute;
-    font-family: 'Syne', sans-serif;
-    font-size: 280px; font-weight: 800;
-    color: rgba(255,255,255,0.06);
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    white-space: nowrap; pointer-events: none;
-    letter-spacing: -0.04em;
-  }
-  .cta-headline {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(52px, 9vw, 110px); font-weight: 800;
-    line-height: 0.9; letter-spacing: -0.04em;
-    color: #fff; margin-bottom: 40px;
-    position: relative; z-index: 1;
-  }
-  .cta-sub {
-    font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.7);
-    max-width: 440px; margin: 0 auto 48px; line-height: 1.6;
-    position: relative; z-index: 1;
-  }
-  .cta-form {
-    display: flex; gap: 12px; max-width: 420px; margin: 0 auto;
-    position: relative; z-index: 1;
-  }
-  .cta-input {
-    flex: 1; background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff; font-family: 'Inter', sans-serif;
-    font-size: 14px; padding: 14px 20px;
-    outline: none; transition: background 0.25s;
-    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
-  }
-  .cta-input::placeholder { color: rgba(255,255,255,0.5); }
-  .cta-input:focus { background: rgba(255,255,255,0.22); }
-  .cta-send {
-    background: #fff; color: var(--accent);
-    font-family: 'Syne', sans-serif;
-    font-size: 13px; font-weight: 800; letter-spacing: 0.06em;
-    padding: 14px 28px; text-decoration: none; text-transform: uppercase;
-    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
-    transition: opacity 0.2s;
-  }
-  .cta-send:hover { opacity: 0.9; }
-
-  /* ── FOOTER ── */
-  footer {
-    background: #080808; padding: 48px 52px;
-    border-top: 1px solid var(--border);
-  }
-  .footer-inner {
-    max-width: 1400px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .footer-logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 16px; font-weight: 800; letter-spacing: 0.1em;
-    color: var(--fg); text-decoration: none;
-  }
-  .footer-logo em { color: var(--accent); font-style: normal; }
-  .footer-nav { display: flex; gap: 32px; list-style: none; }
-  .footer-nav a {
-    font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--dim);
-    text-decoration: none; transition: color 0.2s;
-  }
-  .footer-nav a:hover { color: var(--fg); }
-  .footer-copy { font-size: 11px; color: rgba(239,239,239,0.18); }
-</style>
-
-<!-- inject-local -->
-<style>
-  .work-card-inner {
-    background-image: url('../../images/creative/creative-1.jpg') !important;
-    background-size: cover; background-position: center;
-  }
-  .bg1 {
-    background-image: url('../../images/creative/creative-2.jpg') !important;
-    background-size: cover; background-position: center;
-  }
-  .bg2 {
-    background-image: url('../../images/creative/creative-3.jpg') !important;
-    background-size: cover; background-position: center;
-  }
-  .bg3 {
-    background-image: url('../../images/creative/creative-4.jpg') !important;
-    background-size: cover; background-position: center;
-  }
-  .bg4 {
-    background-image: url('../../images/creative/creative-5.jpg') !important;
-    background-size: cover; background-position: center;
-  }
-</style>
+    /* Creative image frame */
+    .img-frame {
+      position: relative; overflow: hidden;
+    }
+    .img-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-frame::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(212,255,0,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
 
-<nav>
-  <a href="#" class="logo">FADE<em>.</em>STUDIO</a>
-  <ul class="nav-links">
-    <li><a href="#work">Work</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#contact" class="nav-btn">Start Project</a>
-</nav>
+<div id="cursor-outer"></div>
+<div id="cursor-inner"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <h1 class="fade-headline">
-    <span class="clip-line"><span class="clip-inner">WE MAKE</span></span>
-    <span class="clip-line"><span class="clip-inner">BRANDS</span></span>
-    <span class="clip-line"><span class="clip-inner">UNFORGETTABLE</span></span>
-  </h1>
-  <div class="hero-bottom">
-    <p class="hero-desc">FADE.STUDIO crafts visual identities that transcend the ordinary — branding that slides into memory and refuses to leave.</p>
-    <div class="hero-ctas">
-      <a href="#work" class="btn-red">View Work</a>
-      <a href="#services" class="btn-line">Our Process</a>
+<!-- Work preview floating card -->
+<div class="work-preview" id="work-preview">
+  <img id="preview-img" src="" alt="" />
+</div>
+
+<!-- ══ NAV ══ -->
+<header class="fixed top-0 left-0 right-0 z-50 px-8 py-5 flex items-center justify-between" style="border-bottom: 1px solid var(--border); background: rgba(9,9,9,0.85); backdrop-filter: blur(16px);">
+  <a href="#" class="display font-bold text-lg tracking-tight" style="letter-spacing: -0.02em;">FADE.STUDIO</a>
+  <nav class="hidden md:flex items-center gap-10">
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a href="#contact" class="mono text-xs px-5 py-2.5 border transition-all hover:bg-lime-300 hover:text-black hover:border-lime-300" style="border-color: var(--border); letter-spacing: 0.06em; color: var(--fg);">
+    Open a Brief
+  </a>
+</header>
+
+<!-- ══ HERO ══ -->
+<section class="min-h-screen px-8 pt-32 pb-20 flex flex-col justify-between" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto w-full">
+
+    <div class="flex items-center gap-4 mb-14">
+      <div class="clip-line">
+        <span class="clip-inner mono text-xs block" style="color: rgba(212,255,0,0.8); letter-spacing: 0.14em;">— BRANDING &amp; MOTION STUDIO</span>
+      </div>
+      <div style="width: 40px; height: 1px; background: rgba(212,255,0,0.4);"></div>
+      <div class="clip-line d-100">
+        <span class="clip-inner mono text-xs block" style="color: rgba(240,237,232,0.35); letter-spacing: 0.1em;">AMSTERDAM — FOUNDED 2021</span>
+      </div>
+    </div>
+
+    <!-- HERO HEADLINE — clipping mask slide-in per line -->
+    <div class="mb-6">
+      <div class="clip-line">
+        <h1 class="clip-inner display font-extrabold"
+          style="font-size: clamp(52px, 10.5vw, 148px); line-height: 0.88; letter-spacing: -0.04em;">
+          Identity
+        </h1>
+      </div>
+      <div class="clip-line d-100">
+        <h1 class="clip-inner display font-extrabold"
+          style="font-size: clamp(52px, 10.5vw, 148px); line-height: 0.88; letter-spacing: -0.04em; color: rgba(240,237,232,0.25);">
+          in Motion.
+        </h1>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-10 justify-between items-start mt-16">
+      <p class="fade-up d-300 max-w-sm text-sm leading-relaxed" style="color: rgba(240,237,232,0.55);">
+        We design brand identities and motion systems for studios, platforms, and ambitious founders who know that first impressions are not a second-chance medium.
+      </p>
+      <div class="fade-up d-400 flex items-center gap-5">
+        <a href="#work" class="display font-bold text-sm px-8 py-4 transition-all" style="background: var(--accent); color: #090909; letter-spacing: -0.01em;">
+          View Selected Work
+        </a>
+        <a href="#process" class="text-sm transition-colors hover:text-lime-300" style="color: rgba(240,237,232,0.5);">
+          Our process <i data-lucide="arrow-right" style="display:inline; width:14px; height:14px; vertical-align:middle;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll cue -->
+  <div class="max-w-7xl mx-auto w-full flex items-end justify-between mt-20">
+    <div class="flex items-center gap-3 fade-up d-500">
+      <div style="width: 1px; height: 48px; background: var(--border);"></div>
+      <p class="mono text-xs" style="color: rgba(240,237,232,0.3); letter-spacing: 0.1em;">Scroll</p>
+    </div>
+    <div class="fade-up d-500">
+      <p class="mono text-xs" style="color: rgba(240,237,232,0.3);">36 brands shaped — 2021–2025</p>
     </div>
   </div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner">
-    <span>Brand Identity</span><span>✦</span>
-    <span>Motion Graphics</span><span>✦</span>
-    <span>Visual Systems</span><span>✦</span>
-    <span>Type Direction</span><span>✦</span>
-    <span>Art Direction</span><span>✦</span>
-    <span>UI/UX Design</span><span>✦</span>
-    <span>Brand Identity</span><span>✦</span>
-    <span>Motion Graphics</span><span>✦</span>
-    <span>Visual Systems</span><span>✦</span>
-    <span>Type Direction</span><span>✦</span>
-    <span>Art Direction</span><span>✦</span>
-    <span>UI/UX Design</span><span>✦</span>
+<!-- ══ MARQUEE STRIP ══ -->
+<div class="py-4 overflow-hidden" style="border-bottom: 1px solid var(--border); background: var(--accent);">
+  <div class="marquee-track">
+    <div class="flex items-center gap-10 pr-10">
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">BRAND IDENTITY</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">MOTION SYSTEMS</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">TYPOGRAPHY</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">ART DIRECTION</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">VISUAL IDENTITY</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">INTERACTION DESIGN</span>
+      <span class="display text-black text-lg">&#8901;</span>
+    </div>
+    <div class="flex items-center gap-10 pr-10" aria-hidden="true">
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">BRAND IDENTITY</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">MOTION SYSTEMS</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">TYPOGRAPHY</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">ART DIRECTION</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">VISUAL IDENTITY</span>
+      <span class="display text-black text-lg">&#8901;</span>
+      <span class="display font-bold text-black text-sm whitespace-nowrap" style="letter-spacing: 0.06em;">INTERACTION DESIGN</span>
+      <span class="display text-black text-lg">&#8901;</span>
+    </div>
   </div>
 </div>
 
-<!-- WORK -->
-<section class="work" id="work">
-  <div class="work-header">
+<!-- ══ SELECTED WORK ══ -->
+<section id="work" class="py-24 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <p class="mono text-xs mb-3 fade-up" style="color: rgba(240,237,232,0.35); letter-spacing: 0.12em;">01 — SELECTED WORK</p>
+        <div class="clip-line">
+          <h2 class="clip-inner display font-extrabold" style="font-size: clamp(32px, 5vw, 68px); letter-spacing: -0.03em;">
+            Recent Projects
+          </h2>
+        </div>
+      </div>
+      <p class="hidden md:block mono text-xs fade-up" style="color: rgba(240,237,232,0.3); letter-spacing: 0.08em;">2023 — 2025</p>
+    </div>
+
+    <!-- Work list -->
     <div>
-      <p class="section-tag">Selected Work</p>
-      <h2 class="section-title">Projects that<br/>define categories</h2>
-    </div>
-    <a href="#" class="all-work">All Projects →</a>
-  </div>
-  <div class="work-grid">
-    <div class="work-card">
-      <div class="work-card-bg bg1"></div>
-      <div class="work-card-inner">
-        <p class="work-card-label">Brand Identity · 2024</p>
-        <p class="work-card-title">Arcane Financial — Full rebrand for a $2B fintech</p>
-      </div>
-    </div>
-    <div class="work-grid-right">
-      <div class="work-card">
-        <div class="work-card-bg bg2"></div>
-        <div class="work-card-inner">
-          <p class="work-card-label">Motion · 2024</p>
-          <p class="work-card-title">Orbit Health — Campaign film series</p>
+      <div class="work-item group" data-preview="../../images/creative/creative-1.jpg">
+        <span class="mono text-xs pt-1" style="color: rgba(240,237,232,0.3);">01</span>
+        <div>
+          <h3 class="display font-bold text-2xl mb-1" style="letter-spacing: -0.02em;">Forma Collective</h3>
+          <p class="text-sm" style="color: rgba(240,237,232,0.4);">Brand Identity — Visual System — Motion</p>
+        </div>
+        <div class="flex items-center gap-3 work-arrow">
+          <span class="mono text-xs" style="color: var(--accent);">2025</span>
+          <i data-lucide="arrow-up-right" style="width:16px; height:16px; color: var(--accent);"></i>
         </div>
       </div>
-      <div class="work-card">
-        <div class="work-card-bg bg3"></div>
-        <div class="work-card-inner">
-          <p class="work-card-label">Visual System · 2023</p>
-          <p class="work-card-title">Veldt — Consumer app design language</p>
+
+      <div class="work-item group" data-preview="../../images/creative/creative-2.jpg">
+        <span class="mono text-xs pt-1" style="color: rgba(240,237,232,0.3);">02</span>
+        <div>
+          <h3 class="display font-bold text-2xl mb-1" style="letter-spacing: -0.02em;">Noire Architecture</h3>
+          <p class="text-sm" style="color: rgba(240,237,232,0.4);">Logotype — Typography System — Print</p>
+        </div>
+        <div class="flex items-center gap-3 work-arrow">
+          <span class="mono text-xs" style="color: var(--accent);">2024</span>
+          <i data-lucide="arrow-up-right" style="width:16px; height:16px; color: var(--accent);"></i>
+        </div>
+      </div>
+
+      <div class="work-item group" data-preview="../../images/creative/creative-3.jpg">
+        <span class="mono text-xs pt-1" style="color: rgba(240,237,232,0.3);">03</span>
+        <div>
+          <h3 class="display font-bold text-2xl mb-1" style="letter-spacing: -0.02em;">Soleil Platform</h3>
+          <p class="text-sm" style="color: rgba(240,237,232,0.4);">Brand Strategy — Product Identity — Animation</p>
+        </div>
+        <div class="flex items-center gap-3 work-arrow">
+          <span class="mono text-xs" style="color: var(--accent);">2024</span>
+          <i data-lucide="arrow-up-right" style="width:16px; height:16px; color: var(--accent);"></i>
+        </div>
+      </div>
+
+      <div class="work-item group" data-preview="../../images/creative/creative-4.jpg">
+        <span class="mono text-xs pt-1" style="color: rgba(240,237,232,0.3);">04</span>
+        <div>
+          <h3 class="display font-bold text-2xl mb-1" style="letter-spacing: -0.02em;">Drift Magazine</h3>
+          <p class="text-sm" style="color: rgba(240,237,232,0.4);">Editorial Design — Art Direction — Web</p>
+        </div>
+        <div class="flex items-center gap-3 work-arrow">
+          <span class="mono text-xs" style="color: var(--accent);">2023</span>
+          <i data-lucide="arrow-up-right" style="width:16px; height:16px; color: var(--accent);"></i>
+        </div>
+      </div>
+
+      <div class="work-item group" data-preview="../../images/creative/creative-5.jpg">
+        <span class="mono text-xs pt-1" style="color: rgba(240,237,232,0.3);">05</span>
+        <div>
+          <h3 class="display font-bold text-2xl mb-1" style="letter-spacing: -0.02em;">Verdant Ventures</h3>
+          <p class="text-sm" style="color: rgba(240,237,232,0.4);">VC Brand Identity — Deck Design — Motion</p>
+        </div>
+        <div class="flex items-center gap-3 work-arrow">
+          <span class="mono text-xs" style="color: var(--accent);">2023</span>
+          <i data-lucide="arrow-up-right" style="width:16px; height:16px; color: var(--accent);"></i>
+        </div>
+      </div>
+
+      <div class="work-item group" data-preview="../../images/creative/creative-6.jpg" style="border-bottom: 1px solid var(--border);">
+        <span class="mono text-xs pt-1" style="color: rgba(240,237,232,0.3);">06</span>
+        <div>
+          <h3 class="display font-bold text-2xl mb-1" style="letter-spacing: -0.02em;">Monochrome Studio</h3>
+          <p class="text-sm" style="color: rgba(240,237,232,0.4);">Full Brand System — Photography Direction</p>
+        </div>
+        <div class="flex items-center gap-3 work-arrow">
+          <span class="mono text-xs" style="color: var(--accent);">2023</span>
+          <i data-lucide="arrow-up-right" style="width:16px; height:16px; color: var(--accent);"></i>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SERVICES ══ -->
+<section id="services" class="py-24 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+
+    <p class="mono text-xs mb-3 fade-up" style="color: rgba(240,237,232,0.35); letter-spacing: 0.12em;">02 — SERVICES</p>
+    <div class="clip-line mb-16">
+      <h2 class="clip-inner display font-extrabold" style="font-size: clamp(32px, 5vw, 68px); letter-spacing: -0.03em;">
+        What We Build
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-px" style="border: 1px solid var(--border);">
+
+      <div class="service-card fade-up" style="border: none; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+        <div class="flex items-start justify-between mb-6">
+          <i data-lucide="layers" style="width:20px; height:20px; color: var(--accent);"></i>
+          <span class="mono text-xs" style="color: rgba(240,237,232,0.3);">01</span>
+        </div>
+        <h3 class="display font-bold text-2xl mb-3" style="letter-spacing: -0.02em;">Brand Identity</h3>
+        <p class="text-sm leading-relaxed" style="color: rgba(240,237,232,0.5); max-width: 38ch;">
+          Complete visual identity systems — logotype, colour, typography, iconography, and the full suite of brand expressions across print and digital touchpoints.
+        </p>
+        <div class="mt-8">
+          <span class="mono text-xs" style="color: rgba(240,237,232,0.2); letter-spacing: 0.08em;">from €14,000</span>
+        </div>
+      </div>
+
+      <div class="service-card fade-up d-100" style="border: none; border-bottom: 1px solid var(--border);">
+        <div class="flex items-start justify-between mb-6">
+          <i data-lucide="film" style="width:20px; height:20px; color: var(--accent);"></i>
+          <span class="mono text-xs" style="color: rgba(240,237,232,0.3);">02</span>
+        </div>
+        <h3 class="display font-bold text-2xl mb-3" style="letter-spacing: -0.02em;">Motion Systems</h3>
+        <p class="text-sm leading-relaxed" style="color: rgba(240,237,232,0.5); max-width: 38ch;">
+          Brand motion language that defines how your identity moves — transitions, reveals, loaders, and animated guidelines for product and marketing teams.
+        </p>
+        <div class="mt-8">
+          <span class="mono text-xs" style="color: rgba(240,237,232,0.2); letter-spacing: 0.08em;">from €8,000</span>
+        </div>
+      </div>
+
+      <div class="service-card fade-up d-200" style="border: none; border-right: 1px solid var(--border);">
+        <div class="flex items-start justify-between mb-6">
+          <i data-lucide="type" style="width:20px; height:20px; color: var(--accent);"></i>
+          <span class="mono text-xs" style="color: rgba(240,237,232,0.3);">03</span>
+        </div>
+        <h3 class="display font-bold text-2xl mb-3" style="letter-spacing: -0.02em;">Art Direction</h3>
+        <p class="text-sm leading-relaxed" style="color: rgba(240,237,232,0.5); max-width: 38ch;">
+          Campaign and editorial art direction for founders, fashion houses, and cultural institutions. We define the visual language before a single asset is produced.
+        </p>
+        <div class="mt-8">
+          <span class="mono text-xs" style="color: rgba(240,237,232,0.2); letter-spacing: 0.08em;">from €6,000</span>
+        </div>
+      </div>
+
+      <div class="service-card fade-up d-300" style="border: none;">
+        <div class="flex items-start justify-between mb-6">
+          <i data-lucide="globe" style="width:20px; height:20px; color: var(--accent);"></i>
+          <span class="mono text-xs" style="color: rgba(240,237,232,0.3);">04</span>
+        </div>
+        <h3 class="display font-bold text-2xl mb-3" style="letter-spacing: -0.02em;">Digital Experience</h3>
+        <p class="text-sm leading-relaxed" style="color: rgba(240,237,232,0.5); max-width: 38ch;">
+          Branded web presences with interaction design at their core. We partner with development teams or deliver Webflow/Framer-ready production files.
+        </p>
+        <div class="mt-8">
+          <span class="mono text-xs" style="color: rgba(240,237,232,0.2); letter-spacing: 0.08em;">from €18,000</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ PROCESS ══ -->
+<section id="process" class="py-24 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <p class="mono text-xs mb-3 fade-up" style="color: rgba(240,237,232,0.35); letter-spacing: 0.12em;">03 — PROCESS</p>
+    <div class="clip-line mb-16">
+      <h2 class="clip-inner display font-extrabold" style="font-size: clamp(32px, 5vw, 68px); letter-spacing: -0.03em;">
+        How We Work
+      </h2>
+    </div>
+
+    <div class="relative">
+      <div class="absolute left-0 top-0 bottom-0" style="width: 1px; background: linear-gradient(to bottom, var(--accent), transparent); margin-left: 1.5rem;"></div>
+
+      <div class="space-y-0">
+        <div class="pl-16 pb-16 fade-up relative">
+          <div class="absolute left-0 top-2 w-12 h-px" style="background: var(--accent); margin-left: 1.5rem;"></div>
+          <div class="absolute left-4 top-0 w-4 h-4 rounded-full border" style="border-color: var(--accent); background: #090909; margin-left: calc(1.5rem - 8px);"></div>
+          <p class="mono text-xs mb-3" style="color: rgba(212,255,0,0.7); letter-spacing: 0.1em;">WEEK 1-2</p>
+          <h3 class="display font-bold text-xl mb-2" style="letter-spacing: -0.02em;">Discovery &amp; Strategy</h3>
+          <p class="text-sm leading-relaxed max-w-lg" style="color: rgba(240,237,232,0.45);">We interrogate your business context, competitive landscape, and audience before touching design tools. Strategy is not decoration — it is the foundation every visual decision must survive.</p>
+        </div>
+
+        <div class="pl-16 pb-16 fade-up relative">
+          <div class="absolute left-0 top-2 w-12 h-px" style="background: var(--accent); margin-left: 1.5rem;"></div>
+          <div class="absolute left-4 top-0 w-4 h-4 rounded-full border" style="border-color: var(--accent); background: #090909; margin-left: calc(1.5rem - 8px);"></div>
+          <p class="mono text-xs mb-3" style="color: rgba(212,255,0,0.7); letter-spacing: 0.1em;">WEEK 3-5</p>
+          <h3 class="display font-bold text-xl mb-2" style="letter-spacing: -0.02em;">Concept &amp; Direction</h3>
+          <p class="text-sm leading-relaxed max-w-lg" style="color: rgba(240,237,232,0.45);">Two distinct creative directions are developed in full — not rough sketches but resolved ideas with typography, colour, motion intent, and application demonstrated.</p>
+        </div>
+
+        <div class="pl-16 pb-16 fade-up relative">
+          <div class="absolute left-0 top-2 w-12 h-px" style="background: var(--accent); margin-left: 1.5rem;"></div>
+          <div class="absolute left-4 top-0 w-4 h-4 rounded-full border" style="border-color: var(--accent); background: #090909; margin-left: calc(1.5rem - 8px);"></div>
+          <p class="mono text-xs mb-3" style="color: rgba(212,255,0,0.7); letter-spacing: 0.1em;">WEEK 6-8</p>
+          <h3 class="display font-bold text-xl mb-2" style="letter-spacing: -0.02em;">Refinement &amp; Production</h3>
+          <p class="text-sm leading-relaxed max-w-lg" style="color: rgba(240,237,232,0.45);">The selected direction is expanded across all required touchpoints. Brand guidelines are written by designers, not templated — every decision is explained and defended.</p>
+        </div>
+
+        <div class="pl-16 fade-up relative">
+          <div class="absolute left-0 top-2 w-12 h-px" style="background: var(--accent); margin-left: 1.5rem;"></div>
+          <div class="absolute left-4 top-0 w-4 h-4 rounded-full border" style="border-color: var(--accent); background: #090909; margin-left: calc(1.5rem - 8px);"></div>
+          <p class="mono text-xs mb-3" style="color: rgba(212,255,0,0.7); letter-spacing: 0.1em;">WEEK 9</p>
+          <h3 class="display font-bold text-xl mb-2" style="letter-spacing: -0.02em;">Handoff &amp; Activation</h3>
+          <p class="text-sm leading-relaxed max-w-lg" style="color: rgba(240,237,232,0.45);">Structured asset handoff with an onboarding call for your team. We remain available for 60 days post-launch to support correct application of the brand in context.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section class="services" id="services">
-  <div class="services-inner">
-    <p class="section-tag">What We Do</p>
-    <h2 class="section-title">Services built for<br/>ambitious brands</h2>
-    <div class="services-list">
-      <div class="service-row">
-        <span class="service-num">01</span>
-        <span class="service-name">Brand Identity</span>
-        <div class="service-tags">
-          <span class="service-tag">Logo</span>
-          <span class="service-tag">Guidelines</span>
-          <span class="service-tag">Systems</span>
-        </div>
-        <span class="service-arrow">→</span>
-      </div>
-      <div class="service-row">
-        <span class="service-num">02</span>
-        <span class="service-name">Motion Design</span>
-        <div class="service-tags">
-          <span class="service-tag">Film</span>
-          <span class="service-tag">Animation</span>
-        </div>
-        <span class="service-arrow">→</span>
-      </div>
-      <div class="service-row">
-        <span class="service-num">03</span>
-        <span class="service-name">Digital Presence</span>
-        <div class="service-tags">
-          <span class="service-tag">Web</span>
-          <span class="service-tag">UX</span>
-          <span class="service-tag">Mobile</span>
-        </div>
-        <span class="service-arrow">→</span>
-      </div>
-      <div class="service-row">
-        <span class="service-num">04</span>
-        <span class="service-name">Campaign Direction</span>
-        <div class="service-tags">
-          <span class="service-tag">Strategy</span>
-          <span class="service-tag">Art Direction</span>
-        </div>
-        <span class="service-arrow">→</span>
-      </div>
-      <div class="service-row">
-        <span class="service-num">05</span>
-        <span class="service-name">Environmental Design</span>
-        <div class="service-tags">
-          <span class="service-tag">Signage</span>
-          <span class="service-tag">Spatial</span>
-          <span class="service-tag">Print</span>
-        </div>
-        <span class="service-arrow">→</span>
-      </div>
+<!-- ══ PULLQUOTE ══ -->
+<section class="py-24 px-8 overflow-hidden" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto">
+    <div class="clip-line">
+      <p class="clip-inner display font-extrabold"
+        style="font-size: clamp(32px, 6.5vw, 92px); line-height: 0.92; letter-spacing: -0.04em; color: rgba(240,237,232,0.12);">
+        Branding is not
+      </p>
+    </div>
+    <div class="clip-line d-100">
+      <p class="clip-inner display font-extrabold"
+        style="font-size: clamp(32px, 6.5vw, 92px); line-height: 0.92; letter-spacing: -0.04em; color: var(--fg);">
+        about looking good.
+      </p>
+    </div>
+    <div class="clip-line d-200">
+      <p class="clip-inner display font-extrabold"
+        style="font-size: clamp(32px, 6.5vw, 92px); line-height: 0.92; letter-spacing: -0.04em; color: rgba(212,255,0,0.7);">
+        It's about being unmistakable.
+      </p>
     </div>
   </div>
 </section>
 
-<!-- SOCIAL PROOF -->
-<section class="social-proof">
-  <div class="social-inner">
-    <p class="section-tag">By the numbers</p>
-    <h2 class="section-title">Results that<br/>speak clearly</h2>
-    <div class="stats-row">
-      <div class="stat-box">
-        <p class="stat-num">8<em>+</em></p>
-        <p class="stat-label">Years of craft</p>
+<!-- ══ CONTACT ══ -->
+<section id="contact" class="py-24 px-8" style="border-bottom: 1px solid var(--border);">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+    <div>
+      <p class="mono text-xs mb-3 fade-up" style="color: rgba(240,237,232,0.35); letter-spacing: 0.12em;">04 — NEW WORK</p>
+      <div class="clip-line mb-6">
+        <h2 class="clip-inner display font-extrabold" style="font-size: clamp(32px, 4.5vw, 60px); letter-spacing: -0.03em;">
+          Start a Conversation
+        </h2>
       </div>
-      <div class="stat-box">
-        <p class="stat-num">140<em>+</em></p>
-        <p class="stat-label">Brands transformed</p>
-      </div>
-      <div class="stat-box">
-        <p class="stat-num">32<em>×</em></p>
-        <p class="stat-label">Industry awards</p>
-      </div>
-      <div class="stat-box">
-        <p class="stat-num">98<em>%</em></p>
-        <p class="stat-label">Client retention</p>
+      <p class="text-sm leading-relaxed mb-8 fade-up" style="color: rgba(240,237,232,0.45); max-width: 40ch;">
+        We take on six to eight brand projects per year. Availability for Q3 2025 is limited. Reach out early with context on your project.
+      </p>
+      <div class="space-y-2 fade-up">
+        <p class="mono text-xs" style="color: rgba(240,237,232,0.3); letter-spacing: 0.08em;">DIRECT LINE</p>
+        <a href="mailto:studio@fade.studio" class="display font-bold text-2xl transition-colors hover:text-lime-300" style="letter-spacing: -0.03em;">studio@fade.studio</a>
       </div>
     </div>
-    <div class="testi-strip">
-      <div class="testi-item">
-        <p class="testi-text">"FADE.STUDIO didn't just design our brand — they built a visual language our entire team rallied around. The rebrand tripled our conversion rate."</p>
-        <div class="testi-by">
-          <div class="testi-circle">AK</div>
+    <div class="fade-up">
+      <div style="border: 1px solid var(--border); padding: 2.5rem;">
+        <p class="mono text-xs mb-6" style="color: rgba(240,237,232,0.3); letter-spacing: 0.1em;">OPEN A BRIEF</p>
+        <div class="space-y-4">
           <div>
-            <p class="testi-who">Aria Kim</p>
-            <p class="testi-where">CEO, Arcane Financial</p>
+            <label class="mono text-xs block mb-2" style="color: rgba(240,237,232,0.4); letter-spacing: 0.08em;">YOUR NAME</label>
+            <input type="text" class="w-full bg-transparent border-b text-sm py-2 outline-none transition-colors" style="border-color: var(--border); color: var(--fg);" placeholder="Studio or person" />
           </div>
-        </div>
-      </div>
-      <div class="testi-item">
-        <p class="testi-text">"The brand film they produced for our product launch was shared by every design publication I follow. Absolute artistic mastery."</p>
-        <div class="testi-by">
-          <div class="testi-circle" style="background:#333;">TP</div>
           <div>
-            <p class="testi-who">Theo Pearce</p>
-            <p class="testi-where">Head of Brand, Orbit Health</p>
+            <label class="mono text-xs block mb-2" style="color: rgba(240,237,232,0.4); letter-spacing: 0.08em;">EMAIL</label>
+            <input type="email" class="w-full bg-transparent border-b text-sm py-2 outline-none" style="border-color: var(--border); color: var(--fg);" placeholder="you@studio.com" />
           </div>
+          <div>
+            <label class="mono text-xs block mb-2" style="color: rgba(240,237,232,0.4); letter-spacing: 0.08em;">PROJECT TYPE</label>
+            <select class="w-full bg-transparent border-b text-sm py-2 outline-none" style="border-color: var(--border); color: rgba(240,237,232,0.5);">
+              <option value="" style="background: #090909;">Select a service</option>
+              <option value="identity" style="background: #090909;">Brand Identity</option>
+              <option value="motion" style="background: #090909;">Motion System</option>
+              <option value="art" style="background: #090909;">Art Direction</option>
+              <option value="digital" style="background: #090909;">Digital Experience</option>
+            </select>
+          </div>
+          <div>
+            <label class="mono text-xs block mb-2" style="color: rgba(240,237,232,0.4); letter-spacing: 0.08em;">BRIEF</label>
+            <textarea rows="3" class="w-full bg-transparent border-b text-sm py-2 outline-none resize-none" style="border-color: var(--border); color: var(--fg);" placeholder="Describe the project in 2-3 sentences"></textarea>
+          </div>
+          <button class="w-full mt-4 py-4 display font-bold text-sm transition-all hover:opacity-90" style="background: var(--accent); color: #090909; letter-spacing: 0.04em;">
+            Send Brief to Studio
+          </button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta" id="contact">
-  <h2 class="cta-headline">Let's make<br/>something<br/>iconic.</h2>
-  <p class="cta-sub">Drop your email. We'll set up a discovery call and start changing what people think about your brand.</p>
-  <div class="cta-form">
-    <input class="cta-input" type="email" placeholder="hello@yourbrand.com" />
-    <a href="#" class="cta-send">Send →</a>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <a href="#" class="footer-logo">FADE<em>.</em>STUDIO</a>
-    <ul class="footer-nav">
-      <li><a href="#">Work</a></li>
-      <li><a href="#">Services</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Journal</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-    <p class="footer-copy">© 2024 FADE.STUDIO — All rights reserved.</p>
+<!-- ══ FOOTER ══ -->
+<footer class="py-12 px-8">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <p class="display font-bold text-lg" style="letter-spacing: -0.02em;">FADE.STUDIO</p>
+    <div class="flex gap-6 text-xs" style="color: rgba(240,237,232,0.35);">
+      <a href="#" class="hover:text-white transition-colors">Instagram</a>
+      <a href="#" class="hover:text-white transition-colors">LinkedIn</a>
+      <a href="#" class="hover:text-white transition-colors">Are.na</a>
+    </div>
+    <p class="mono text-xs" style="color: rgba(240,237,232,0.2); letter-spacing: 0.06em;">&copy; 2025 FADE.STUDIO — Amsterdam</p>
   </div>
 </footer>
 
 <script>
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll('.work-card, .stat-box, .testi-item, .service-row, .feat').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(28px)';
-    el.style.transition = `opacity 0.65s ease ${i * 0.06}s, transform 0.65s ease ${i * 0.06}s`;
-    io.observe(el);
+  // ── Cursor ──
+  const co = document.getElementById('cursor-outer');
+  const ci = document.getElementById('cursor-inner');
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    co.style.left = mx + 'px'; co.style.top = my + 'px';
+    ci.style.left = mx + 'px'; ci.style.top = my + 'px';
   });
+
+  // ── Work preview image ──
+  const preview = document.getElementById('work-preview');
+  const previewImg = document.getElementById('preview-img');
+  document.querySelectorAll('.work-item').forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      const src = item.dataset.preview;
+      if (src) { previewImg.src = src; preview.classList.add('active'); }
+    });
+    item.addEventListener('mouseleave', () => { preview.classList.remove('active'); });
+    item.addEventListener('mousemove', e => {
+      preview.style.left = (e.clientX + 24) + 'px';
+      preview.style.top = (e.clientY - 100) + 'px';
+    });
+  });
+
+  // ── Intersection observer ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.clip-line, .fade-up').forEach(el => io.observe(el));
+
+  // Trigger hero
+  document.querySelectorAll('.clip-line, .fade-up').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) el.classList.add('is-visible');
+  });
+
+  lucide.createIcons();
 </script>
 </body>
 </html>

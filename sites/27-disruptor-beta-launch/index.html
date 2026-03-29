@@ -3,666 +3,817 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VOLT — Banking That Fights Back</title>
+<title>VOLT &mdash; Money Moves Different</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #121212;
-  --bg-2: #0D0D0D;
-  --card: #1A1A1A;
-  --white: #FFFFFF;
-  --volt: #CCFF00;
-  --volt-dim: #A8D400;
-  --volt-subtle: rgba(204,255,0,0.08);
-  --volt-border: rgba(204,255,0,0.25);
-  --border: #2A2A2A;
-  --border-bright: #3A3A3A;
-  --gray-400: #888888;
-  --gray-600: #444444;
-}
-
-html { scroll-behavior: smooth; }
-body { font-family: 'Space Grotesk', sans-serif; background: var(--bg); color: var(--white); overflow-x: hidden; }
-
-/* ── NAV ──────────────────────────────────────────────────── */
-nav {
-  position: sticky; top: 0; z-index: 900;
-  padding: 0 40px; height: 64px;
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--bg); border-bottom: 1px solid var(--border);
-}
-
-.nav-logo {
-  font-weight: 700; font-size: 1.2rem; letter-spacing: -0.5px;
-  display: flex; align-items: center; gap: 10px;
-}
-
-.nav-logo-v {
-  width: 32px; height: 32px; background: var(--volt);
-  border: 2px solid var(--volt); color: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 0.9rem;
-  transform: rotate(-2deg);
-}
-
-.nav-links { display: flex; gap: 0; list-style: none; }
-.nav-links a { display: block; padding: 0 18px; line-height: 64px; font-size: 0.8rem; font-weight: 500; color: var(--gray-400); text-decoration: none; transition: color 0.2s; }
-.nav-links a:hover { color: var(--white); }
-
-.nav-right { display: flex; gap: 10px; align-items: center; }
-
-.nav-btn-ghost {
-  padding: 9px 20px; background: transparent; border: 1px solid var(--border-bright);
-  border-radius: 0; font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 600;
-  color: var(--gray-400); cursor: pointer; transition: all 0.15s; text-decoration: none;
-}
-.nav-btn-ghost:hover { border-color: var(--white); color: var(--white); }
-
-.nav-btn-volt {
-  padding: 9px 20px; background: var(--volt); border: none;
-  border-radius: 0; font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700;
-  color: var(--bg); cursor: pointer; transition: all 0.15s; text-decoration: none;
-  box-shadow: 4px 4px 0 rgba(204,255,0,0.3);
-}
-.nav-btn-volt:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(204,255,0,0.3); }
-
-/* ── HERO ──────────────────────────────────────────────────── */
-.hero {
-  padding: 80px 40px 60px;
-  position: relative; overflow: hidden;
-  min-height: calc(100vh - 64px);
-  display: flex; align-items: center;
-}
-
-.hero-inner {
-  max-width: 1280px; margin: 0 auto; width: 100%;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
-}
-
-.sticker-row {
-  display: flex; gap: 12px; align-items: center; margin-bottom: 32px; flex-wrap: wrap;
-}
-
-.sticker {
-  padding: 6px 14px; font-size: 0.72rem; font-weight: 700; font-family: 'Space Mono', monospace;
-  text-transform: uppercase; letter-spacing: 1px; border: 2px solid;
-  border-radius: 2px; display: inline-block;
-  box-shadow: 3px 3px 0;
-}
-
-.sticker-volt { background: var(--volt); color: var(--bg); border-color: var(--volt); box-shadow-color: var(--volt-dim); transform: rotate(-1.5deg); }
-.sticker-white { background: transparent; color: var(--white); border-color: var(--white); box-shadow: 3px 3px 0 var(--gray-600); transform: rotate(0.8deg); }
-.sticker-outline { background: transparent; color: var(--volt); border-color: var(--volt-border); box-shadow: 3px 3px 0 var(--volt-subtle); transform: rotate(-0.5deg); }
-
-.hero-title {
-  font-size: clamp(3.5rem, 6.5vw, 6.5rem); font-weight: 700;
-  letter-spacing: -3px; line-height: 1.0; margin-bottom: 28px;
-}
-
-.hero-title .volt-line {
-  color: var(--volt); -webkit-text-stroke: 0px; display: block;
-}
-
-.hero-title .outline-line {
-  -webkit-text-stroke: 2px var(--white); color: transparent; display: block;
-  letter-spacing: -2px;
-}
-
-.hero-sub {
-  font-size: 1rem; color: var(--gray-400); line-height: 1.7; font-weight: 400;
-  max-width: 480px; margin-bottom: 40px;
-}
-
-.hero-cta-row { display: flex; gap: 12px; margin-bottom: 48px; flex-wrap: wrap; }
-
-.btn-volt-main {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 16px 32px; background: var(--volt); border: none;
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 700;
-  color: var(--bg); cursor: pointer; transition: all 0.15s; text-decoration: none;
-  box-shadow: 6px 6px 0 var(--volt-dim);
-}
-.btn-volt-main:hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--volt-dim); }
-
-.btn-outline-main {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 16px 28px; background: transparent;
-  border: 2px solid var(--border-bright);
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600;
-  color: var(--gray-400); cursor: pointer; transition: all 0.15s; text-decoration: none;
-  box-shadow: 6px 6px 0 var(--bg-2);
-}
-.btn-outline-main:hover { border-color: var(--white); color: var(--white); transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--bg-2); }
-
-.hero-tags { display: flex; gap: 12px; flex-wrap: wrap; }
-.hero-tag { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--gray-600); border: 1px solid var(--border); padding: 4px 10px; }
-
-/* Hero right — App visual */
-.app-mockup {
-  background: var(--card); border: 2px solid var(--border-bright);
-  box-shadow: 8px 8px 0 var(--bg-2);
-  padding: 0; overflow: hidden; border-radius: 2px;
-}
-
-.app-status-bar {
-  background: var(--bg); padding: 8px 20px;
-  display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-
-.app-status-left { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--gray-600); }
-.app-status-right { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--volt); display: flex; align-items: center; gap: 4px; }
-.app-status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--volt); }
-
-.app-body { padding: 24px; }
-
-.app-balance-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--gray-600); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
-.app-balance { font-size: 3.2rem; font-weight: 700; letter-spacing: -2px; margin-bottom: 4px; }
-.app-balance span { color: var(--volt); }
-.app-balance-sub { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--volt); margin-bottom: 24px; }
-
-.app-card-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
-.app-action-btn { background: var(--bg); border: 1px solid var(--border-bright); padding: 12px 8px; text-align: center; cursor: pointer; transition: border-color 0.15s; }
-.app-action-btn:hover { border-color: var(--volt); }
-.app-action-icon { font-size: 1.1rem; margin-bottom: 4px; }
-.app-action-label { font-size: 0.62rem; font-family: 'Space Mono', monospace; color: var(--gray-600); }
-
-.app-section-title { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--gray-600); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-
-.app-tx-list { display: flex; flex-direction: column; gap: 6px; }
-.app-tx { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: 1px solid var(--border); background: var(--bg); }
-.app-tx-left { display: flex; align-items: center; gap: 10px; }
-.app-tx-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--volt-subtle); border: 1px solid var(--volt-border); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
-.app-tx-name { font-size: 0.78rem; font-weight: 600; }
-.app-tx-date { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--gray-600); margin-top: 2px; }
-.app-tx-amount { font-family: 'Space Mono', monospace; font-size: 0.82rem; font-weight: 700; }
-.app-tx-amount.plus { color: var(--volt); }
-.app-tx-amount.minus { color: var(--white); }
-
-/* ── MARQUEE BAND ─────────────────────────────────────────── */
-.volt-band { background: var(--volt); padding: 12px 0; overflow: hidden; }
-.volt-band-track { display: inline-flex; animation: voltScroll 16s linear infinite; white-space: nowrap; }
-.volt-band-track span { font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700; color: var(--bg); padding: 0 28px; text-transform: uppercase; letter-spacing: 1px; }
-@keyframes voltScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-/* ── FEATURES ─────────────────────────────────────────────── */
-.features-section { padding: 100px 40px; }
-.features-inner { max-width: 1280px; margin: 0 auto; }
-
-.feat-header {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 64px; align-items: end;
-}
-
-.feat-header h2 { font-size: clamp(2.5rem, 4vw, 4rem); font-weight: 700; letter-spacing: -2px; line-height: 1.05; }
-.feat-header h2 .volt { color: var(--volt); }
-
-.feat-header p { font-size: 0.95rem; color: var(--gray-400); line-height: 1.7; font-weight: 400; }
-
-.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); }
-
-.feat-card {
-  padding: 40px 32px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  transition: background 0.2s; cursor: default; position: relative; overflow: hidden;
-  opacity: 0; transform: translateY(16px);
-}
-.feat-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.4s, transform 0.4s, background 0.2s; }
-
-.feat-card:nth-child(3n) { border-right: none; }
-.feat-card:nth-last-child(-n+3) { border-bottom: none; }
-.feat-card:hover { background: rgba(204,255,0,0.03); }
-
-.feat-card:hover .feat-num { color: var(--volt); }
-
-.feat-num { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--gray-600); letter-spacing: 2px; margin-bottom: 20px; transition: color 0.2s; }
-
-.feat-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
-.feat-card p { font-size: 0.82rem; color: var(--gray-400); line-height: 1.65; }
-
-.feat-volt-tag {
-  display: inline-block; margin-top: 16px;
-  padding: 3px 10px; border: 1px solid var(--volt-border);
-  font-family: 'Space Mono', monospace; font-size: 0.62rem;
-  color: var(--volt); text-transform: uppercase; letter-spacing: 1px;
-}
-
-/* ── NUMBERS ──────────────────────────────────────────────── */
-.numbers-section { background: var(--volt); padding: 80px 40px; }
-.numbers-inner { max-width: 1280px; margin: 0 auto; }
-.numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 2px solid var(--bg); }
-
-.number-item {
-  padding: 48px 36px; border-right: 2px solid var(--bg); text-align: center;
-  opacity: 0; transform: translateY(16px);
-}
-.number-item.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s; }
-.number-item:last-child { border-right: none; }
-
-.number-num { font-size: 3.5rem; font-weight: 700; letter-spacing: -2px; color: var(--bg); line-height: 1; margin-bottom: 8px; }
-.number-label { font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; color: rgba(0,0,0,0.55); text-transform: uppercase; letter-spacing: 1px; }
-
-/* ── TESTIMONIALS ─────────────────────────────────────────── */
-.test-section { padding: 100px 40px; }
-.test-inner { max-width: 1280px; margin: 0 auto; }
-
-.test-header { margin-bottom: 64px; }
-.test-header h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; letter-spacing: -1.5px; line-height: 1.05; }
-.test-header h2 .volt { color: var(--volt); }
-
-.test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); }
-
-.test-card {
-  padding: 40px 32px; border-right: 1px solid var(--border);
-  opacity: 0; transform: translateY(16px); position: relative;
-}
-.test-card.visible { opacity: 1; transform: translateY(0); transition: opacity 0.5s, transform 0.5s; }
-.test-card:last-child { border-right: none; }
-.test-card.test-volt { background: var(--volt); }
-
-.test-rating { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--volt); letter-spacing: 2px; margin-bottom: 16px; }
-.test-card.test-volt .test-rating { color: var(--bg); }
-
-.test-quote { font-size: 0.9rem; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 20px; font-weight: 400; }
-.test-card.test-volt .test-quote { color: rgba(0,0,0,0.75); }
-
-.test-name { font-weight: 700; font-size: 0.88rem; }
-.test-card.test-volt .test-name { color: var(--bg); }
-.test-role { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--gray-600); margin-top: 4px; }
-.test-card.test-volt .test-role { color: rgba(0,0,0,0.5); }
-
-/* ── PRICING ──────────────────────────────────────────────── */
-.pricing-section { background: var(--bg-2); padding: 100px 40px; border-top: 1px solid var(--border); }
-.pricing-inner { max-width: 1280px; margin: 0 auto; }
-.pricing-header { margin-bottom: 64px; }
-.pricing-header h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; letter-spacing: -1.5px; }
-.pricing-header p { font-size: 0.88rem; color: var(--gray-400); margin-top: 8px; }
-
-.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); }
-
-.price-card {
-  padding: 48px 36px; border-right: 1px solid var(--border);
-}
-.price-card:last-child { border-right: none; }
-.price-card.volt-plan { background: var(--volt); }
-
-.price-tier { font-family: 'Space Mono', monospace; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-600); margin-bottom: 16px; }
-.price-card.volt-plan .price-tier { color: rgba(0,0,0,0.5); }
-
-.price-amount { font-size: 3.5rem; font-weight: 700; letter-spacing: -2px; line-height: 1; margin-bottom: 4px; }
-.price-card.volt-plan .price-amount { color: var(--bg); }
-
-.price-period { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--gray-600); margin-bottom: 28px; }
-.price-card.volt-plan .price-period { color: rgba(0,0,0,0.5); }
-
-.price-features { list-style: none; margin-bottom: 36px; }
-.price-features li { padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.82rem; color: rgba(255,255,255,0.65); display: flex; align-items: center; gap: 10px; }
-.price-card.volt-plan .price-features li { color: rgba(0,0,0,0.7); border-bottom-color: rgba(0,0,0,0.12); }
-.price-features li::before { content: '◆'; font-size: 0.4rem; color: var(--volt); flex-shrink: 0; }
-.price-card.volt-plan .price-features li::before { color: var(--bg); }
-
-.price-btn-w {
-  display: block; text-align: center; padding: 16px;
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 700; text-decoration: none;
-  border: 2px solid var(--border-bright); color: var(--gray-400); cursor: pointer;
-  background: transparent; transition: all 0.15s;
-  box-shadow: 4px 4px 0 var(--bg-2);
-}
-.price-btn-w:hover { border-color: var(--white); color: var(--white); transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--bg-2); }
-
-.price-btn-v {
-  display: block; text-align: center; padding: 16px;
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.82rem; font-weight: 700; text-decoration: none;
-  border: 2px solid var(--bg); color: var(--bg); cursor: pointer;
-  background: var(--bg); transition: all 0.15s;
-  box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
-}
-.price-btn-v:hover { background: var(--bg-2); transform: translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(0,0,0,0.3); }
-
-/* ── CTA ──────────────────────────────────────────────────── */
-.cta-section { padding: 120px 40px; text-align: center; position: relative; overflow: hidden; }
-.cta-bg-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 28vw; font-weight: 700; letter-spacing: -0.05em; color: rgba(204,255,0,0.025); pointer-events: none; white-space: nowrap; }
-.cta-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
-.cta-sticker { display: inline-block; padding: 6px 16px; background: var(--volt); color: var(--bg); font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 28px; transform: rotate(-1deg); box-shadow: 4px 4px 0 var(--volt-dim); }
-.cta-title { font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 700; letter-spacing: -3px; line-height: 1.0; margin-bottom: 20px; }
-.cta-sub { font-size: 1rem; color: var(--gray-400); line-height: 1.7; margin-bottom: 44px; }
-.cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-
-/* ── FOOTER ──────────────────────────────────────────────── */
-footer { background: var(--bg-2); border-top: 1px solid var(--border); padding: 60px 40px 32px; }
-.footer-inner { max-width: 1280px; margin: 0 auto; }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); }
-.footer-brand { }
-.footer-brand-logo { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-.footer-brand-v { width: 24px; height: 24px; background: var(--volt); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 900; }
-.footer-brand p { font-size: 0.78rem; color: var(--gray-600); line-height: 1.65; max-width: 220px; }
-.footer-col h4 { font-family: 'Space Mono', monospace; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-600); margin-bottom: 16px; }
-.footer-col a { display: block; font-size: 0.8rem; color: var(--gray-400); text-decoration: none; margin-bottom: 10px; transition: color 0.15s; }
-.footer-col a:hover { color: var(--volt); }
-.footer-bottom { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--gray-600); flex-wrap: wrap; gap: 8px; }
-
-@media (max-width: 1024px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .hero { padding: 60px 20px; }
-  .hero-inner { grid-template-columns: 1fr; }
-  .feat-header { grid-template-columns: 1fr; }
-  .features-grid, .test-grid, .pricing-grid { grid-template-columns: 1fr; }
-  .features-grid .feat-card, .test-grid .test-card, .pricing-grid .price-card { border-right: none; }
-  .numbers-grid { grid-template-columns: repeat(2,1fr); }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .features-section, .test-section, .pricing-section, .cta-section { padding: 60px 20px; }
-  footer { padding: 48px 20px 24px; }
-}
+  :root {
+    --bg: #121212;
+    --volt: #CCFF00;
+    --white: #ffffff;
+    --black: #000000;
+    --card: #1a1a1a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::selection { background: var(--volt); color: var(--black); }
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+  }
+  .syne { font-family: 'Syne', sans-serif; font-weight: 800; }
+  .mono { font-family: 'Space Mono', monospace; }
+
+  /* Neo-shadow utilities */
+  .neo-shadow { box-shadow: 8px 8px 0 #000; }
+  .neo-shadow-white { box-shadow: 8px 8px 0 var(--white); }
+  .neo-shadow-volt { box-shadow: 8px 8px 0 var(--volt); }
+  .neo-shadow-sm { box-shadow: 4px 4px 0 #000; }
+
+  /* Borders */
+  .border-8px { border: 8px solid var(--black); }
+  .border-4px { border: 4px solid var(--black); }
+  .border-4px-white { border: 4px solid var(--white); }
+
+  /* Button hover: translate to fill shadow */
+  .neo-btn {
+    transition: transform 0.15s;
+    cursor: pointer;
+  }
+  .neo-btn:hover { transform: translate(4px, 4px); box-shadow: none !important; }
+
+  /* Sticky nav */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 8px solid var(--black);
+    padding: 0 3rem;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--black);
+    letter-spacing: -0.03em;
+  }
+  .header-nav { display: flex; gap: 2.5rem; align-items: center; }
+  .header-nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .header-nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .header-cta {
+    padding: 0.625rem 1.5rem;
+    background: var(--volt);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 4px solid var(--black);
+    box-shadow: 4px 4px 0 var(--black);
+    text-decoration: none;
+    display: block;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .header-cta:hover { transform: translate(4px,4px); box-shadow: none; }
+
+  /* Vertical sidebar (large screens) */
+  .page-wrap {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    min-height: 100vh;
+  }
+  .vert-sidebar {
+    background: var(--black);
+    border-right: 4px solid var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    gap: 2rem;
+    position: sticky;
+    top: 72px;
+    height: calc(100vh - 72px);
+    overflow: hidden;
+  }
+  .vert-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--volt);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+  }
+  .vert-sep { width: 2px; background: rgba(255,255,255,0.1); height: 40px; }
+
+  /* Main content */
+  .main-content { overflow: hidden; }
+
+  /* Section separators */
+  .section-border { border-top: 8px solid var(--black); }
+
+  /* Hero */
+  .hero {
+    background: var(--bg);
+    padding: 5rem 3rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-img {
+    position: absolute;
+    inset: 0;
+    background-image: url('../../images/creative/creative-2.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+  }
+  .hero-left { position: relative; z-index: 1; }
+  .hero-sticker {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: var(--volt);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 3px solid var(--black);
+    box-shadow: 4px 4px 0 var(--black);
+    transform: rotate(-2deg);
+    margin-bottom: 2.5rem;
+  }
+  .hero-headline {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 9vw, 9rem);
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 2.5rem;
+  }
+  .hero-headline .volt { color: var(--volt); }
+  .hero-body {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.55);
+    max-width: 400px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-form {
+    display: flex;
+    gap: 0;
+    max-width: 440px;
+  }
+  .hero-input {
+    flex: 1;
+    padding: 0.875rem 1.25rem;
+    background: var(--white);
+    border: 4px solid var(--black);
+    border-right: none;
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.825rem;
+    outline: none;
+  }
+  .hero-input::placeholder { color: rgba(0,0,0,0.35); }
+  .hero-form-btn {
+    padding: 0.875rem 1.5rem;
+    background: var(--volt);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 4px solid var(--black);
+    box-shadow: 6px 6px 0 var(--black);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .hero-form-btn:hover { transform: translate(4px,4px); box-shadow: none; }
+  .hero-right {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* CSS App Mockup */
+  .app-mockup {
+    background: var(--black);
+    border: 4px solid var(--white);
+    box-shadow: 10px 10px 0 var(--volt);
+    border-radius: 24px;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+  .app-status-bar {
+    background: var(--black);
+    padding: 10px 20px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .app-time { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--white); font-weight: 700; }
+  .app-screen { padding: 16px 20px 20px; background: #0e0e0e; }
+  .app-greeting { font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .app-balance-label { font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.35); margin-bottom: 2px; }
+  .app-balance { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--volt); letter-spacing: -0.03em; line-height: 1; margin-bottom: 12px; }
+  .app-card {
+    background: var(--volt);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .app-card-label { font-family: 'Space Mono', monospace; font-size: 8px; color: rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .app-card-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--black); }
+  .app-card-num { font-family: 'Space Mono', monospace; font-size: 8px; color: rgba(0,0,0,0.4); margin-top: 4px; }
+  .app-section-title { font-family: 'Space Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+  .app-txn { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .app-txn-left { display: flex; flex-direction: column; gap: 2px; }
+  .app-txn-name { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--white); }
+  .app-txn-date { font-family: 'Space Mono', monospace; font-size: 8px; color: rgba(255,255,255,0.3); }
+  .app-txn-amt { font-family: 'Syne', sans-serif; font-size: 0.875rem; font-weight: 800; }
+  .app-txn-amt.positive { color: var(--volt); }
+  .app-txn-amt.negative { color: rgba(255,255,255,0.6); }
+  .app-tabbar { display: flex; border-top: 1px solid rgba(255,255,255,0.08); padding: 10px 0 12px; }
+  .app-tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 7px; font-family: 'Space Mono', monospace; color: rgba(255,255,255,0.3); }
+  .app-tab.active { color: var(--volt); }
+  .app-tab i { width: 16px; height: 16px; }
+
+  /* Stats section */
+  .stats-section {
+    background: var(--volt);
+    border-top: 8px solid var(--black);
+    border-bottom: 8px solid var(--black);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .stats-cell {
+    padding: 4rem 2.5rem;
+    border-right: 8px solid var(--black);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .stats-cell:last-child { border-right: none; }
+  .stats-num {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--black);
+  }
+  .stats-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(0,0,0,0.5);
+  }
+
+  /* Features section */
+  .features-section {
+    padding: 5rem 3rem;
+    background: var(--bg);
+  }
+  .feat-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    color: var(--white);
+    line-height: 0.9;
+    margin-bottom: 4rem;
+  }
+  .feat-section-title span { color: var(--volt); }
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border: 4px solid var(--white);
+    box-shadow: 8px 8px 0 var(--volt);
+  }
+  .feat-card {
+    padding: 2.5rem;
+    border-right: 4px solid var(--white);
+    border-bottom: 4px solid var(--white);
+    background: var(--card);
+    transition: background 0.2s;
+    position: relative;
+  }
+  .feat-card:hover { background: #222; }
+  .feat-card:nth-child(3n) { border-right: none; }
+  .feat-card:nth-last-child(-n+3) { border-bottom: none; }
+  .feat-card.volt-bg { background: var(--volt); }
+  .feat-card.volt-bg:hover { background: #d4ff00; }
+  .feat-card.white-bg { background: var(--white); transform: rotate(1deg); z-index: 2; box-shadow: 6px 6px 0 var(--black); border-color: var(--black); }
+  .feat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 1.25rem;
+  }
+  .feat-card.volt-bg .feat-num { color: rgba(0,0,0,0.4); }
+  .feat-card.white-bg .feat-num { color: rgba(0,0,0,0.4); }
+  .feat-icon { margin-bottom: 1rem; }
+  .feat-icon i { width: 24px; height: 24px; color: rgba(255,255,255,0.4); }
+  .feat-card.volt-bg .feat-icon i { color: var(--black); }
+  .feat-card.white-bg .feat-icon i { color: var(--black); }
+  .feat-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+  .feat-card.volt-bg .feat-name { color: var(--black); }
+  .feat-card.white-bg .feat-name { color: var(--black); }
+  .feat-desc {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.4);
+  }
+  .feat-card.volt-bg .feat-desc { color: rgba(0,0,0,0.55); }
+  .feat-card.white-bg .feat-desc { color: rgba(0,0,0,0.55); }
+
+  /* Sticker elements */
+  .sticker {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 3px solid var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    box-shadow: 4px 4px 0 var(--black);
+  }
+
+  /* Manifesto section */
+  .manifesto-section {
+    background: var(--black);
+    border-top: 8px solid var(--volt);
+    border-bottom: 8px solid var(--volt);
+    padding: 5rem 3rem;
+    position: relative;
+  }
+  .manifesto-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: var(--white);
+    margin-bottom: 3rem;
+  }
+  .manifesto-title span { color: var(--volt); }
+  .manifesto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+  }
+  .manifesto-item {
+    border-left: 4px solid var(--volt);
+    padding-left: 1.5rem;
+  }
+  .manifesto-item-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--volt);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+  .manifesto-item-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* CTA */
+  .cta-section {
+    background: var(--volt);
+    border-top: 8px solid var(--black);
+    padding: 6rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .cta-sticker-wrap {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .cta-headline {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 9vw, 8rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+    color: var(--black);
+    margin-bottom: 2rem;
+  }
+  .cta-sub {
+    font-size: 1rem;
+    color: rgba(0,0,0,0.55);
+    max-width: 440px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+  }
+  .cta-form {
+    display: flex;
+    gap: 0;
+    max-width: 480px;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .cta-input {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    background: var(--white);
+    border: 4px solid var(--black);
+    border-right: none;
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.875rem;
+    outline: none;
+  }
+  .cta-input::placeholder { color: rgba(0,0,0,0.35); }
+  .cta-btn {
+    padding: 1rem 1.75rem;
+    background: var(--black);
+    color: var(--volt);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 4px solid var(--black);
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.3);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .cta-btn:hover { transform: translate(4px,4px); box-shadow: none; }
+  .cta-fine {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(0,0,0,0.4);
+  }
+
+  /* Footer */
+  footer {
+    background: var(--black);
+    border-top: 8px solid var(--white);
+    padding: 3rem 3rem;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 3rem;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--volt);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.75rem;
+  }
+  .footer-desc {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+  .footer-col-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 1rem;
+  }
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  .footer-links a {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--volt); }
+
+  @media (max-width: 1024px) {
+    .page-wrap { grid-template-columns: 1fr; }
+    .vert-sidebar { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .manifesto-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .feat-card:nth-child(3n) { border-right: 4px solid var(--white); }
+    .feat-card:nth-last-child(-n+3) { border-bottom: 4px solid var(--white); }
+    .stats-section { grid-template-columns: 1fr; }
+    .stats-cell { border-right: none; border-bottom: 8px solid var(--black); }
+    footer { grid-template-columns: 1fr; }
+    header { padding: 0 1.5rem; }
+    .header-nav { display: none; }
+    .cta-form { flex-direction: column; }
+    .cta-input { border-right: 4px solid var(--black); }
+  }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">
-    <div class="nav-logo-v">V</div>
-    VOLT
-  </div>
-  <ul class="nav-links">
-    <li><a href="#">Features</a></li>
-    <li><a href="#">Pricing</a></li>
-    <li><a href="#">Security</a></li>
-    <li><a href="#">Business</a></li>
-    <li><a href="#">Manifesto</a></li>
-  </ul>
-  <div class="nav-right">
-    <a href="#" class="nav-btn-ghost">Sign In</a>
-    <a href="#" class="nav-btn-volt">Get VOLT →</a>
-  </div>
-</nav>
+<!-- Sticky Nav -->
+<header>
+  <div class="header-logo">VOLT</div>
+  <nav class="header-nav">
+    <a href="#">How It Works</a>
+    <a href="#">Features</a>
+    <a href="#">Security</a>
+  </nav>
+  <a href="#beta" class="header-cta">Get Beta Access</a>
+</header>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="sticker-row">
-        <div class="sticker sticker-volt">⚡ Zero Fees</div>
-        <div class="sticker sticker-white">Anti-Bank</div>
-        <div class="sticker sticker-outline">Beta Live</div>
-      </div>
-      <h1 class="hero-title">
-        <span class="volt-line">Banking</span>
-        <span class="outline-line">that</span>
-        <span style="color:var(--volt);display:block;">fights back.</span>
-      </h1>
-      <p class="hero-sub">VOLT is the fintech app built for people who are tired of being nickeled-and-dimed by traditional banks. Zero hidden fees, instant transfers, 4.8% APY savings, and a debit card that actually fights for you.</p>
-      <div class="hero-cta-row">
-        <a href="#" class="btn-volt-main">Open Free Account →</a>
-        <a href="#" class="btn-outline-main">See How It Works</a>
-      </div>
-      <div class="hero-tags">
-        <div class="hero-tag">NO_FEES=TRUE</div>
-        <div class="hero-tag">APY=4.8%</div>
-        <div class="hero-tag">FDIC_INSURED=TRUE</div>
-        <div class="hero-tag">INSTANT_TRANSFERS=TRUE</div>
-      </div>
-    </div>
-    <div>
-      <div class="app-mockup">
-        <div class="app-status-bar">
-          <div class="app-status-left">VOLT · v2.0</div>
-          <div class="app-status-right"><div class="app-status-dot"></div> LIVE</div>
-        </div>
-        <div class="app-body">
-          <div class="app-balance-label">Total Balance</div>
-          <div class="app-balance"><span>$</span>12,847.32</div>
-          <div class="app-balance-sub">⚡ +$48.20 interest this month</div>
-          <div class="app-card-row">
-            <div class="app-action-btn"><div class="app-action-icon">↑</div><div class="app-action-label">Send</div></div>
-            <div class="app-action-btn"><div class="app-action-icon">↓</div><div class="app-action-label">Receive</div></div>
-            <div class="app-action-btn"><div class="app-action-icon">⚡</div><div class="app-action-label">Volt Pay</div></div>
-          </div>
-          <div class="app-section-title">Recent Transactions</div>
-          <div class="app-tx-list">
-            <div class="app-tx">
-              <div class="app-tx-left"><div class="app-tx-icon">💰</div><div><div class="app-tx-name">Paycheck — Acme Corp</div><div class="app-tx-date">Today, 9:00 AM</div></div></div>
-              <div class="app-tx-amount plus">+$3,200.00</div>
-            </div>
-            <div class="app-tx">
-              <div class="app-tx-left"><div class="app-tx-icon">🏠</div><div><div class="app-tx-name">Rent — 340 Oak St</div><div class="app-tx-date">Yesterday</div></div></div>
-              <div class="app-tx-amount minus">-$1,450.00</div>
-            </div>
-            <div class="app-tx">
-              <div class="app-tx-left"><div class="app-tx-icon">⚡</div><div><div class="app-tx-name">VOLT Savings Interest</div><div class="app-tx-date">Dec 31</div></div></div>
-              <div class="app-tx-amount plus">+$48.20</div>
-            </div>
-          </div>
+<!-- Page wrap with sidebar -->
+<div class="page-wrap">
+
+  <!-- Vertical sidebar -->
+  <div class="vert-sidebar">
+    <span class="vert-text">VOLT BETA &mdash; 2026</span>
+    <div class="vert-sep"></div>
+    <span class="vert-text">MONEY MOVES DIFFERENT</span>
+    <div class="vert-sep"></div>
+    <span class="vert-text">DISRUPT OR BE DISRUPTED</span>
+  </div>
+
+  <!-- Main content -->
+  <div class="main-content">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg-img"></div>
+      <div class="hero-left">
+        <div class="hero-sticker">Beta Launch 2026</div>
+        <h1 class="hero-headline">
+          MONEY<br><span class="volt">MOVES</span><br>DIFFERENT.
+        </h1>
+        <p class="hero-body">VOLT is the fintech app that doesn't ask permission. Instant transfers. Zero hidden fees. A debit card with actual intelligence. Banking built for how you actually live.</p>
+        <div class="hero-form">
+          <input type="email" class="hero-input" placeholder="your@email.com">
+          <button class="hero-form-btn">Claim Handle</button>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+      <div class="hero-right">
+        <!-- CSS App Mockup -->
+        <div class="app-mockup">
+          <div class="app-status-bar">
+            <span class="app-time">9:41</span>
+            <div style="display:flex;gap:4px;align-items:center">
+              <i data-lucide="signal" style="width:12px;height:12px;color:var(--white)"></i>
+              <i data-lucide="wifi" style="width:12px;height:12px;color:var(--white)"></i>
+              <i data-lucide="battery" style="width:12px;height:12px;color:var(--white)"></i>
+            </div>
+          </div>
+          <div class="app-screen">
+            <p class="app-greeting">Hey, Jordan</p>
+            <p class="app-balance-label">Total Balance</p>
+            <p class="app-balance">$4,291</p>
+            <div class="app-card">
+              <p class="app-card-label">Volt Card</p>
+              <p class="app-card-name">Jordan Chen</p>
+              <p class="app-card-num">**** **** **** 7742</p>
+              <div style="position:absolute;right:12px;bottom:12px;opacity:0.3">
+                <i data-lucide="credit-card" style="width:28px;height:28px;color:#000"></i>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:14px">
+              <div style="flex:1;background:#1a1a1a;border:2px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;text-align:center">
+                <i data-lucide="send" style="width:16px;height:16px;color:var(--volt);margin:0 auto 4px;display:block"></i>
+                <span style="font-family:'Space Mono',monospace;font-size:8px;color:rgba(255,255,255,0.4)">SEND</span>
+              </div>
+              <div style="flex:1;background:#1a1a1a;border:2px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;text-align:center">
+                <i data-lucide="download" style="width:16px;height:16px;color:var(--volt);margin:0 auto 4px;display:block"></i>
+                <span style="font-family:'Space Mono',monospace;font-size:8px;color:rgba(255,255,255,0.4)">REQUEST</span>
+              </div>
+              <div style="flex:1;background:#1a1a1a;border:2px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;text-align:center">
+                <i data-lucide="zap" style="width:16px;height:16px;color:var(--volt);margin:0 auto 4px;display:block"></i>
+                <span style="font-family:'Space Mono',monospace;font-size:8px;color:rgba(255,255,255,0.4)">VOLT PAY</span>
+              </div>
+            </div>
+            <p class="app-section-title">Recent Activity</p>
+            <div class="app-txn">
+              <div class="app-txn-left">
+                <span class="app-txn-name">Salary Deposit</span>
+                <span class="app-txn-date">Today, 00:01</span>
+              </div>
+              <span class="app-txn-amt positive">+$3,400</span>
+            </div>
+            <div class="app-txn">
+              <div class="app-txn-left">
+                <span class="app-txn-name">Spotify</span>
+                <span class="app-txn-date">Yesterday</span>
+              </div>
+              <span class="app-txn-amt negative">-$9.99</span>
+            </div>
+            <div class="app-txn">
+              <div class="app-txn-left">
+                <span class="app-txn-name">Dani Sent You</span>
+                <span class="app-txn-date">Mar 26</span>
+              </div>
+              <span class="app-txn-amt positive">+$42.00</span>
+            </div>
+          </div>
+          <div class="app-tabbar">
+            <div class="app-tab active"><i data-lucide="home"></i><span>Home</span></div>
+            <div class="app-tab"><i data-lucide="send"></i><span>Send</span></div>
+            <div class="app-tab"><i data-lucide="bar-chart-2"></i><span>Spend</span></div>
+            <div class="app-tab"><i data-lucide="user"></i><span>Profile</span></div>
+          </div>
+        </div>
 
-<!-- VOLT BAND -->
-<div class="volt-band">
-  <div class="volt-band-track">
-    <span>Zero Fees</span><span>◆</span><span>4.8% APY</span><span>◆</span>
-    <span>Instant Transfers</span><span>◆</span><span>FDIC Insured</span><span>◆</span>
-    <span>No Overdraft Traps</span><span>◆</span><span>Volt Cashback</span><span>◆</span>
-    <span>Real-Time Notifications</span><span>◆</span><span>Banking That Fights Back</span><span>◆</span>
-    <span>Zero Fees</span><span>◆</span><span>4.8% APY</span><span>◆</span>
-    <span>Instant Transfers</span><span>◆</span><span>FDIC Insured</span><span>◆</span>
-    <span>No Overdraft Traps</span><span>◆</span><span>Volt Cashback</span><span>◆</span>
-    <span>Real-Time Notifications</span><span>◆</span><span>Banking That Fights Back</span><span>◆</span>
-  </div>
-</div>
+        <!-- Sticker badges -->
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
+          <div class="sticker" style="background:var(--volt);color:#000;transform:rotate(2deg)">Instant Transfers</div>
+          <div class="sticker" style="background:var(--white);color:#000;transform:rotate(-1.5deg)">Zero Fees</div>
+          <div class="sticker" style="background:var(--black);color:var(--volt);border-color:var(--volt);box-shadow:4px 4px 0 var(--volt);transform:rotate(1deg)">No BS</div>
+        </div>
+      </div>
+    </section>
 
-<!-- FEATURES -->
-<section class="features-section">
-  <div class="features-inner">
-    <div class="feat-header">
-      <h2>Features that <span class="volt">banks hate.</span></h2>
-      <p>Traditional banks profit from your confusion. VOLT is built to do the opposite — every feature is designed to put money back in your pocket.</p>
-    </div>
-    <div class="features-grid">
-      <div class="feat-card">
-        <div class="feat-num">01 —</div>
-        <h3>Zero. Hidden. Fees.</h3>
-        <p>No monthly fees, no minimum balance, no ATM fees (worldwide), no overdraft fees. We charge nothing we don't have to.</p>
-        <div class="feat-volt-tag">$0 Fees</div>
+    <!-- Stats section -->
+    <div class="stats-section">
+      <div class="stats-cell">
+        <p class="stats-num">0.8s</p>
+        <p class="stats-label">Average transfer time</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-num">02 —</div>
-        <h3>4.8% APY Savings</h3>
-        <p>Your savings earn 12x the national average. Interest compounds daily and deposits to your account every month. No hoops.</p>
-        <div class="feat-volt-tag">vs 0.4% national avg</div>
+      <div class="stats-cell">
+        <p class="stats-num">$0</p>
+        <p class="stats-label">Hidden fees. Period.</p>
       </div>
-      <div class="feat-card">
-        <div class="feat-num">03 —</div>
-        <h3>Instant Everywhere</h3>
-        <p>Send money to anyone on VOLT in under a second. Bank transfers land in minutes, not days. Real instant means instant.</p>
-        <div class="feat-volt-tag">Sub-second transfers</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-num">04 —</div>
-        <h3>VOLT Cashback Card</h3>
-        <p>3% cashback on groceries, 2% on gas, 1% everywhere else. All deposited automatically. Your debit card earns like a credit card.</p>
-        <div class="feat-volt-tag">Up to 3% back</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-num">05 —</div>
-        <h3>Dispute Shield</h3>
-        <p>We dispute fraudulent charges on your behalf — automatically. Our AI scans every transaction and flags suspicious activity before you even notice.</p>
-        <div class="feat-volt-tag">AI-powered fraud protection</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-num">06 —</div>
-        <h3>Spend Intelligence</h3>
-        <p>Real-time insights into where your money goes, personalized saving tips, and automatic round-up investments. Financial clarity, built in.</p>
-        <div class="feat-volt-tag">AI-driven insights</div>
+      <div class="stats-cell">
+        <p class="stats-num">127K</p>
+        <p class="stats-label">Beta applications received</p>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- NUMBERS -->
-<section class="numbers-section">
-  <div class="numbers-inner">
-    <div class="numbers-grid">
-      <div class="number-item">
-        <div class="number-num">4.8<span style="font-size:2rem;">%</span></div>
-        <div class="number-label">Annual APY</div>
+    <!-- Manifesto -->
+    <section class="manifesto-section section-border">
+      <h2 class="manifesto-title">Built for the<br>ones who <span>move fast.</span></h2>
+      <div class="manifesto-grid">
+        <div class="manifesto-item">
+          <p class="manifesto-item-num">01 / Banking</p>
+          <p class="manifesto-item-text">Your bank was built for people who had money in 1975. VOLT was built for now. Instant deposits, real-time notifications, and a card that actually works internationally without extortion fees.</p>
+        </div>
+        <div class="manifesto-item">
+          <p class="manifesto-item-num">02 / Intelligence</p>
+          <p class="manifesto-item-text">VOLT watches your spending the way a good friend would. It spots patterns, flags the subscriptions draining you, and surfaces insights that your current bank hides because knowing costs them money.</p>
+        </div>
+        <div class="manifesto-item">
+          <p class="manifesto-item-num">03 / Privacy</p>
+          <p class="manifesto-item-text">We don't sell your transaction data. We don't share your spending profile with advertisers. We make money when you make money. That's the only business model that makes sense.</p>
+        </div>
       </div>
-      <div class="number-item">
-        <div class="number-num">$0</div>
-        <div class="number-label">Monthly Fees</div>
-      </div>
-      <div class="number-item">
-        <div class="number-num">2M+</div>
-        <div class="number-label">Volt Members</div>
-      </div>
-      <div class="number-item">
-        <div class="number-num">0.3s</div>
-        <div class="number-label">Avg Transfer Time</div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- TESTIMONIALS -->
-<section class="test-section">
-  <div class="test-inner">
-    <div class="test-header">
-      <h2>People who <span class="volt">switched.</span></h2>
-    </div>
-    <div class="test-grid">
-      <div class="test-card test-volt">
-        <div class="test-rating">★★★★★</div>
-        <p class="test-quote">"I was paying $35/month in random fees at my old bank. VOLT is literally paying ME $48 a month in savings interest. That's an $83/month swing. I can't believe I waited this long."</p>
-        <div class="test-name">Jordan T.</div>
-        <div class="test-role">Product Designer · Chicago</div>
+    <!-- Features -->
+    <section class="features-section section-border">
+      <h2 class="feat-section-title">Features that<br><span>hit different.</span></h2>
+      <div class="features-grid">
+        <div class="feat-card volt-bg">
+          <p class="feat-num">01</p>
+          <div class="feat-icon"><i data-lucide="zap"></i></div>
+          <h3 class="feat-name">Volt Pay</h3>
+          <p class="feat-desc">Tap to send to anyone in your contacts. No account required. No 3-day wait. No explanation needed.</p>
+        </div>
+        <div class="feat-card">
+          <p class="feat-num">02</p>
+          <div class="feat-icon"><i data-lucide="globe"></i></div>
+          <h3 class="feat-name">No-Fee Global</h3>
+          <p class="feat-desc">Use your Volt card anywhere in the world. No foreign transaction fees. Live exchange rates. The rate the bank uses, not the one they invent for you.</p>
+        </div>
+        <div class="feat-card white-bg">
+          <p class="feat-num">03</p>
+          <div class="feat-icon"><i data-lucide="eye"></i></div>
+          <h3 class="feat-name">Spend Watch</h3>
+          <p class="feat-desc">Real-time categorization of every transaction. See where your money goes before you wonder where it went.</p>
+        </div>
+        <div class="feat-card">
+          <p class="feat-num">04</p>
+          <div class="feat-icon"><i data-lucide="lock"></i></div>
+          <h3 class="feat-name">Instant Lock</h3>
+          <p class="feat-desc">Lost your card? Lock it from the app in 0.2 seconds. No hold music. No escalation path.</p>
+        </div>
+        <div class="feat-card">
+          <p class="feat-num">05</p>
+          <div class="feat-icon"><i data-lucide="trending-up"></i></div>
+          <h3 class="feat-name">Volt Yield</h3>
+          <p class="feat-desc">Your idle balance earns 4.8% APY. Automatically. No minimum. No lock-up. Just your money working.</p>
+        </div>
+        <div class="feat-card" style="border-right:none">
+          <p class="feat-num">06</p>
+          <div class="feat-icon"><i data-lucide="users"></i></div>
+          <h3 class="feat-name">Split & Settle</h3>
+          <p class="feat-desc">Split any transaction, request your portion, and get paid in seconds. No more "venmo me" anxiety.</p>
+        </div>
       </div>
-      <div class="test-card">
-        <div class="test-rating" style="color:var(--volt);">★★★★★</div>
-        <p class="test-quote">"The dispute shield caught a $340 fraud charge before I even saw my statement. One notification, one tap, money back in 24 hours. Unreal."</p>
-        <div class="test-name">Marcus B.</div>
-        <div class="test-role">Freelance Developer · Austin</div>
-      </div>
-      <div class="test-card">
-        <div class="test-rating" style="color:var(--volt);">★★★★★</div>
-        <p class="test-quote">"Instant transfers to my team is the feature I didn't know I needed. We do 40+ payroll payments a week. VOLT Business is non-negotiable for us now."</p>
-        <div class="test-name">Serena K.</div>
-        <div class="test-role">Founder @ Pixel Studio · NYC</div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- PRICING -->
-<section class="pricing-section">
-  <div class="pricing-inner">
-    <div class="pricing-header">
-      <h2>Simple. Honest. Pricing.</h2>
-      <p>Because we don't have a fee department making up new charges every quarter.</p>
-    </div>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-tier">// VOLT FREE</div>
-        <div class="price-amount">$0</div>
-        <div class="price-period">forever · no surprises</div>
-        <ul class="price-features">
-          <li>Checking + Savings account</li>
-          <li>4.8% APY</li>
-          <li>VOLT Cashback Debit Card</li>
-          <li>Instant transfers</li>
-          <li>0 ATM fees worldwide</li>
-        </ul>
-        <a href="#" class="price-btn-w">Open Free Account</a>
+    <!-- CTA -->
+    <section class="cta-section" id="beta">
+      <div class="cta-sticker-wrap">
+        <div class="sticker" style="background:#000;color:var(--volt);border-color:#000;box-shadow:4px 4px 0 rgba(0,0,0,0.3);transform:rotate(-2deg)">Beta Open Now</div>
+        <div class="sticker" style="background:#fff;color:#000;transform:rotate(1.5deg)">127K Applicants</div>
       </div>
-      <div class="price-card volt-plan">
-        <div class="price-tier">// VOLT PLUS</div>
-        <div class="price-amount" style="color:var(--bg);">$9</div>
-        <div class="price-period">per month · cancel anytime</div>
-        <ul class="price-features">
-          <li>Everything in Free</li>
-          <li>Shared accounts (up to 5)</li>
-          <li>Priority dispute resolution</li>
-          <li>3% cashback all categories</li>
-          <li>Custom virtual card numbers</li>
-          <li>Monthly spending report</li>
-        </ul>
-        <a href="#" class="price-btn-v">Start VOLT Plus</a>
+      <h2 class="cta-headline">CLAIM YOUR<br>VOLT HANDLE</h2>
+      <p class="cta-sub">Beta spots are limited and non-transferable. Your @volt handle is yours forever. First 10,000 members get the black Volt card with lifetime fee-free status.</p>
+      <div class="cta-form">
+        <input type="email" class="cta-input" placeholder="your@email.com">
+        <button class="cta-btn">Get Beta Access</button>
       </div>
-      <div class="price-card">
-        <div class="price-tier">// VOLT BUSINESS</div>
-        <div class="price-amount">$29</div>
-        <div class="price-period">per month · per business</div>
-        <ul class="price-features">
-          <li>Business checking</li>
-          <li>Unlimited team members</li>
-          <li>Bulk payment tools</li>
-          <li>Expense categorization</li>
-          <li>QuickBooks + Xero sync</li>
-          <li>Dedicated support</li>
-        </ul>
-        <a href="#" class="price-btn-w">Start Business</a>
-      </div>
-    </div>
-  </div>
-</section>
+      <p class="cta-fine">No credit card. No obligation. Just first access.</p>
+    </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-bg-text">VOLT</div>
-  <div class="cta-inner">
-    <div class="cta-sticker">⚡ Join 2 Million Members</div>
-    <h2 class="cta-title">Stop letting banks<br>steal from you.</h2>
-    <p class="cta-sub">Opening a VOLT account takes 3 minutes and a phone number. No credit check, no minimum deposit, no excuses.</p>
-    <div class="cta-btns">
-      <a href="#" class="btn-volt-main">Open Free Account → No Credit Check</a>
-    </div>
-  </div>
-</section>
+    <!-- Footer -->
+    <footer>
+      <div>
+        <p class="footer-logo">VOLT</p>
+        <p class="footer-desc">The fintech app for people who move fast and don't trust banks that don't trust them back. FDIC insured. Licensed in 50 states.</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Product</p>
+        <div class="footer-links">
+          <a href="#">How It Works</a>
+          <a href="#">Volt Card</a>
+          <a href="#">Volt Yield</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title">Company</p>
+        <div class="footer-links">
+          <a href="#">About</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Press</a>
+        </div>
+      </div>
+    </footer>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-brand-logo"><div class="footer-brand-v">V</div> VOLT</div>
-        <p>Banking that fights back. Accounts are FDIC insured up to $250,000 through Volt Banking Partners.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Product</h4>
-        <a href="#">Features</a>
-        <a href="#">Pricing</a>
-        <a href="#">VOLT Plus</a>
-        <a href="#">Business</a>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <a href="#">Manifesto</a>
-        <a href="#">About</a>
-        <a href="#">Careers</a>
-        <a href="#">Press</a>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">FDIC Info</a>
-        <a href="#">Security</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 VOLT Financial Inc. FDIC Insured. Member FDIC.</span>
-      <span>Banking that fights back.</span>
-    </div>
-  </div>
-</footer>
+  </div><!-- /main-content -->
+</div><!-- /page-wrap -->
 
 <script>
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('.feat-card, .test-card, .number-item').forEach(el => obs.observe(el));
+  lucide.createIcons();
 </script>
 </body>
 </html>

@@ -3,849 +3,545 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOLSTICE — Premium Streetwear</title>
+<title>SOLSTICE — New Season Arrives</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --cream: #E4E2DD;
-  --red: #DB4A2B;
-  --orange: #F8A348;
-  --black: #0D0D0D;
-  --charcoal: #1E1E1E;
-  --gray: #888;
-  --light-gray: #C8C6C1;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--cream);
-  color: var(--black);
-  font-family: 'Space Grotesk', sans-serif;
-  overflow-x: hidden;
-}
-
-/* ── SCROLL ANIMATIONS ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(48px);
-  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── NAV ── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 22px 48px;
-  mix-blend-mode: multiply;
-}
-
-.nav-logo {
-  font-family: 'Space Mono', monospace;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--black);
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 36px;
-  list-style: none;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--black);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  transition: opacity 0.2s;
-}
-
-.nav-links a:hover { opacity: 0.5; }
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.nav-bag {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--black);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 0 48px 60px;
-  overflow: hidden;
-}
-
-/* Blurred gradient blobs */
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.blob-1 {
-  width: 700px;
-  height: 700px;
-  background: var(--red);
-  top: -100px;
-  right: -150px;
-  opacity: 0.55;
-  animation: float1 12s ease-in-out infinite alternate;
-}
-
-.blob-2 {
-  width: 500px;
-  height: 500px;
-  background: var(--orange);
-  bottom: -50px;
-  left: -100px;
-  opacity: 0.45;
-  animation: float2 15s ease-in-out infinite alternate;
-}
-
-.blob-3 {
-  width: 350px;
-  height: 350px;
-  background: var(--red);
-  top: 40%;
-  left: 35%;
-  opacity: 0.25;
-  animation: float3 10s ease-in-out infinite alternate;
-}
-
-@keyframes float1 { from { transform: translate(0,0) scale(1); } to { transform: translate(-60px, 80px) scale(1.1); } }
-@keyframes float2 { from { transform: translate(0,0) scale(1); } to { transform: translate(40px, -60px) scale(0.9); } }
-@keyframes float3 { from { transform: translate(0,0); } to { transform: translate(-30px, 40px); } }
-
-.hero-tagline {
-  position: relative;
-  z-index: 1;
-  font-size: 11px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: var(--black);
-  opacity: 0.6;
-  margin-bottom: 16px;
-}
-
-.hero-headline {
-  position: relative;
-  z-index: 1;
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  font-size: clamp(72px, 11vw, 180px);
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  color: var(--black);
-  mix-blend-mode: multiply;
-}
-
-.hero-headline .outline {
-  -webkit-text-stroke: 2px var(--black);
-  color: transparent;
-}
-
-.hero-sub {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-top: 32px;
-}
-
-.hero-desc {
-  max-width: 380px;
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--charcoal);
-  font-weight: 400;
-}
-
-.hero-cta-group {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.btn-hero {
-  background: var(--black);
-  color: var(--cream);
-  padding: 18px 40px;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: 600;
-  font-family: 'Space Mono', monospace;
-  transition: background 0.2s;
-}
-
-.btn-hero:hover { background: var(--charcoal); }
-
-.btn-hero-outline {
-  background: transparent;
-  color: var(--black);
-  padding: 17px 40px;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: 600;
-  font-family: 'Space Mono', monospace;
-  border: 1.5px solid var(--black);
-  transition: background 0.2s, color 0.2s;
-}
-
-.btn-hero-outline:hover { background: var(--black); color: var(--cream); }
-
-/* ── TICKER ── */
-.ticker {
-  background: var(--black);
-  color: var(--cream);
-  padding: 16px 0;
-  overflow: hidden;
-}
-
-.ticker-track {
-  display: flex;
-  gap: 0;
-  white-space: nowrap;
-  animation: ticker-scroll 30s linear infinite;
-}
-
-.ticker-track-2 {
-  animation-direction: reverse;
-  background: var(--red);
-  margin-top: 0;
-}
-
-.ticker-item {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  padding: 0 40px;
-  flex-shrink: 0;
-}
-
-.ticker-dot {
-  color: var(--orange);
-  margin-right: 40px;
-}
-
-@keyframes ticker-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-/* ── COLLECTION GRID ── */
-.collection {
-  padding: 100px 48px;
-}
-
-.collection-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 60px;
-}
-
-.collection-title {
-  font-family: 'Space Mono', monospace;
-  font-size: clamp(48px, 6vw, 90px);
-  font-weight: 700;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-}
-
-.collection-meta {
-  text-align: right;
-}
-
-.collection-meta .season {
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 8px;
-}
-
-.collection-meta .count {
-  font-family: 'Space Mono', monospace;
-  font-size: 36px;
-  font-weight: 700;
-}
-
-.collection-meta .count span {
-  font-size: 16px;
-  color: var(--gray);
-  font-weight: 400;
-}
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-}
-
-.product-card {
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.product-visual {
-  aspect-ratio: 3/4;
-  position: relative;
-  overflow: hidden;
-}
-
-.product-bg {
-  width: 100%;
-  height: 100%;
-  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.product-card:hover .product-bg { transform: scale(1.06); }
-
-.p-bg-1 { background: linear-gradient(160deg, #1a1a1a 0%, #DB4A2B 60%, #F8A348 100%); }
-.p-bg-2 { background: linear-gradient(200deg, #F8A348 0%, #DB4A2B 50%, #0d0d0d 100%); }
-.p-bg-3 { background: linear-gradient(130deg, #0d0d0d 0%, #2a2a2a 100%); }
-
-.product-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: var(--red);
-  color: white;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  padding: 6px 12px;
-  font-weight: 600;
-}
-
-.product-quick {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  background: var(--cream);
-  color: var(--black);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-align: center;
-  padding: 14px;
-  font-weight: 600;
-  font-family: 'Space Mono', monospace;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.3s, transform 0.3s;
-}
-
-.product-card:hover .product-quick { opacity: 1; transform: translateY(0); }
-
-.product-info {
-  padding: 20px 0;
-}
-
-.product-name {
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-
-.product-sub {
-  font-size: 12px;
-  color: var(--gray);
-  letter-spacing: 0.08em;
-}
-
-.product-price {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.price-amount {
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  font-size: 16px;
-}
-
-.price-add {
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--red);
-  font-weight: 700;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.price-add:hover { color: var(--black); }
-
-/* ── POSTER SECTION ── */
-.poster-section {
-  padding: 0 48px 100px;
-}
-
-.poster-inner {
-  background: var(--black);
-  padding: 100px 80px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.poster-blob {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: var(--red);
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.3;
-  right: -100px;
-  top: -100px;
-  mix-blend-mode: screen;
-}
-
-.poster-content { position: relative; z-index: 1; }
-
-.poster-eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 24px;
-  font-weight: 500;
-}
-
-.poster-headline {
-  font-family: 'Space Mono', monospace;
-  font-size: clamp(48px, 5vw, 80px);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  color: var(--cream);
-  margin-bottom: 32px;
-}
-
-.poster-desc {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #888;
-  max-width: 360px;
-  margin-bottom: 48px;
-}
-
-.btn-poster {
-  background: var(--red);
-  color: white;
-  padding: 18px 44px;
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: 600;
-  font-family: 'Space Mono', monospace;
-  display: inline-block;
-  transition: background 0.2s;
-}
-
-.btn-poster:hover { background: var(--orange); }
-
-.poster-visual {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
-}
-
-.poster-visual-item {
-  aspect-ratio: 1;
-  overflow: hidden;
-}
-
-.pv-bg-1 { background: linear-gradient(135deg, #DB4A2B, #F8A348); }
-.pv-bg-2 { background: linear-gradient(225deg, #F8A348, #1a1a1a); }
-.pv-bg-3 { background: linear-gradient(315deg, #1a1a1a, #DB4A2B); }
-.pv-bg-4 { background: linear-gradient(45deg, #2a2a2a, #F8A348); }
-
-/* ── MANIFESTO ── */
-.manifesto {
-  padding: 80px 48px;
-  border-top: 1px solid var(--light-gray);
-  border-bottom: 1px solid var(--light-gray);
-}
-
-.manifesto-inner {
-  max-width: 900px;
-}
-
-.manifesto-label {
-  font-size: 10px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 32px;
-}
-
-.manifesto-text {
-  font-family: 'Space Mono', monospace;
-  font-size: clamp(22px, 3vw, 40px);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-}
-
-.manifesto-text .red { color: var(--red); }
-
-/* ── TESTIMONIALS ── */
-.testimonials {
-  padding: 100px 48px;
-}
-
-.testimonials-title {
-  font-family: 'Space Mono', monospace;
-  font-size: clamp(36px, 4vw, 64px);
-  font-weight: 700;
-  line-height: 0.95;
-  margin-bottom: 60px;
-}
-
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 24px;
-}
-
-.review-card {
-  background: white;
-  padding: 40px 32px;
-  border: 1px solid var(--light-gray);
-}
-
-.review-stars {
-  color: var(--red);
-  font-size: 14px;
-  margin-bottom: 20px;
-  letter-spacing: 3px;
-}
-
-.review-text {
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--charcoal);
-  margin-bottom: 28px;
-}
-
-.review-author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.reviewer-avatar {
-  width: 38px;
-  height: 38px;
-  background: linear-gradient(135deg, var(--red), var(--orange));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  color: white;
-  flex-shrink: 0;
-}
-
-.reviewer-name {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.reviewer-tag {
-  font-size: 11px;
-  color: var(--gray);
-  margin-top: 2px;
-}
-
-/* ── PRESS ── */
-.press-bar {
-  padding: 48px;
-  border-top: 1px solid var(--light-gray);
-  display: flex;
-  align-items: center;
-  gap: 60px;
-}
-
-.press-label {
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--gray);
-  white-space: nowrap;
-  font-weight: 500;
-}
-
-.press-logos {
-  display: flex;
-  align-items: center;
-  gap: 48px;
-  flex: 1;
-  overflow: hidden;
-}
-
-.press-logo {
-  font-family: 'Space Mono', monospace;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--light-gray);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: color 0.3s;
-}
-
-.press-logo:hover { color: var(--black); }
-
-/* ── CTA ── */
-.cta-section {
-  padding: 120px 48px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  background: var(--black);
-}
-
-.cta-blob {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  background: linear-gradient(135deg, var(--red), var(--orange));
-  border-radius: 50%;
-  filter: blur(130px);
-  opacity: 0.35;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: screen;
-}
-
-.cta-eyebrow {
-  position: relative;
-  z-index: 1;
-  font-size: 11px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 24px;
-  font-weight: 500;
-}
-
-.cta-headline {
-  position: relative;
-  z-index: 1;
-  font-family: 'Space Mono', monospace;
-  font-size: clamp(52px, 7vw, 110px);
-  font-weight: 700;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  color: var(--cream);
-  margin-bottom: 48px;
-}
-
-.cta-actions {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-}
-
-/* ── FOOTER ── */
-footer {
-  background: var(--black);
-  color: var(--cream);
-  padding: 80px 48px 40px;
-  border-top: 1px solid #222;
-}
-
-.footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px;
-  margin-bottom: 60px;
-}
-
-.footer-brand-name {
-  font-family: 'Space Mono', monospace;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  margin-bottom: 16px;
-  color: var(--cream);
-}
-
-.footer-brand-desc {
-  font-size: 13px;
-  line-height: 1.7;
-  color: #666;
-  max-width: 280px;
-}
-
-.footer-social {
-  display: flex;
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.social-link {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #666;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.social-link:hover { color: var(--orange); }
-
-.footer-col-title {
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #555;
-  margin-bottom: 20px;
-  font-weight: 600;
-}
-
-.footer-col ul { list-style: none; }
-
-.footer-col ul li {
-  margin-bottom: 12px;
-}
-
-.footer-col ul li a {
-  font-size: 13px;
-  color: #888;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.footer-col ul li a:hover { color: var(--cream); }
-
-.footer-bottom {
-  border-top: 1px solid #222;
-  padding-top: 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-copy {
-  font-size: 11px;
-  color: #555;
-  letter-spacing: 0.1em;
-}
-
-.footer-legal a {
-  font-size: 11px;
-  color: #555;
-  text-decoration: none;
-  margin-left: 24px;
-  transition: color 0.2s;
-}
-
-.footer-legal a:hover { color: var(--cream); }
-</style>
-
-<!-- inject-local -->
-<style>
-  .p-bg-1 {
-    background-image: url('../../images/fashion-warm/fw-1.jpg') !important;
-    background-size: cover; background-position: center top;
+  :root {
+    --base: #E4E2DD;
+    --ink: #1E1E1E;
+    --red: #DB4A2B;
+    --orange: #F8A348;
+    --pink: #FF89A9;
   }
-  .p-bg-2 {
-    background-image: url('../../images/fashion-warm/fw-2.jpg') !important;
-    background-size: cover; background-position: center top;
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  ::selection { background: var(--red); color: #fff; }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--base); }
+  ::-webkit-scrollbar-thumb { background: var(--red); }
+
+  html { background: var(--base); color: var(--ink); font-family: 'Satoshi', sans-serif; scroll-behavior: smooth; }
+
+  .clash { font-family: 'Clash Display', sans-serif; }
+
+  /* SLIDE-UP ENTRANCE */
+  .slide-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
   }
-  .p-bg-3 {
-    background-image: url('../../images/fashion-warm/fw-3.jpg') !important;
-    background-size: cover; background-position: center top;
+  .slide-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 64px;
+    background: var(--base);
+    border-bottom: 1px solid rgba(30,30,30,0.08);
   }
-  .pv-bg-1 {
-    background-image: url('../../images/fashion-warm/fw-4.jpg') !important;
-    background-size: cover; background-position: center top;
+  .nav-logo {
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
   }
-  .pv-bg-2 {
-    background-image: url('../../images/fashion-warm/fw-5.jpg') !important;
-    background-size: cover; background-position: center top;
+  .nav-center {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
   }
-  .pv-bg-3 {
-    background-image: url('../../images/fashion-warm/fw-6.jpg') !important;
-    background-size: cover; background-position: center top;
+  .nav-center a {
+    font-family: 'Satoshi', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 200ms;
   }
-  .pv-bg-4 {
-    background-image: url('../../images/fashion-warm/fw-1.jpg') !important;
-    background-size: cover; background-position: center top;
+  .nav-center a:hover { opacity: 1; }
+  .nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    color: var(--ink);
   }
-  .product-visual {
-    background-image: url('../../images/fashion-warm/fw-2.jpg') !important;
-    background-size: cover; background-position: center top;
+  .nav-icons a {
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+    transition: opacity 200ms;
   }
-  .poster-visual-item {
-    background-image: url('../../images/fashion-warm/fw-3.jpg') !important;
-    background-size: cover; background-position: center top;
+  .nav-icons a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding-top: 64px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 3rem;
+    padding-right: 3rem;
   }
+
+  /* GRADIENT BLOBS */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    mix-blend-mode: multiply;
+    animation: blobFloat 12s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  .blob-1 {
+    width: 600px; height: 600px;
+    background: var(--red);
+    top: -100px; right: -100px;
+    animation-delay: 0s;
+  }
+  .blob-2 {
+    width: 500px; height: 500px;
+    background: var(--orange);
+    bottom: -80px; left: 20%;
+    animation-delay: -3s;
+  }
+  .blob-3 {
+    width: 400px; height: 400px;
+    background: var(--pink);
+    top: 30%; left: -80px;
+    animation-delay: -6s;
+  }
+  @keyframes blobFloat {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(30px, -20px) scale(1.05); }
+    66%  { transform: translate(-20px, 30px) scale(0.95); }
+    100% { transform: translate(15px, -35px) scale(1.08); }
+  }
+
+  /* HERO TYPE */
+  .hero-type {
+    position: relative;
+    z-index: 10;
+  }
+  .hero-line-1 {
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 700;
+    font-size: 18vw;
+    letter-spacing: -0.05em;
+    line-height: 0.75;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: block;
+  }
+  .hero-line-2 {
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 700;
+    font-size: 18vw;
+    letter-spacing: -0.05em;
+    line-height: 0.75;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: block;
+    margin-left: 15vw;
+  }
+  .hero-meta {
+    position: relative;
+    z-index: 10;
+    margin-top: 3.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .hero-desc {
+    max-width: 360px;
+  }
+  .hero-desc p {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: rgba(30,30,30,0.65);
+  }
+  .hero-cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  /* SLIDE-IN BUTTON */
+  .btn-slide {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: transparent;
+    border: 1.5px solid var(--ink);
+    padding: 0.9rem 2.5rem;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: color 300ms;
+    cursor: pointer;
+  }
+  .btn-slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; bottom: 0;
+    width: 100%;
+    background: var(--ink);
+    transition: left 300ms cubic-bezier(0.16,1,0.3,1);
+    z-index: -1;
+  }
+  .btn-slide:hover { color: var(--base); }
+  .btn-slide:hover::before { left: 0; }
+
+  .btn-slide-red {
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .btn-slide-red::before { background: var(--red); }
+  .btn-slide-red:hover { color: #fff; }
+
+  /* SCROLL TAG */
+  .scroll-tag {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: rgba(30,30,30,0.5);
+  }
+  .scroll-tag span {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  /* CATEGORY DIVIDER */
+  .cat-div {
+    padding: 1.5rem 3rem;
+    border-top: 1.5px solid var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    overflow: hidden;
+  }
+  .cat-div-num {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--red);
+    letter-spacing: 0.1em;
+    min-width: 2.5rem;
+  }
+  .cat-div-name {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--ink);
+    flex: 1;
+  }
+  .cat-div-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(30,30,30,0.45);
+  }
+
+  /* PRODUCT GRID */
+  .product-grid {
+    padding: 2rem 3rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: rgba(30,30,30,0.12);
+  }
+  .product-card {
+    background: var(--base);
+    cursor: pointer;
+    transition: background 200ms;
+  }
+  .product-card:hover { background: #dddbd6; }
+  .product-img {
+    height: 420px;
+    overflow: hidden;
+    position: relative;
+  }
+  .product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .product-card:hover .product-img img { transform: scale(1.05); }
+  .product-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: var(--red);
+    color: #fff;
+    padding: 0.3rem 0.7rem;
+  }
+  .product-info {
+    padding: 1.2rem 1.5rem 1.5rem;
+  }
+  .product-name {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.25rem;
+  }
+  .product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+  .product-price {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .product-add {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    transition: gap 200ms;
+  }
+  .product-add:hover { gap: 0.7rem; }
+
+  /* EDITORIAL SPLIT */
+  .editorial-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+    border-top: 1.5px solid var(--ink);
+  }
+  .editorial-image {
+    overflow: hidden;
+    position: relative;
+  }
+  .editorial-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 800ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .editorial-split:hover .editorial-image img { transform: scale(1.04); }
+  .editorial-content {
+    padding: 4rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--ink);
+    color: var(--base);
+  }
+  .editorial-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .editorial-eyebrow::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--orange); }
+  .editorial-content h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+    margin-bottom: 1.5rem;
+    color: var(--base);
+  }
+  .editorial-content p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: rgba(228,226,221,0.65);
+    max-width: 380px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* LOOKBOOK STRIP */
+  .lookbook {
+    padding: 4rem 3rem;
+    border-top: 1.5px solid rgba(30,30,30,0.12);
+  }
+  .lookbook-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+  }
+  .lookbook-header h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(2rem, 4vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+  .lookbook-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 300px 240px;
+    gap: 0.75rem;
+  }
+  .lk-cell { overflow: hidden; }
+  .lk-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .lk-cell:hover img { transform: scale(1.06); }
+  .lk-span { grid-row: 1 / 3; }
+
+  /* NEWSLETTER */
+  .newsletter {
+    background: var(--red);
+    padding: 5rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .newsletter h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(2rem, 4.5vw, 5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+    color: var(--base);
+  }
+  .newsletter-form { display: flex; flex-direction: column; gap: 1rem; }
+  .newsletter-form input {
+    background: transparent;
+    border: 1.5px solid rgba(228,226,221,0.4);
+    padding: 1rem 1.5rem;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 0.9rem;
+    color: var(--base);
+    outline: none;
+    transition: border-color 200ms;
+  }
+  .newsletter-form input::placeholder { color: rgba(228,226,221,0.5); }
+  .newsletter-form input:focus { border-color: var(--base); }
+  .btn-newsletter {
+    font-family: 'Satoshi', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+    background: var(--base);
+    border: none;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: color 300ms;
+    align-self: flex-start;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 4rem 3rem 2rem;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(228,226,221,0.1);
+  }
+  .footer-brand-name {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--base);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .footer-brand-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: rgba(228,226,221,0.5);
+    max-width: 280px;
+  }
+  .footer-col h4 {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(228,226,221,0.4);
+    margin-bottom: 1.2rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-col ul li a {
+    font-size: 0.88rem;
+    color: rgba(228,226,221,0.7);
+    text-decoration: none;
+    transition: color 200ms;
+  }
+  .footer-col ul li a:hover { color: var(--orange); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom span { font-size: 0.75rem; color: rgba(228,226,221,0.3); }
 </style>
 </head>
 <body>
@@ -853,207 +549,188 @@ footer {
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">SOLSTICE</a>
-  <ul class="nav-links">
+  <ul class="nav-center">
     <li><a href="#">Collection</a></li>
-    <li><a href="#">Editorial</a></li>
+    <li><a href="#">Lookbook</a></li>
     <li><a href="#">Archive</a></li>
     <li><a href="#">About</a></li>
   </ul>
-  <div class="nav-right">
-    <a href="#" class="nav-bag">Cart (0)</a>
+  <div class="nav-icons">
+    <a href="#"><i data-lucide="search" style="width:20px;height:20px;"></i></a>
+    <a href="#"><i data-lucide="shopping-bag" style="width:20px;height:20px;"></i></a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
+  <!-- Gradient blobs -->
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
 
-  <div class="hero-tagline">SS25 Collection — "The Burning Season"</div>
-  <h1 class="hero-headline">
-    SOL<br>
-    <span class="outline">STICE</span>
-  </h1>
-  <div class="hero-sub">
-    <p class="hero-desc">
-      Born from the heat between summer and oblivion. Premium streetwear engineered for those who move between worlds — raw material, refined form.
-    </p>
+  <div class="hero-type slide-up">
+    <span class="hero-line-1">SOLSTICE</span>
+    <span class="hero-line-2">SS 25</span>
+  </div>
+
+  <div class="hero-meta slide-up" style="transition-delay:0.12s;">
+    <div class="hero-desc">
+      <p>Where structure meets surrender. Summer/Spring 2025 distills five seasons of restraint into a collection built for the in-between — neither warm nor cold, neither loud nor silent.</p>
+    </div>
     <div class="hero-cta-group">
-      <a href="#" class="btn-hero">Shop Collection</a>
-      <a href="#" class="btn-hero-outline">View Lookbook</a>
+      <a href="#" class="btn-slide">Browse the Collection</a>
+      <a href="#" class="btn-slide btn-slide-red">Reserve a Fitting</a>
     </div>
   </div>
+
+  <a href="#collection" class="scroll-tag">
+    <i data-lucide="arrow-down" style="width:16px;height:16px;"></i>
+    <span>Scroll</span>
+  </a>
 </section>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-track">
-    <span class="ticker-item">SS25 Collection <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">The Burning Season <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">Premium Streetwear <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">Limited Edition <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">Free Shipping Over $250 <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">SS25 Collection <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">The Burning Season <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">Premium Streetwear <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">Limited Edition <span class="ticker-dot">●</span></span>
-    <span class="ticker-item">Free Shipping Over $250 <span class="ticker-dot">●</span></span>
+<!-- CATEGORY DIVIDER: OUTERWEAR -->
+<div class="cat-div slide-up" id="collection">
+  <span class="cat-div-num">01</span>
+  <span class="cat-div-name">Outerwear</span>
+  <span class="cat-div-tag">12 Pieces</span>
+</div>
+
+<!-- PRODUCT GRID -->
+<div class="product-grid slide-up">
+  <div class="product-card">
+    <div class="product-img">
+      <img src="../../images/fashion-warm/fw-1.jpg" alt="Field Coat No. 01">
+      <span class="product-tag">New</span>
+    </div>
+    <div class="product-info">
+      <div class="product-name">Field Coat No. 01</div>
+      <div class="product-meta">
+        <span class="product-price">$640</span>
+        <button class="product-add">Add <i data-lucide="plus" style="width:14px;height:14px;"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="product-card">
+    <div class="product-img">
+      <img src="../../images/fashion-warm/fw-2.jpg" alt="Seam Jacket">
+    </div>
+    <div class="product-info">
+      <div class="product-name">Seam Jacket</div>
+      <div class="product-meta">
+        <span class="product-price">$480</span>
+        <button class="product-add">Add <i data-lucide="plus" style="width:14px;height:14px;"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="product-card">
+    <div class="product-img">
+      <img src="../../images/fashion-warm/fw-3.jpg" alt="Canvas Over">
+      <span class="product-tag">Ltd</span>
+    </div>
+    <div class="product-info">
+      <div class="product-name">Canvas Over</div>
+      <div class="product-meta">
+        <span class="product-price">$720</span>
+        <button class="product-add">Add <i data-lucide="plus" style="width:14px;height:14px;"></i></button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- COLLECTION GRID -->
-<section class="collection">
-  <div class="collection-header reveal">
-    <h2 class="collection-title">THE<br>COLLECTION</h2>
-    <div class="collection-meta">
-      <div class="season">Spring / Summer 2025</div>
-      <div class="count">32 <span>pieces</span></div>
-    </div>
-  </div>
-  <div class="product-grid">
-    <div class="product-card reveal">
-      <div class="product-visual">
-        <div class="product-bg p-bg-1"></div>
-        <div class="product-badge">New Drop</div>
-        <div class="product-quick">Quick Add +</div>
-      </div>
-      <div class="product-info">
-        <div class="product-name">Ember Oversized Tee</div>
-        <div class="product-sub">Heavyweight 340gsm / 4 colors</div>
-        <div class="product-price">
-          <span class="price-amount">$148</span>
-          <span class="price-add">Add to Cart →</span>
-        </div>
-      </div>
-    </div>
-    <div class="product-card reveal">
-      <div class="product-visual">
-        <div class="product-bg p-bg-2"></div>
-        <div class="product-badge">Limited</div>
-        <div class="product-quick">Quick Add +</div>
-      </div>
-      <div class="product-info">
-        <div class="product-name">Solstice Cargo Pant</div>
-        <div class="product-sub">Ripstop Canvas / Unisex Cut</div>
-        <div class="product-price">
-          <span class="price-amount">$265</span>
-          <span class="price-add">Add to Cart →</span>
-        </div>
-      </div>
-    </div>
-    <div class="product-card reveal">
-      <div class="product-visual">
-        <div class="product-bg p-bg-3"></div>
-        <div class="product-quick">Quick Add +</div>
-      </div>
-      <div class="product-info">
-        <div class="product-name">Void Utility Jacket</div>
-        <div class="product-sub">Waxed Cotton / Removable Liner</div>
-        <div class="product-price">
-          <span class="price-amount">$495</span>
-          <span class="price-add">Add to Cart →</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- CATEGORY DIVIDER: ESSENTIALS -->
+<div class="cat-div slide-up">
+  <span class="cat-div-num">02</span>
+  <span class="cat-div-name">Essentials</span>
+  <span class="cat-div-tag">24 Pieces</span>
+</div>
 
-<!-- POSTER SECTION -->
-<section class="poster-section reveal">
-  <div class="poster-inner">
-    <div class="poster-blob"></div>
-    <div class="poster-content">
-      <div class="poster-eyebrow">The Philosophy</div>
-      <h2 class="poster-headline">MADE FOR<br>THE MARGIN</h2>
-      <p class="poster-desc">
-        Solstice exists at the intersection of craft and confrontation. Every garment is a statement — not a uniform. Designed in London. Made in Portugal. Worn everywhere else.
-      </p>
-      <a href="#" class="btn-poster">Our Story →</a>
+<!-- PRODUCT GRID 2 -->
+<div class="product-grid slide-up">
+  <div class="product-card">
+    <div class="product-img">
+      <img src="../../images/fashion-warm/fw-4.jpg" alt="Wide-Cut Trouser">
     </div>
-    <div class="poster-visual">
-      <div class="poster-visual-item pv-bg-1"></div>
-      <div class="poster-visual-item pv-bg-2"></div>
-      <div class="poster-visual-item pv-bg-3"></div>
-      <div class="poster-visual-item pv-bg-4"></div>
-    </div>
-  </div>
-</section>
-
-<!-- MANIFESTO -->
-<section class="manifesto reveal">
-  <div class="manifesto-inner">
-    <div class="manifesto-label">Manifesto / 2025</div>
-    <p class="manifesto-text">
-      We don't dress for crowds. We dress for<br>
-      <span class="red">the moment between dusk and ignition.</span><br>
-      Fabric as armour. Silhouette as signal.<br>
-      Quality that outlasts the trend.
-    </p>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <h2 class="testimonials-title reveal">WHAT PEOPLE<br>ARE SAYING</h2>
-  <div class="testimonials-grid">
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"The Void Jacket is unlike anything I've owned. The construction is immaculate — every seam, every detail tells you this was made with real intention."</p>
-      <div class="review-author">
-        <div class="reviewer-avatar">MK</div>
-        <div>
-          <div class="reviewer-name">Marcus K.</div>
-          <div class="reviewer-tag">Verified Buyer — London</div>
-        </div>
-      </div>
-    </div>
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"I've been following Solstice since their first drop. The SS25 collection is their best work. The Ember Tee hits different — the weight, the drape, everything."</p>
-      <div class="review-author">
-        <div class="reviewer-avatar">SL</div>
-        <div>
-          <div class="reviewer-name">Sofia L.</div>
-          <div class="reviewer-tag">Verified Buyer — Paris</div>
-        </div>
-      </div>
-    </div>
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"The Cargo Pants are the real deal. I wore them across three time zones and they looked better at the end of the trip than the beginning."</p>
-      <div class="review-author">
-        <div class="reviewer-avatar">JR</div>
-        <div>
-          <div class="reviewer-name">James R.</div>
-          <div class="reviewer-tag">Verified Buyer — New York</div>
-        </div>
+    <div class="product-info">
+      <div class="product-name">Wide-Cut Trouser</div>
+      <div class="product-meta">
+        <span class="product-price">$295</span>
+        <button class="product-add">Add <i data-lucide="plus" style="width:14px;height:14px;"></i></button>
       </div>
     </div>
   </div>
-</section>
-
-<!-- PRESS -->
-<div class="press-bar reveal">
-  <span class="press-label">As Seen In</span>
-  <div class="press-logos">
-    <span class="press-logo">HIGHSNOBIETY</span>
-    <span class="press-logo">HYPEBEAST</span>
-    <span class="press-logo">WALLPAPER*</span>
-    <span class="press-logo">DAZED</span>
-    <span class="press-logo">i-D MAGAZINE</span>
-    <span class="press-logo">VOGUE RUNWAY</span>
+  <div class="product-card">
+    <div class="product-img">
+      <img src="../../images/fashion-warm/fw-5.jpg" alt="Relaxed Linen Set">
+      <span class="product-tag">New</span>
+    </div>
+    <div class="product-info">
+      <div class="product-name">Relaxed Linen Set</div>
+      <div class="product-meta">
+        <span class="product-price">$380</span>
+        <button class="product-add">Add <i data-lucide="plus" style="width:14px;height:14px;"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="product-card">
+    <div class="product-img">
+      <img src="../../images/fashion-warm/fw-6.jpg" alt="Woven Tee">
+    </div>
+    <div class="product-info">
+      <div class="product-name">Woven Tee</div>
+      <div class="product-meta">
+        <span class="product-price">$145</span>
+        <button class="product-add">Add <i data-lucide="plus" style="width:14px;height:14px;"></i></button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-blob"></div>
-  <div class="cta-eyebrow">Drop Two Incoming</div>
-  <h2 class="cta-headline reveal">DON'T<br>MISS IT</h2>
-  <div class="cta-actions reveal">
-    <a href="#" class="btn-hero">Shop Now</a>
-    <a href="#" class="btn-hero-outline" style="border-color:#666; color:var(--cream);">Join the List</a>
+<!-- EDITORIAL SPLIT -->
+<div class="editorial-split slide-up">
+  <div class="editorial-image">
+    <img src="../../images/fashion-warm/fw-1.jpg" alt="Editorial">
+  </div>
+  <div class="editorial-content">
+    <div class="editorial-eyebrow">The Philosophy</div>
+    <h2>Against the Expected</h2>
+    <p>SOLSTICE was born from frustration with the predictable cycle: hype, drop, disappear. We build collections that age into something worth keeping — fabrics sourced from three mills, cut patterns refined over fourteen months.</p>
+    <a href="#" class="btn-slide" style="color:var(--base);border-color:rgba(228,226,221,0.4);">Read Our Manifesto</a>
+  </div>
+</div>
+
+<!-- LOOKBOOK -->
+<section class="lookbook slide-up">
+  <div class="lookbook-header">
+    <h2>SS 25<br>Lookbook</h2>
+    <a href="#" class="btn-slide" style="font-size:0.75rem;padding:0.7rem 1.8rem;">View All <i data-lucide="arrow-right" style="width:14px;height:14px;display:inline;"></i></a>
+  </div>
+  <div class="lookbook-grid">
+    <div class="lk-cell lk-span">
+      <img src="../../images/fashion-warm/fw-2.jpg" alt="Lookbook 1">
+    </div>
+    <div class="lk-cell">
+      <img src="../../images/fashion-warm/fw-3.jpg" alt="Lookbook 2">
+    </div>
+    <div class="lk-cell">
+      <img src="../../images/fashion-warm/fw-4.jpg" alt="Lookbook 3">
+    </div>
+    <div class="lk-cell">
+      <img src="../../images/fashion-warm/fw-5.jpg" alt="Lookbook 4">
+    </div>
+    <div class="lk-cell">
+      <img src="../../images/fashion-warm/fw-6.jpg" alt="Lookbook 5">
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter slide-up">
+  <h2>First To<br>Know,<br>First To<br>Own.</h2>
+  <div class="newsletter-form">
+    <p style="font-size:0.9rem;color:rgba(228,226,221,0.7);line-height:1.6;max-width:380px;">Drop access, archive sale notifications, and the occasional thought — nothing more. No algorithm. No noise.</p>
+    <input type="email" placeholder="your@address.com">
+    <button class="btn-newsletter">Join the List</button>
   </div>
 </section>
 
@@ -1062,66 +739,52 @@ footer {
   <div class="footer-top">
     <div>
       <div class="footer-brand-name">SOLSTICE</div>
-      <p class="footer-brand-desc">Premium streetwear for those who refuse to choose between craft and edge. Made in Portugal. Sold worldwide.</p>
-      <div class="footer-social">
-        <a href="#" class="social-link">Instagram</a>
-        <a href="#" class="social-link">TikTok</a>
-        <a href="#" class="social-link">Pinterest</a>
-      </div>
+      <p class="footer-brand-desc">A seasonal lifestyle label built around restraint, function, and material integrity. Made in limited quantities.</p>
     </div>
     <div class="footer-col">
-      <div class="footer-col-title">Shop</div>
+      <h4>Shop</h4>
       <ul>
-        <li><a href="#">New Arrivals</a></li>
-        <li><a href="#">Collection SS25</a></li>
         <li><a href="#">Outerwear</a></li>
-        <li><a href="#">Tops & Tees</a></li>
-        <li><a href="#">Bottoms</a></li>
-        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Essentials</a></li>
+        <li><a href="#">Footwear</a></li>
+        <li><a href="#">Archive</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <div class="footer-col-title">Help</div>
+      <h4>Company</h4>
       <ul>
-        <li><a href="#">Size Guide</a></li>
-        <li><a href="#">Shipping & Returns</a></li>
-        <li><a href="#">Order Status</a></li>
-        <li><a href="#">Care Instructions</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <div class="footer-col-title">Brand</div>
-      <ul>
-        <li><a href="#">Our Story</a></li>
-        <li><a href="#">Sustainability</a></li>
-        <li><a href="#">Editorial</a></li>
-        <li><a href="#">Press</a></li>
+        <li><a href="#">About</a></li>
         <li><a href="#">Stockists</a></li>
+        <li><a href="#">Wholesale</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">Sizing</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Care</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <span class="footer-copy">© 2025 SOLSTICE — Premium Streetwear. All Rights Reserved.</span>
-    <div class="footer-legal">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Cookie Preferences</a>
-    </div>
+    <span>&copy; 2025 SOLSTICE — All rights reserved</span>
+    <span style="color:rgba(228,226,221,0.3);font-size:0.72rem;">Privacy &nbsp;&middot;&nbsp; Terms &nbsp;&middot;&nbsp; Cookies</span>
   </div>
 </footer>
 
 <script>
-// Scroll reveal
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
+lucide.createIcons();
+
+const reveals = document.querySelectorAll('.slide-up');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
   });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-reveals.forEach(el => observer.observe(el));
+}, { threshold: 0.06 });
+reveals.forEach(el => obs.observe(el));
 </script>
 </body>
 </html>

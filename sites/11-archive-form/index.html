@@ -3,868 +3,410 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARCHIV — Objects of Lasting Form</title>
+<title>ARCHIV — Museum-Grade Furniture</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=General+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --cream: #F5F2EC;
-  --parchment: #EDE9E1;
-  --charcoal: #2A2825;
-  --stone: #8C8880;
-  --border: #D4CFC7;
-  --accent: #7A6F5D;
-  --white: #FDFCFA;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--cream);
-  color: var(--charcoal);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 1.7;
-  overflow-x: hidden;
-}
-
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28px 60px;
-  background: transparent;
-  mix-blend-mode: multiply;
-  transition: background 0.4s ease;
-}
-nav.scrolled {
-  background: var(--cream);
-  mix-blend-mode: normal;
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  color: var(--charcoal);
-  text-decoration: none;
-}
-.nav-index {
-  display: flex;
-  gap: 48px;
-  list-style: none;
-}
-.nav-index a {
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--charcoal);
-  text-decoration: none;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-}
-.nav-index a:hover { opacity: 1; }
-.nav-cta {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--charcoal);
-  text-decoration: none;
-  border-bottom: 1px solid var(--charcoal);
-  padding-bottom: 2px;
-  opacity: 0.8;
-}
-
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding-top: 80px;
-  overflow: hidden;
-}
-.hero-left {
-  padding: 80px 60px 80px 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  border-right: 1px solid var(--border);
-}
-.hero-index-label {
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--stone);
-  margin-bottom: 60px;
-}
-.hero-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(56px, 6vw, 88px);
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: var(--charcoal);
-  margin-bottom: 48px;
-}
-.hero-h1 em {
-  font-style: italic;
-  color: var(--accent);
-}
-.hero-sub {
-  font-size: 14px;
-  color: var(--stone);
-  max-width: 320px;
-  line-height: 1.8;
-  margin-bottom: 60px;
-}
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-.btn-primary {
-  display: inline-block;
-  background: var(--charcoal);
-  color: var(--cream);
-  padding: 16px 36px;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.3s;
-}
-.btn-primary:hover { background: var(--accent); }
-.btn-text {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--stone);
-  text-decoration: none;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-}
-.hero-right {
-  position: relative;
-  overflow: hidden;
-}
-.hero-img-wrap {
-  width: 100%;
-  height: 100%;
-  min-height: 600px;
-  background: var(--parchment);
-  position: relative;
-  overflow: hidden;
-}
-.hero-img-bg {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 60% 30%, #D9D2C5 0%, transparent 60%),
-    radial-gradient(ellipse at 30% 80%, #C8C0B0 0%, transparent 50%);
-}
-.hero-object {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 280px;
-  height: 360px;
-  background: linear-gradient(135deg, #B5AFA5 0%, #8C8880 40%, #6E6860 100%);
-  border-radius: 2px;
-  box-shadow: 40px 40px 80px rgba(42,40,37,0.2);
-  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-.hero-object:hover { transform: translateX(-50%) scale(1.03); }
-.hero-object::before {
-  content: '';
-  position: absolute;
-  top: 20px; left: 20px; right: 20px; bottom: 20px;
-  border: 1px solid rgba(253,252,250,0.2);
-}
-.hero-caption {
-  position: absolute;
-  bottom: 28px;
-  right: 28px;
-  font-size: 11px;
-  color: var(--stone);
-  letter-spacing: 0.08em;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-
-/* TICKER */
-.ticker-bar {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 14px 0;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.ticker-inner {
-  display: inline-block;
-  animation: ticker 30s linear infinite;
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--stone);
-}
-.ticker-sep { margin: 0 40px; opacity: 0.3; }
-@keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* SECTION HEADERS */
-.section-label {
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--stone);
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-  max-width: 60px;
-}
-
-/* COLLECTION GRID */
-.collection {
-  padding: 120px 60px;
-}
-.collection-header {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 40px;
-  align-items: end;
-  margin-bottom: 80px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 40px;
-}
-.collection-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(36px, 4vw, 56px);
-  font-weight: 400;
-  line-height: 1.1;
-  grid-column: 1 / 3;
-}
-.collection-desc {
-  font-size: 13px;
-  color: var(--stone);
-  line-height: 1.8;
-}
-.collection-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 2px;
-}
-.product-card {
-  background: var(--parchment);
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-.product-card:first-child {
-  grid-row: 1 / 3;
-}
-.product-img {
-  width: 100%;
-  aspect-ratio: 3/4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  overflow: hidden;
-}
-.product-card:first-child .product-img { aspect-ratio: 2/3; }
-.product-card:hover .product-img { transform: scale(1.04); }
-.product-shape {
-  width: 60%;
-  height: 70%;
-  position: relative;
-}
-.shape-chair {
-  background: linear-gradient(150deg, #A09890 0%, #6E6860 100%);
-  clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 70%, 85% 85%, 75% 100%, 25% 100%, 15% 85%, 0% 70%, 0% 15%);
-}
-.shape-table {
-  background: linear-gradient(135deg, #C5BDB3 0%, #8C8075 100%);
-  border-radius: 2px;
-}
-.shape-lamp {
-  background: linear-gradient(180deg, #B5AFA5 0%, #7A7268 100%);
-  border-radius: 50% 50% 10% 10%;
-}
-.product-info {
-  padding: 20px 24px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-top: 1px solid var(--border);
-}
-.product-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  font-weight: 400;
-}
-.product-sub { font-size: 12px; color: var(--stone); margin-top: 4px; }
-.product-price {
-  font-size: 13px;
-  letter-spacing: 0.05em;
-  color: var(--charcoal);
-}
-
-/* PHILOSOPHY */
-.philosophy {
-  padding: 120px 60px;
-  display: grid;
-  grid-template-columns: 1fr 2px 1fr;
-  gap: 80px;
-  border-top: 1px solid var(--border);
-}
-.phil-divider { background: var(--border); }
-.phil-left {}
-.phil-quote {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(28px, 3vw, 44px);
-  font-weight: 400;
-  line-height: 1.25;
-  font-style: italic;
-  margin-top: 40px;
-}
-.phil-attr {
-  font-size: 12px;
-  color: var(--stone);
-  margin-top: 32px;
-  letter-spacing: 0.05em;
-}
-.phil-right { padding-top: 48px; }
-.phil-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 400;
-  margin-bottom: 24px;
-}
-.phil-body { font-size: 14px; color: var(--stone); line-height: 1.9; margin-bottom: 20px; }
-.phil-list { list-style: none; margin-top: 32px; }
-.phil-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-.phil-list li:first-child { border-top: 1px solid var(--border); }
-.phil-num {
-  font-size: 11px;
-  color: var(--stone);
-  letter-spacing: 0.1em;
-  min-width: 30px;
-  padding-top: 2px;
-}
-
-/* TESTIMONIALS */
-.testimonials {
-  padding: 120px 60px;
-  background: var(--charcoal);
-  color: var(--cream);
-}
-.test-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 80px;
-  border-bottom: 1px solid rgba(212,207,199,0.2);
-  padding-bottom: 40px;
-}
-.test-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(32px, 3.5vw, 52px);
-  font-weight: 400;
-  line-height: 1.1;
-}
-.test-count { font-size: 12px; color: rgba(212,207,199,0.5); letter-spacing: 0.1em; }
-.test-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(212,207,199,0.1);
-}
-.test-card {
-  background: var(--charcoal);
-  padding: 48px 40px;
-}
-.test-stars {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 28px;
-}
-.star { width: 12px; height: 12px; background: var(--accent); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
-.test-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 400;
-  font-style: italic;
-  line-height: 1.6;
-  color: rgba(245,242,236,0.9);
-  margin-bottom: 32px;
-}
-.test-author { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(212,207,199,0.5); }
-.test-role { font-size: 12px; color: rgba(212,207,199,0.3); margin-top: 4px; }
-
-/* PROCESS */
-.process {
-  padding: 120px 60px;
-  border-top: 1px solid var(--border);
-}
-.process-grid {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  gap: 80px;
-  margin-top: 60px;
-}
-.process-index { padding-top: 4px; }
-.process-label-small { font-size: 11px; letter-spacing: 0.15em; color: var(--stone); text-transform: uppercase; }
-.process-steps {}
-.step {
-  display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: 40px;
-  padding: 48px 0;
-  border-bottom: 1px solid var(--border);
-  opacity: 0.5;
-  transition: opacity 0.3s;
-}
-.step:first-child { border-top: 1px solid var(--border); }
-.step:hover { opacity: 1; }
-.step-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 48px;
-  font-weight: 400;
-  color: var(--border);
-  line-height: 1;
-}
-.step-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  font-weight: 400;
-  margin-bottom: 16px;
-}
-.step-desc { font-size: 14px; color: var(--stone); line-height: 1.8; }
-
-/* CTA */
-.cta-section {
-  padding: 160px 60px;
-  text-align: center;
-  border-top: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-}
-.cta-bg {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, var(--parchment) 0%, var(--cream) 70%);
-}
-.cta-content { position: relative; }
-.cta-eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--stone);
-  margin-bottom: 32px;
-}
-.cta-h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(48px, 6vw, 96px);
-  font-weight: 400;
-  line-height: 1.0;
-  color: var(--charcoal);
-  margin-bottom: 48px;
-}
-.cta-h2 em { font-style: italic; color: var(--accent); }
-.cta-sub {
-  font-size: 14px;
-  color: var(--stone);
-  max-width: 480px;
-  margin: 0 auto 60px;
-  line-height: 1.8;
-}
-.cta-buttons { display: flex; gap: 24px; justify-content: center; align-items: center; }
-.btn-outline {
-  display: inline-block;
-  border: 1px solid var(--charcoal);
-  color: var(--charcoal);
-  padding: 16px 36px;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all 0.3s;
-}
-.btn-outline:hover { background: var(--charcoal); color: var(--cream); }
-.cta-frame {
-  position: absolute;
-  inset: 40px;
-  border: 1px solid var(--border);
-  pointer-events: none;
-}
-
-/* FOOTER */
-footer {
-  background: var(--charcoal);
-  color: var(--cream);
-  padding: 80px 60px 40px;
-}
-.footer-top {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px;
-  padding-bottom: 60px;
-  border-bottom: 1px solid rgba(212,207,199,0.15);
-}
-.footer-brand-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  margin-bottom: 20px;
-}
-.footer-brand-desc { font-size: 13px; color: rgba(212,207,199,0.5); line-height: 1.8; max-width: 280px; }
-.footer-col-title {
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(212,207,199,0.4);
-  margin-bottom: 24px;
-}
-.footer-links { list-style: none; }
-.footer-links li { margin-bottom: 12px; }
-.footer-links a {
-  font-size: 13px;
-  color: rgba(212,207,199,0.6);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-links a:hover { color: var(--cream); }
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 40px;
-  font-size: 12px;
-  color: rgba(212,207,199,0.3);
-}
-
-/* SCROLL FADE */
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (max-width: 900px) {
-  nav { padding: 20px 24px; }
-  .nav-index { display: none; }
-  .hero { grid-template-columns: 1fr; }
-  .hero-right { min-height: 400px; }
-  .collection-grid { grid-template-columns: 1fr 1fr; }
-  .collection-header { grid-template-columns: 1fr; }
-  .philosophy { grid-template-columns: 1fr; }
-  .phil-divider { display: none; }
-  .test-grid { grid-template-columns: 1fr; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .process-grid { grid-template-columns: 1fr; }
-}
-</style>
-
-<!-- inject-local -->
-<style>
-  .hero-img-bg {
-    background-image: url('../../images/furniture/furn-1.jpg') !important;
-    background-size: cover; background-position: center;
+  :root {
+    --cream: #FDFBF9;
+    --ink: #1a1a1a;
+    --secondary: #737373;
+    --border: #e5e5e5;
+    --border-strong: #d4d4d4;
+    --hover-bg: #f5f3f0;
   }
-  .product-img {
-    background-image: url('../../images/furniture/furn-2.jpg') !important;
-    background-size: cover; background-position: center;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'General Sans', sans-serif; background: var(--cream); color: var(--ink); }
+  .serif { font-family: 'Cormorant Garamond', serif; }
+
+  /* Index label style */
+  .index-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--secondary); }
+
+  /* Slow scale on image hover */
+  .img-hover { overflow: hidden; }
+  .img-hover img {
+    transition: transform 2s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease;
+    filter: grayscale(15%);
   }
+  .img-hover:hover img {
+    transform: scale(1.01);
+    filter: grayscale(0%);
+  }
+
+  /* Text underline link */
+  .text-link {
+    position: relative;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .text-link::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--ink);
+    transition: width 0.3s ease;
+  }
+  .text-link:hover::after { width: 100%; }
+
+  /* Fade in sections */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeUp 1.2s ease forwards; }
+
+  /* Vertical container border */
+  .vertical-border { border-left: 1px solid var(--border); padding-left: 32px; }
+
+  /* Nav */
+  .nav-link {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--ink); }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="mainNav">
-  <a href="#" class="nav-logo">ARCHIV</a>
-  <ul class="nav-index">
-    <li><a href="#collection">Collection</a></li>
-    <li><a href="#philosophy">Philosophy</a></li>
-    <li><a href="#process">Process</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#collection" class="nav-cta">View Catalog</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <p class="hero-index-label">Archive &amp; Form — Vol. III, 2024</p>
-    <h1 class="hero-h1">Objects of<br><em>Lasting</em><br>Form</h1>
-    <p class="hero-sub">Furniture conceived not as decoration, but as architecture for the interior. Each piece a study in restraint, material, and enduring function.</p>
-    <div class="hero-actions">
-      <a href="#collection" class="btn-primary">Explore Collection</a>
-      <a href="#philosophy" class="btn-text">Our Craft</a>
+<!-- HEADER -->
+<header style="border-bottom: 1px solid var(--border); height: 72px; position: sticky; top: 0; z-index: 50; background: var(--cream);">
+  <div style="max-width: 1440px; margin: 0 auto; padding: 0 48px; height: 100%; display: flex; align-items: center; justify-content: space-between;">
+    <!-- Index navigation left -->
+    <nav style="display: flex; align-items: center; gap: 32px;">
+      <a href="#rooms" class="nav-link">Rooms</a>
+      <a href="#collection" class="nav-link">Collection</a>
+      <a href="#materials" class="nav-link">Materials</a>
+      <a href="#commission" class="nav-link">Commission</a>
+    </nav>
+    <!-- Centered logo -->
+    <a href="#" style="position: absolute; left: 50%; transform: translateX(-50%); text-decoration: none;">
+      <span class="serif" style="font-size: 22px; font-weight: 300; letter-spacing: 0.2em; color: var(--ink);">ARCHIV</span>
+    </a>
+    <!-- Right actions -->
+    <div style="display: flex; align-items: center; gap: 24px;">
+      <span class="index-label">Est. 2009</span>
+      <button style="border: none; background: none; cursor: pointer; padding: 4px;">
+        <i data-lucide="search" style="width: 16px; height: 16px; color: var(--secondary);"></i>
+      </button>
+      <a href="#commission" style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 1px; text-decoration: none;">Enquire</a>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="hero-img-wrap">
-      <div class="hero-img-bg"></div>
-      <div class="hero-object"></div>
-      <span class="hero-caption">Archive Series No. 07 — Lounge Chair</span>
+</header>
+
+<!-- OPENING SPREAD HERO -->
+<section style="min-height: 92vh; display: grid; grid-template-columns: 3fr 2fr; border-bottom: 1px solid var(--border);">
+  <!-- Left: large image -->
+  <div class="img-hover" style="border-right: 1px solid var(--border); position: relative; min-height: 80vh;">
+    <img src="../../images/furniture/furn-1.jpg" alt="Archiv — Forma Settee, 2023" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+    <!-- Bottom left caption -->
+    <div style="position: absolute; bottom: 32px; left: 32px;">
+      <p class="index-label" style="margin-bottom: 6px;">No. 01 — Autumn Collection</p>
+      <p class="serif" style="font-size: 13px; color: rgba(253,251,249,0.9);">Forma Settee — Travertine & Blackened Ash, 2023</p>
     </div>
   </div>
-</section>
-
-<!-- TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-inner">
-    Handcrafted Objects<span class="ticker-sep">·</span>European Timber<span class="ticker-sep">·</span>Lifetime Guarantee<span class="ticker-sep">·</span>Made to Order<span class="ticker-sep">·</span>Architectural Furniture<span class="ticker-sep">·</span>Small-Batch Production<span class="ticker-sep">·</span>Handcrafted Objects<span class="ticker-sep">·</span>European Timber<span class="ticker-sep">·</span>Lifetime Guarantee<span class="ticker-sep">·</span>Made to Order<span class="ticker-sep">·</span>Architectural Furniture<span class="ticker-sep">·</span>Small-Batch Production<span class="ticker-sep">·</span>
-  </div>
-</div>
-
-<!-- COLLECTION -->
-<section class="collection" id="collection">
-  <div class="collection-header fade-in">
+  <!-- Right: opening text -->
+  <div style="padding: 80px 48px; display: flex; flex-direction: column; justify-content: space-between;">
     <div>
-      <p class="section-label">Current Collection</p>
-      <h2 class="collection-title">Form follows<br><em style="font-family:'Playfair Display',serif;font-style:italic;">purpose.</em></h2>
+      <p class="index-label" style="margin-bottom: 48px;">Object making since 2009</p>
+      <h1 class="serif fade-in" style="font-size: clamp(48px, 5vw, 80px); font-weight: 300; line-height: 1.05; letter-spacing: -0.01em;">
+        Forms that<br><em>earn</em><br>their place.
+      </h1>
     </div>
-    <div></div>
-    <p class="collection-desc">Each piece in the Archive collection is produced in limited runs of twelve. Designed once. Made well. Owned for a lifetime.</p>
-  </div>
-  <div class="collection-grid fade-in">
-    <div class="product-card">
-      <div class="product-img">
-        <div class="product-shape shape-chair" style="width:55%;height:75%;background:linear-gradient(150deg,#A09890 0%,#6E6860 100%);border-radius:4px;box-shadow:20px 30px 60px rgba(42,40,37,0.15);"></div>
-      </div>
-      <div class="product-info">
-        <div>
-          <div class="product-name">Archive Lounge Chair</div>
-          <div class="product-sub">Solid Walnut · Wool Boucle</div>
-        </div>
-        <div class="product-price">£ 4,800</div>
-      </div>
-    </div>
-    <div class="product-card">
-      <div class="product-img" style="aspect-ratio:1.2/1;">
-        <div class="product-shape shape-table" style="width:70%;height:40%;box-shadow:10px 20px 40px rgba(42,40,37,0.12);"></div>
-      </div>
-      <div class="product-info">
-        <div>
-          <div class="product-name">Form Side Table</div>
-          <div class="product-sub">Blackened Steel · Marble</div>
-        </div>
-        <div class="product-price">£ 1,950</div>
-      </div>
-    </div>
-    <div class="product-card">
-      <div class="product-img" style="aspect-ratio:1.2/1;">
-        <div class="product-shape shape-lamp" style="width:30%;height:60%;box-shadow:10px 20px 40px rgba(42,40,37,0.12);"></div>
-      </div>
-      <div class="product-info">
-        <div>
-          <div class="product-name">Arc Floor Lamp</div>
-          <div class="product-sub">Brushed Brass · Linen</div>
-        </div>
-        <div class="product-price">£ 2,200</div>
-      </div>
-    </div>
-    <div class="product-card" style="display:flex;align-items:center;justify-content:center;background:var(--charcoal);aspect-ratio:auto;">
-      <div style="text-align:center;padding:40px;">
-        <p style="font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);font-weight:400;font-style:italic;margin-bottom:16px;">14 Objects.<br>All Unique.</p>
-        <a href="#" style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(245,242,236,0.5);text-decoration:none;border-bottom:1px solid rgba(245,242,236,0.2);padding-bottom:2px;">View Full Catalog →</a>
-      </div>
+    <div class="vertical-border">
+      <p style="font-size: 14px; line-height: 1.8; color: var(--secondary); max-width: 320px; margin-bottom: 32px;">
+        ARCHIV produces furniture at the intersection of archival craft and structural conviction. Each object begins as a material study and ends as an irreducible form.
+      </p>
+      <a href="#collection" class="text-link" style="font-size: 13px; letter-spacing: 0.05em;">View current collection</a>
     </div>
   </div>
 </section>
 
-<!-- PHILOSOPHY -->
-<section class="philosophy" id="philosophy">
-  <div class="phil-left fade-in">
-    <p class="section-label">The Archiv Philosophy</p>
-    <blockquote class="phil-quote">"We do not make furniture. We resolve the question of how a room should be inhabited."</blockquote>
-    <p class="phil-attr">— Henrik Maas, Founder &amp; Designer</p>
-  </div>
-  <div class="phil-divider"></div>
-  <div class="phil-right fade-in">
-    <h3 class="phil-heading">Designed to outlast everything around it.</h3>
-    <p class="phil-body">Every Archiv object begins as a structural problem. The chair must support without strain. The table must anchor without dominating. What remains after every excess is removed—that is the finished piece.</p>
-    <p class="phil-body">We work exclusively with materials that age with dignity: solid hardwoods, hand-treated leathers, woven natural fibres. Nothing that fades poorly. Nothing that isn't worth inheriting.</p>
-    <ul class="phil-list">
-      <li><span class="phil-num">01</span><span>Sourced from FSC-certified European forests</span></li>
-      <li><span class="phil-num">02</span><span>Hand-finished by master craftspeople in Lisbon</span></li>
-      <li><span class="phil-num">03</span><span>Produced in editions of twelve or fewer</span></li>
-      <li><span class="phil-num">04</span><span>Lifetime structural guarantee on every piece</span></li>
-    </ul>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div class="test-header fade-in">
-    <h2 class="test-title">Collected by those<br>who choose carefully.</h2>
-    <span class="test-count">212 clients worldwide</span>
-  </div>
-  <div class="test-grid fade-in">
-    <div class="test-card">
-      <div class="test-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
-      <p class="test-text">"The Archive Lounge Chair is the most considered piece of furniture I've ever owned. It arrived as a statement and stayed as a companion."</p>
-      <p class="test-author">Clara V.</p>
-      <p class="test-role">Interior Architect, Copenhagen</p>
-    </div>
-    <div class="test-card">
-      <div class="test-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
-      <p class="test-text">"I've furnished three apartments with Archiv. The restraint in their design makes every room feel more deliberate, more honest."</p>
-      <p class="test-author">James T.</p>
-      <p class="test-role">Gallerist, London</p>
-    </div>
-    <div class="test-card">
-      <div class="test-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
-      <p class="test-text">"Six years on, the table looks better now than the day it arrived. That's the only metric I trust when investing in furniture."</p>
-      <p class="test-author">Marta L.</p>
-      <p class="test-role">Architect, Barcelona</p>
-    </div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section class="process" id="process">
-  <p class="section-label fade-in">How it's made</p>
-  <div class="process-grid">
-    <div class="process-index fade-in">
-      <p class="process-label-small">A deliberate<br>sequence of<br>four steps</p>
-    </div>
-    <div class="process-steps fade-in">
-      <div class="step">
-        <div class="step-num">01</div>
+<!-- INDEX / TABLE OF CONTENTS -->
+<section style="border-bottom: 1px solid var(--border); padding: 0 48px;">
+  <div style="max-width: 1440px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: 1fr 3fr; border-bottom: 1px solid var(--border); padding: 24px 0;">
+      <p class="index-label">Index</p>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
         <div>
-          <h4 class="step-title">Commission</h4>
-          <p class="step-desc">Each order begins with a conversation. We understand the room, the light, the life it serves. Dimensions are confirmed. Materials selected from our current stock.</p>
+          <p class="index-label" style="margin-bottom: 12px;">01</p>
+          <a href="#seating" class="text-link" style="font-size: 13px; display: block; margin-bottom: 4px;">Seating</a>
+          <p style="font-size: 12px; color: var(--secondary);">14 objects</p>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
         <div>
-          <h4 class="step-title">Material Selection</h4>
-          <p class="step-desc">Timber is chosen by hand from our Lisbon yard. Each board is evaluated for grain, density, and character. We reject as much as we accept.</p>
+          <p class="index-label" style="margin-bottom: 12px;">02</p>
+          <a href="#tables" class="text-link" style="font-size: 13px; display: block; margin-bottom: 4px;">Tables & Surfaces</a>
+          <p style="font-size: 12px; color: var(--secondary);">9 objects</p>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
         <div>
-          <h4 class="step-title">Construction</h4>
-          <p class="step-desc">Joinery is traditional: mortise and tenon, hand-cut dovetails, no metal fixings where wood will do. Each joint is a structural decision.</p>
+          <p class="index-label" style="margin-bottom: 12px;">03</p>
+          <a href="#storage" class="text-link" style="font-size: 13px; display: block; margin-bottom: 4px;">Storage & Shelving</a>
+          <p style="font-size: 12px; color: var(--secondary);">7 objects</p>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">04</div>
         <div>
-          <h4 class="step-title">Delivery &amp; Placement</h4>
-          <p class="step-desc">White-glove delivery to your door. Our team places and levels every piece. We don't leave until the room is right.</p>
+          <p class="index-label" style="margin-bottom: 12px;">04</p>
+          <a href="#commission" class="text-link" style="font-size: 13px; display: block; margin-bottom: 4px;">Commission</a>
+          <p style="font-size: 12px; color: var(--secondary);">By appointment</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-bg"></div>
-  <div class="cta-frame"></div>
-  <div class="cta-content fade-in">
-    <p class="cta-eyebrow">Begin Your Inquiry</p>
-    <h2 class="cta-h2">Commission<br>something<br><em>enduring.</em></h2>
-    <p class="cta-sub">We accept twelve commissions per year. Inquire early to secure your place in the next production cycle.</p>
-    <div class="cta-buttons">
-      <a href="#" class="btn-primary">Start a Commission</a>
-      <a href="#" class="btn-outline">Download Catalog</a>
+<!-- ROOM 01 — Seating -->
+<section id="seating" style="border-bottom: 1px solid var(--border);">
+  <div style="max-width: 1440px; margin: 0 auto;">
+    <!-- Section header -->
+    <div style="display: grid; grid-template-columns: 1fr 3fr; padding: 48px; border-bottom: 1px solid var(--border);">
+      <div>
+        <p class="index-label" style="margin-bottom: 8px;">Section 01</p>
+        <p class="serif" style="font-size: 14px; font-style: italic; color: var(--secondary);">Seating</p>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+        <h2 class="serif" style="font-size: clamp(32px, 4vw, 56px); font-weight: 300; line-height: 1.0;">
+          A seat is an<br><em>architecture</em> of rest.
+        </h2>
+        <p style="font-size: 13px; color: var(--secondary); max-width: 240px; text-align: right; line-height: 1.6;">
+          Every seating object in the ARCHIV catalogue is structurally resolved — no decorative elements that aren't load-bearing.
+        </p>
+      </div>
+    </div>
+    <!-- Asymmetric image grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; min-height: 580px;">
+      <!-- Large primary -->
+      <div class="img-hover" style="border-right: 1px solid var(--border); position: relative;">
+        <img src="../../images/furniture/furn-2.jpg" alt="Plinth Chair" style="width: 100%; height: 100%; object-fit: cover; min-height: 480px;">
+        <div style="position: absolute; bottom: 24px; left: 24px; background: var(--cream); padding: 16px; border: 1px solid var(--border);">
+          <p class="index-label" style="margin-bottom: 4px;">PC-03</p>
+          <p style="font-size: 14px; font-weight: 500; margin-bottom: 2px;">Plinth Chair</p>
+          <p style="font-size: 12px; color: var(--secondary);">Solid oak, natural linen — £3,200</p>
+        </div>
+      </div>
+      <!-- Two stacked -->
+      <div style="border-right: 1px solid var(--border);">
+        <div class="img-hover" style="border-bottom: 1px solid var(--border); height: 50%;">
+          <img src="../../images/furniture/furn-3.jpg" alt="Stele Bench" style="width: 100%; height: 100%; object-fit: cover; min-height: 240px;">
+        </div>
+        <div style="padding: 24px;">
+          <p class="index-label" style="margin-bottom: 8px;">SB-01</p>
+          <p style="font-size: 14px; font-weight: 500; margin-bottom: 4px;">Stele Bench</p>
+          <p style="font-size: 12px; color: var(--secondary); margin-bottom: 12px;">Honed limestone — £5,800</p>
+          <a href="#" class="text-link" style="font-size: 12px;">Enquire</a>
+        </div>
+      </div>
+      <!-- Right column: product list -->
+      <div style="padding: 32px;">
+        <p class="index-label" style="margin-bottom: 24px;">Also in seating</p>
+        <div style="display: flex; flex-direction: column; gap: 0;">
+          <div style="padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline;">
+            <div>
+              <p style="font-size: 13px; font-weight: 500; margin-bottom: 2px;">Volta Armchair</p>
+              <p style="font-size: 11px; color: var(--secondary);">Walnut & saddle leather</p>
+            </div>
+            <p style="font-size: 12px; color: var(--secondary);">£4,400</p>
+          </div>
+          <div style="padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline;">
+            <div>
+              <p style="font-size: 13px; font-weight: 500; margin-bottom: 2px;">Datum Daybed</p>
+              <p style="font-size: 11px; color: var(--secondary);">Brushed steel & bouclé</p>
+            </div>
+            <p style="font-size: 12px; color: var(--secondary);">£7,200</p>
+          </div>
+          <div style="padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline;">
+            <div>
+              <p style="font-size: 13px; font-weight: 500; margin-bottom: 2px;">Forma Settee</p>
+              <p style="font-size: 11px; color: var(--secondary);">Travertine & blackened ash</p>
+            </div>
+            <p style="font-size: 12px; color: var(--secondary);">£9,800</p>
+          </div>
+          <div style="padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline;">
+            <div>
+              <p style="font-size: 13px; font-weight: 500; margin-bottom: 2px;">Linea Side Chair</p>
+              <p style="font-size: 11px; color: var(--secondary);">Bent beech, rush seat</p>
+            </div>
+            <p style="font-size: 12px; color: var(--secondary);">£1,650</p>
+          </div>
+          <div style="padding-top: 32px;">
+            <a href="#" class="text-link" style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;">Full seating catalogue</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROOM 02 — Tables -->
+<section id="tables" style="border-bottom: 1px solid var(--border);">
+  <div style="max-width: 1440px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: 1fr 3fr; padding: 48px; border-bottom: 1px solid var(--border);">
+      <div>
+        <p class="index-label" style="margin-bottom: 8px;">Section 02</p>
+        <p class="serif" style="font-size: 14px; font-style: italic; color: var(--secondary);">Tables & Surfaces</p>
+      </div>
+      <h2 class="serif" style="font-size: clamp(32px, 4vw, 56px); font-weight: 300; line-height: 1.0;">
+        Surface as<br><em>statement.</em>
+      </h2>
+    </div>
+    <!-- Reverse layout: right-heavy -->
+    <div style="display: grid; grid-template-columns: 1fr 2fr; border-bottom: 1px solid var(--border);">
+      <!-- Left: editorial text + specs -->
+      <div style="padding: 48px; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <p class="index-label" style="margin-bottom: 6px;">Featured object — TT-07</p>
+          <p class="serif" style="font-size: 32px; font-weight: 300; margin-bottom: 16px; line-height: 1.1;">Archive Dining Table</p>
+          <p style="font-size: 13px; color: var(--secondary); line-height: 1.75; margin-bottom: 32px;">
+            A single slab of book-matched Portuguese marble on a base of burnished mild steel. The top appears to float — achieved through a concealed cantilever connection developed over two years of structural testing.
+          </p>
+          <!-- Specification table -->
+          <div style="border-top: 1px solid var(--border);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; padding: 10px 0; border-bottom: 1px solid var(--border);">
+              <p style="font-size: 11px; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.08em;">Dimensions</p>
+              <p style="font-size: 12px;">240 × 100 × 74 cm</p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; padding: 10px 0; border-bottom: 1px solid var(--border);">
+              <p style="font-size: 11px; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.08em;">Material — Top</p>
+              <p style="font-size: 12px;">Portuguese Estremoz marble</p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; padding: 10px 0; border-bottom: 1px solid var(--border);">
+              <p style="font-size: 11px; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.08em;">Material — Base</p>
+              <p style="font-size: 12px;">Burnished mild steel</p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; padding: 10px 0; border-bottom: 1px solid var(--border);">
+              <p style="font-size: 11px; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.08em;">Lead time</p>
+              <p style="font-size: 12px;">18–22 weeks</p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; padding: 10px 0;">
+              <p style="font-size: 11px; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.08em;">Price</p>
+              <p style="font-size: 12px; font-weight: 600;">£14,200</p>
+            </div>
+          </div>
+        </div>
+        <a href="#commission" class="text-link" style="font-size: 13px; letter-spacing: 0.05em; margin-top: 32px; display: inline-block;">Request material samples</a>
+      </div>
+      <!-- Right: large image -->
+      <div class="img-hover" style="min-height: 520px;">
+        <img src="../../images/furniture/furn-4.jpg" alt="Archive Dining Table" style="width: 100%; height: 100%; object-fit: cover; min-height: 520px;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATERIALS & PROCESS -->
+<section id="materials" style="border-bottom: 1px solid var(--border); padding: 96px 48px;">
+  <div style="max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;">
+    <div>
+      <p class="index-label" style="margin-bottom: 24px;">On material selection</p>
+      <h2 class="serif" style="font-size: clamp(36px, 4vw, 60px); font-weight: 300; line-height: 1.05; margin-bottom: 32px;">
+        We source what<br>the object<br><em>requires.</em>
+      </h2>
+      <a href="#" class="text-link" style="font-size: 13px;">Material sourcing notes</a>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+      <!-- Each material block -->
+      <div style="padding: 32px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+        <div style="width: 32px; height: 32px; background: #C8B99A; margin-bottom: 16px;"></div>
+        <p style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">European Oak</p>
+        <p style="font-size: 12px; color: var(--secondary); line-height: 1.65;">Air-dried for 36 months minimum. Sourced from managed forests in Austria and Slovenia. No engineered cores.</p>
+      </div>
+      <div style="padding: 32px; border-bottom: 1px solid var(--border);">
+        <div style="width: 32px; height: 32px; background: #E8E4DC; border: 1px solid var(--border-strong); margin-bottom: 16px;"></div>
+        <p style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">Portuguese Marble</p>
+        <p style="font-size: 12px; color: var(--secondary); line-height: 1.65;">Quarried from Estremoz and Alentejo. Each slab selected in person. Movement and veining considered part of the object's identity.</p>
+      </div>
+      <div style="padding: 32px; border-right: 1px solid var(--border);">
+        <div style="width: 32px; height: 32px; background: #4A4A4A; margin-bottom: 16px;"></div>
+        <p style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">Blackened Steel</p>
+        <p style="font-size: 12px; color: var(--secondary); line-height: 1.65;">Cold-rolled mild steel, chemically patinated. Sealed with beeswax and linseed oil. No powder coating — the surface changes over decades.</p>
+      </div>
+      <div style="padding: 32px;">
+        <div style="width: 32px; height: 32px; background: #D4CAB8; margin-bottom: 16px;"></div>
+        <p style="font-size: 14px; font-weight: 500; margin-bottom: 8px;">Natural Linen</p>
+        <p style="font-size: 12px; color: var(--secondary); line-height: 1.65;">Undyed, unbleached Belgian linen. Pre-washed for softness. Upholstered over horsehair padding — traditional methods for durable comfort.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMISSION -->
+<section id="commission" style="background: var(--ink); border-bottom: 1px solid var(--border); padding: 96px 48px;">
+  <div style="max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+    <div>
+      <p style="font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(253,251,249,0.4); margin-bottom: 32px;">Commission Enquiry</p>
+      <h2 class="serif" style="font-size: clamp(36px, 4vw, 64px); font-weight: 300; line-height: 1.05; color: var(--cream); margin-bottom: 24px;">
+        An object made<br>for one space,<br><em>once.</em>
+      </h2>
+      <p style="font-size: 14px; line-height: 1.8; color: rgba(253,251,249,0.6); max-width: 380px;">
+        ARCHIV accepts a limited number of bespoke commissions each year. We begin with the space, then the material, then the form. Each commission typically takes 6–12 months from first conversation to delivery.
+      </p>
+    </div>
+    <div>
+      <div style="border: 1px solid rgba(253,251,249,0.1); padding: 48px;">
+        <div style="margin-bottom: 24px;">
+          <label style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(253,251,249,0.4); display: block; margin-bottom: 8px;">Your name</label>
+          <input type="text" placeholder="Full name" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(253,251,249,0.2); color: var(--cream); font-size: 14px; padding: 8px 0; outline: none; font-family: 'General Sans', sans-serif;">
+        </div>
+        <div style="margin-bottom: 24px;">
+          <label style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(253,251,249,0.4); display: block; margin-bottom: 8px;">Email</label>
+          <input type="email" placeholder="you@example.com" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(253,251,249,0.2); color: var(--cream); font-size: 14px; padding: 8px 0; outline: none; font-family: 'General Sans', sans-serif;">
+        </div>
+        <div style="margin-bottom: 32px;">
+          <label style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(253,251,249,0.4); display: block; margin-bottom: 8px;">The brief</label>
+          <textarea placeholder="Describe the space, the need, the materials you love." rows="4" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(253,251,249,0.2); color: var(--cream); font-size: 14px; padding: 8px 0; outline: none; resize: none; font-family: 'General Sans', sans-serif;"></textarea>
+        </div>
+        <button style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: var(--cream); border: none; padding: 14px 32px; cursor: pointer; transition: opacity 0.2s; font-family: 'General Sans', sans-serif;" onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">
+          Send enquiry
+        </button>
+      </div>
+      <p style="font-size: 12px; color: rgba(253,251,249,0.3); margin-top: 16px;">We respond to all enquiries within 3 business days. Showroom visits by appointment — London &amp; Amsterdam.</p>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-top">
+<footer style="padding: 48px; border-top: 1px solid var(--border);">
+  <div style="max-width: 1440px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
     <div>
-      <div class="footer-brand-name">ARCHIV</div>
-      <p class="footer-brand-desc">Objects of lasting form, produced by hand in Lisbon, Portugal. Delivered worldwide. Designed to be inherited.</p>
+      <span class="serif" style="font-size: 18px; font-weight: 300; letter-spacing: 0.2em; color: var(--ink);">ARCHIV</span>
+      <p style="font-size: 11px; color: var(--secondary); margin-top: 4px; letter-spacing: 0.05em;">Museum-Grade Furniture. Established 2009.</p>
     </div>
-    <div>
-      <p class="footer-col-title">Collection</p>
-      <ul class="footer-links">
-        <li><a href="#">Seating</a></li>
-        <li><a href="#">Tables</a></li>
-        <li><a href="#">Storage</a></li>
-        <li><a href="#">Lighting</a></li>
-        <li><a href="#">Archive</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-title">Studio</p>
-      <ul class="footer-links">
-        <li><a href="#">About</a></li>
-        <li><a href="#">Process</a></li>
-        <li><a href="#">Bespoke</a></li>
-        <li><a href="#">Press</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-title">Contact</p>
-      <ul class="footer-links">
-        <li><a href="#">commission@archiv.co</a></li>
-        <li><a href="#">+351 21 000 0000</a></li>
-        <li><a href="#">Rua do Arsenal, Lisbon</a></li>
-        <li><a href="#">Visit by appointment</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2024 Archiv Studio, Lda. All rights reserved.</span>
-    <span>Designed with intention. Built to last.</span>
+    <nav style="display: flex; gap: 32px;">
+      <a href="#" class="nav-link">Press</a>
+      <a href="#" class="nav-link">Trade programme</a>
+      <a href="#" class="nav-link">Archive</a>
+      <a href="#" class="nav-link">Privacy</a>
+    </nav>
+    <p style="font-size: 11px; color: var(--secondary);">London & Amsterdam — © 2025 ARCHIV Ltd.</p>
   </div>
 </footer>
 
 <script>
-// Nav scroll
-const nav = document.getElementById('mainNav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 60);
-});
+  lucide.createIcons();
 
-// Scroll fade
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  // Intersection observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.serif').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(10px)';
+    el.style.transition = 'opacity 1.2s ease, transform 1.2s ease';
+    observer.observe(el);
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>

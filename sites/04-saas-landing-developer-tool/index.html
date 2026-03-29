@@ -3,1218 +3,837 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GRID.SH — Deploy Anywhere in Seconds</title>
+<title>GRID.SH — Deploy Without Ceremony</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --cream: #F5F0E8;
-  --cobalt: #1533CC;
-  --cobalt-dark: #0E24A8;
-  --cobalt-light: #3D5BDD;
-  --black: #0A0A0A;
-  --white: #FFFFFF;
-  --gray-100: #ECEAE4;
-  --gray-200: #D8D4CB;
-  --gray-500: #8E8A82;
-  --gray-700: #4A4845;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--cream);
-  color: var(--black);
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 14px;
-  overflow-x: hidden;
-}
-
-/* ── GRID SYSTEM ── */
-.grid-12 {
-  display: grid;
-  grid-template-columns: 48px repeat(11, 1fr);
-  border-left: 1px solid var(--black);
-}
-
-.col-label {
-  border-right: 1px solid var(--black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 4px;
-  position: relative;
-}
-
-.col-label span {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  writing-mode: vertical-rl;
-}
-
-/* ── NAV ── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 200;
-  background: var(--cream);
-  border-bottom: 1px solid var(--black);
-  display: flex;
-  align-items: stretch;
-  height: 56px;
-}
-
-.nav-label {
-  width: 48px;
-  border-right: 1px solid var(--black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.nav-label span {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.2em;
-  color: var(--gray-500);
-  writing-mode: vertical-rl;
-  text-transform: uppercase;
-}
-
-.nav-main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-}
-
-.nav-logo {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--cobalt);
-  text-decoration: none;
-  letter-spacing: -0.01em;
-}
-
-.nav-links {
-  display: flex;
-  gap: 32px;
-  list-style: none;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--gray-700);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-family: 'IBM Plex Mono', monospace;
-  transition: color 0.2s;
-}
-
-.nav-links a:hover { color: var(--cobalt); }
-
-.nav-cta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.btn-nav {
-  background: var(--cobalt);
-  color: var(--white);
-  padding: 10px 24px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-
-.btn-nav:hover { background: var(--cobalt-dark); }
-
-.btn-nav-ghost {
-  background: transparent;
-  color: var(--cobalt);
-  border: 1px solid var(--cobalt);
-  padding: 9px 24px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-}
-
-.btn-nav-ghost:hover { background: var(--cobalt); color: white; }
-
-/* ── HERO ── */
-.hero {
-  margin-top: 56px;
-  border-bottom: 1px solid var(--black);
-  display: grid;
-  grid-template-columns: 48px 1fr;
-}
-
-.hero-side {
-  border-right: 1px solid var(--black);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 32px 0;
-  gap: 24px;
-}
-
-.hero-side-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  writing-mode: vertical-rl;
-}
-
-.hero-content {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  border-bottom: 0;
-}
-
-.hero-main {
-  padding: 80px 60px 80px 60px;
-  border-right: 1px solid var(--black);
-}
-
-.hero-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 32px;
-  padding: 8px 14px;
-  background: var(--cobalt);
-  color: white;
-}
-
-.status-dot {
-  width: 6px;
-  height: 6px;
-  background: #00FF88;
-  border-radius: 50%;
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-.status-text {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-.hero-h1 {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: clamp(56px, 7vw, 100px);
-  font-weight: 700;
-  line-height: 0.88;
-  letter-spacing: -0.03em;
-  color: var(--black);
-  margin-bottom: 32px;
-}
-
-.hero-h1 .blue { color: var(--cobalt); }
-
-.hero-desc {
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--gray-700);
-  max-width: 560px;
-  margin-bottom: 48px;
-  font-weight: 400;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 48px;
-}
-
-.btn-primary {
-  background: var(--cobalt);
-  color: var(--white);
-  padding: 16px 36px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-
-.btn-primary:hover { background: var(--cobalt-dark); }
-
-.btn-secondary {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--black);
-  text-decoration: none;
-  border-bottom: 1px solid var(--black);
-  padding-bottom: 2px;
-  transition: color 0.2s, border-color 0.2s;
-}
-
-.btn-secondary:hover { color: var(--cobalt); border-color: var(--cobalt); }
-
-.hero-code {
-  background: var(--black);
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  max-width: 480px;
-}
-
-.hero-code code {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  color: #00FF88;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-}
-
-.hero-code .copy-btn {
-  margin-left: auto;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--gray-500);
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  transition: color 0.2s;
-  background: none;
-  border: none;
-  text-transform: uppercase;
-}
-
-.hero-code .copy-btn:hover { color: white; }
-
-.hero-aside {
-  padding: 48px 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: var(--gray-100);
-}
-
-.aside-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 20px;
-}
-
-.aside-stat {
-  margin-bottom: 32px;
-  padding-bottom: 32px;
-  border-bottom: 1px solid var(--gray-200);
-}
-
-.aside-stat:last-of-type { border-bottom: none; margin-bottom: 0; }
-
-.stat-num {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 40px;
-  font-weight: 700;
-  color: var(--cobalt);
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.stat-desc {
-  font-size: 12px;
-  color: var(--gray-700);
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-/* ── FEATURES ── */
-.features {
-  border-bottom: 1px solid var(--black);
-}
-
-.features-header {
-  display: grid;
-  grid-template-columns: 48px 1fr 1fr;
-  border-bottom: 1px solid var(--black);
-}
-
-.features-header-label {
-  border-right: 1px solid var(--black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.features-header-label span {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  writing-mode: vertical-rl;
-}
-
-.features-title-area {
-  padding: 60px 60px 60px 60px;
-  border-right: 1px solid var(--black);
-}
-
-.section-eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--cobalt);
-  margin-bottom: 16px;
-}
-
-.section-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: clamp(36px, 4vw, 60px);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-}
-
-.features-intro {
-  padding: 60px;
-  display: flex;
-  align-items: flex-end;
-}
-
-.features-intro p {
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--gray-700);
-  max-width: 420px;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: 48px repeat(3, 1fr);
-}
-
-.features-side {
-  border-right: 1px solid var(--black);
-}
-
-.feature-box {
-  padding: 48px 40px;
-  border-right: 1px solid var(--black);
-  border-bottom: 1px solid var(--black);
-  transition: background 0.25s;
-}
-
-.feature-box:hover { background: var(--cobalt); color: white; }
-.feature-box:hover .feat-label { color: rgba(255,255,255,0.6); }
-.feature-box:hover .feat-desc { color: rgba(255,255,255,0.8); }
-
-.feat-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.feat-num {
-  font-size: 8px;
-}
-
-.feat-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 16px;
-  letter-spacing: -0.01em;
-}
-
-.feat-desc {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--gray-700);
-}
-
-/* ── CODE DEMO ── */
-.code-demo {
-  display: grid;
-  grid-template-columns: 48px 1fr 1fr;
-  border-bottom: 1px solid var(--black);
-}
-
-.code-demo-side {
-  border-right: 1px solid var(--black);
-}
-
-.code-demo-left {
-  padding: 80px 60px;
-  border-right: 1px solid var(--black);
-}
-
-.code-block {
-  background: var(--black);
-  padding: 32px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  line-height: 1.75;
-  margin-top: 32px;
-}
-
-.code-block .c-comment { color: #555; }
-.code-block .c-cmd { color: var(--cobalt-light); }
-.code-block .c-flag { color: #F8A348; }
-.code-block .c-string { color: #00FF88; }
-.code-block .c-output { color: var(--gray-500); }
-
-.code-demo-right {
-  padding: 80px 60px;
-  background: var(--gray-100);
-}
-
-.demo-step {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 36px;
-  align-items: flex-start;
-}
-
-.demo-step:last-child { margin-bottom: 0; }
-
-.demo-step-num {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--cobalt);
-  background: rgba(21, 51, 204, 0.1);
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.demo-step-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.demo-step-desc {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--gray-700);
-}
-
-/* ── TESTIMONIALS ── */
-.testimonials {
-  border-bottom: 1px solid var(--black);
-}
-
-.testimonials-inner {
-  display: grid;
-  grid-template-columns: 48px 1fr;
-}
-
-.testimonials-side {
-  border-right: 1px solid var(--black);
-}
-
-.testimonials-main {
-  padding: 80px 60px;
-}
-
-.testimonials-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: clamp(36px, 4vw, 56px);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  margin-bottom: 48px;
-}
-
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1px;
-  background: var(--black);
-}
-
-.t-card {
-  background: var(--cream);
-  padding: 36px 32px;
-}
-
-.t-quote {
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--gray-700);
-  margin-bottom: 28px;
-  font-style: italic;
-}
-
-.t-author-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.t-avatar {
-  width: 36px;
-  height: 36px;
-  background: var(--cobalt);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  color: white;
-  flex-shrink: 0;
-}
-
-.t-name {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.t-role {
-  font-size: 11px;
-  color: var(--gray-500);
-  margin-top: 2px;
-}
-
-/* ── PRICING ── */
-.pricing {
-  border-bottom: 1px solid var(--black);
-  display: grid;
-  grid-template-columns: 48px 1fr 1fr 1fr;
-}
-
-.pricing-side {
-  border-right: 1px solid var(--black);
-}
-
-.pricing-card {
-  padding: 60px 48px;
-  border-right: 1px solid var(--black);
-  display: flex;
-  flex-direction: column;
-}
-
-.pricing-card:last-child { border-right: none; }
-
-.price-plan {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 16px;
-}
-
-.price-amount {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 48px;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--black);
-  margin-bottom: 4px;
-}
-
-.price-amount sup { font-size: 22px; vertical-align: top; margin-top: 8px; display: inline-block; }
-.price-amount span { font-size: 16px; font-weight: 400; color: var(--gray-500); }
-
-.price-desc {
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--gray-700);
-  margin: 20px 0 32px;
-  flex: 1;
-}
-
-.price-features {
-  list-style: none;
-  margin-bottom: 40px;
-}
-
-.price-features li {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  color: var(--gray-700);
-  padding: 10px 0;
-  border-bottom: 1px solid var(--gray-200);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.price-features li::before {
-  content: '→';
-  color: var(--cobalt);
-  font-size: 11px;
-}
-
-.pricing-card.featured {
-  background: var(--cobalt);
-  color: white;
-}
-
-.pricing-card.featured .price-plan { color: rgba(255,255,255,0.6); }
-.pricing-card.featured .price-amount { color: white; }
-.pricing-card.featured .price-amount span { color: rgba(255,255,255,0.6); }
-.pricing-card.featured .price-desc { color: rgba(255,255,255,0.75); }
-.pricing-card.featured .price-features li { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.2); }
-.pricing-card.featured .price-features li::before { color: #00FF88; }
-
-.btn-plan {
-  padding: 14px 28px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  text-decoration: none;
-  text-align: center;
-  display: block;
-  background: var(--cobalt);
-  color: white;
-  transition: background 0.2s;
-}
-
-.btn-plan:hover { background: var(--cobalt-dark); }
-
-.pricing-card.featured .btn-plan {
-  background: white;
-  color: var(--cobalt);
-}
-
-.pricing-card.featured .btn-plan:hover { background: var(--gray-100); }
-
-/* ── CTA ── */
-.cta-section {
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  border-bottom: 1px solid var(--black);
-}
-
-.cta-side {
-  border-right: 1px solid var(--black);
-}
-
-.cta-inner {
-  padding: 100px 60px;
-  background: var(--cobalt);
-  color: white;
-}
-
-.cta-eyebrow {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 24px;
-}
-
-.cta-h2 {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: clamp(48px, 6vw, 86px);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  margin-bottom: 24px;
-}
-
-.cta-desc {
-  font-size: 15px;
-  line-height: 1.7;
-  color: rgba(255,255,255,0.75);
-  max-width: 560px;
-  margin-bottom: 48px;
-}
-
-.cta-actions {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.btn-cta-white {
-  background: white;
-  color: var(--cobalt);
-  padding: 16px 40px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-
-.btn-cta-white:hover { background: var(--gray-100); }
-
-.btn-cta-ghost {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.8);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255,255,255,0.4);
-  padding-bottom: 2px;
-}
-
-.btn-cta-ghost:hover { color: white; border-color: white; }
-
-/* ── FOOTER ── */
-footer {
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  border-bottom: 0;
-}
-
-.footer-side {
-  border-right: 1px solid var(--black);
-}
-
-.footer-main {
-  padding: 60px;
-}
-
-.footer-top-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px;
-  padding-bottom: 48px;
-  border-bottom: 1px solid var(--gray-200);
-}
-
-.footer-logo {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--cobalt);
-  margin-bottom: 12px;
-}
-
-.footer-tagline {
-  font-size: 12px;
-  color: var(--gray-500);
-  line-height: 1.6;
-  max-width: 240px;
-}
-
-.footer-col-title {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gray-500);
-  margin-bottom: 16px;
-}
-
-.footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 8px; }
-.footer-col ul li a { font-size: 13px; color: var(--gray-700); text-decoration: none; transition: color 0.2s; }
-.footer-col ul li a:hover { color: var(--cobalt); }
-
-.footer-bottom-row {
-  margin-top: 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.footer-copy {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--gray-500);
-  letter-spacing: 0.12em;
-}
-
-.footer-legal a {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  color: var(--gray-500);
-  text-decoration: none;
-  margin-left: 20px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-
-.footer-legal a:hover { color: var(--cobalt); }
+  :root {
+    --cream: #E3E2DE;
+    --cobalt: #1533CC;
+    --ink: #141414;
+    --gray: #444343;
+    --muted: #7A7A7A;
+    --divider: #C7C7C7;
+    --cream-2: #F5F0E8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  /* NO ROUNDED CORNERS — enforced globally */
+  * { border-radius: 0 !important; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--cobalt); }
+
+  /* VERTICAL LABEL SYSTEM */
+  .v-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    user-select: none;
+  }
+
+  /* 12-COLUMN GRID */
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 1px solid var(--divider);
+  }
+  .col-label { /* cols 1-2 */
+    grid-column: 1 / 3;
+    border-right: 1px solid var(--divider);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    min-height: 100%;
+  }
+  .col-main { /* cols 3-12 */
+    grid-column: 3 / 13;
+    padding: 3rem;
+  }
+  .col-main-split-7 { grid-column: 3 / 10; padding: 3rem; border-right: 1px solid var(--divider); }
+  .col-main-split-3 { grid-column: 10 / 13; padding: 3rem; }
+  .col-main-full { grid-column: 1 / 13; }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    border-bottom: 1px solid rgba(227,226,222,0.08);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    height: 56px;
+  }
+  .nav-logo-cell {
+    grid-column: 1 / 4;
+    border-right: 1px solid rgba(227,226,222,0.08);
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--cream);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--cobalt); }
+  .nav-links-cell {
+    grid-column: 4 / 10;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    gap: 2rem;
+    border-right: 1px solid rgba(227,226,222,0.08);
+  }
+  .nav-links-cell a {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(227,226,222,0.5);
+    text-decoration: none;
+    transition: color 200ms;
+  }
+  .nav-links-cell a:hover { color: var(--cream); }
+  .nav-cta-cell {
+    grid-column: 10 / 13;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 2rem;
+  }
+  .nav-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--cobalt);
+    padding: 0.5rem 1.2rem;
+    text-decoration: none;
+    transition: background 200ms;
+  }
+  .nav-cta:hover { background: #0f22a8; }
+
+  /* HERO */
+  .hero-section { border-bottom: 1px solid var(--divider); }
+  .hero-top {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 1px solid var(--divider);
+  }
+  .hero-label {
+    grid-column: 1 / 3;
+    border-right: 1px solid var(--divider);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+  }
+  .hero-headline-block {
+    grid-column: 3 / 13;
+    padding: 4rem 3rem;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cobalt);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--cobalt); }
+  .hero-h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(5rem, 10vw, 12rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  .hero-h1 em { color: var(--cobalt); font-style: normal; }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .hero-desc-cell {
+    grid-column: 1 / 3;
+    border-right: 1px solid var(--divider);
+    padding: 2.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .hero-desc-cell p {
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: var(--gray);
+    text-align: center;
+  }
+  .hero-sub-cell {
+    grid-column: 3 / 8;
+    padding: 2.5rem 3rem;
+    border-right: 1px solid var(--divider);
+  }
+  .hero-sub-cell p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--gray);
+    max-width: 500px;
+  }
+  .hero-sub-cell p strong { color: var(--ink); font-weight: 600; }
+  .hero-cta-cell {
+    grid-column: 8 / 13;
+    padding: 2.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .btn-cobalt {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #fff;
+    background: var(--cobalt);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+    transition: background 200ms;
+  }
+  .btn-cobalt:hover { background: #0f22a8; }
+  .btn-outline {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--divider);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+    transition: border-color 200ms, color 200ms;
+  }
+  .btn-outline:hover { border-color: var(--ink); }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--ink);
+    padding: 1.5rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--cream);
+    line-height: 1.8;
+    overflow-x: auto;
+    border: none;
+  }
+  .code-block .cmd { color: var(--cobalt); }
+  .code-block .comment { color: rgba(227,226,222,0.35); }
+  .code-block .str { color: #98C379; }
+  .code-block .kw { color: #E06C75; }
+
+  /* FEATURES SECTION */
+  .features-header {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 1px solid var(--divider);
+  }
+  .feat-h-label { grid-column: 1 / 3; border-right: 1px solid var(--divider); display: flex; align-items: center; justify-content: center; padding: 2rem; }
+  .feat-h-content { grid-column: 3 / 13; padding: 3rem; display: flex; justify-content: space-between; align-items: flex-end; }
+  .feat-h-content h2 {
+    font-size: clamp(2.5rem, 5vw, 6rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+    text-transform: uppercase;
+  }
+  .feat-h-content h2 span { color: var(--cobalt); }
+  .feat-h-right { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; }
+  .feat-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--cobalt);
+    line-height: 1;
+  }
+  .feat-count-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* FEATURE ROWS */
+  .feature-row {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 1px solid var(--divider);
+    min-height: 180px;
+  }
+  .feat-label { grid-column: 1 / 3; border-right: 1px solid var(--divider); display: flex; align-items: center; justify-content: center; padding: 2rem; }
+  .feat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .feat-content { grid-column: 3 / 7; border-right: 1px solid var(--divider); padding: 2.5rem 3rem; }
+  .feat-content h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    line-height: 1.1;
+  }
+  .feat-content p { font-size: 0.88rem; line-height: 1.7; color: var(--gray); }
+  .feat-extra { grid-column: 7 / 13; padding: 2.5rem 3rem; display: flex; flex-direction: column; justify-content: space-between; }
+  .feat-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .feat-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--divider);
+    color: var(--muted);
+    padding: 0.25rem 0.65rem;
+    transition: border-color 200ms, color 200ms;
+  }
+  .feat-tag:hover { border-color: var(--cobalt); color: var(--cobalt); }
+  .feat-metric {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .feat-metric-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+
+  /* INTEGRATIONS SECTION */
+  .integrations {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    background: var(--ink);
+    border-top: 1px solid rgba(227,226,222,0.08);
+  }
+  .int-label { grid-column: 1 / 3; border-right: 1px solid rgba(227,226,222,0.08); display: flex; align-items: center; justify-content: center; padding: 3rem; }
+  .int-content { grid-column: 3 / 13; padding: 4rem 3rem; }
+  .int-content h2 {
+    font-size: clamp(2rem, 4vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+    color: var(--cream);
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+  .int-content h2 span { color: var(--cobalt); }
+  .int-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(227,226,222,0.08);
+    margin-bottom: 3rem;
+  }
+  .int-cell {
+    background: var(--ink);
+    padding: 2rem 1.5rem;
+    border: none;
+    transition: background 200ms;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .int-cell:hover { background: #1f1f1f; }
+  .int-cell-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .int-cell-type {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(227,226,222,0.35);
+  }
+  .int-cell-icon { color: var(--cobalt); }
+
+  /* PRICING */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-top: 1px solid var(--divider);
+    border-bottom: 1px solid var(--divider);
+  }
+  .pricing-label { grid-column: 1 / 3; border-right: 1px solid var(--divider); display: flex; align-items: center; justify-content: center; padding: 3rem; }
+  .pricing-content { grid-column: 3 / 13; padding: 4rem 3rem; }
+  .pricing-content h2 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.88;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--divider);
+  }
+  .price-card {
+    background: var(--cream);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: background 200ms;
+  }
+  .price-card:hover { background: #d8d7d3; }
+  .price-card.featured { background: var(--cobalt); color: #fff; }
+  .price-card.featured:hover { background: #0f22a8; }
+  .price-plan {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .price-card.featured .price-plan { color: rgba(255,255,255,0.65); }
+  .price-amount {
+    font-family: 'Space Mono', monospace;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .price-period { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+  .price-card.featured .price-period { color: rgba(255,255,255,0.6); }
+  .price-desc { font-size: 0.88rem; line-height: 1.6; color: var(--gray); }
+  .price-card.featured .price-desc { color: rgba(255,255,255,0.75); }
+  .price-divider { height: 1px; background: var(--divider); }
+  .price-card.featured .price-divider { background: rgba(255,255,255,0.2); }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .price-features li {
+    font-size: 0.83rem;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .price-card.featured .price-features li { color: rgba(255,255,255,0.8); }
+  .price-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    background: var(--cream-2);
+    border: 1px solid var(--divider);
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    align-self: flex-start;
+    text-decoration: none;
+    transition: background 200ms, border-color 200ms;
+  }
+  .price-btn:hover { background: #e0dcd4; border-color: var(--ink); }
+  .price-card.featured .price-btn {
+    background: #fff;
+    border-color: transparent;
+    color: var(--cobalt);
+  }
+  .price-card.featured .price-btn:hover { background: #f0f0f0; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .footer-label { grid-column: 1 / 3; border-right: 1px solid rgba(227,226,222,0.08); display: flex; align-items: center; justify-content: center; padding: 3rem; }
+  .footer-content { grid-column: 3 / 13; padding: 4rem 3rem; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(227,226,222,0.08); }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+  }
+  .footer-brand span { color: var(--cobalt); }
+  .footer-tagline { font-size: 0.82rem; color: rgba(227,226,222,0.4); line-height: 1.6; }
+  .footer-col h4 { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(227,226,222,0.3); margin-bottom: 1.2rem; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .footer-col ul li a { font-size: 0.82rem; color: rgba(227,226,222,0.55); text-decoration: none; transition: color 200ms; }
+  .footer-col ul li a:hover { color: var(--cream); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom span { font-size: 0.68rem; color: rgba(227,226,222,0.25); letter-spacing: 0.06em; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-label"><span>Nav</span></div>
-  <div class="nav-main">
-    <a href="#" class="nav-logo">GRID.SH</a>
-    <ul class="nav-links">
-      <li><a href="#">Docs</a></li>
-      <li><a href="#">Pricing</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">GitHub</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="#" class="btn-nav-ghost">Sign In</a>
-      <a href="#" class="btn-nav">Get Started →</a>
-    </div>
+  <div class="nav-logo-cell">
+    <a href="#" class="nav-logo">GRID<span>.SH</span></a>
+  </div>
+  <div class="nav-links-cell">
+    <a href="#">Docs</a>
+    <a href="#">Pricing</a>
+    <a href="#">Changelog</a>
+    <a href="#">Blog</a>
+    <a href="#">Status</a>
+  </div>
+  <div class="nav-cta-cell">
+    <a href="#" class="nav-cta">$ sh install</a>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-side">
-    <span class="hero-side-label">Hero / 01</span>
+<section class="hero-section">
+  <div class="hero-top">
+    <div class="hero-label">
+      <span class="v-label">Hero / 01</span>
+    </div>
+    <div class="hero-headline-block">
+      <div class="hero-eyebrow">CLI Deployment — Zero Config</div>
+      <h1 class="hero-h1">Deploy<br>Without<br><em>Ceremony.</em></h1>
+    </div>
   </div>
-  <div class="hero-content">
-    <div class="hero-main">
-      <div class="hero-status">
-        <div class="status-dot"></div>
-        <span class="status-text">v3.2.1 — Now with Edge Regions</span>
-      </div>
-      <h1 class="hero-h1">
-        DEPLOY<br>
-        ANYWHERE<br>
-        <span class="blue">IN SECONDS</span>
-      </h1>
-      <p class="hero-desc">GRID.SH is the CLI-first deployment platform for modern engineering teams. One command to push your app to any cloud provider, any region, any scale.</p>
-      <div class="hero-actions">
-        <a href="#" class="btn-primary">Start Free →</a>
-        <a href="#" class="btn-secondary">Read the Docs</a>
-      </div>
-      <div class="hero-code">
-        <code>$ curl -fsSL https://grid.sh/install | sh</code>
-        <button class="copy-btn" onclick="this.textContent='Copied!'">Copy</button>
+  <div class="hero-bottom">
+    <div class="hero-desc-cell">
+      <p>One command. Any stack. Any cloud.</p>
+    </div>
+    <div class="hero-sub-cell">
+      <p>GRID.SH turns your <strong>git push</strong> into a production deployment across any cloud — AWS, GCP, Fly.io, Hetzner — with zero configuration files, zero YAML, and zero platform lock-in. Your team writes code. We handle the rest.</p>
+      <div style="margin-top:2rem;">
+        <div class="code-block">
+          <div><span class="comment"># Install globally</span></div>
+          <div><span class="cmd">curl</span> -fsSL https://grid.sh/install | sh</div>
+          <div>&nbsp;</div>
+          <div><span class="comment"># Initialize in your project</span></div>
+          <div><span class="cmd">grid</span> init --auto</div>
+          <div>&nbsp;</div>
+          <div><span class="comment"># Deploy</span></div>
+          <div><span class="cmd">grid</span> up <span class="str">--prod</span></div>
+          <div><span class="comment"># Deployed to grid.sh/live/your-app in 14s</span></div>
+        </div>
       </div>
     </div>
-    <div class="hero-aside">
-      <div class="aside-label">Platform Stats</div>
-      <div class="aside-stat">
-        <div class="stat-num">99.99%</div>
-        <div class="stat-desc">Uptime SLA across all production deployments</div>
-      </div>
-      <div class="aside-stat">
-        <div class="stat-num">4.2s</div>
-        <div class="stat-desc">Average cold-start to live deployment</div>
-      </div>
-      <div class="aside-stat">
-        <div class="stat-num">140+</div>
-        <div class="stat-desc">Edge regions across 6 continents</div>
-      </div>
-      <div class="aside-stat">
-        <div class="stat-num">28k</div>
-        <div class="stat-desc">Teams shipping on GRID.SH today</div>
-      </div>
+    <div class="hero-cta-cell">
+      <a href="#" class="btn-cobalt">Install GRID.SH <i data-lucide="terminal" style="width:14px;height:14px;"></i></a>
+      <a href="#" class="btn-outline">Read the Docs <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></a>
+      <p style="font-size:0.72rem;color:var(--muted);margin-top:0.5rem;font-family:'Space Mono',monospace;">v2.4.1 &centerdot; MIT License &centerdot; 8.4k stars</p>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features">
-  <div class="features-header">
-    <div class="features-header-label"><span>Feats</span></div>
-    <div class="features-title-area">
-      <div class="section-eyebrow">Capabilities</div>
-      <h2 class="section-title">BUILT FOR<br>ENGINEERS</h2>
-    </div>
-    <div class="features-intro">
-      <p>Every feature in GRID.SH was designed by engineers who were frustrated by slow deploys, opaque configs, and platforms that get in your way. We fix all of that.</p>
+<!-- FEATURES HEADER -->
+<div class="features-header reveal">
+  <div class="feat-h-label"><span class="v-label">Features / 02</span></div>
+  <div class="feat-h-content">
+    <h2>What<br><span>Grid</span><br>Does</h2>
+    <div class="feat-h-right">
+      <div class="feat-count">06</div>
+      <div class="feat-count-label">Core Primitives</div>
     </div>
   </div>
-  <div class="features-grid">
-    <div class="features-side"></div>
-    <div class="feature-box">
-      <div class="feat-label"><span class="feat-num">01</span> Core</div>
-      <div class="feat-title">INSTANT CLI<br>DEPLOYS</div>
-      <p class="feat-desc">One command. Any language, any framework. GRID.SH detects your stack automatically and optimizes the build pipeline without any config files.</p>
-    </div>
-    <div class="feature-box">
-      <div class="feat-label"><span class="feat-num">02</span> Network</div>
-      <div class="feat-title">GLOBAL EDGE<br>NETWORK</div>
-      <p class="feat-desc">140+ PoPs worldwide. Your app runs at the edge by default — no additional configuration required for sub-50ms response times globally.</p>
-    </div>
-    <div class="feature-box">
-      <div class="feat-label"><span class="feat-num">03</span> Infra</div>
-      <div class="feat-title">ZERO-CONFIG<br>SCALING</div>
-      <p class="feat-desc">Scale from zero to a million requests without touching a single YAML file. Automatic vertical and horizontal scaling with intelligent traffic routing.</p>
-    </div>
-    <div class="features-side" style="border-bottom:0;"></div>
-    <div class="feature-box" style="border-bottom:0;">
-      <div class="feat-label"><span class="feat-num">04</span> Preview</div>
-      <div class="feat-title">PR PREVIEW<br>ENVIRONMENTS</div>
-      <p class="feat-desc">Every pull request gets a live preview URL in under 10 seconds. Isolated environments with full database branching included.</p>
-    </div>
-    <div class="feature-box" style="border-bottom:0;">
-      <div class="feat-label"><span class="feat-num">05</span> Observability</div>
-      <div class="feat-title">BUILT-IN<br>OBSERVABILITY</div>
-      <p class="feat-desc">Real-time logs, distributed traces, and performance metrics without installing a single additional tool. Everything piped to your terminal.</p>
-    </div>
-    <div class="feature-box" style="border-bottom:0;">
-      <div class="feat-label"><span class="feat-num">06</span> Security</div>
-      <div class="feat-title">SOC 2 TYPE II<br>COMPLIANT</div>
-      <p class="feat-desc">End-to-end encryption, secrets management, audit logs, and SSO out of the box. Enterprise-grade security without the enterprise overhead.</p>
-    </div>
-  </div>
-</section>
+</div>
 
-<!-- CODE DEMO -->
-<section class="code-demo">
-  <div class="code-demo-side"></div>
-  <div class="code-demo-left">
-    <div class="section-eyebrow">Live Demo</div>
-    <h2 class="section-title" style="font-size:clamp(32px,4vw,52px);">DEPLOY IN<br>THREE STEPS</h2>
-    <div class="code-block">
-      <div class="c-comment"># 1. Install GRID.SH</div>
-      <div class="c-cmd">$ curl -fsSL https://grid.sh/install | sh</div>
-      <br>
-      <div class="c-comment"># 2. Initialize your project</div>
-      <div class="c-cmd">$ grid init <span class="c-flag">--name</span> <span class="c-string">my-app</span></div>
-      <br>
-      <div class="c-comment"># 3. Deploy to production</div>
-      <div class="c-cmd">$ grid deploy <span class="c-flag">--prod</span></div>
-      <br>
-      <div class="c-output">✓ Building my-app (Node 22)...</div>
-      <div class="c-output">✓ Optimizing bundle (3.2s)</div>
-      <div class="c-output">✓ Pushing to edge (140 regions)</div>
-      <div class="c-output">✓ <span class="c-string">Live: https://my-app.grid.sh</span></div>
+<!-- FEATURE ROWS -->
+<div class="feature-row reveal">
+  <div class="feat-label"><span class="feat-num">01</span></div>
+  <div class="feat-content">
+    <h3>Auto-Detect & Build</h3>
+    <p>GRID.SH reads your repository root and infers your stack — Node, Python, Go, Rust, Docker — with zero configuration required. Build steps are synthesized automatically.</p>
+  </div>
+  <div class="feat-extra">
+    <div class="feat-tags">
+      <span class="feat-tag">Node</span>
+      <span class="feat-tag">Python</span>
+      <span class="feat-tag">Go</span>
+      <span class="feat-tag">Rust</span>
+      <span class="feat-tag">Docker</span>
+      <span class="feat-tag">Bun</span>
+    </div>
+    <div>
+      <div class="feat-metric">~14s</div>
+      <div class="feat-metric-label">Avg. Cold Deploy Time</div>
     </div>
   </div>
-  <div class="code-demo-right">
-    <div class="section-eyebrow">How It Works</div>
-    <h2 class="section-title" style="font-size:clamp(28px,3vw,44px); margin-bottom:40px;">SIMPLE BY<br>DESIGN</h2>
-    <div class="demo-step">
-      <div class="demo-step-num">01</div>
-      <div>
-        <div class="demo-step-title">Install the CLI</div>
-        <p class="demo-step-desc">One curl command installs everything. Works on macOS, Linux, and Windows (WSL). No Docker required.</p>
-      </div>
-    </div>
-    <div class="demo-step">
-      <div class="demo-step-num">02</div>
-      <div>
-        <div class="demo-step-title">Connect Your Repo</div>
-        <p class="demo-step-desc">Link GitHub, GitLab, or Bitbucket. GRID.SH auto-detects your stack — Next.js, Django, Go binaries, anything.</p>
-      </div>
-    </div>
-    <div class="demo-step">
-      <div class="demo-step-num">03</div>
-      <div>
-        <div class="demo-step-title">Push to Deploy</div>
-        <p class="demo-step-desc">git push or grid deploy. Watch your app go live globally in seconds. Get a deployment URL instantly.</p>
-      </div>
-    </div>
-    <div class="demo-step">
-      <div class="demo-step-num">04</div>
-      <div>
-        <div class="demo-step-title">Monitor & Scale</div>
-        <p class="demo-step-desc">Real-time metrics in your terminal. Set autoscaling rules in plain English. Sleep knowing it handles anything.</p>
-      </div>
-    </div>
-  </div>
-</section>
+</div>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="testimonials-inner">
-    <div class="testimonials-side"></div>
-    <div class="testimonials-main">
-      <h2 class="testimonials-title">ENGINEERS<br>LOVE IT</h2>
-      <div class="testimonials-grid">
-        <div class="t-card">
-          <p class="t-quote">"We moved our entire infra from a major cloud provider to GRID.SH in an afternoon. Deploy times went from 8 minutes to 12 seconds. I can't go back."</p>
-          <div class="t-author-row">
-            <div class="t-avatar">NK</div>
-            <div>
-              <div class="t-name">Nadia K.</div>
-              <div class="t-role">Staff SRE — Veritas Labs</div>
-            </div>
-          </div>
-        </div>
-        <div class="t-card">
-          <p class="t-quote">"The PR preview environments alone saved our QA process. Every PR gets a live environment in 8 seconds — stakeholders can click and test without involving engineering."</p>
-          <div class="t-author-row">
-            <div class="t-avatar">MR</div>
-            <div>
-              <div class="t-name">Marcus R.</div>
-              <div class="t-role">CTO — Bloom Platform</div>
-            </div>
-          </div>
-        </div>
-        <div class="t-card">
-          <p class="t-quote">"GRID.SH is the deployment platform that actually respects the CLI. No dashboards required, no YAML hell. Just write code and ship."</p>
-          <div class="t-author-row">
-            <div class="t-avatar">YT</div>
-            <div>
-              <div class="t-name">Yuki T.</div>
-              <div class="t-role">Principal Engineer — Flux.io</div>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="feature-row reveal">
+  <div class="feat-label"><span class="feat-num">02</span></div>
+  <div class="feat-content">
+    <h3>Instant Rollback</h3>
+    <p>Every deployment is versioned and immutable. Roll back to any prior state in under three seconds with a single command — no database migrations reversed, no data touched.</p>
+  </div>
+  <div class="feat-extra">
+    <div class="feat-tags">
+      <span class="feat-tag">Versioned</span>
+      <span class="feat-tag">Immutable</span>
+      <span class="feat-tag">Atomic</span>
+    </div>
+    <div>
+      <div class="feat-metric">&lt;3s</div>
+      <div class="feat-metric-label">Rollback Time</div>
     </div>
   </div>
-</section>
+</div>
+
+<div class="feature-row reveal">
+  <div class="feat-label"><span class="feat-num">03</span></div>
+  <div class="feat-content">
+    <h3>Multi-Cloud Targeting</h3>
+    <p>Deploy to AWS, GCP, Azure, Fly.io, or Hetzner from the same config-free command. Switch providers mid-project without changing a single line of application code.</p>
+  </div>
+  <div class="feat-extra">
+    <div class="feat-tags">
+      <span class="feat-tag">AWS</span>
+      <span class="feat-tag">GCP</span>
+      <span class="feat-tag">Azure</span>
+      <span class="feat-tag">Fly.io</span>
+      <span class="feat-tag">Hetzner</span>
+    </div>
+    <div>
+      <div class="feat-metric">12+</div>
+      <div class="feat-metric-label">Cloud Providers</div>
+    </div>
+  </div>
+</div>
+
+<div class="feature-row reveal">
+  <div class="feat-label"><span class="feat-num">04</span></div>
+  <div class="feat-content">
+    <h3>Preview Environments</h3>
+    <p>Every pull request gets its own ephemeral URL. Share with stakeholders, run end-to-end tests, and tear down automatically on merge. No extra cost.</p>
+  </div>
+  <div class="feat-extra">
+    <div class="feat-tags">
+      <span class="feat-tag">GitHub</span>
+      <span class="feat-tag">GitLab</span>
+      <span class="feat-tag">Bitbucket</span>
+      <span class="feat-tag">Gitea</span>
+    </div>
+    <div>
+      <div class="feat-metric">0s</div>
+      <div class="feat-metric-label">Setup Time Per PR</div>
+    </div>
+  </div>
+</div>
+
+<!-- INTEGRATIONS -->
+<div class="integrations reveal">
+  <div class="int-label">
+    <span class="v-label" style="color:rgba(227,226,222,0.3);">Integrations / 03</span>
+  </div>
+  <div class="int-content">
+    <h2>Works With<br>Your Entire<br><span>Stack</span></h2>
+    <div class="int-grid">
+      <div class="int-cell">
+        <span class="int-cell-icon"><i data-lucide="github" style="width:20px;height:20px;"></i></span>
+        <span class="int-cell-name">GitHub Actions</span>
+        <span class="int-cell-type">CI/CD</span>
+      </div>
+      <div class="int-cell">
+        <span class="int-cell-icon"><i data-lucide="database" style="width:20px;height:20px;"></i></span>
+        <span class="int-cell-name">Postgres / PlanetScale</span>
+        <span class="int-cell-type">Database</span>
+      </div>
+      <div class="int-cell">
+        <span class="int-cell-icon"><i data-lucide="zap" style="width:20px;height:20px;"></i></span>
+        <span class="int-cell-name">Datadog / Grafana</span>
+        <span class="int-cell-type">Observability</span>
+      </div>
+      <div class="int-cell">
+        <span class="int-cell-icon"><i data-lucide="shield" style="width:20px;height:20px;"></i></span>
+        <span class="int-cell-name">Vault / Doppler</span>
+        <span class="int-cell-type">Secrets</span>
+      </div>
+      <div class="int-cell">
+        <span class="int-cell-icon"><i data-lucide="globe" style="width:20px;height:20px;"></i></span>
+        <span class="int-cell-name">Cloudflare</span>
+        <span class="int-cell-type">Edge / DNS</span>
+      </div>
+      <div class="int-cell">
+        <span class="int-cell-icon"><i data-lucide="bell" style="width:20px;height:20px;"></i></span>
+        <span class="int-cell-name">Slack / PagerDuty</span>
+        <span class="int-cell-type">Alerting</span>
+      </div>
+      <div class="int-cell">
+        <span class="int-cell-icon"><i data-lucide="package" style="width:20px;height:20px;"></i></span>
+        <span class="int-cell-name">Docker / Buildpacks</span>
+        <span class="int-cell-type">Build</span>
+      </div>
+      <div class="int-cell">
+        <span class="int-cell-icon"><i data-lucide="key" style="width:20px;height:20px;"></i></span>
+        <span class="int-cell-name">OIDC / SSO</span>
+        <span class="int-cell-type">Auth</span>
+      </div>
+    </div>
+    <a href="#" class="btn-cobalt">See All 40+ Integrations <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></a>
+  </div>
+</div>
 
 <!-- PRICING -->
-<section class="pricing">
-  <div class="pricing-side"></div>
-  <div class="pricing-card">
-    <div class="price-plan">Hobby</div>
-    <div class="price-amount"><sup>$</sup>0<span>/mo</span></div>
-    <p class="price-desc">For personal projects and experimentation. Free forever.</p>
-    <ul class="price-features">
-      <li>3 projects</li>
-      <li>1 team member</li>
-      <li>100GB bandwidth</li>
-      <li>Community support</li>
-      <li>Shared edge network</li>
-    </ul>
-    <a href="#" class="btn-plan">Start Free →</a>
-  </div>
-  <div class="pricing-card featured">
-    <div class="price-plan">Pro</div>
-    <div class="price-amount"><sup>$</sup>49<span>/mo</span></div>
-    <p class="price-desc">For teams shipping fast. Everything you need, nothing you don't.</p>
-    <ul class="price-features">
-      <li>Unlimited projects</li>
-      <li>Up to 10 members</li>
-      <li>1TB bandwidth</li>
-      <li>PR Preview environments</li>
-      <li>Priority support 24/7</li>
-      <li>Custom domains + SSL</li>
-    </ul>
-    <a href="#" class="btn-plan">Get Started →</a>
-  </div>
-  <div class="pricing-card">
-    <div class="price-plan">Enterprise</div>
-    <div class="price-amount" style="font-size:40px;">Custom</div>
-    <p class="price-desc">For large teams requiring compliance, SLAs, and dedicated infrastructure.</p>
-    <ul class="price-features">
-      <li>Unlimited everything</li>
-      <li>SOC 2 compliance</li>
-      <li>Dedicated infrastructure</li>
-      <li>SSO + SAML</li>
-      <li>99.99% SLA</li>
-      <li>Dedicated CSM</li>
-    </ul>
-    <a href="#" class="btn-plan" style="background:var(--black)">Talk to Sales →</a>
-  </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-  <div class="cta-side"></div>
-  <div class="cta-inner">
-    <div class="cta-eyebrow">Get started today</div>
-    <h2 class="cta-h2">SHIP FASTER.<br>SLEEP BETTER.</h2>
-    <p class="cta-desc">Join 28,000 teams who've cut their deploy times by 95%. Free to start. No credit card required. One command away.</p>
-    <div class="cta-actions">
-      <a href="#" class="btn-cta-white">Start Deploying →</a>
-      <a href="#" class="btn-cta-ghost">Read the Docs</a>
+<div class="pricing reveal">
+  <div class="pricing-label"><span class="v-label">Pricing / 04</span></div>
+  <div class="pricing-content">
+    <h2>Transparent.<br>No Surprises.</h2>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-plan">Solo</div>
+        <div>
+          <div class="price-amount">$0</div>
+          <div class="price-period">forever free</div>
+        </div>
+        <div class="price-desc">For individual developers exploring GRID.SH. Up to 3 projects, shared runners.</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> 3 Projects</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> 100 Deploys / Month</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> Community Support</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> Preview Environments</li>
+        </ul>
+        <a href="#" class="price-btn">Install Free</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-plan">Team</div>
+        <div>
+          <div class="price-amount">$49</div>
+          <div class="price-period">per seat / month</div>
+        </div>
+        <div class="price-desc">For engineering teams shipping daily. Unlimited projects, dedicated runners.</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><i data-lucide="check" style="width:14px;height:14px;flex-shrink:0;"></i> Unlimited Projects</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;flex-shrink:0;"></i> Unlimited Deploys</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;flex-shrink:0;"></i> Dedicated Runners</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;flex-shrink:0;"></i> SSO / SAML</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;flex-shrink:0;"></i> Priority Support &lt;2h SLA</li>
+        </ul>
+        <a href="#" class="price-btn">Activate Team Plan</a>
+      </div>
+      <div class="price-card">
+        <div class="price-plan">Enterprise</div>
+        <div>
+          <div class="price-amount">Custom</div>
+          <div class="price-period">annual contract</div>
+        </div>
+        <div class="price-desc">For organizations with compliance, on-premise, and enterprise SLA requirements.</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> Self-Hosted Option</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> SOC 2 Type II</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> 99.99% SLA</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> Dedicated CSM</li>
+          <li><i data-lucide="check" style="width:14px;height:14px;color:var(--cobalt);flex-shrink:0;"></i> Custom Integrations</li>
+        </ul>
+        <a href="#" class="price-btn">Talk to Sales</a>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-side"></div>
-  <div class="footer-main">
-    <div class="footer-top-row">
+  <div class="footer-label">
+    <span class="v-label" style="color:rgba(227,226,222,0.3);">Footer</span>
+  </div>
+  <div class="footer-content">
+    <div class="footer-top">
       <div>
-        <div class="footer-logo">GRID.SH</div>
-        <p class="footer-tagline">Deploy anywhere in seconds. The CLI-first platform for modern engineering teams.</p>
+        <div class="footer-brand">GRID<span>.SH</span></div>
+        <p class="footer-tagline">CLI-first deployment infrastructure for engineers who prefer terminals to dashboards. Open source, cloud-agnostic.</p>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Product</div>
+        <h4>Product</h4>
         <ul>
-          <li><a href="#">Features</a></li>
-          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Docs</a></li>
           <li><a href="#">Changelog</a></li>
           <li><a href="#">Roadmap</a></li>
           <li><a href="#">Status</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Developers</div>
-        <ul>
-          <li><a href="#">Documentation</a></li>
-          <li><a href="#">API Reference</a></li>
-          <li><a href="#">CLI Reference</a></li>
-          <li><a href="#">GitHub</a></li>
-          <li><a href="#">Examples</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Company</div>
+        <h4>Company</h4>
         <ul>
           <li><a href="#">About</a></li>
           <li><a href="#">Blog</a></li>
           <li><a href="#">Careers</a></li>
-          <li><a href="#">Security</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">Discord</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">Newsletter</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-bottom-row">
-      <span class="footer-copy">© 2025 GRID.SH, Inc. — All Rights Reserved</span>
-      <div class="footer-legal">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">SOC 2</a>
-      </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 GRID.SH — MIT Licensed</span>
+      <span style="font-size:0.68rem;color:rgba(227,226,222,0.2);letter-spacing:0.06em;">Privacy &nbsp;&centerdot;&nbsp; Terms &nbsp;&centerdot;&nbsp; Security</span>
     </div>
   </div>
 </footer>
 
+<script>
+lucide.createIcons();
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.05 });
+reveals.forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

@@ -1,829 +1,735 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MERIDIAN — Wealth, Without Compromise</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --black:  #050505;
-      --dark:   #0c0c0c;
-      --panel:  #121212;
-      --border: #1f1f1f;
-      --gold:   #c9a96e;
-      --gold-l: #e8cc9a;
-      --white:  #f5f3ee;
-      --gray:   #777770;
-      --glow:   rgba(201,169,110,0.12);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--black);
-      color: var(--white);
-      overflow-x: hidden;
-    }
-
-    /* Glow */
-    .hero-glow {
-      position: absolute;
-      top: -200px; left: 50%;
-      transform: translateX(-50%);
-      width: 800px; height: 800px;
-      background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 2rem 3.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(to bottom, rgba(5,5,5,0.9) 0%, transparent 100%);
-    }
-
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--white);
-      text-decoration: none;
-    }
-
-    .nav-logo span { color: var(--gold); }
-
-    .nav-links {
-      display: flex;
-      gap: 3rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gray);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover { color: var(--gold); }
-
-    .nav-btn {
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      padding: 0.65rem 1.6rem;
-      border-radius: 0.2rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-
-    .nav-btn:hover {
-      background: var(--gold);
-      color: var(--black);
-    }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 8rem 3.5rem 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 3rem;
-      padding: 0.5rem 1.2rem;
-      border: 1px solid rgba(201,169,110,0.3);
-      border-radius: 0.2rem;
-    }
-
-    .hero-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(5rem, 11vw, 14rem);
-      font-weight: 800;
-      line-height: 0.88;
-      letter-spacing: -0.03em;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 3rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-title .stroke {
-      -webkit-text-stroke: 1px rgba(245,243,238,0.2);
-      color: transparent;
-    }
-
-    .hero-title .gold { color: var(--gold); }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray);
-      max-width: 50ch;
-      margin: 0 auto 3.5rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-    }
-
-    .btn-gold {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--black);
-      padding: 1.1rem 3rem;
-      border-radius: 0.2rem;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .btn-gold:hover { background: var(--gold-l); transform: translateY(-2px); }
-
-    .btn-outline-gold {
-      display: inline-block;
-      background: transparent;
-      border: 1px solid rgba(201,169,110,0.4);
-      color: var(--gold);
-      padding: 1.1rem 3rem;
-      border-radius: 0.2rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-
-    .btn-outline-gold:hover { border-color: var(--gold); background: var(--glow); }
-
-    .hero-trusted {
-      margin-top: 5rem;
-      display: flex;
-      align-items: center;
-      gap: 3rem;
-      justify-content: center;
-    }
-
-    .trusted-label {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-
-    .trusted-items {
-      display: flex;
-      gap: 3rem;
-    }
-
-    .trusted-item {
-      font-family: 'Syne', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: rgba(245,243,238,0.25);
-      text-transform: uppercase;
-    }
-
-    /* FEATURES */
-    .features-section {
-      padding: 8rem 3.5rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .features-inner { max-width: 1400px; margin: 0 auto; }
-
-    .features-header {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-      margin-bottom: 5rem;
-    }
-
-    .section-tag {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-
-    .section-tag::before {
-      content: '';
-      display: block;
-      width: 24px; height: 1px;
-      background: var(--gold);
-    }
-
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2.5rem, 5vw, 6rem);
-      font-weight: 800;
-      line-height: 0.9;
-      letter-spacing: -0.03em;
-      text-transform: uppercase;
-      color: var(--white);
-    }
-
-    .section-title .stroke {
-      -webkit-text-stroke: 1px rgba(245,243,238,0.2);
-      color: transparent;
-    }
-
-    .features-desc {
-      font-size: 1rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--gray);
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-
-    .feat-card {
-      background: var(--panel);
-      padding: 2.8rem;
-      transition: background 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feat-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: transparent;
-      transition: background 0.3s;
-    }
-
-    .feat-card:hover { background: #161616; }
-    .feat-card:hover::before { background: var(--gold); }
-
-    .feat-icon {
-      width: 44px; height: 44px;
-      border: 1px solid var(--border);
-      border-radius: 0.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      margin-bottom: 2rem;
-    }
-
-    .feat-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .feat-body {
-      font-size: 0.88rem;
-      font-weight: 300;
-      line-height: 1.7;
-      color: var(--gray);
-    }
-
-    /* DASHBOARD PREVIEW */
-    .preview-section {
-      padding: 8rem 3.5rem;
-      background: var(--dark);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .preview-inner { max-width: 1400px; margin: 0 auto; }
-
-    .preview-header { margin-bottom: 4rem; }
-
-    .dashboard-mockup {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 0.8rem;
-      overflow: hidden;
-    }
-
-    .dash-titlebar {
-      background: #0a0a0a;
-      padding: 1rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .dash-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .dd-r { background: #ff5f57; }
-    .dd-y { background: #febc2e; }
-    .dd-g { background: #28c840; }
-
-    .dash-body {
-      padding: 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .dash-stat {
-      background: var(--dark);
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-    }
-
-    .dash-stat-label {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 0.75rem;
-    }
-
-    .dash-stat-val {
-      font-family: 'Syne', sans-serif;
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--white);
-    }
-
-    .dash-stat-val span { color: var(--gold); font-size: 1rem; }
-
-    .dash-chart {
-      grid-column: 1 / -1;
-      background: var(--dark);
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      height: 160px;
-      display: flex;
-      align-items: flex-end;
-      gap: 0.5rem;
-    }
-
-    .bar {
-      flex: 1;
-      border-radius: 0.2rem 0.2rem 0 0;
-      transition: opacity 0.3s;
-    }
-
-    .bar:hover { opacity: 0.7; }
-
-    /* TESTIMONIALS */
-    .testimonials-section { padding: 8rem 3.5rem; }
-    .testi-inner { max-width: 1400px; margin: 0 auto; }
-
-    .testi-header { margin-bottom: 4rem; }
-
-    .testi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    .t-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 2.5rem;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-
-    .t-card:hover { border-color: var(--gold); transform: translateY(-4px); }
-
-    .t-stars { color: var(--gold); letter-spacing: 0.1em; margin-bottom: 1.5rem; font-size: 0.9rem; }
-
-    .t-text {
-      font-size: 0.95rem;
-      font-weight: 300;
-      line-height: 1.8;
-      color: rgba(245,243,238,0.7);
-      font-style: italic;
-      margin-bottom: 2rem;
-    }
-
-    .t-author { display: flex; align-items: center; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-
-    .t-ava {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--gold);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 0.75rem;
-      color: var(--black);
-    }
-
-    .t-name { font-size: 0.85rem; font-weight: 600; color: var(--white); }
-    .t-role { font-size: 0.72rem; color: var(--gray); margin-top: 0.15rem; }
-
-    /* CTA */
-    .cta-section {
-      padding: 10rem 3.5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cta-glow {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      width: 900px; height: 600px;
-      background: radial-gradient(ellipse, rgba(201,169,110,0.07) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .cta-inner { position: relative; z-index: 1; }
-
-    .cta-tag { color: var(--gold); margin-bottom: 2rem; justify-content: center; }
-
-    .cta-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(4rem, 9vw, 12rem);
-      font-weight: 800;
-      line-height: 0.88;
-      letter-spacing: -0.04em;
-      text-transform: uppercase;
-      color: var(--white);
-      margin-bottom: 2rem;
-    }
-
-    .cta-title .gold { color: var(--gold); }
-    .cta-title .stroke {
-      -webkit-text-stroke: 1px rgba(245,243,238,0.15);
-      color: transparent;
-    }
-
-    .cta-sub {
-      font-size: 1rem;
-      font-weight: 300;
-      color: var(--gray);
-      max-width: 45ch;
-      margin: 0 auto 3rem;
-      line-height: 1.8;
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--dark);
-      padding: 4rem 3.5rem 3rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-inner { max-width: 1400px; margin: 0 auto; }
-
-    .footer-top {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      padding-bottom: 3rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-    }
-
-    .f-brand {
-      font-family: 'Syne', sans-serif;
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: 0.15em;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .f-brand span { color: var(--gold); }
-
-    .f-tagline { font-size: 0.88rem; font-weight: 300; color: var(--gray); line-height: 1.7; max-width: 28ch; }
-
-    .f-col h4 { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray); margin-bottom: 1.5rem; }
-    .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
-    .f-col a { font-size: 0.88rem; color: rgba(245,243,238,0.5); text-decoration: none; transition: color 0.3s; }
-    .f-col a:hover { color: var(--gold); }
-
-    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
-    .f-copy { font-size: 0.75rem; color: var(--gray); }
-
-    .f-badges { display: flex; gap: 0.75rem; }
-    .badge {
-      background: rgba(201,169,110,0.08);
-      border: 1px solid rgba(201,169,110,0.2);
-      color: var(--gold);
-      padding: 0.3rem 0.75rem;
-      border-radius: 0.2rem;
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 900px) {
-      nav { padding: 1.5rem; }
-      .nav-links { display: none; }
-      .hero { padding: 7rem 1.5rem 5rem; }
-      .features-section, .preview-section, .testimonials-section, .cta-section { padding: 5rem 1.5rem; }
-      .features-header { grid-template-columns: 1fr; }
-      .features-grid { grid-template-columns: 1fr; }
-      .dash-body { grid-template-columns: 1fr 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MERIDIAN — Luxury Wealth Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --bg: #050505;
+    --bg2: #0a0a0a;
+    --fg: #ffffff;
+    --fg-muted: rgba(255,255,255,0.45);
+    --glass-border: rgba(255,255,255,0.05);
+    --glow-orange: rgba(249,115,22,0.08);
+    --glow-blue: rgba(30,64,175,0.06);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  /* Clash Display font fallback — Inter Bold */
+  .clash {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    text-transform: uppercase;
+  }
+  /* Atmospheric glow layers */
+  .glow-field {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-1 {
+    width: 800px; height: 800px;
+    top: -200px; right: -200px;
+    background: radial-gradient(circle, var(--glow-orange) 0%, transparent 70%);
+    filter: blur(80px);
+    mix-blend-mode: screen;
+  }
+  .glow-2 {
+    width: 600px; height: 600px;
+    bottom: 20%; left: -100px;
+    background: radial-gradient(circle, var(--glow-blue) 0%, transparent 70%);
+    filter: blur(80px);
+    mix-blend-mode: screen;
+  }
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+    height: 76px;
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(5,5,5,0.7);
+    backdrop-filter: blur(20px);
+  }
+  .nav-logo {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+  .nav-links { display: flex; gap: 40px; }
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-btn {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 11px 24px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.3s, background 0.3s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .nav-btn:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.04); }
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    padding-top: 76px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+  .hero-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-label::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+  }
+  .hero-h1 {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 15vw;
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 60px;
+    padding-top: 48px;
+    border-top: 1px solid var(--glass-border);
+    position: relative;
+    z-index: 2;
+  }
+  .hb-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 12px;
+  }
+  .hb-value {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.8);
+  }
+  /* Noise overlay image */
+  .hero-img-strip {
+    position: absolute;
+    right: 0;
+    top: 76px;
+    bottom: 0;
+    width: 35%;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .hero-img-strip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.12;
+    filter: grayscale(100%);
+  }
+  .hero-img-strip::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--bg) 0%, transparent 60%);
+  }
+  /* Section wrapper */
+  .section { position: relative; z-index: 2; }
+  .inner { max-width: 1280px; margin: 0 auto; padding: 0 60px; }
+  /* Manifesto */
+  .manifesto {
+    padding: 120px 0;
+    border-top: 1px solid var(--glass-border);
+  }
+  .manifesto-text {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: clamp(36px, 5vw, 72px);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--fg);
+  }
+  .manifesto-text em {
+    font-style: normal;
+    color: rgba(255,255,255,0.25);
+  }
+  /* Performance metrics */
+  .metrics {
+    padding: 80px 0;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .metric {
+    padding: 48px 40px;
+    border-right: 1px solid var(--glass-border);
+    position: relative;
+  }
+  .metric:last-child { border-right: none; }
+  .metric-num {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--fg);
+    margin-bottom: 12px;
+  }
+  .metric-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .metric-sub { font-size: 13px; color: var(--fg-muted); line-height: 1.5; font-weight: 300; }
+  /* Capabilities */
+  .capabilities { padding: 120px 0; }
+  .cap-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.8fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .cap-title {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: var(--fg);
+    position: sticky;
+    top: 120px;
+  }
+  .cap-items { display: flex; flex-direction: column; }
+  .cap-item {
+    padding: 36px 0;
+    border-bottom: 1px solid var(--glass-border);
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: start;
+    cursor: default;
+    transition: padding 0.3s;
+  }
+  .cap-item:first-child { border-top: 1px solid var(--glass-border); }
+  .cap-item:hover { padding-left: 8px; }
+  .cap-num {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--fg-muted);
+    padding-top: 4px;
+  }
+  .cap-content {}
+  .cap-name {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-bottom: 12px;
+  }
+  .cap-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--fg-muted); }
+  /* Portfolio section */
+  .portfolio { padding: 120px 0; border-top: 1px solid var(--glass-border); }
+  .portfolio-title {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: clamp(60px, 9vw, 130px);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    line-height: 0.88;
+    color: var(--fg);
+    margin-bottom: 80px;
+  }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2px;
+  }
+  .port-item {
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    background: var(--bg2);
+  }
+  .port-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(80%) brightness(0.5);
+    display: block;
+    transition: filter 0.7s, transform 0.7s;
+    min-height: 360px;
+    opacity: 0.7;
+  }
+  .port-item:hover img { filter: grayscale(40%) brightness(0.7); transform: scale(1.04); }
+  .port-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(5,5,5,0.9) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .port-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 32px;
+  }
+  .port-cat {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .port-name {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .port-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .port-right .port-item img { min-height: 176px; }
+  /* Testimonial */
+  .testimonial {
+    padding: 120px 0;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    background: var(--bg2);
+  }
+  .t-quote {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: clamp(24px, 3.5vw, 48px);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    color: rgba(255,255,255,0.85);
+    max-width: 1000px;
+    margin-bottom: 40px;
+  }
+  .t-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 32px;
+    border-top: 1px solid var(--glass-border);
+  }
+  .t-auth { font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--fg-muted); }
+  .t-result { font-family: 'Clash Display', 'Inter', sans-serif; font-size: 32px; font-weight: 700; letter-spacing: -0.04em; }
+  /* CTA */
+  .cta { padding: 140px 0; position: relative; }
+  .cta::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 800px; height: 400px;
+    background: radial-gradient(ellipse, var(--glow-orange) 0%, transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .cta-h2 {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: clamp(60px, 10vw, 140px);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    line-height: 0.88;
+    color: var(--fg);
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+  .cta-body { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--fg-muted); max-width: 480px; }
+  .cta-btns { display: flex; gap: 16px; }
+  .btn-white {
+    background: var(--fg);
+    color: var(--bg);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-white:hover { opacity: 0.9; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: border-color 0.3s, color 0.3s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--fg); }
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--glass-border);
+    padding: 80px 60px 40px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 60px;
+    background: var(--bg2);
+    position: relative;
+    z-index: 2;
+  }
+  footer .f-logo {
+    font-family: 'Clash Display', 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  footer .f-desc { font-size: 13px; color: var(--fg-muted); line-height: 1.7; font-weight: 300; }
+  footer h6 { font-size: 9px; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 20px; }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  footer ul a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s; font-weight: 300; }
+  footer ul a:hover { color: var(--fg); }
+  .footer-bottom {
+    border-top: 1px solid var(--glass-border);
+    padding: 24px 60px;
+    display: flex;
+    justify-content: space-between;
+    background: var(--bg2);
+    position: relative;
+    z-index: 2;
+  }
+  .footer-bottom p { font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; }
+  /* Mix-blend interactions */
+  .blend-hover { transition: color 0.3s; }
+  .blend-hover:hover { mix-blend-mode: difference; }
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s cubic-bezier(0.22,1,0.36,1), transform 1s cubic-bezier(0.22,1,0.36,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a class="nav-logo" href="#">MERIDIAN<span>.</span></a>
-    <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#preview">Dashboard</a></li>
-      <li><a href="#testimonials">Testimonials</a></li>
+<!-- Atmospheric glows -->
+<div class="glow-field glow-1"></div>
+<div class="glow-field glow-2"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">Meridian</div>
+  <div class="nav-links">
+    <a href="#platform">Platform</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#approach">Approach</a>
+    <a href="#access">Access</a>
+  </div>
+  <button class="nav-btn">Request access <i data-lucide="arrow-right" style="width:13px;height:13px;"></i></button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-img-strip">
+    <img src="../../images/noir/noir-1.jpg" alt="Meridian wealth background">
+  </div>
+  <div class="hero-label">Private Wealth Platform / Invitation Only</div>
+  <h1 class="hero-h1">Merid<br>ian</h1>
+  <div class="hero-bottom">
+    <div>
+      <div class="hb-label">Position</div>
+      <div class="hb-value">Institutional-grade wealth intelligence for principals with eight-figure portfolios.</div>
+    </div>
+    <div>
+      <div class="hb-label">Platform advantage</div>
+      <div class="hb-value">Real-time exposure analytics across every asset class. Single dashboard. No brokers in the loop.</div>
+    </div>
+    <div>
+      <div class="hb-label">Access</div>
+      <div class="hb-value">By introduction or direct application review. No onboarding calls.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Manifesto -->
+<section class="section manifesto">
+  <div class="inner">
+    <div class="reveal">
+      <p class="manifesto-text">
+        Wealth management has always been about who you know. <em>We think it should be about what you know.</em> Meridian gives principals direct sight-lines into their wealth — not summarised by a relationship manager, not delayed by reporting cycles.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Metrics -->
+<section class="section metrics">
+  <div class="metrics-grid" style="max-width:1280px;margin:0 auto;padding:0 60px;">
+    <div class="metric reveal">
+      <div class="metric-label">Assets on platform</div>
+      <div class="metric-num">$48B</div>
+      <div class="metric-sub">Principal portfolio value under Meridian management.</div>
+    </div>
+    <div class="metric reveal" style="transition-delay:0.1s;">
+      <div class="metric-label">Portfolio latency</div>
+      <div class="metric-num">&lt;2s</div>
+      <div class="metric-sub">Real-time position refresh across all custodians.</div>
+    </div>
+    <div class="metric reveal" style="transition-delay:0.2s;">
+      <div class="metric-label">Alpha generated</div>
+      <div class="metric-num">3.2%</div>
+      <div class="metric-sub">Average annual excess return vs. benchmark (5yr).</div>
+    </div>
+    <div class="metric reveal" style="transition-delay:0.3s;">
+      <div class="metric-label">Principals served</div>
+      <div class="metric-num">214</div>
+      <div class="metric-sub">Invitation-only. Intentionally not scaling beyond 500.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Capabilities -->
+<section class="section capabilities" id="platform">
+  <div class="inner">
+    <div class="cap-layout">
+      <div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:20px;" class="reveal">Platform</div>
+        <h2 class="cap-title reveal" style="transition-delay:0.05s;">What<br>Meridian<br>does</h2>
+      </div>
+      <div class="cap-items">
+        <div class="cap-item reveal">
+          <div class="cap-num">01</div>
+          <div class="cap-content">
+            <div class="cap-name">Unified Portfolio Intelligence</div>
+            <div class="cap-desc">A single live view of every holding — public equities, private credit, real assets, alternatives, and cash — regardless of custodian or geography. Consolidated performance attribution updated continuously, not monthly.</div>
+          </div>
+        </div>
+        <div class="cap-item reveal" style="transition-delay:0.05s;">
+          <div class="cap-num">02</div>
+          <div class="cap-content">
+            <div class="cap-name">Scenario Modeling</div>
+            <div class="cap-desc">Run drawdown, liquidity, and tax scenarios against your actual portfolio before executing. No more asking advisors to model hypotheticals and waiting three weeks for a spreadsheet.</div>
+          </div>
+        </div>
+        <div class="cap-item reveal" style="transition-delay:0.1s;">
+          <div class="cap-num">03</div>
+          <div class="cap-content">
+            <div class="cap-name">Counterparty Risk Mapping</div>
+            <div class="cap-desc">Continuous monitoring of your exposure to any single counterparty across custodians, credit facilities, and derivatives — surfacing concentration before it becomes crisis.</div>
+          </div>
+        </div>
+        <div class="cap-item reveal" style="transition-delay:0.15s;">
+          <div class="cap-num">04</div>
+          <div class="cap-content">
+            <div class="cap-name">Tax Efficiency Engine</div>
+            <div class="cap-desc">Real-time tax loss harvesting signals, wash-sale tracking across entities, and cross-jurisdictional optimization for principals with international exposure.</div>
+          </div>
+        </div>
+        <div class="cap-item reveal" style="transition-delay:0.2s;">
+          <div class="cap-num">05</div>
+          <div class="cap-content">
+            <div class="cap-name">Secure Principal Portal</div>
+            <div class="cap-desc">End-to-end encrypted. Zero third-party analytics. Data never leaves your jurisdiction. Independently audited by a Big Four firm annually.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Portfolio proof -->
+<section class="section portfolio" id="portfolio">
+  <div class="inner">
+    <div style="font-size:9px;font-weight:600;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:24px;" class="reveal">Case studies</div>
+    <h2 class="portfolio-title reveal" style="transition-delay:0.05s;">Results<br>on record</h2>
+    <div class="portfolio-grid">
+      <div class="port-item" style="height:540px;">
+        <img src="../../images/noir/noir-2.jpg" alt="Family office restructure">
+        <div class="port-overlay"></div>
+        <div class="port-info">
+          <div class="port-cat">Family Office / London & Geneva</div>
+          <div class="port-name">Reduced fee drag by 1.8%<br>in 6 months</div>
+        </div>
+      </div>
+      <div class="port-right">
+        <div class="port-item">
+          <img src="../../images/noir/noir-3.jpg" alt="Private equity exposure">
+          <div class="port-overlay"></div>
+          <div class="port-info">
+            <div class="port-cat">PE Principal / Singapore</div>
+            <div class="port-name">$340M exposure consolidated</div>
+          </div>
+        </div>
+        <div class="port-item">
+          <img src="../../images/noir/noir-4.jpg" alt="Tax restructure">
+          <div class="port-overlay"></div>
+          <div class="port-info">
+            <div class="port-cat">Founder Exit / New York</div>
+            <div class="port-name">$12M in tax savings identified</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial -->
+<div class="section testimonial">
+  <div class="inner reveal">
+    <p class="t-quote">"For the first time in fifteen years of managing significant wealth, I have a clear answer to the question: what do I actually own, across what jurisdictions, and what does it cost me in real terms. Meridian gave me that in the first week."</p>
+    <div class="t-meta">
+      <div class="t-auth">Founding Principal — European family office, $2.4B AUM</div>
+      <div class="t-result">+3.2% net alpha</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="section cta" id="access">
+  <div class="inner">
+    <div style="font-size:9px;font-weight:600;letter-spacing:0.35em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:32px;" class="reveal">Request access</div>
+    <h2 class="cta-h2 reveal" style="transition-delay:0.05s;">Clarity<br>for principals<br>who know<br>better.</h2>
+    <div class="cta-bottom reveal" style="transition-delay:0.15s;">
+      <p class="cta-body">We review every application personally. Minimum portfolio size of $10M. Most onboarding completes in under two weeks from approval.</p>
+      <div class="cta-btns">
+        <button class="btn-white">Apply for access <i data-lucide="arrow-right" style="width:13px;height:13px;"></i></button>
+        <button class="btn-ghost">Speak to a principal <i data-lucide="external-link" style="width:13px;height:13px;"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <div class="f-logo">Meridian</div>
+    <div class="f-desc">Private wealth intelligence platform. Institutional-grade tools for principals who demand direct control. Invitation only.</div>
+  </div>
+  <div>
+    <h6>Platform</h6>
+    <ul>
+      <li><a href="#">Portfolio Intelligence</a></li>
+      <li><a href="#">Scenario Modeling</a></li>
+      <li><a href="#">Tax Efficiency</a></li>
+      <li><a href="#">Security</a></li>
     </ul>
-    <a href="#cta" class="nav-btn">Get Access</a>
-  </nav>
+  </div>
+  <div>
+    <h6>Company</h6>
+    <ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Approach</a></li>
+      <li><a href="#">Compliance</a></li>
+      <li><a href="#">Press</a></li>
+    </ul>
+  </div>
+  <div>
+    <h6>Access</h6>
+    <ul>
+      <li><a href="#">Apply</a></li>
+      <li><a href="#">Referral Program</a></li>
+      <li><a href="#">principals@meridian.io</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>Meridian &copy; 2025 — Regulated entity. Not an investment adviser.</p>
+  <p>FCA Registered &nbsp;&middot;&nbsp; SOC 2 Type II</p>
+</div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-eyebrow">Private Wealth Platform · Est. 2021</div>
-    <h1 class="hero-title">
-      WEALTH<br>
-      <span class="stroke">WITHOUT</span><br>
-      <span class="gold">COMPROMISE</span>
-    </h1>
-    <p class="hero-desc">Meridian is the private wealth platform built for those who've earned the right to expect more. Institutional-grade intelligence. Personal-scale service.</p>
-    <div class="hero-actions">
-      <a href="#cta" class="btn-gold">Request Access</a>
-      <a href="#features" class="btn-outline-gold">See How It Works</a>
-    </div>
-    <div class="hero-trusted">
-      <span class="trusted-label">Trusted by</span>
-      <div class="trusted-items">
-        <span class="trusted-item">Summit Capital</span>
-        <span class="trusted-item">Arktis Group</span>
-        <span class="trusted-item">Palisade Fund</span>
-        <span class="trusted-item">Vantage Partners</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="features-section" id="features">
-    <div class="features-inner">
-      <div class="features-header reveal">
-        <div>
-          <div class="section-tag">Platform Features</div>
-          <h2 class="section-title">BUILT FOR<br><span class="stroke">PRECISION</span></h2>
-        </div>
-        <p class="features-desc">Every feature in Meridian was designed around a single question: what do the world's most sophisticated investors actually need? The answer wasn't more dashboards. It was better intelligence.</p>
-      </div>
-      <div class="features-grid">
-        <div class="feat-card reveal">
-          <div class="feat-icon">⚡</div>
-          <div class="feat-title">Real-Time Intelligence</div>
-          <div class="feat-body">Live portfolio analytics with sub-second refresh rates. Every position, every move, every risk signal — visible before it matters.</div>
-        </div>
-        <div class="feat-card reveal" style="transition-delay:0.1s">
-          <div class="feat-icon">🔐</div>
-          <div class="feat-title">Institutional Security</div>
-          <div class="feat-body">SOC 2 Type II certified, AES-256 encryption at rest and in transit. Your wealth data is protected to the highest institutional standard.</div>
-        </div>
-        <div class="feat-card reveal" style="transition-delay:0.2s">
-          <div class="feat-icon">🌐</div>
-          <div class="feat-title">Multi-Custodian Aggregation</div>
-          <div class="feat-body">Consolidate accounts across 800+ custodians, banks, and brokerages. One unified view, regardless of where your assets are held.</div>
-        </div>
-        <div class="feat-card reveal">
-          <div class="feat-icon">📊</div>
-          <div class="feat-title">Tax Alpha Engine</div>
-          <div class="feat-body">Automated tax-loss harvesting opportunities, realized/unrealized gain tracking, and jurisdiction-aware reporting across all asset classes.</div>
-        </div>
-        <div class="feat-card reveal" style="transition-delay:0.1s">
-          <div class="feat-icon">🤝</div>
-          <div class="feat-title">White-Glove Concierge</div>
-          <div class="feat-body">A dedicated relationship manager — not a chatbot — available whenever you need strategic guidance on your wealth picture.</div>
-        </div>
-        <div class="feat-card reveal" style="transition-delay:0.2s">
-          <div class="feat-icon">🧠</div>
-          <div class="feat-title">AI Risk Modeling</div>
-          <div class="feat-body">Proprietary Monte Carlo simulations and scenario stress-testing, trained on four decades of multi-asset cycle data.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DASHBOARD PREVIEW -->
-  <section class="preview-section" id="preview">
-    <div class="preview-inner">
-      <div class="preview-header reveal">
-        <div class="section-tag">Interface Preview</div>
-        <h2 class="section-title">YOUR WEALTH<br><span class="stroke">AT A GLANCE</span></h2>
-      </div>
-      <div class="dashboard-mockup reveal">
-        <div class="dash-titlebar">
-          <div class="dash-dot dd-r"></div>
-          <div class="dash-dot dd-y"></div>
-          <div class="dash-dot dd-g"></div>
-        </div>
-        <div class="dash-body">
-          <div class="dash-stat">
-            <div class="dash-stat-label">Net Worth</div>
-            <div class="dash-stat-val">$8.4<span>M</span></div>
-          </div>
-          <div class="dash-stat">
-            <div class="dash-stat-label">YTD Return</div>
-            <div class="dash-stat-val" style="color: var(--gold)">+14.2<span>%</span></div>
-          </div>
-          <div class="dash-stat">
-            <div class="dash-stat-label">Risk Score</div>
-            <div class="dash-stat-val">6.8<span>/10</span></div>
-          </div>
-          <div class="dash-stat">
-            <div class="dash-stat-label">Accounts</div>
-            <div class="dash-stat-val">12<span></span></div>
-          </div>
-          <div class="dash-chart">
-            <div class="bar" style="height:40%; background: rgba(201,169,110,0.3)"></div>
-            <div class="bar" style="height:55%; background: rgba(201,169,110,0.35)"></div>
-            <div class="bar" style="height:45%; background: rgba(201,169,110,0.3)"></div>
-            <div class="bar" style="height:70%; background: rgba(201,169,110,0.4)"></div>
-            <div class="bar" style="height:60%; background: rgba(201,169,110,0.35)"></div>
-            <div class="bar" style="height:80%; background: rgba(201,169,110,0.5)"></div>
-            <div class="bar" style="height:75%; background: rgba(201,169,110,0.45)"></div>
-            <div class="bar" style="height:90%; background: var(--gold)"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="testimonials-section" id="testimonials">
-    <div class="testi-inner">
-      <div class="testi-header reveal">
-        <div class="section-tag">Client Perspectives</div>
-        <h2 class="section-title">TRUSTED BY<br><span class="stroke">THE FINEST</span></h2>
-      </div>
-      <div class="testi-grid">
-        <div class="t-card reveal">
-          <div class="t-stars">★★★★★</div>
-          <p class="t-text">"Meridian finally solved something I'd given up on: a single, unified view of everything I own. The intelligence layer is genuinely different — it surfaces insights I wasn't looking for but absolutely needed."</p>
-          <div class="t-author">
-            <div class="t-ava">RH</div>
-            <div>
-              <div class="t-name">Richard Holloway</div>
-              <div class="t-role">Managing Partner, Summit Capital</div>
-            </div>
-          </div>
-        </div>
-        <div class="t-card reveal" style="transition-delay:0.1s">
-          <div class="t-stars">★★★★★</div>
-          <p class="t-text">"The tax alpha engine alone has more than paid for the platform. But the real value is the clarity it gives me. I make better decisions because I finally have complete information."</p>
-          <div class="t-author">
-            <div class="t-ava">SK</div>
-            <div>
-              <div class="t-name">Sarah Kim</div>
-              <div class="t-role">Family Office Principal</div>
-            </div>
-          </div>
-        </div>
-        <div class="t-card reveal" style="transition-delay:0.2s">
-          <div class="t-stars">★★★★★</div>
-          <p class="t-text">"I've used Bloomberg, Addepar, and half a dozen private platforms. Meridian is the only one that feels like it was built for the way I actually think about my portfolio."</p>
-          <div class="t-author">
-            <div class="t-ava">JV</div>
-            <div>
-              <div class="t-name">Jean-Marc Villeneuve</div>
-              <div class="t-role">Founder, Arktis Group</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-section" id="cta">
-    <div class="cta-glow"></div>
-    <div class="cta-inner reveal">
-      <div class="section-tag cta-tag">Exclusive Access</div>
-      <h2 class="cta-title">
-        ELEVATE<br><span class="stroke">YOUR</span><br><span class="gold">WEALTH</span>
-      </h2>
-      <p class="cta-sub">Meridian is invite-only and onboards a limited number of clients each quarter. Apply now to see if you qualify.</p>
-      <a href="#" class="btn-gold">Apply for Access</a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div>
-          <div class="f-brand">MERIDIAN<span>.</span></div>
-          <p class="f-tagline">Private wealth intelligence for those who demand more from their financial picture.</p>
-        </div>
-        <div class="f-col">
-          <h4>Platform</h4>
-          <ul>
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Security</a></li>
-            <li><a href="#">Pricing</a></li>
-          </ul>
-        </div>
-        <div class="f-col">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Press</a></li>
-            <li><a href="#">Careers</a></li>
-          </ul>
-        </div>
-        <div class="f-col">
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Disclosures</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p class="f-copy">© 2025 Meridian Wealth Technologies Inc. All rights reserved. Not a registered investment advisor.</p>
-        <div class="f-badges">
-          <span class="badge">SOC 2</span>
-          <span class="badge">AES-256</span>
-          <span class="badge">FINRA</span>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    const reveals = document.querySelectorAll('.reveal');
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    reveals.forEach(el => obs.observe(el));
-  </script>
+<script>
+  lucide.createIcons();
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

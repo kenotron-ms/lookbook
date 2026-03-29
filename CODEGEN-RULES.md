@@ -1,189 +1,233 @@
 # Lookbook — Code Generation Rules
 
-These rules apply to ALL agents generating HTML for this lookbook.
-Violating them produces amateur output that defeats the purpose of the lookbook.
+Synthesized from:
+- SuperDesign extension rules (`designRuleContent` in extension.ts)
+- no-ai-slop design quality standard
+- Project-specific image pipeline
+
+These rules apply to ALL agents generating HTML for this lookbook. No exceptions.
+
+---
+
+## Role
+
+You are a **senior frontend designer**. Your goal is to generate visually exceptional,
+production-quality landing pages. Every output should look like it came from a top-tier
+design agency, not a template generator.
+
+---
+
+## Structure
+
+- One self-contained HTML file per site
+- Tailwind CDN is allowed and preferred for utility classes
+- All CSS variables go in `:root` using the theme token system below
+- Minimum 500 lines per full landing page
+
+---
+
+## Allowed Dependencies (CDN)
+
+```html
+<!-- Tailwind (allowed) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Lucide icons (REQUIRED for all icons) -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+```
+
+Use Lucide icons via `<i data-lucide="arrow-right"></i>` with `lucide.createIcons()` at end of body.
+Full icon list: https://lucide.dev/icons/
+
+No other CDN dependencies. No Bootstrap. No jQuery. No Alpine. No GSAP CDN.
 
 ---
 
 ## ❌ ABSOLUTE PROHIBITIONS
 
-### 1. NO EMOJI AS PLACEHOLDER GRAPHICS
+### 1. NEVER USE EMOJI AS GRAPHICS
 
-**Never. Not once. Not "just for now". Not "as a temporary placeholder".**
+This is the single most important rule. Emoji are not icons. They are not placeholders.
+They are not "temporary." They destroy the visual credibility of the entire design.
 
-Emoji used in place of icons, images, or graphics is pure laziness and instantly
-kills the visual credibility of any design. It signals to anyone viewing the site
-that the generator gave up and threw in a 🏠 or a ⚡️ instead of doing the work.
-
-**Wrong:**
+**Never:**
 ```html
-<div class="feature-icon">🚀</div>
-<div class="card-image">📸</div>
-<span class="status-icon">✅</span>
-<div class="hero-graphic">🎨</div>
+<div class="icon">🚀</div>   <!-- NEVER -->
+<span>✅ Feature</span>       <!-- NEVER -->
+<div class="badge">🏆</div>  <!-- NEVER -->
 ```
 
-**Right — use inline SVG:**
+**Always use Lucide:**
 ```html
-<div class="feature-icon">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-  </svg>
-</div>
+<i data-lucide="rocket"></i>
+<i data-lucide="check"></i>
+<i data-lucide="trophy"></i>
 ```
 
-**Right — use a CSS shape:**
-```html
-<div class="feature-icon" style="
-  width: 48px; height: 48px;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-">
-  <!-- geometric CSS shape, not emoji -->
-</div>
-```
+If Lucide doesn't have what you need, use an inline SVG path. Never fall back to emoji.
 
-**Right — use a pool image for large placeholders:**
-```html
-<div class="card-image" style="
-  background-image: url('../../images/creative/creative-1.jpg');
-  background-size: cover;
-  background-position: center;
-"></div>
-```
+### 2. NO AI SLOP PATTERNS
 
-**Acceptable icon sources (in order of preference):**
-1. Inline SVG paths (zero dependencies, fully customizable)
-2. Lucide icon paths (clean, consistent, professional)
-3. Heroicons paths
-4. CSS geometric shapes (circles, lines, crosses — but only when abstract is appropriate)
-5. The shared image pools in `images/` for large image slots
+These patterns instantly signal automated generation with zero design judgment:
 
-**Never acceptable:**
-- Emoji of any kind (🚀 💡 ✨ 📱 🎯 — all banned)
-- Unicode symbols used as visual graphics (★ → ⚡ ► — these are text, not icons)
-- Font Awesome or similar icon font CDN `<i class="fa fa-...">` tags (external dep)
-- Placeholder services like placehold.co or via.placeholder.com
+**Layout slop:**
+- ❌ Hero → 3-equal-column features → testimonials → 3-tier pricing → CTA → footer (default section order)
+- ❌ `grid-template-columns: repeat(3, 1fr)` with identical icon+h3+p blocks
+- ❌ Three equal-width pricing tiers with the middle one "Most Popular"
+- ❌ Full-width centered hero with gradient background and generic CTA buttons
+
+**Visual slop:**
+- ❌ `border-radius: 16px+` on everything uniformly
+- ❌ Rounded card with inner `border-left: 3px solid accent` — outer curve contradicts inner vertical
+- ❌ `box-shadow` on more than half of all containers
+- ❌ Purple-to-blue, pink-to-orange, teal-to-green gradient as a primary background
+- ❌ Decorative SVG blobs, wave dividers, floating circles with no semantic purpose
+- ❌ Mixed icon styles (some outlined, some filled, different stroke weights)
+
+**Copy slop:**
+- ❌ "Get Started" / "Learn More" / "Try It Free" / "Sign Up Now" / "Book a Demo"
+- ❌ "seamless" / "powerful" / "revolutionary" / "next-gen" / "cutting-edge" / "game-changing"
+- ❌ Vague testimonials with no product specifics ("This product changed everything")
+
+### 3. NO EXTERNAL IMAGE SERVICES
+
+- ❌ Unsplash CDN URLs — they surface irrelevant stock imagery
+- ❌ placehold.co / via.placeholder.com
+- ❌ Any fabricated or guessed image URLs
+
+Use the shared image pools below, or CSS for purely decorative backgrounds.
+
+### 4. NO LOREM IPSUM
+
+Write real, contextually appropriate copy for the fictional product. If the prompt
+specifies a product (e.g. "FORM.STUDIO — architecture studio"), write copy that
+actually fits. "Lorem ipsum" means the generator didn't read the brief.
 
 ---
 
-### 2. NO LOREM IPSUM IN HERO TEXT
+## Fonts
 
-Use real, contextually appropriate copy. Every site has a named product — write
-copy that fits that product. "Lorem ipsum dolor sit amet" in a hero section means
-the generator didn't read the brief.
+Always from Google Fonts via `@import`. Preferred list:
 
----
-
-### 3. NO GENERIC STOCK GRADIENTS FOR IMAGES
-
-If an element needs an image:
-- Use the shared pool: `../../images/{pool}/{file}.jpg`
-- Or use nano-banana to generate a contextually appropriate image
-
-The acceptable CSS gradient approach is ONLY for decorative backgrounds, not for
-elements that are clearly image containers (product cards, showcase grids, etc.).
-
----
-
-### 4. NO EXTERNAL JS FRAMEWORK DEPENDENCIES
-
-Sites must be self-contained. Allowed:
-- Vanilla JS
-- Google Fonts via `@import` in `<style>`
-- Fontshare via `@import` in `<style>`
-
-Not allowed:
-- `<script src="https://cdn.jsdelivr.net/...">`
-- `<link rel="stylesheet" href="https://...cdnjs...">`
-- Importing React, Vue, Alpine, GSAP, etc. from a CDN
-
----
-
-## ✅ MANDATORY STANDARDS
-
-### Icons
-
-Every icon must be an inline SVG path. Keep a mental library of common ones:
-
-```html
-<!-- Arrow right -->
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-  <path d="M5 12h14M12 5l7 7-7 7"/>
-</svg>
-
-<!-- Check -->
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-  <polyline points="20 6 9 17 4 12"/>
-</svg>
-
-<!-- Plus -->
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-</svg>
-
-<!-- Close/X -->
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-</svg>
-
-<!-- Search -->
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-</svg>
-
-<!-- Menu/hamburger -->
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-  <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/>
-  <line x1="3" y1="18" x2="21" y2="18"/>
-</svg>
-
-<!-- External link / arrow up-right -->
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-  <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-</svg>
-
-<!-- Star -->
-<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-</svg>
+```
+JetBrains Mono, Fira Code, Inter, Poppins, Montserrat, Outfit,
+Plus Jakarta Sans, DM Sans, Geist, Merriweather, Playfair Display, Space Grotesk
 ```
 
-### Image slots
-
-Large image containers must reference the shared image pool or use a CSS gradient
-only as a last resort with a clear TODO comment:
-
+For sites that specify Fontshare fonts (Clash Display, Satoshi, Cabinet Grotesk, etc.),
+use Fontshare `@import`:
 ```css
-/* TODO: Replace with nano-banana generated image from appropriate pool */
-.product-card { background: linear-gradient(135deg, #1a1a1a, #2d2d2d); }
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@700&display=swap');
 ```
-
-### Minimum line count
-
-Every full landing page should be at least 400 lines. A site under 400 lines
-hasn't implemented all the required sections.
 
 ---
 
-## SHARED IMAGE POOLS
+## Theme Tokens
 
-Available at `../../images/` (relative from any `sites/{folder}/index.html`):
+Always define CSS variables in `:root`. Use these reference themes as a starting point,
+then adapt to the site's design prompt.
 
-| Pool | Path | Use for |
-|---|---|---|
-| Architecture | `../../images/architecture/arch-{1-5}.jpg` | Swiss brutalist, B&W |
-| Fashion (warm) | `../../images/fashion-warm/fw-{1-6}.jpg` | Cream/orange editorial fashion |
+### Neo-Brutalism
+```css
+:root {
+  --background: oklch(1.0000 0 0);
+  --foreground: oklch(0 0 0);
+  --primary: oklch(0.6489 0.2370 26.9728);      /* orange-red */
+  --secondary: oklch(0.9680 0.2110 109.7692);    /* acid yellow */
+  --accent: oklch(0.5635 0.2408 260.8178);       /* blue */
+  --border: oklch(0 0 0);
+  --radius: 0px;
+  --shadow: 4px 4px 0px 0px hsl(0 0% 0% / 1.00);
+  --font-sans: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+```
+
+### Modern Dark (Vercel/Linear style)
+```css
+:root {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --border: oklch(0.269 0 0);
+  --radius: 0.5rem;
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+```
+
+---
+
+## Icons — Lucide Usage
+
+```html
+<!-- In <head> or before </body> -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<!-- Usage anywhere in HTML -->
+<i data-lucide="arrow-right" class="w-4 h-4"></i>
+<i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+<i data-lucide="zap" class="w-6 h-6"></i>
+
+<!-- Initialize at end of body -->
+<script>lucide.createIcons();</script>
+```
+
+Common icons for landing pages:
+`arrow-right`, `arrow-up-right`, `check`, `check-circle`, `x`, `x-circle`,
+`plus`, `minus`, `zap`, `star`, `shield`, `lock`, `eye`, `search`,
+`menu`, `chevron-down`, `chevron-right`, `external-link`, `copy`,
+`bar-chart-2`, `trending-up`, `users`, `clock`, `globe`, `code`,
+`terminal`, `layers`, `layout`, `cpu`, `database`, `cloud`, `sparkles`
+
+---
+
+## Images — Shared Pools
+
+All image slots must use paths from the shared pool or CSS-only backgrounds.
+Paths are relative from `sites/{folder}/index.html`:
+
+| Pool | Path pattern | Use for |
+|------|-------------|---------|
+| Architecture | `../../images/architecture/arch-{1-5}.jpg` | Brutalist/Swiss monochrome |
+| Fashion (warm) | `../../images/fashion-warm/fw-{1-6}.jpg` | Cream/editorial fashion |
 | Fashion (dark) | `../../images/fashion-dark/fd-{1-5}.jpg` | Dark industrial streetwear |
 | Hotel | `../../images/hotel/hotel-{1-6}.jpg` | Luxury hospitality |
-| Furniture | `../../images/furniture/furn-{1-4}.jpg` | Museum-grade minimal furniture |
+| Furniture | `../../images/furniture/furn-{1-4}.jpg` | Minimal museum-grade |
 | Skincare | `../../images/skincare/skin-{1-3}.jpg` | Clinical beauty |
 | Automotive | `../../images/automotive/auto-{1-3}.jpg` | Dark luxury automotive |
 | Creative | `../../images/creative/creative-{1-6}.jpg` | Dark editorial/studio |
 | Tech | `../../images/tech/tech-{1-4}.jpg` | Dark tech workspace |
 | Noir | `../../images/noir/noir-{1-5}.jpg` | Cinematic dark fashion |
+| Site hero | `images/hero.jpg` | Site-specific generated hero |
+
+For image containers use `background-image` CSS or `<img>` tags with these paths.
 
 ---
 
-*This document is the law. No exceptions.*
+## Design Quality Checklist
+
+Run this before writing any site:
+
+**Avoid defaults:**
+- [ ] Section order follows narrative logic, not Hero→3col→pricing→footer template
+- [ ] Icons are Lucide, not emoji, not Unicode symbols used decoratively
+- [ ] No generic CTA text ("Get Started", "Learn More")
+- [ ] No buzzwords without specific claims
+- [ ] No uniform large border-radius on all elements
+- [ ] No shadow on more than 2-3 key elevated elements
+- [ ] No purple-to-blue gradient backgrounds
+
+**Must haves:**
+- [ ] Real product-specific copy for the fictional brand
+- [ ] CSS variables in :root for all colors/radii/fonts
+- [ ] Responsive (mobile breakpoint at minimum)
+- [ ] Lucide icons initialized with `lucide.createIcons()`
+- [ ] Image slots use pool paths or contextual CSS
+
+---
+
+*This is the law. No exceptions.*

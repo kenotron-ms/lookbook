@@ -3,680 +3,425 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AURA AUDIO — Sound Without Compromise</title>
+<title>AURA AUDIO — Premium Headphones</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
+  :root {
+    --stone: #FAF7F5;
+    --stone-100: #F5F5F4;
+    --stone-900: #1C1917;
+    --wood: #A67B5B;
+    --aluminium: #B0BAC5;
+    --border: #E7E5E4;
+    --secondary: #78716C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--stone); color: var(--stone-900); }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --dark: #0C0C0D;
-  --panel: #131315;
-  --surface: #1A1A1D;
-  --border: rgba(255,255,255,0.08);
-  --border-mid: rgba(255,255,255,0.14);
-  --white: #FAFAFA;
-  --muted: #808080;
-  --accent: #C8A96E;
-  --accent-dim: rgba(200,169,110,0.15);
-  --blue: #4A8FE7;
-  --green: #4AE799;
-}
-html { scroll-behavior: smooth; }
-body {
-  background: var(--dark);
-  color: var(--white);
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  line-height: 1.65;
-  font-weight: 300;
-  overflow-x: hidden;
-}
+  /* Model selector tabs */
+  .model-tab { padding: 12px 24px; font-size: 13px; cursor: pointer; border-bottom: 2px solid transparent; color: var(--secondary); transition: all 0.25s; font-weight: 400; }
+  .model-tab.active { border-bottom-color: var(--stone-900); color: var(--stone-900); font-weight: 500; }
+  .model-tab:hover { color: var(--stone-900); }
 
-/* NAV */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0; z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 60px;
-  background: linear-gradient(180deg, rgba(12,12,13,0.98) 0%, transparent 100%);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  transition: padding 0.4s;
-}
-nav.scrolled { padding: 16px 60px; }
-.nav-logo {
-  font-family: 'Syne', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--white);
-  text-decoration: none;
-}
-.nav-logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 40px; list-style: none; }
-.nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s; }
-.nav-links a:hover { color: var(--white); }
-.nav-cta {
-  background: var(--accent);
-  color: var(--dark);
-  padding: 10px 24px;
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 4px;
-  letter-spacing: 0.03em;
-  transition: opacity 0.2s;
-}
-.nav-cta:hover { opacity: 0.85; }
+  /* Card hover */
+  .show-card { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+  .show-card:hover { transform: translateY(-3px); }
 
-/* HERO — PRODUCT THEATER */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 120px 60px 80px;
-  position: relative;
-  overflow: hidden;
-}
-.hero-glow {
-  position: absolute;
-  width: 800px; height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(200,169,110,0.12) 0%, transparent 70%);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--border-mid);
-  padding: 6px 16px;
-  border-radius: 100px;
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  margin-bottom: 40px;
-  position: relative;
-}
-.eyebrow-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-.hero-h1 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(52px, 8vw, 112px);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  color: var(--white);
-  margin-bottom: 32px;
-  position: relative;
-}
-.hero-h1 .accent { color: var(--accent); }
-.hero-sub {
-  font-size: 18px;
-  color: var(--muted);
-  max-width: 600px;
-  margin: 0 auto 60px;
-  line-height: 1.7;
-}
-/* Product Visual */
-.headphone-visual {
-  width: 320px;
-  height: 280px;
-  position: relative;
-  margin: 0 auto 60px;
-}
-.headphone-arc {
-  width: 220px;
-  height: 120px;
-  border: 6px solid #2A2A2E;
-  border-bottom: none;
-  border-radius: 120px 120px 0 0;
-  margin: 0 auto;
-  position: relative;
-}
-.headphone-arc::before, .headphone-arc::after {
-  content: '';
-  position: absolute;
-  bottom: -60px;
-  width: 48px; height: 80px;
-  background: linear-gradient(180deg, #2A2A2E 0%, #1E1E22 100%);
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
-}
-.headphone-arc::before { left: -24px; }
-.headphone-arc::after { right: -24px; }
-.headphone-band {
-  position: absolute;
-  top: 8px; left: 50%; transform: translateX(-50%);
-  width: 60px; height: 12px;
-  background: var(--accent);
-  border-radius: 6px;
-  box-shadow: 0 0 20px rgba(200,169,110,0.4);
-}
-.hero-actions { display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap; }
-.btn-hero {
-  display: inline-block;
-  background: var(--white);
-  color: var(--dark);
-  padding: 16px 40px;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: opacity 0.2s;
-}
-.btn-hero:hover { opacity: 0.85; }
-.btn-hero-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 14px;
-  transition: color 0.2s;
-  padding: 16px 0;
-}
-.btn-hero-ghost:hover { color: var(--white); }
-.hero-specs {
-  display: flex;
-  gap: 48px;
-  margin-top: 64px;
-  padding-top: 48px;
-  border-top: 1px solid var(--border);
-}
-.spec-item { text-align: center; }
-.spec-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 600; color: var(--white); display: block; margin-bottom: 4px; }
-.spec-label { font-size: 12px; color: var(--muted); }
+  /* Section label */
+  .label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--secondary); }
 
-/* MODEL SELECTOR */
-.model-section {
-  padding: 100px 60px;
-  border-top: 1px solid var(--border);
-}
-.model-header { text-align: center; margin-bottom: 64px; }
-.model-h2 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(36px, 5vw, 64px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-}
-.model-sub { font-size: 15px; color: var(--muted); max-width: 480px; margin: 0 auto; }
-.model-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-}
-.model-card {
-  background: var(--panel);
-  padding: 48px 40px;
-  position: relative;
-  transition: background 0.3s;
-  cursor: pointer;
-  overflow: hidden;
-}
-.model-card:hover { background: var(--surface); }
-.model-card.featured {
-  background: var(--surface);
-}
-.model-card.featured::after {
-  content: 'Most Popular';
-  position: absolute;
-  top: 20px; right: 20px;
-  background: var(--accent);
-  color: var(--dark);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  padding: 4px 10px;
-  border-radius: 2px;
-}
-.model-name { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 8px; }
-.model-sub-name { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
-.model-visual {
-  width: 80px; height: 60px;
-  background: var(--surface);
-  border: 1px solid var(--border-mid);
-  border-radius: 8px;
-  margin-bottom: 32px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
-}
-.model-features { list-style: none; margin-bottom: 32px; }
-.model-features li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  color: rgba(250,250,250,0.7);
-}
-.model-features li::before { content: '→'; color: var(--accent); font-size: 12px; }
-.model-price { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 600; margin-bottom: 24px; }
-.model-price .period { font-size: 16px; font-weight: 400; color: var(--muted); }
-.btn-model {
-  display: block;
-  text-align: center;
-  background: var(--border-mid);
-  color: var(--white);
-  padding: 14px;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: 4px;
-  transition: background 0.3s;
-}
-.btn-model:hover { background: var(--white); color: var(--dark); }
-.model-card.featured .btn-model { background: var(--accent); color: var(--dark); }
-.model-card.featured .btn-model:hover { background: var(--white); }
+  /* Product panel */
+  .model-panel { display: none; }
+  .model-panel.active { display: grid; }
 
-/* SCENARIOS */
-.scenarios {
-  padding: 100px 60px;
-  border-top: 1px solid var(--border);
-}
-.scenarios-title { font-family: 'Syne', sans-serif; font-size: clamp(32px,4vw,56px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 64px; }
-.scenarios-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-}
-.scenario-card {
-  background: var(--panel);
-  padding: 60px 48px;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.3s;
-}
-.scenario-card:hover { background: var(--surface); }
-.scenario-icon { font-size: 36px; margin-bottom: 24px; display: block; }
-.scenario-name { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 600; margin-bottom: 16px; }
-.scenario-desc { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 32px; }
-.scenario-stat {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--accent-dim);
-  border: 1px solid rgba(200,169,110,0.2);
-  padding: 10px 20px;
-  border-radius: 4px;
-}
-.scenario-stat-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 600; color: var(--accent); }
-.scenario-stat-label { font-size: 12px; color: var(--muted); }
+  /* Scenario cards */
+  .scenario { border: 1px solid var(--border); padding: 28px; cursor: pointer; transition: all 0.25s; }
+  .scenario:hover { border-color: var(--stone-900); background: var(--stone-100); }
+  .scenario.active { border-color: var(--stone-900); background: var(--stone-100); }
 
-/* COMPARISON */
-.comparison {
-  padding: 100px 60px;
-  border-top: 1px solid var(--border);
-  background: var(--panel);
-}
-.comp-header { margin-bottom: 48px; }
-.comp-h2 { font-family: 'Syne', sans-serif; font-size: clamp(28px,4vw,48px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
-.comp-table { width: 100%; border-collapse: collapse; }
-.comp-table th {
-  text-align: left;
-  padding: 16px 24px;
-  background: var(--surface);
-  font-family: 'Syne', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid var(--border-mid);
-}
-.comp-table th:first-child { color: var(--muted); font-weight: 400; font-family: 'Inter', sans-serif; }
-.comp-table td {
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  color: rgba(250,250,250,0.7);
-}
-.comp-table td:first-child { color: var(--muted); }
-.comp-table tr:hover td { background: rgba(255,255,255,0.02); }
-.check { color: var(--green); font-size: 16px; }
-.cross { color: var(--muted); opacity: 0.4; }
+  /* Comparison table */
+  .compare-cell { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
 
-/* TESTIMONIALS */
-.testimonials { padding: 100px 60px; border-top: 1px solid var(--border); }
-.test-h2 { font-family: 'Syne', sans-serif; font-size: clamp(32px,4vw,52px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 60px; }
-.test-scroll {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border);
-}
-.test-card {
-  background: var(--panel);
-  padding: 40px 36px;
-}
-.test-rating { display: flex; gap: 4px; margin-bottom: 24px; }
-.test-star { color: var(--accent); font-size: 14px; }
-.test-body { font-size: 15px; line-height: 1.7; color: rgba(250,250,250,0.8); margin-bottom: 28px; }
-.test-author { font-size: 12px; font-weight: 500; color: var(--white); }
-.test-product { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.test-badge { display: inline-block; margin-top: 12px; background: var(--accent-dim); border: 1px solid rgba(200,169,110,0.2); color: var(--accent); font-size: 10px; padding: 4px 10px; letter-spacing: 0.08em; border-radius: 2px; }
-
-/* CTA */
-.cta-section {
-  padding: 120px 60px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.cta-glow {
-  position: absolute;
-  width: 600px; height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(74,143,231,0.08) 0%, transparent 70%);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-.cta-h2 { font-family: 'Syne', sans-serif; font-size: clamp(44px,7vw,96px); font-weight: 700; letter-spacing: -0.03em; line-height: 0.95; margin-bottom: 32px; position: relative; }
-.cta-h2 .accent { color: var(--accent); }
-.cta-sub { font-size: 16px; color: var(--muted); max-width: 480px; margin: 0 auto 48px; line-height: 1.7; position: relative; }
-.cta-btns { display: flex; gap: 16px; justify-content: center; position: relative; }
-.btn-cta-main {
-  display: inline-block;
-  background: var(--accent);
-  color: var(--dark);
-  padding: 18px 48px;
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: opacity 0.2s;
-}
-.btn-cta-main:hover { opacity: 0.85; }
-.btn-cta-ghost {
-  display: inline-block;
-  border: 1px solid var(--border-mid);
-  color: var(--white);
-  padding: 18px 48px;
-  font-size: 15px;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: border-color 0.2s;
-}
-.btn-cta-ghost:hover { border-color: var(--muted); }
-.cta-guarantee { font-size: 12px; color: var(--muted); margin-top: 24px; position: relative; }
-
-/* FOOTER */
-footer { background: var(--panel); border-top: 1px solid var(--border); padding: 80px 60px 40px; }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 60px; border-bottom: 1px solid var(--border); }
-.footer-brand { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 16px; }
-.footer-brand span { color: var(--accent); }
-.footer-desc { font-size: 13px; color: var(--muted); line-height: 1.8; max-width: 260px; }
-.footer-col-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
-.footer-links { list-style: none; }
-.footer-links li { margin-bottom: 10px; }
-.footer-links a { font-size: 13px; color: rgba(250,250,250,0.4); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: var(--white); }
-.footer-bottom { display: flex; justify-content: space-between; padding-top: 40px; font-size: 12px; color: var(--muted); }
-
-.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-.fade-in.visible { opacity: 1; transform: none; }
-
-@media (max-width: 900px) {
-  nav { padding: 16px 24px; }
-  .nav-links { display: none; }
-  .hero { padding: 100px 24px 60px; }
-  .model-grid { grid-template-columns: 1fr; }
-  .scenarios-grid { grid-template-columns: 1fr; }
-  .test-scroll { grid-template-columns: 1fr; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-}
+  /* Image fade-in-up */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeInUp 0.8s ease-out forwards; }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="mainNav">
-  <a href="#" class="nav-logo">AURA <span>AUDIO</span></a>
-  <ul class="nav-links">
-    <li><a href="#models">Models</a></li>
-    <li><a href="#scenarios">Experience</a></li>
-    <li><a href="#compare">Compare</a></li>
-    <li><a href="#reviews">Reviews</a></li>
-  </ul>
-  <a href="#models" class="nav-cta">Shop Now</a>
-</nav>
-
-<!-- HERO THEATER -->
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-eyebrow"><div class="eyebrow-pulse"></div>Now shipping — 8–12 week delivery</div>
-  <h1 class="hero-h1">Sound without<br><span class="accent">compromise.</span></h1>
-  <p class="hero-sub">Three models. One uncompromising approach to acoustic engineering. From studio monitors to daily wear — built for ears that know the difference.</p>
-  <!-- Headphone Visual -->
-  <div class="headphone-visual">
-    <div class="headphone-arc">
-      <div class="headphone-band"></div>
+<!-- STICKY NAVIGATION -->
+<header style="position: sticky; top: 0; z-index: 50; height: 80px; background: rgba(250,247,245,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);">
+  <div style="max-width: 1280px; margin: 0 auto; padding: 0 48px; height: 100%; display: flex; align-items: center; justify-content: space-between;">
+    <a href="#" style="font-size: 18px; font-weight: 700; text-decoration: none; color: var(--stone-900); letter-spacing: -0.02em;">AURA AUDIO</a>
+    <nav style="display: flex; gap: 32px;">
+      <a href="#theater" style="font-size: 13px; color: var(--secondary); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color=this.style.color=='rgb(28,25,23)'?'rgb(120,113,108)':'rgb(28,25,23)'" onmouseout="this.style.color='rgb(120, 113, 108)'">Experience</a>
+      <a href="#models" style="font-size: 13px; color: var(--secondary); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='rgb(28,25,23)'" onmouseout="this.style.color='rgb(120, 113, 108)'">Models</a>
+      <a href="#scenarios" style="font-size: 13px; color: var(--secondary); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='rgb(28,25,23)'" onmouseout="this.style.color='rgb(120, 113, 108)'">Use cases</a>
+      <a href="#compare" style="font-size: 13px; color: var(--secondary); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='rgb(28,25,23)'" onmouseout="this.style.color='rgb(120, 113, 108)'">Compare</a>
+    </nav>
+    <div style="display: flex; gap: 16px; align-items: center;">
+      <button style="background: none; border: none; cursor: pointer; padding: 4px;">
+        <i data-lucide="search" style="width: 18px; height: 18px; color: var(--secondary);"></i>
+      </button>
+      <a href="#purchase" style="font-size: 13px; font-weight: 500; padding: 10px 24px; background: var(--stone-900); color: var(--stone); text-decoration: none; transition: opacity 0.2s; border-radius: 2px;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Buy now</a>
     </div>
   </div>
-  <div class="hero-actions">
-    <a href="#models" class="btn-hero">Explore Models</a>
-    <a href="#scenarios" class="btn-hero-ghost">▶ Hear the Difference</a>
+</header>
+
+<!-- PRODUCT THEATER -->
+<section id="theater" style="background: var(--stone-100); min-height: 92vh; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden;">
+  <!-- Left: copy -->
+  <div style="padding: 100px 64px; display: flex; flex-direction: column; justify-content: center;">
+    <p class="label fade-up" style="margin-bottom: 24px; animation-delay: 0.1s;">AURA AUDIO — 2025 Collection</p>
+    <h1 style="font-size: clamp(52px, 5.5vw, 88px); font-weight: 700; line-height: 0.95; letter-spacing: -0.035em; margin-bottom: 32px;" class="fade-up" style="animation-delay: 0.2s;">
+      Sound as<br>material.
+    </h1>
+    <p style="font-size: 16px; line-height: 1.75; color: var(--secondary); max-width: 400px; margin-bottom: 48px;" class="fade-up">
+      Three models. One philosophy: sound that doesn't compromise material integrity for wireless convenience. Walnut, anodized aluminium, and lambskin. Built to be used — and kept.
+    </p>
+    <!-- Model quick selectors -->
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;" class="fade-up">
+      <a href="#models" style="font-size: 13px; font-weight: 500; padding: 12px 28px; background: var(--stone-900); color: var(--stone); text-decoration: none; border-radius: 2px;">Explore all models</a>
+      <a href="#scenarios" style="font-size: 13px; color: var(--secondary); padding: 12px 28px; border: 1px solid var(--border); text-decoration: none; border-radius: 2px; transition: border-color 0.2s;" onmouseover="this.style.borderColor='rgb(28,25,23)'" onmouseout="this.style.borderColor='rgb(231,229,228)'">Which model for you?</a>
+    </div>
   </div>
-  <div class="hero-specs">
-    <div class="spec-item"><span class="spec-val">40mm</span><span class="spec-label">Beryllium Driver</span></div>
-    <div class="spec-item"><span class="spec-val">32Ω</span><span class="spec-label">Impedance</span></div>
-    <div class="spec-item"><span class="spec-val">5Hz–40kHz</span><span class="spec-label">Frequency Range</span></div>
-    <div class="spec-item"><span class="spec-val">36hr</span><span class="spec-label">Battery Life</span></div>
-    <div class="spec-item"><span class="spec-val">−45dB</span><span class="spec-label">ANC Depth</span></div>
+  <!-- Right: hero image -->
+  <div style="position: relative; overflow: hidden; min-height: 600px;">
+    <img src="../../images/tech/tech-1.jpg" alt="AURA Audio headphones" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: transform 2s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+    <!-- Model badge -->
+    <div style="position: absolute; bottom: 40px; left: 40px; background: rgba(250,247,245,0.9); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 20px 24px; min-width: 200px;">
+      <p class="label" style="margin-bottom: 6px;">Shown: Reference</p>
+      <p style="font-size: 18px; font-weight: 600; letter-spacing: -0.02em;">AURA Reference</p>
+      <p style="font-size: 13px; color: var(--secondary); margin-top: 2px;">Open-back · Walnut · £1,200</p>
+    </div>
   </div>
 </section>
 
 <!-- MODEL SELECTOR -->
-<section class="model-section fade-in" id="models">
-  <div class="model-header">
-    <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Choose Your Model</p>
-    <h2 class="model-h2">Three ways to listen.</h2>
-    <p class="model-sub">Each model is engineered for a specific listening context. Not a good/better/best hierarchy — three distinct tools.</p>
+<section id="models" style="padding: 96px 48px; max-width: 1280px; margin: 0 auto;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;">
+    <div>
+      <p class="label" style="margin-bottom: 12px;">Three models</p>
+      <h2 style="font-size: clamp(32px, 4vw, 52px); font-weight: 700; line-height: 1.0; letter-spacing: -0.03em;">Different needs.<br>Same standard.</h2>
+    </div>
+    <p style="font-size: 14px; color: var(--secondary); max-width: 280px; text-align: right; line-height: 1.65;">Select a model to see its design rationale, materials, and intended listening context.</p>
   </div>
-  <div class="model-grid">
-    <div class="model-card">
-      <div class="model-visual">🎧</div>
-      <h3 class="model-name">Aura One</h3>
-      <p class="model-sub-name">Wireless Over-Ear · Daily Wear</p>
-      <ul class="model-features">
-        <li>40mm Dynamic Driver</li>
-        <li>Active Noise Cancellation</li>
-        <li>36-Hour Battery</li>
-        <li>Multi-Device Connect (3)</li>
-        <li>Foldable Design</li>
-      </ul>
-      <div class="model-price">£ 349</div>
-      <a href="#" class="btn-model">Add to Cart</a>
+
+  <!-- Tab selector -->
+  <div style="border-bottom: 1px solid var(--border); display: flex; margin-bottom: 48px;">
+    <button class="model-tab active" id="tab-reference" onclick="selectModel('reference')">AURA Reference</button>
+    <button class="model-tab" id="tab-studio" onclick="selectModel('studio')">AURA Studio</button>
+    <button class="model-tab" id="tab-field" onclick="selectModel('field')">AURA Field</button>
+  </div>
+
+  <!-- Reference panel -->
+  <div class="model-panel active" id="panel-reference" style="grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
+    <div>
+      <img src="../../images/tech/tech-2.jpg" alt="AURA Reference" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 16px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border);">
+        <div style="background: var(--stone); padding: 16px;">
+          <p class="label" style="margin-bottom: 4px;">Driver</p>
+          <p style="font-size: 13px; font-weight: 500;">40mm planar magnetic</p>
+        </div>
+        <div style="background: var(--stone); padding: 16px;">
+          <p class="label" style="margin-bottom: 4px;">Configuration</p>
+          <p style="font-size: 13px; font-weight: 500;">Open-back, circumaural</p>
+        </div>
+        <div style="background: var(--stone); padding: 16px;">
+          <p class="label" style="margin-bottom: 4px;">Impedance</p>
+          <p style="font-size: 13px; font-weight: 500;">50 ohms</p>
+        </div>
+        <div style="background: var(--stone); padding: 16px;">
+          <p class="label" style="margin-bottom: 4px;">Sensitivity</p>
+          <p style="font-size: 13px; font-weight: 500;">94 dB/mW</p>
+        </div>
+      </div>
     </div>
-    <div class="model-card featured">
-      <div class="model-visual">🎵</div>
-      <h3 class="model-name">Aura Pro</h3>
-      <p class="model-sub-name">Wireless Over-Ear · Hi-Fi</p>
-      <ul class="model-features">
-        <li>40mm Beryllium Driver</li>
-        <li>Adaptive ANC (−45dB)</li>
-        <li>LDAC + aptX Lossless</li>
-        <li>48-Hour Battery</li>
-        <li>Precision EQ via App</li>
-        <li>Lambskin Ear Cushions</li>
-      </ul>
-      <div class="model-price">£ 549</div>
-      <a href="#" class="btn-model">Add to Cart</a>
+    <div>
+      <div style="display: inline-block; background: var(--stone-100); padding: 4px 12px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; margin-bottom: 20px; color: var(--secondary); text-transform: uppercase;">Best for: Home listening, hi-fi setups</div>
+      <h3 style="font-size: 36px; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 16px; line-height: 1.05;">AURA Reference</h3>
+      <p style="font-size: 15px; color: var(--secondary); line-height: 1.75; margin-bottom: 32px;">Our planar magnetic flagship. Walnut ear cups machined from a single block of American black walnut, paired with lambskin earpads. Open-back — not for commuting. For sitting still and listening properly.</p>
+      <!-- Differentiating feature -->
+      <div style="border-left: 3px solid var(--wood); padding-left: 20px; margin-bottom: 32px; background: transparent;">
+        <p style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">Why planar magnetic?</p>
+        <p style="font-size: 13px; color: var(--secondary); line-height: 1.65;">Dynamic drivers move a cone. Planar drivers move an entire membrane — more surface area means more even force distribution, lower distortion at high volumes, and a more accurate transient response. The trade-off: they're harder to drive. You need an amplifier.</p>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 24px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 24px;">
+        <div>
+          <p style="font-size: 32px; font-weight: 700; letter-spacing: -0.03em;">£1,200</p>
+          <p style="font-size: 13px; color: var(--secondary);">Free shipping. 30-day audition period.</p>
+        </div>
+        <a href="#purchase" style="font-size: 13px; font-weight: 600; padding: 14px 32px; background: var(--stone-900); color: var(--stone); text-decoration: none; border-radius: 2px;">Order Reference</a>
+      </div>
+      <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--secondary);">
+          <i data-lucide="package" style="width: 14px; height: 14px;"></i>2-year warranty
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--secondary);">
+          <i data-lucide="wrench" style="width: 14px; height: 14px;"></i>User-serviceable parts
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--secondary);">
+          <i data-lucide="headphones" style="width: 14px; height: 14px;"></i>Detachable cable
+        </div>
+      </div>
     </div>
-    <div class="model-card">
-      <div class="model-visual">🔊</div>
-      <h3 class="model-name">Aura Studio</h3>
-      <p class="model-sub-name">Open-Back Wired · Reference</p>
-      <ul class="model-features">
-        <li>50mm Planar Magnetic Driver</li>
-        <li>5Hz–40kHz Response</li>
-        <li>300Ω High Impedance</li>
-        <li>Detachable XLR Cable</li>
-        <li>Cherry Wood Ear Cups</li>
-      </ul>
-      <div class="model-price">£ 899</div>
-      <a href="#" class="btn-model">Add to Cart</a>
+  </div>
+
+  <!-- Studio panel -->
+  <div class="model-panel" id="panel-studio" style="grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
+    <div>
+      <img src="../../images/tech/tech-3.jpg" alt="AURA Studio" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 16px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border);">
+        <div style="background: var(--stone); padding: 16px;"><p class="label" style="margin-bottom: 4px;">Driver</p><p style="font-size: 13px; font-weight: 500;">42mm dynamic, beryllium dome</p></div>
+        <div style="background: var(--stone); padding: 16px;"><p class="label" style="margin-bottom: 4px;">Configuration</p><p style="font-size: 13px; font-weight: 500;">Closed-back, circumaural</p></div>
+        <div style="background: var(--stone); padding: 16px;"><p class="label" style="margin-bottom: 4px;">ANC depth</p><p style="font-size: 13px; font-weight: 500;">-32dB active noise reduction</p></div>
+        <div style="background: var(--stone); padding: 16px;"><p class="label" style="margin-bottom: 4px;">Battery</p><p style="font-size: 13px; font-weight: 500;">38 hrs (ANC on)</p></div>
+      </div>
+    </div>
+    <div>
+      <div style="display: inline-block; background: var(--stone-100); padding: 4px 12px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; margin-bottom: 20px; color: var(--secondary); text-transform: uppercase;">Best for: Office, travel, focus work</div>
+      <h3 style="font-size: 36px; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 16px; line-height: 1.05;">AURA Studio</h3>
+      <p style="font-size: 15px; color: var(--secondary); line-height: 1.75; margin-bottom: 32px;">Closed-back with active noise cancellation built around a beryllium dome driver. The anodized aluminium headband flexes without creaking. 38 hours battery. Folds flat. Won't embarrass you at an airport.</p>
+      <div style="border-left: 3px solid var(--aluminium); padding-left: 20px; margin-bottom: 32px;">
+        <p style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">Why beryllium?</p>
+        <p style="font-size: 13px; color: var(--secondary); line-height: 1.65;">Beryllium is 7x more rigid than titanium at 1/3 the weight. A stiffer dome means less breakup distortion in the high frequencies. It's expensive to work with, which is why most companies use it only in £2,000+ speakers. We put it in an everyday headphone because the ears notice.</p>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 24px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 24px;">
+        <div><p style="font-size: 32px; font-weight: 700; letter-spacing: -0.03em;">£749</p><p style="font-size: 13px; color: var(--secondary);">Free shipping. 30-day audition period.</p></div>
+        <a href="#purchase" style="font-size: 13px; font-weight: 600; padding: 14px 32px; background: var(--stone-900); color: var(--stone); text-decoration: none; border-radius: 2px;">Order Studio</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Field panel -->
+  <div class="model-panel" id="panel-field" style="grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
+    <div>
+      <img src="../../images/tech/tech-4.jpg" alt="AURA Field" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 16px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border);">
+        <div style="background: var(--stone); padding: 16px;"><p class="label" style="margin-bottom: 4px;">Type</p><p style="font-size: 13px; font-weight: 500;">In-ear, universal fit</p></div>
+        <div style="background: var(--stone); padding: 16px;"><p class="label" style="margin-bottom: 4px;">Driver</p><p style="font-size: 13px; font-weight: 500;">Knowles BA + 10mm dynamic hybrid</p></div>
+        <div style="background: var(--stone); padding: 16px;"><p class="label" style="margin-bottom: 4px;">Codec</p><p style="font-size: 13px; font-weight: 500;">aptX Adaptive, AAC, SBC</p></div>
+        <div style="background: var(--stone); padding: 16px;"><p class="label" style="margin-bottom: 4px;">IPX rating</p><p style="font-size: 13px; font-weight: 500;">IPX5 — sweat and rain</p></div>
+      </div>
+    </div>
+    <div>
+      <div style="display: inline-block; background: var(--stone-100); padding: 4px 12px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; margin-bottom: 20px; color: var(--secondary); text-transform: uppercase;">Best for: Exercise, commute, all-day carry</div>
+      <h3 style="font-size: 36px; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 16px; line-height: 1.05;">AURA Field</h3>
+      <p style="font-size: 15px; color: var(--secondary); line-height: 1.75; margin-bottom: 32px;">Hybrid driver true wireless. Knowles balanced armature for detail, dynamic driver for bass impact. Machined aluminium shells. aptX Adaptive for 24-bit lossless streaming when your source supports it.</p>
+      <div style="border-left: 3px solid var(--stone-900); padding-left: 20px; margin-bottom: 32px;">
+        <p style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">What is aptX Adaptive?</p>
+        <p style="font-size: 13px; color: var(--secondary); line-height: 1.65;">Most wireless earphones cap at 256kbps (SBC) or 328kbps (AAC). aptX Adaptive scales from 276kbps to 420kbps and supports 24-bit, 96kHz audio. If your Android phone and streaming service support it, you're getting CD quality wirelessly. iPhone users get AAC — still excellent.</p>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 24px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 24px;">
+        <div><p style="font-size: 32px; font-weight: 700; letter-spacing: -0.03em;">£349</p><p style="font-size: 13px; color: var(--secondary);">Free shipping. 30-day audition period.</p></div>
+        <a href="#purchase" style="font-size: 13px; font-weight: 600; padding: 14px 32px; background: var(--stone-900); color: var(--stone); text-decoration: none; border-radius: 2px;">Order Field</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- SCENARIOS -->
-<section class="scenarios fade-in" id="scenarios">
-  <h2 class="scenarios-title">Built for how you<br>actually listen.</h2>
-  <div class="scenarios-grid">
-    <div class="scenario-card">
-      <span class="scenario-icon">✈️</span>
-      <h3 class="scenario-name">Long-Haul Travel</h3>
-      <p class="scenario-desc">Adaptive ANC that adjusts to engine noise profiles in real-time. Pressure-relief ear cushions designed for 12-hour wear. The Aura Pro goes 48 hours without a charge.</p>
-      <div class="scenario-stat"><span class="scenario-stat-val">−45dB</span><span class="scenario-stat-label">Cabin noise reduction</span></div>
+<!-- SCENARIO SELECTOR -->
+<section id="scenarios" style="padding: 96px 48px; background: var(--stone-100); border-top: 1px solid var(--border);">
+  <div style="max-width: 1280px; margin: 0 auto;">
+    <p class="label" style="margin-bottom: 16px;">Find your model</p>
+    <h2 style="font-size: clamp(28px, 3.5vw, 48px); font-weight: 700; letter-spacing: -0.025em; margin-bottom: 48px; line-height: 1.1;">How do you actually listen?</h2>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 48px;">
+      <div class="scenario active" id="scenario-home" onclick="selectScenario('home')">
+        <i data-lucide="home" style="width: 20px; height: 20px; color: var(--stone-900); margin-bottom: 16px;"></i>
+        <p style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">At home, undisturbed</p>
+        <p style="font-size: 13px; color: var(--secondary); line-height: 1.6;">Listening sessions after work. Vinyl, hi-res streaming. No interruptions.</p>
+      </div>
+      <div class="scenario" id="scenario-office" onclick="selectScenario('office')">
+        <i data-lucide="briefcase" style="width: 20px; height: 20px; color: var(--secondary); margin-bottom: 16px;"></i>
+        <p style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Open office or café</p>
+        <p style="font-size: 13px; color: var(--secondary); line-height: 1.6;">Blocking background noise. Long wearing sessions. Wireless freedom.</p>
+      </div>
+      <div class="scenario" id="scenario-commute" onclick="selectScenario('commute')">
+        <i data-lucide="train" style="width: 20px; height: 20px; color: var(--secondary); margin-bottom: 16px;"></i>
+        <p style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Commute and travel</p>
+        <p style="font-size: 13px; color: var(--secondary); line-height: 1.6;">Compact, durable, ANC strong. Goes in a bag and comes out intact.</p>
+      </div>
+      <div class="scenario" id="scenario-sport" onclick="selectScenario('sport')">
+        <i data-lucide="activity" style="width: 20px; height: 20px; color: var(--secondary); margin-bottom: 16px;"></i>
+        <p style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">Running or gym</p>
+        <p style="font-size: 13px; color: var(--secondary); line-height: 1.6;">Secure fit. Sweat resistance. No cable to manage. Bass that motivates.</p>
+      </div>
     </div>
-    <div class="scenario-card">
-      <span class="scenario-icon">🎙️</span>
-      <h3 class="scenario-name">Studio Recording</h3>
-      <p class="scenario-desc">The Aura Studio delivers a ruler-flat frequency response with no coloration. Open-back design for natural soundstage. The reference tool for mastering engineers.</p>
-      <div class="scenario-stat"><span class="scenario-stat-val">±0.5dB</span><span class="scenario-stat-label">Frequency response accuracy</span></div>
-    </div>
-    <div class="scenario-card">
-      <span class="scenario-icon">🏃</span>
-      <h3 class="scenario-name">Daily Movement</h3>
-      <p class="scenario-desc">IPX5 water resistance. Magnetic earcup folding. A cable-free profile that doesn't catch on jacket collars. Aura One is designed for the commute, the gym, the city.</p>
-      <div class="scenario-stat"><span class="scenario-stat-val">IPX5</span><span class="scenario-stat-label">Water resistance rating</span></div>
-    </div>
-    <div class="scenario-card">
-      <span class="scenario-icon">🌙</span>
-      <h3 class="scenario-name">Late Night Sessions</h3>
-      <p class="scenario-desc">Transparency mode lets you stay aware without removing the headphones. The EQ app's sleep profile applies a warm, fatigue-reducing curve for 2AM listening.</p>
-      <div class="scenario-stat"><span class="scenario-stat-val">4 EQ</span><span class="scenario-stat-label">Preset listening modes</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- COMPARISON -->
-<section class="comparison fade-in" id="compare">
-  <div class="comp-header">
-    <h2 class="comp-h2">How we compare.</h2>
-    <p style="color:var(--muted);font-size:14px;">Against the category leaders. Objectively.</p>
-  </div>
-  <table class="comp-table">
-    <thead>
-      <tr>
-        <th>Feature</th>
-        <th>Aura Pro</th>
-        <th>Sony WH-1000XM5</th>
-        <th>Bose QC45</th>
-        <th>Apple AirPods Max</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>ANC Depth</td><td><span class="check">−45dB</span></td><td>−40dB</td><td>−38dB</td><td>−35dB</td></tr>
-      <tr><td>Battery Life</td><td><span class="check">48h</span></td><td>30h</td><td>24h</td><td>20h</td></tr>
-      <tr><td>LDAC / Lossless</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
-      <tr><td>Planar / Beryllium Driver</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
-      <tr><td>Multipoint (3 devices)</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
-      <tr><td>Precision EQ App</td><td><span class="check">✓</span></td><td>Basic</td><td><span class="cross">✗</span></td><td>Basic</td></tr>
-      <tr><td>Price</td><td>£ 549</td><td>£ 379</td><td>£ 329</td><td>£ 549</td></tr>
-    </tbody>
-  </table>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials fade-in" id="reviews">
-  <h2 class="test-h2">What listeners say.</h2>
-  <div class="test-scroll">
-    <div class="test-card">
-      <div class="test-rating"><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span></div>
-      <p class="test-body">"The beryllium driver on the Pro is audibly different. You can hear into recordings you've listened to for years. Detail that was always there, now accessible."</p>
-      <p class="test-author">Marcus T.</p>
-      <p class="test-product">Aura Pro · Mastering Engineer</p>
-      <span class="test-badge">Verified Purchase</span>
-    </div>
-    <div class="test-card">
-      <div class="test-rating"><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span></div>
-      <p class="test-body">"48 hours battery is not an exaggeration. I took these on a 3-week trip and charged them twice. The ANC on flights is the best I've used, period."</p>
-      <p class="test-author">Lena K.</p>
-      <p class="test-product">Aura Pro · Frequent Traveller</p>
-      <span class="test-badge">Verified Purchase</span>
-    </div>
-    <div class="test-card">
-      <div class="test-rating"><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span><span class="test-star">★</span></div>
-      <p class="test-body">"The Studio model is the most honest pair of headphones I've owned. No hype in the frequency response. Just the music, exactly as recorded."</p>
-      <p class="test-author">David O.</p>
-      <p class="test-product">Aura Studio · Recording Musician</p>
-      <span class="test-badge">Verified Purchase</span>
+    <!-- Recommendation output -->
+    <div id="scenario-output" style="padding: 32px; background: var(--stone); border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 32px;">
+      <div>
+        <p class="label" style="margin-bottom: 8px;">Recommended for this context</p>
+        <p id="rec-model" style="font-size: 24px; font-weight: 700; letter-spacing: -0.02em;">AURA Reference</p>
+        <p id="rec-reason" style="font-size: 14px; color: var(--secondary); margin-top: 6px; line-height: 1.6;">Open-back planar magnetic. No noise isolation, but the soundstage and imaging at home is unmatched. Requires a desktop amplifier — you're treating it as an investment in how you listen.</p>
+      </div>
+      <div style="text-align: right; flex-shrink: 0;">
+        <p id="rec-price" style="font-size: 28px; font-weight: 700; letter-spacing: -0.025em;">£1,200</p>
+        <a href="#models" id="rec-link" style="font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--stone-900); text-decoration: none; border-bottom: 1px solid var(--stone-900); padding-bottom: 2px;">View Reference details <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i></a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section fade-in">
-  <div class="cta-glow"></div>
-  <h2 class="cta-h2">Hear everything.<br>Miss <span class="accent">nothing.</span></h2>
-  <p class="cta-sub">60-day home trial. Free returns. Two-year warranty. If it's not the best headphone you've ever owned, we'll take it back.</p>
-  <div class="cta-btns">
-    <a href="#" class="btn-cta-main">Shop All Models</a>
-    <a href="#" class="btn-cta-ghost">Try Before You Buy</a>
+<!-- COMPARISON TABLE -->
+<section id="compare" style="padding: 96px 48px; max-width: 1280px; margin: 0 auto;">
+  <p class="label" style="margin-bottom: 16px;">Model comparison</p>
+  <h2 style="font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; letter-spacing: -0.025em; margin-bottom: 48px; line-height: 1.1;">The numbers, clearly.</h2>
+  <div style="overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 14px 16px; border-bottom: 2px solid var(--stone-900); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--secondary); font-weight: 500;">Specification</th>
+          <th style="padding: 14px 24px; border-bottom: 2px solid var(--stone-900); font-size: 13px; font-weight: 700; text-align: center;">Reference</th>
+          <th style="padding: 14px 24px; border-bottom: 2px solid var(--stone-900); font-size: 13px; font-weight: 700; text-align: center; background: var(--stone-100);">Studio</th>
+          <th style="padding: 14px 24px; border-bottom: 2px solid var(--stone-900); font-size: 13px; font-weight: 700; text-align: center;">Field</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="compare-cell" style="font-weight: 500;">Price</td>
+          <td class="compare-cell" style="text-align: center;">£1,200</td>
+          <td class="compare-cell" style="text-align: center; background: var(--stone-100);">£749</td>
+          <td class="compare-cell" style="text-align: center;">£349</td>
+        </tr>
+        <tr>
+          <td class="compare-cell" style="font-weight: 500;">Driver type</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px; color: var(--secondary);">40mm planar magnetic</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px; color: var(--secondary); background: var(--stone-100);">42mm beryllium dome dynamic</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px; color: var(--secondary);">Hybrid BA + 10mm dynamic</td>
+        </tr>
+        <tr>
+          <td class="compare-cell" style="font-weight: 500;">Design</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px; color: var(--secondary);">Open-back over-ear</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px; color: var(--secondary); background: var(--stone-100);">Closed-back over-ear</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px; color: var(--secondary);">In-ear (TWS)</td>
+        </tr>
+        <tr>
+          <td class="compare-cell" style="font-weight: 500;">Wireless</td>
+          <td class="compare-cell" style="text-align: center;"><i data-lucide="x" style="width: 14px; height: 14px; color: var(--secondary); margin: 0 auto; display: block;"></i></td>
+          <td class="compare-cell" style="text-align: center; background: var(--stone-100);"><i data-lucide="check" style="width: 14px; height: 14px; color: #16a34a; margin: 0 auto; display: block;"></i></td>
+          <td class="compare-cell" style="text-align: center;"><i data-lucide="check" style="width: 14px; height: 14px; color: #16a34a; margin: 0 auto; display: block;"></i></td>
+        </tr>
+        <tr>
+          <td class="compare-cell" style="font-weight: 500;">Active noise cancellation</td>
+          <td class="compare-cell" style="text-align: center;"><i data-lucide="x" style="width: 14px; height: 14px; color: var(--secondary); margin: 0 auto; display: block;"></i></td>
+          <td class="compare-cell" style="text-align: center; background: var(--stone-100); font-size: 12px;">-32dB</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px; color: var(--secondary);">Transparency mode only</td>
+        </tr>
+        <tr>
+          <td class="compare-cell" style="font-weight: 500;">Battery life</td>
+          <td class="compare-cell" style="text-align: center; color: var(--secondary); font-size: 12px;">N/A (wired)</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px; background: var(--stone-100);">38 hrs (ANC on)</td>
+          <td class="compare-cell" style="text-align: center; font-size: 12px;">9 hrs + 27 via case</td>
+        </tr>
+        <tr>
+          <td class="compare-cell" style="font-weight: 500; border-bottom: none;">Intended use</td>
+          <td class="compare-cell" style="border-bottom: none; text-align: center; font-size: 12px; color: var(--secondary);">Home / hi-fi system</td>
+          <td class="compare-cell" style="border-bottom: none; text-align: center; font-size: 12px; color: var(--secondary); background: var(--stone-100);">Office / travel</td>
+          <td class="compare-cell" style="border-bottom: none; text-align: center; font-size: 12px; color: var(--secondary);">Sport / commute</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <p class="cta-guarantee">60-day trial · Free worldwide shipping · 2-year warranty</p>
+</section>
+
+<!-- PURCHASE / CLOSE -->
+<section id="purchase" style="padding: 96px 48px; background: var(--stone-900); color: var(--stone);">
+  <div style="max-width: 1280px; margin: 0 auto;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+      <div>
+        <p style="font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(250,247,245,0.4); margin-bottom: 24px;">30-day audition</p>
+        <h2 style="font-size: clamp(32px, 4vw, 56px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.05; margin-bottom: 24px; color: var(--stone);">Hear them for 30 days.<br>Return if unconvinced.</h2>
+        <p style="font-size: 14px; line-height: 1.75; color: rgba(250,247,245,0.6); max-width: 400px;">We believe in the product. We also believe you should hear it in your room, with your music, through your amplifier before deciding. Full refund within 30 days, no questions asked.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <a href="#" style="display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; border: 1px solid rgba(250,247,245,0.15); text-decoration: none; transition: border-color 0.25s;" onmouseover="this.style.borderColor='rgba(250,247,245,0.4)'" onmouseout="this.style.borderColor='rgba(250,247,245,0.15)'">
+          <div>
+            <p style="font-size: 16px; font-weight: 600; color: var(--stone);">AURA Reference</p>
+            <p style="font-size: 13px; color: rgba(250,247,245,0.5); margin-top: 2px;">Open-back planar magnetic · Walnut</p>
+          </div>
+          <div style="text-align: right;">
+            <p style="font-size: 20px; font-weight: 700; color: var(--stone);">£1,200</p>
+            <i data-lucide="arrow-right" style="width: 18px; height: 18px; color: rgba(250,247,245,0.4);"></i>
+          </div>
+        </a>
+        <a href="#" style="display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; border: 1px solid rgba(250,247,245,0.15); text-decoration: none; transition: border-color 0.25s;" onmouseover="this.style.borderColor='rgba(250,247,245,0.4)'" onmouseout="this.style.borderColor='rgba(250,247,245,0.15)'">
+          <div>
+            <p style="font-size: 16px; font-weight: 600; color: var(--stone);">AURA Studio</p>
+            <p style="font-size: 13px; color: rgba(250,247,245,0.5); margin-top: 2px;">Closed-back wireless ANC · Aluminium</p>
+          </div>
+          <div style="text-align: right;">
+            <p style="font-size: 20px; font-weight: 700; color: var(--stone);">£749</p>
+            <i data-lucide="arrow-right" style="width: 18px; height: 18px; color: rgba(250,247,245,0.4);"></i>
+          </div>
+        </a>
+        <a href="#" style="display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; border: 1px solid rgba(250,247,245,0.15); text-decoration: none; transition: border-color 0.25s;" onmouseover="this.style.borderColor='rgba(250,247,245,0.4)'" onmouseout="this.style.borderColor='rgba(250,247,245,0.15)'">
+          <div>
+            <p style="font-size: 16px; font-weight: 600; color: var(--stone);">AURA Field</p>
+            <p style="font-size: 13px; color: rgba(250,247,245,0.5); margin-top: 2px;">Hybrid TWS · Machined aluminium</p>
+          </div>
+          <div style="text-align: right;">
+            <p style="font-size: 20px; font-weight: 700; color: var(--stone);">£349</p>
+            <i data-lucide="arrow-right" style="width: 18px; height: 18px; color: rgba(250,247,245,0.4);"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-top">
+<footer style="padding: 48px; border-top: 1px solid var(--border);">
+  <div style="max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
     <div>
-      <div class="footer-brand">AURA <span>AUDIO</span></div>
-      <p class="footer-desc">Precision audio engineering. Built for those who listen differently. Designed in London, assembled by hand.</p>
+      <p style="font-size: 16px; font-weight: 700; letter-spacing: -0.02em;">AURA AUDIO</p>
+      <p style="font-size: 12px; color: var(--secondary); margin-top: 4px;">Sound as material. Built to last.</p>
     </div>
-    <div>
-      <p class="footer-col-label">Products</p>
-      <ul class="footer-links">
-        <li><a href="#">Aura One</a></li>
-        <li><a href="#">Aura Pro</a></li>
-        <li><a href="#">Aura Studio</a></li>
-        <li><a href="#">Accessories</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-label">Support</p>
-      <ul class="footer-links">
-        <li><a href="#">Compare Models</a></li>
-        <li><a href="#">Warranty</a></li>
-        <li><a href="#">60-Day Trial</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-    <div>
-      <p class="footer-col-label">Company</p>
-      <ul class="footer-links">
-        <li><a href="#">About</a></li>
-        <li><a href="#">Engineering Blog</a></li>
-        <li><a href="#">Press</a></li>
-        <li><a href="#">Careers</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2024 Aura Audio Ltd. All rights reserved. Designed in London.</span>
-    <span>Sound without compromise.</span>
+    <nav style="display: flex; gap: 32px;">
+      <a href="#" style="font-size: 12px; color: var(--secondary); text-decoration: none;">Support</a>
+      <a href="#" style="font-size: 12px; color: var(--secondary); text-decoration: none;">Warranty</a>
+      <a href="#" style="font-size: 12px; color: var(--secondary); text-decoration: none;">Audiophile resources</a>
+      <a href="#" style="font-size: 12px; color: var(--secondary); text-decoration: none;">Privacy</a>
+    </nav>
+    <p style="font-size: 12px; color: var(--secondary);">© 2025 AURA Audio Ltd.</p>
   </div>
 </footer>
 
 <script>
-const nav = document.getElementById('mainNav');
-window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', scrollY > 60); });
-const obs = new IntersectionObserver(e => e.forEach(i => { if(i.isIntersecting) i.target.classList.add('visible'); }), { threshold: 0.08 });
-document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  lucide.createIcons();
+
+  function selectModel(name) {
+    document.querySelectorAll('.model-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.model-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('panel-' + name).classList.add('active');
+    lucide.createIcons();
+  }
+
+  const scenarioData = {
+    home: { model: 'AURA Reference', price: '£1,200', reason: 'Open-back planar magnetic. No noise isolation, but the soundstage and imaging at home is unmatched. Requires a desktop amplifier — you\'re treating it as an investment in how you listen.', link: 'View Reference details' },
+    office: { model: 'AURA Studio', price: '£749', reason: 'Closed-back wireless with -32dB ANC. Built for focus in noisy environments. 38-hour battery means you\'re not hunting a charger mid-afternoon.', link: 'View Studio details' },
+    commute: { model: 'AURA Studio', price: '£749', reason: 'Folds flat, ANC blocks train noise, premium build that survives a bag. Bluetooth 5.3 reconnects to your phone instantly when you open it.', link: 'View Studio details' },
+    sport: { model: 'AURA Field', price: '£349', reason: 'Hybrid driver TWS with IPX5 sweat resistance. Secure fit, no cable, aptX Adaptive for those who stream hi-res on Android. Bass that actually motivates without becoming muddy.', link: 'View Field details' }
+  };
+
+  function selectScenario(name) {
+    document.querySelectorAll('.scenario').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.scenario i').forEach(i => i.style.color = 'rgb(120, 113, 108)');
+    const el = document.getElementById('scenario-' + name);
+    el.classList.add('active');
+    el.querySelector('i').style.color = 'rgb(28, 25, 23)';
+    const d = scenarioData[name];
+    document.getElementById('rec-model').textContent = d.model;
+    document.getElementById('rec-price').textContent = d.price;
+    document.getElementById('rec-reason').textContent = d.reason;
+  }
 </script>
 </body>
 </html>
