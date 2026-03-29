@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  background: #f8f9fa;
+  color: #1f2937;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin scrollbar for doc body */
+.doc-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.doc-scroll::-webkit-scrollbar-track {
+  background: #f1f3f4;
+}
+.doc-scroll::-webkit-scrollbar-thumb {
+  background: #c1c7cd;
+  border-radius: 4px;
+}
+.doc-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9aa0a6;
+}
+
+/* Ruler */
+.ruler {
+  background: #f8f9fa;
+  border-bottom: 1px solid #dadce0;
+  height: 24px;
+  position: relative;
+}
+
+/* Comment highlight */
+.comment-highlight {
+  background: rgba(255, 214, 0, 0.4);
+  border-bottom: 2px solid #f9a825;
+  cursor: pointer;
+}
+
+/* Table styles */
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11pt;
+}
+.doc-table th,
+.doc-table td {
+  border: 1px solid #c7c7c7;
+  padding: 6px 12px;
+  text-align: left;
+}
+.doc-table thead th {
+  background: #e8f0fe;
+  font-weight: 600;
+  color: #1f2937;
+}
+.doc-table tbody tr:nth-child(even) {
+  background: #f8f9fa;
+}
