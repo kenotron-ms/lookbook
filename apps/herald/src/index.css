@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --accent: #326891;
+  --text-primary: #121212;
+  --text-muted: #666666;
+  --border: #e2e2e2;
+  --bg: #ffffff;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: #ffffff;
+  color: #121212;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Georgia serif for headlines and body */
+.font-serif {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* Inter for meta/UI elements */
+.font-sans {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Section label style — NYT uppercase small text */
+.section-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #326891;
+}
+
+/* NYT-style horizontal rule divider */
+.rule-divider {
+  border: none;
+  border-top: 3px solid #121212;
+  margin-bottom: 0.75rem;
+}
+
+.rule-divider-thin {
+  border: none;
+  border-top: 1px solid #e2e2e2;
+}
+
+/* Article headline hover */
+a:hover h2,
+a:hover h3,
+a:hover p.headline {
+  color: #326891;
+}
+
+/* Paywall overlay */
+.paywall-fade {
+  background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.85) 40%, #ffffff 75%);
+}
+
+/* Editorial gradient image placeholders */
+.img-navy    { background: linear-gradient(135deg, #1a2744 0%, #243b6e 100%); }
+.img-charcoal{ background: linear-gradient(135deg, #2a2a2a 0%, #4a4a4a 100%); }
+.img-forest  { background: linear-gradient(135deg, #1a3328 0%, #2d5a45 100%); }
+.img-burgundy{ background: linear-gradient(135deg, #3d1118 0%, #6b1e2e 100%); }
+.img-slate   { background: linear-gradient(135deg, #1e2d3d 0%, #2e4460 100%); }
+.img-umber   { background: linear-gradient(135deg, #2e1f0e 0%, #5a3d20 100%); }
