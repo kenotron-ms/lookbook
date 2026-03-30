@@ -37,50 +37,57 @@ export default function Welcome() {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '0 32px',
       background: 'var(--bg)',
     }}>
-      <img
-        src="./sage-logo.jpg"
-        alt="Sage"
-        width={48}
-        height={48}
-        style={{
-          borderRadius: 10,
-          filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.12))',
-          marginBottom: 20,
-          objectFit: 'cover',
-        }}
-      />
-
-      <h1 style={{
-        fontSize: 28,
-        fontWeight: 700,
-        letterSpacing: '-0.02em',
-        color: 'var(--text-primary)',
-        marginBottom: 40,
-        textAlign: 'center',
-      }}>
-        What&apos;s on your mind, {USER.name}?
-      </h1>
-
-      {/* Suggestion cards */}
+      {/* ── Centred greeting area ── */}
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: 12,
-        maxWidth: 560,
-        width: '100%',
-        marginBottom: 32,
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0 32px',
+        minHeight: 0,
       }}>
-        {SUGGESTIONS.map((text) => (
-          <SuggestionCard key={text} text={text} onSubmit={handleSend} />
-        ))}
+        <img
+          src="./sage-logo.jpg"
+          alt="Sage"
+          width={48}
+          height={48}
+          style={{
+            borderRadius: 10,
+            filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.12))',
+            marginBottom: 20,
+            objectFit: 'cover',
+          }}
+        />
+
+        <h1 style={{
+          fontSize: 28,
+          fontWeight: 700,
+          letterSpacing: '-0.02em',
+          color: 'var(--text-primary)',
+          marginBottom: 36,
+          textAlign: 'center',
+        }}>
+          What&apos;s on your mind, {USER.name}?
+        </h1>
+
+        {/* Suggestion cards */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: 10,
+          maxWidth: 640,
+          width: '100%',
+        }}>
+          {SUGGESTIONS.map((text) => (
+            <SuggestionCard key={text} text={text} onSubmit={handleSend} />
+          ))}
+        </div>
       </div>
 
-      {/* Input bar */}
+      {/* ── Input bar anchored to bottom ── */}
       <InputBar onSend={handleSend} />
     </div>
   )
