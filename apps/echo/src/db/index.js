@@ -15,4 +15,9 @@ db.version(1).stores({
   messages:      '++id, conversationId, senderId, timestamp',
 })
 
+// v2 — adds settings key-value store (all other tables preserved)
+db.version(2).stores({
+  settings: '&key',  // & = unique primary key (not auto-increment)
+})
+
 export default db

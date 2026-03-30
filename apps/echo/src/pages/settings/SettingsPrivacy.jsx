@@ -1,17 +1,12 @@
 import { useState } from 'react'
 import { ChevronRight } from 'lucide-react'
+import { useSetting } from '../../hooks/useSettings.js'
 
-/* ── Reusable toggle row ───────────────────────────────────── */
-function ToggleRow({ label, description, storageKey, defaultVal = false }) {
-  const [on, setOn] = useState(() => {
-    const saved = localStorage.getItem(storageKey)
-    return saved !== null ? saved === 'true' : defaultVal
-  })
-  const toggle = () => {
-    const next = !on
-    setOn(next)
-    localStorage.setItem(storageKey, String(next))
-  }
+/* ── Reusable toggle row ─────────────────────────────────────────────────── */
+function ToggleRow({ label, description, settingKey, defaultVal = false }) {
+  const [rawVal, setVal] = useSetting(settingKey, String(defaultVal))
+  const on = rawVal === 'true' || rawVal === true
+  const toggle = async () => { await setVal(String(!on)) }
   return (
     <div style={{
       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -101,19 +96,19 @@ export default function SettingsPrivacy() {
       <ToggleRow
         label="Protect your posts"
         description="Only your followers can see your posts."
-        storageKey="echo-protect-posts"
+        settingKey="echo-protect-posts"
         defaultVal={false}
       />
       <ToggleRow
         label="Protect your videos"
         description="If enabled, videos in your posts will not be downloadable by default."
-        storageKey="echo-protect-videos"
+        settingKey="echo-protect-videos"
         defaultVal={false}
       />
       <ToggleRow
         label="Photo tagging"
         description="Allow anyone to tag you in photos."
-        storageKey="echo-photo-tagging"
+        settingKey="echo-photo-tagging"
         defaultVal={true}
       />
 
@@ -122,13 +117,13 @@ export default function SettingsPrivacy() {
       <ToggleRow
         label="Direct Messages"
         description="Allow message requests from everyone."
-        storageKey="echo-dm-everyone"
+        settingKey="echo-dm-everyone"
         defaultVal={true}
       />
       <ToggleRow
         label="Discoverability and contacts"
         description="Let others find you by your phone number and email address."
-        storageKey="echo-discoverability"
+        settingKey="echo-discoverability"
         defaultVal={true}
       />
 
@@ -139,7 +134,7 @@ export default function SettingsPrivacy() {
       <ToggleRow
         label="Muted words"
         description="Add or remove keywords you want to mute from your timeline."
-        storageKey="echo-muted-words"
+        settingKey="echo-muted-words"
         defaultVal={false}
       />
 
@@ -148,7 +143,7 @@ export default function SettingsPrivacy() {
       <ToggleRow
         label="Add location information to your posts"
         description="Share your location with your posts to let people know where you're posting from."
-        storageKey="echo-location"
+        settingKey="echo-location"
         defaultVal={false}
       />
     </div>

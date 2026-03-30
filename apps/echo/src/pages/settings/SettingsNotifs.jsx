@@ -1,16 +1,10 @@
-import { useState } from 'react'
+import { useSetting } from '../../hooks/useSettings.js'
 
-/* ── Reusable toggle row ───────────────────────────────────── */
-function ToggleRow({ label, description, storageKey, defaultVal = false }) {
-  const [on, setOn] = useState(() => {
-    const saved = localStorage.getItem(storageKey)
-    return saved !== null ? saved === 'true' : defaultVal
-  })
-  const toggle = () => {
-    const next = !on
-    setOn(next)
-    localStorage.setItem(storageKey, String(next))
-  }
+/* ── Reusable toggle row ─────────────────────────────────────────────────── */
+function ToggleRow({ label, description, settingKey, defaultVal = false }) {
+  const [rawVal, setVal] = useSetting(settingKey, String(defaultVal))
+  const on = rawVal === 'true' || rawVal === true
+  const toggle = async () => { await setVal(String(!on)) }
   return (
     <div style={{
       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -78,13 +72,13 @@ export default function SettingsNotifs() {
       <ToggleRow
         label="Quality filter"
         description="Filter lower-quality content from your notifications. This won't filter out notifications from people you follow or have interacted with recently."
-        storageKey="echo-notif-quality-filter"
+        settingKey="echo-notif-quality-filter"
         defaultVal={true}
       />
       <ToggleRow
         label="Muted notifications"
         description="From people you don't follow."
-        storageKey="echo-notif-muted"
+        settingKey="echo-notif-muted"
         defaultVal={false}
       />
 
@@ -93,37 +87,37 @@ export default function SettingsNotifs() {
       <ToggleRow
         label="Likes"
         description="When someone likes one of your posts."
-        storageKey="echo-push-likes"
+        settingKey="echo-push-likes"
         defaultVal={true}
       />
       <ToggleRow
         label="Reposts"
         description="When someone reposts one of your posts."
-        storageKey="echo-push-reposts"
+        settingKey="echo-push-reposts"
         defaultVal={true}
       />
       <ToggleRow
         label="New followers"
         description="When someone new follows you."
-        storageKey="echo-push-followers"
+        settingKey="echo-push-followers"
         defaultVal={true}
       />
       <ToggleRow
         label="Direct Messages"
         description="When you receive a new direct message."
-        storageKey="echo-push-dms"
+        settingKey="echo-push-dms"
         defaultVal={true}
       />
       <ToggleRow
         label="Mentions"
         description="When someone mentions you in a post."
-        storageKey="echo-push-mentions"
+        settingKey="echo-push-mentions"
         defaultVal={true}
       />
       <ToggleRow
         label="Echo platform updates"
         description="News and announcements about Echo."
-        storageKey="echo-push-platform"
+        settingKey="echo-push-platform"
         defaultVal={true}
       />
 
@@ -132,19 +126,19 @@ export default function SettingsNotifs() {
       <ToggleRow
         label="From Echo"
         description="News about Echo features and tips."
-        storageKey="echo-email-from-echo"
+        settingKey="echo-email-from-echo"
         defaultVal={true}
       />
       <ToggleRow
         label="Things you missed"
         description="A digest of posts and activity you may have missed."
-        storageKey="echo-email-missed"
+        settingKey="echo-email-missed"
         defaultVal={false}
       />
       <ToggleRow
         label="Top posts and stories"
         description="The most engaging posts in your network."
-        storageKey="echo-email-top"
+        settingKey="echo-email-top"
         defaultVal={false}
       />
     </div>

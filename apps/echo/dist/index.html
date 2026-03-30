@@ -4,10 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Echo · Your voice, amplified</title>
+    <!-- Echo: apply saved display settings before first paint (paint-cache from localStorage) -->
+    <script>
+      (function(){
+        try {
+          var t=localStorage.getItem('echo-theme')||'';
+          if(t)document.documentElement.setAttribute('data-theme',t);
+          var f=localStorage.getItem('echo-fontSize');
+          if(f)document.documentElement.style.setProperty('--font-size',f);
+          var a=localStorage.getItem('echo-accent');
+          if(a){
+            var h={'#6366f1':'#5254cc','#7c3aed':'#6d28d9','#1d9bf0':'#1a8cd8','#00ba7c':'#00a368','#ff7700':'#e06600','#f91880':'#d61672'};
+            document.documentElement.style.setProperty('--accent',a);
+            document.documentElement.style.setProperty('--accent-hover',h[a]||'#5254cc');
+          }
+        }catch(e){}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="./assets/index-D1FnLiH2.js"></script>
+    <script type="module" crossorigin src="./assets/index-BOMOYkQb.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BktZ_OBV.css">
   </head>
   <body>

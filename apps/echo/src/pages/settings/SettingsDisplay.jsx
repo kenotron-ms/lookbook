@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useSetting, ACCENT_HOVERS } from '../../hooks/useSettings.js'
 
 const SIZES = ['13px', '15px', '17px', '19px']
 const SIZE_LABELS = ['Sm', 'Md', 'Lg', 'XL']
@@ -19,68 +19,30 @@ const THEMES = [
 ]
 
 export default function SettingsDisplay() {
-  /* ── Font size state ──────────────────────────────────────── */
-  const [sizeIdx, setSizeIdx] = useState(() => {
-    const saved = localStorage.getItem('echo-font-size')
-    if (saved) {
-      const idx = SIZES.indexOf(saved)
-      return idx >= 0 ? idx : 1
-    }
-    return 1
-  })
+  const [fontSize, setFontSizeRaw] = useSetting('fontSize', '15px')
+  const [themeVal, setThemeRaw]    = useSetting('theme', '')
+  const [accent,   setAccentRaw]   = useSetting('accent', '#6366f1')
 
-  /* ── Accent color state ───────────────────────────────────── */
-  const [accentIdx, setAccentIdx] = useState(() => {
-    const saved = localStorage.getItem('echo-accent')
-    if (saved) {
-      const idx = COLORS.findIndex(c => c.accent === saved)
-      return idx >= 0 ? idx : 0
-    }
-    return 0
-  })
+  const sizeIdx   = Math.max(0, SIZES.indexOf(fontSize ?? '15px'))
+  const accentIdx = Math.max(0, COLORS.findIndex(c => c.accent === (accent ?? '#6366f1')))
 
-  /* ── Theme state ──────────────────────────────────────────── */
-  const [themeVal, setThemeVal] = useState(() => {
-    return localStorage.getItem('echo-theme') || ''
-  })
-
-  /* ── Apply saved settings on mount ───────────────────────── */
-  useEffect(() => {
-    const theme = localStorage.getItem('echo-theme') || ''
-    document.documentElement.setAttribute('data-theme', theme)
-
-    const fontSz = localStorage.getItem('echo-font-size') || '15px'
-    document.documentElement.style.setProperty('--font-size', fontSz)
-
-    const accent = localStorage.getItem('echo-accent')
-    if (accent) {
-      const c = COLORS.find(c => c.accent === accent)
-      if (c) {
-        document.documentElement.style.setProperty('--accent', c.accent)
-        document.documentElement.style.setProperty('--accent-hover', c.hover)
-      }
-    }
-  }, [])
-
-  /* ── Handlers ─────────────────────────────────────────────── */
-  const changeSize = (idx) => {
-    setSizeIdx(idx)
-    document.documentElement.style.setProperty('--font-size', SIZES[idx])
-    localStorage.setItem('echo-font-size', SIZES[idx])
+  /* ── Handlers ─────────────────────────────────────────────────────────── */
+  const changeSize = async (idx) => {
+    const sz = SIZES[idx]
+    document.documentElement.style.setProperty('--font-size', sz)
+    await setFontSizeRaw(sz)
   }
 
-  const changeColor = (idx) => {
-    setAccentIdx(idx)
+  const changeColor = async (idx) => {
     const c = COLORS[idx]
     document.documentElement.style.setProperty('--accent', c.accent)
     document.documentElement.style.setProperty('--accent-hover', c.hover)
-    localStorage.setItem('echo-accent', c.accent)
+    await setAccentRaw(c.accent)
   }
 
-  const changeTheme = (val) => {
-    setThemeVal(val)
+  const changeTheme = async (val) => {
     document.documentElement.setAttribute('data-theme', val)
-    localStorage.setItem('echo-theme', val)
+    await setThemeRaw(val)
   }
 
   return (
@@ -95,7 +57,7 @@ export default function SettingsDisplay() {
         </p>
       </div>
 
-      {/* ── Font size ─────────────────────────────────────────── */}
+      {/* ── Font size ─────────────────────────────────────────────────────── */}
       <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid var(--border)' }}>
         <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text-primary)', marginBottom: 16 }}>
           Font size
@@ -145,7 +107,7 @@ export default function SettingsDisplay() {
         </div>
       </div>
 
-      {/* ── Accent color ──────────────────────────────────────── */}
+      {/* ── Accent color ──────────────────────────────────────────────────── */}
       <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid var(--border)' }}>
         <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text-primary)', marginBottom: 16 }}>
           Color
@@ -174,7 +136,7 @@ export default function SettingsDisplay() {
         </div>
       </div>
 
-      {/* ── Background theme ──────────────────────────────────── */}
+      {/* ── Background theme ──────────────────────────────────────────────── */}
       <div style={{ padding: '20px 20px 24px', borderBottom: '1px solid var(--border)' }}>
         <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text-primary)', marginBottom: 16 }}>
           Background
@@ -214,7 +176,7 @@ export default function SettingsDisplay() {
         </div>
       </div>
 
-      {/* ── Preview ───────────────────────────────────────────── */}
+      {/* ── Preview ───────────────────────────────────────────────────────── */}
       <div style={{ padding: '20px' }}>
         <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text-primary)', marginBottom: 12 }}>
           Preview

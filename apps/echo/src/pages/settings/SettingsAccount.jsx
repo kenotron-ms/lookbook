@@ -1,17 +1,11 @@
-import { useState } from 'react'
 import { Shield, Smartphone, Globe, Monitor } from 'lucide-react'
+import { useSetting } from '../../hooks/useSettings.js'
 
-/* ── Reusable toggle row ───────────────────────────────────── */
-function ToggleRow({ label, description, storageKey, defaultVal = false }) {
-  const [on, setOn] = useState(() => {
-    const saved = localStorage.getItem(storageKey)
-    return saved !== null ? saved === 'true' : defaultVal
-  })
-  const toggle = () => {
-    const next = !on
-    setOn(next)
-    localStorage.setItem(storageKey, String(next))
-  }
+/* ── Reusable toggle row ─────────────────────────────────────────────────── */
+function ToggleRow({ label, description, settingKey, defaultVal = false }) {
+  const [rawVal, setVal] = useSetting(settingKey, String(defaultVal))
+  const on = rawVal === 'true' || rawVal === true
+  const toggle = async () => { await setVal(String(!on)) }
   return (
     <div style={{
       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -46,7 +40,7 @@ function ToggleRow({ label, description, storageKey, defaultVal = false }) {
   )
 }
 
-/* ── Section header ───────────────────────────────────────── */
+/* ── Section header ──────────────────────────────────────────────────────── */
 function SectionHeader({ children }) {
   return (
     <div style={{
@@ -62,7 +56,7 @@ function SectionHeader({ children }) {
   )
 }
 
-/* ── Info row (non-interactive) ───────────────────────────── */
+/* ── Info row (non-interactive) ──────────────────────────────────────────── */
 function InfoRow({ icon: Icon, label, sub }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
@@ -93,13 +87,13 @@ export default function SettingsAccount() {
       <ToggleRow
         label="Two-factor authentication"
         description="Protect your account with an extra layer of security by requiring a verification code in addition to your password."
-        storageKey="echo-2fa"
+        settingKey="echo-2fa"
         defaultVal={false}
       />
       <ToggleRow
         label="Password reset protection"
         description="Adds extra confirmation steps before your password can be changed."
-        storageKey="echo-pwd-protection"
+        settingKey="echo-pwd-protection"
         defaultVal={true}
       />
 
@@ -128,13 +122,13 @@ export default function SettingsAccount() {
       <ToggleRow
         label="Personalized login prompts"
         description="Make signing into Echo easier with personalized account suggestions."
-        storageKey="echo-login-prompts"
+        settingKey="echo-login-prompts"
         defaultVal={true}
       />
       <ToggleRow
         label="Connected accounts"
         description="Connect to Google or Apple to sign in quickly."
-        storageKey="echo-connected-accounts"
+        settingKey="echo-connected-accounts"
         defaultVal={false}
       />
     </div>
