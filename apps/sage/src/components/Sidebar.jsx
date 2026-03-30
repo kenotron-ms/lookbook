@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { SquarePen, MessageSquare } from 'lucide-react'
+import { SquarePen, MessageSquare, Plus, ChevronDown, ChevronRight } from 'lucide-react'
 import db from '../db/index.js'
 import { USER } from '../db/seed.js'
 
@@ -23,6 +23,15 @@ function groupByDate(convos) {
   return groups
 }
 
+const sectionLabelStyle = {
+  padding: '8px 12px 3px',
+  fontSize: 11,
+  fontWeight: 600,
+  color: 'var(--text-muted)',
+  textTransform: 'uppercase',
+  letterSpacing: '0.07em',
+}
+
 export default function Sidebar() {
   const navigate = useNavigate()
   const { convoId } = useParams()
@@ -30,13 +39,36 @@ export default function Sidebar() {
   const [avatarError, setAvatarError] = useState(false)
   const [newChatHover, setNewChatHover] = useState(false)
   const [iconHover, setIconHover] = useState(false)
+  const [projectsOpen, setProjectsOpen] = useState(true)
 
   const convos = useLiveQuery(
     () => db.conversations.orderBy('updatedAt').reverse().toArray(),
     []
   )
 
+  const projects = useLiveQuery(() => db.projects.orderBy('updatedAt').reverse().toArray())
+  const starredProjects = projects?.filter(p => p.starred) ?? []
+  const otherProjects = projects?.filter(p => !p.starred) ?? []
+
+  // Quick color lookup for conversation project dots
+  const projectColorMap = {}
+  if (projects) {
+    for (const p of projects) projectColorMap[p.id] = p.color
+  }
+
   const handleNewChat = () => navigate('/')
+
+  const handleProjectClick = async (project) => {
+    const projectConvos = await db.conversations
+      .where('projectId').equals(project.id)
+      .toArray()
+    if (projectConvos.length > 0) {
+      const latest = projectConvos.sort((a, b) => b.updatedAt - a.updatedAt)[0]
+      navigate(`/c/${latest.id}`)
+    } else {
+      navigate('/')
+    }
+  }
 
   const grouped = groupByDate(convos || [])
   const sections = ['Today', 'Yesterday', 'Previous 7 days', 'Previous 30 days']
@@ -56,8 +88,8 @@ export default function Sidebar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img
             src="./sage-logo.jpg"
-            width={28}
-            height={28}
+            width={24}
+            height={24}
             alt="Sage"
             style={{ borderRadius: 'var(--radius-sm)', objectFit: 'cover' }}
           />
@@ -113,8 +145,85 @@ export default function Sidebar() {
         New chat
       </button>
 
-      {/* Conversation list */}
+      {/* Scrollable content */}
       <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 8 }}>
+
+        {/* ── Starred ─────────────────────────────── */}
+        {starredProjects.length > 0 && (
+          <div>
+            <div style={sectionLabelStyle}>Starred</div>
+            {starredProjects.map(project => (
+              <ProjectRow
+                key={project.id}
+                project={project}
+                onClick={() => handleProjectClick(project)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* ── Projects (collapsible) ──────────────── */}
+        <div>
+          <button
+            onClick={() => setProjectsOpen(o => !o)}
+            style={{
+              ...sectionLabelStyle,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              width: '100%',
+            }}
+          >
+            {projectsOpen
+              ? <ChevronDown size={11} style={{ color: 'var(--text-muted)' }} />
+              : <ChevronRight size={11} style={{ color: 'var(--text-muted)' }} />
+            }
+            Projects
+          </button>
+
+          {projectsOpen && (
+            <>
+              {otherProjects.map(project => (
+                <ProjectRow
+                  key={project.id}
+                  project={project}
+                  onClick={() => handleProjectClick(project)}
+                />
+              ))}
+              <button
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = 'var(--text-secondary)'
+                  e.currentTarget.style.background = 'var(--bg-sidebar-hover)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = 'var(--text-muted)'
+                  e.currentTarget.style.background = 'none'
+                }}
+                style={{
+                  padding: '5px 12px',
+                  margin: '2px 4px',
+                  borderRadius: 'var(--radius-md)',
+                  cursor: 'pointer',
+                  fontSize: 13,
+                  color: 'var(--text-muted)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  background: 'none',
+                  border: 'none',
+                }}
+              >
+                <Plus size={13} />
+                New project
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* ── Date-grouped conversations ──────────── */}
         {sections.map((section) => {
           const items = grouped[section]
           if (!items || items.length === 0) return null
@@ -136,6 +245,7 @@ export default function Sidebar() {
                   convo={convo}
                   isActive={convo.id === activeId}
                   onClick={() => navigate(`/c/${convo.id}`)}
+                  projectColor={convo.projectId ? (projectColorMap[convo.projectId] ?? null) : null}
                 />
               ))}
             </div>
@@ -151,7 +261,48 @@ export default function Sidebar() {
   )
 }
 
-function ConvoRow({ convo, isActive, onClick }) {
+function ProjectRow({ project, onClick }) {
+  const [hover, setHover] = useState(false)
+
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        padding: '6px 12px',
+        margin: '1px 4px',
+        borderRadius: 'var(--radius-md)',
+        cursor: 'pointer',
+        fontSize: 14,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        color: 'var(--text-secondary)',
+        background: hover ? 'var(--bg-sidebar-hover)' : 'transparent',
+        transition: 'background 0.1s',
+      }}
+    >
+      <div style={{
+        width: 8,
+        height: 8,
+        borderRadius: '50%',
+        background: project.color,
+        flexShrink: 0,
+      }} />
+      <span style={{
+        flex: 1,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+      }}>
+        {project.name}
+      </span>
+    </div>
+  )
+}
+
+function ConvoRow({ convo, isActive, onClick, projectColor }) {
   const [hover, setHover] = useState(false)
   const bg = isActive ? 'var(--bg-hover)' : hover ? 'var(--bg-sidebar-hover)' : 'transparent'
 
@@ -169,13 +320,30 @@ function ConvoRow({ convo, isActive, onClick }) {
         color: 'var(--text-secondary)',
         background: bg,
         fontWeight: isActive ? 500 : 400,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
         transition: 'background 0.1s',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 7,
+        overflow: 'hidden',
       }}
     >
-      {convo.title}
+      {projectColor && (
+        <div style={{
+          width: 5,
+          height: 5,
+          borderRadius: '50%',
+          background: projectColor,
+          flexShrink: 0,
+        }} />
+      )}
+      <span style={{
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        flex: 1,
+      }}>
+        {convo.title}
+      </span>
     </div>
   )
 }

@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
-import { ArrowUp, Sparkles, ChevronDown } from 'lucide-react'
+import { ArrowUp, Sparkles, ChevronDown, Plus, Globe, Terminal, Paperclip, X as XIcon } from 'lucide-react'
 import { MODELS, DEFAULT_MODEL } from '../db/seed.js'
+
+const TOOLS = [
+  { id: 'web_search',  icon: Globe,     label: 'Web search',  desc: 'Search the internet for current info' },
+  { id: 'code_exec',  icon: Terminal,  label: 'Run code',    desc: 'Execute Python, JS, or bash' },
+  { id: 'file_upload', icon: Paperclip, label: 'Attach file', desc: 'Upload a PDF, doc, image, or CSV' },
+]
 
 export default function InputBar({ onSend, disabled = false, placeholder = 'Message Sage...' }) {
   const [text, setText] = useState('')
@@ -9,7 +15,11 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
     MODELS.find((m) => m.id === DEFAULT_MODEL) || MODELS[0]
   )
   const [modelOpen, setModelOpen] = useState(false)
+  const [toolsOpen, setToolsOpen] = useState(false)
+  const [activeTool, setActiveTool] = useState(null)
+
   const textareaRef = useRef(null)
+  const toolsRef = useRef(null)
 
   const hasText = text.trim().length > 0
 
@@ -17,6 +27,18 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
   useEffect(() => {
     textareaRef.current?.focus()
   }, [])
+
+  // Close tools popover on outside click
+  useEffect(() => {
+    if (!toolsOpen) return
+    const handler = (e) => {
+      if (toolsRef.current && !toolsRef.current.contains(e.target)) {
+        setToolsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [toolsOpen])
 
   const handleChange = (e) => {
     setText(e.target.value)
@@ -43,6 +65,11 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
     }
   }
 
+  const handleToolSelect = (tool) => {
+    setActiveTool(tool)
+    setToolsOpen(false)
+  }
+
   return (
     <div style={{
       padding: '12px 24px 20px',
@@ -53,18 +80,16 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
       alignItems: 'center',
     }}>
       {/* Input box */}
-      <div
-        style={{
-          width: '100%',
-          maxWidth: 680,
-          background: 'var(--bg-input)',
-          borderRadius: 'var(--radius-xl)',
-          boxShadow: focused ? 'var(--shadow-input-focus)' : 'var(--shadow-input)',
-          border: '1px solid var(--border)',
-          overflow: 'hidden',
-          transition: 'box-shadow 0.15s',
-        }}
-      >
+      <div style={{
+        width: '100%',
+        maxWidth: 680,
+        background: 'var(--bg-input)',
+        borderRadius: 'var(--radius-xl)',
+        boxShadow: focused ? 'var(--shadow-input-focus)' : 'var(--shadow-input)',
+        border: '1px solid var(--border)',
+        overflow: 'hidden',
+        transition: 'box-shadow 0.15s',
+      }}>
         {/* Textarea */}
         <textarea
           ref={textareaRef}
@@ -94,6 +119,11 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
           }}
         />
 
+        {/* Active tool chip — between textarea and toolbar */}
+        {activeTool && (
+          <ActiveToolChip tool={activeTool} onClear={() => setActiveTool(null)} />
+        )}
+
         {/* Bottom toolbar */}
         <div style={{
           display: 'flex',
@@ -101,37 +131,86 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
           justifyContent: 'space-between',
           padding: '6px 10px 10px',
         }}>
-          {/* Left: model selector */}
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => setModelOpen((o) => !o)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 5,
-                padding: '4px 8px',
-                borderRadius: 'var(--radius-sm)',
-                border: 'none',
-                background: 'none',
-                fontSize: 13,
-                color: 'var(--text-secondary)',
-                cursor: 'pointer',
-              }}
-            >
-              <Sparkles size={13} />
-              {currentModel.label}
-              <ChevronDown size={11} />
-            </button>
+          {/* Left: "+" tool button + model selector */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
 
-            {/* Model dropdown */}
-            {modelOpen && (
-              <ModelDropdown
-                models={MODELS}
-                current={currentModel}
-                onSelect={(m) => { setCurrentModel(m); setModelOpen(false) }}
-                onClose={() => setModelOpen(false)}
-              />
-            )}
+            {/* Tool menu button */}
+            <div ref={toolsRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setToolsOpen(o => !o)}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 'var(--radius-sm)',
+                  border: toolsOpen ? '1px solid var(--border)' : '1px solid transparent',
+                  background: toolsOpen ? 'var(--bg-hover)' : 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-secondary)',
+                  fontSize: 20,
+                  fontWeight: 300,
+                  lineHeight: 1,
+                  transition: 'all 0.15s',
+                }}
+              >
+                <Plus size={16} />
+              </button>
+
+              {/* Tool popover */}
+              {toolsOpen && (
+                <div style={{
+                  position: 'absolute',
+                  bottom: 'calc(100% + 8px)',
+                  left: 0,
+                  background: 'var(--bg-input)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius-md)',
+                  boxShadow: 'var(--shadow-md)',
+                  minWidth: 220,
+                  zIndex: 200,
+                  overflow: 'hidden',
+                }}>
+                  {TOOLS.map(tool => (
+                    <ToolMenuItem key={tool.id} tool={tool} onSelect={handleToolSelect} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Model selector */}
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => setModelOpen((o) => !o)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 5,
+                  padding: '4px 8px',
+                  borderRadius: 'var(--radius-sm)',
+                  border: 'none',
+                  background: 'none',
+                  fontSize: 13,
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                }}
+              >
+                <Sparkles size={13} />
+                {currentModel.label}
+                <ChevronDown size={11} />
+              </button>
+
+              {/* Model dropdown */}
+              {modelOpen && (
+                <ModelDropdown
+                  models={MODELS}
+                  current={currentModel}
+                  onSelect={(m) => { setCurrentModel(m); setModelOpen(false) }}
+                  onClose={() => setModelOpen(false)}
+                />
+              )}
+            </div>
           </div>
 
           {/* Right: send button */}
@@ -160,6 +239,69 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
         </div>
       </div>
     </div>
+  )
+}
+
+function ActiveToolChip({ tool, onClear }) {
+  const Icon = tool.icon
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6,
+      padding: '3px 8px 3px 6px',
+      margin: '0 16px 8px',
+      borderRadius: '100px',
+      background: 'var(--accent-subtle)',
+      border: '1px solid var(--accent-dim)',
+      fontSize: 12,
+      color: 'var(--accent)',
+      width: 'fit-content',
+    }}>
+      <Icon size={11} />
+      {tool.label}
+      <button
+        onClick={onClear}
+        style={{
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          color: 'var(--accent)',
+          display: 'flex',
+          padding: 0,
+        }}
+      >
+        <XIcon size={11} />
+      </button>
+    </div>
+  )
+}
+
+function ToolMenuItem({ tool, onSelect }) {
+  const Icon = tool.icon
+  return (
+    <button
+      onClick={() => onSelect(tool)}
+      style={{
+        width: '100%',
+        padding: '10px 14px',
+        border: 'none',
+        background: 'none',
+        cursor: 'pointer',
+        textAlign: 'left',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+      }}
+      onMouseEnter={e => { e.currentTarget.style.background = 'var(--bg-hover)' }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'none' }}
+    >
+      <Icon size={15} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
+      <div>
+        <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--text-primary)' }}>{tool.label}</div>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{tool.desc}</div>
+      </div>
+    </button>
   )
 }
 

@@ -1,116 +1,314 @@
-// AI response generation — single-player simulation of Sage
-// Pattern-matches user input and returns realistic responses with optional artifacts
+/**
+ * Agentic AI response generator — simulates Sage's thinking, tool use, and responses.
+ * All responses are pre-authored to be high-quality and realistic.
+ */
 
-const THINKING_DELAY_MS = 1400
-
-const CODE_PATTERNS = [
-  /\b(refactor|rewrite|implement|fix\s+the|debug|optimize|improve)\b/i,
-  /\b(function|class|component|hook|api|endpoint|middleware|schema)\b/i,
-  /```/,
-]
-const EXPLAIN_PATTERNS = [
-  /\b(explain|how does|what is|what are|why does|tell me about|describe|understand)\b/i,
-  /\b(difference between|compare|versus|vs\.?)\b/i,
-]
-const CREATE_PATTERNS = [
-  /\b(write|create|generate|draft|make|build)\b.{0,30}\b(readme|documentation|spec|proposal|email|letter|essay|report)\b/i,
-]
-const PLAN_PATTERNS = [
-  /\b(plan|roadmap|strategy|approach|steps|outline|breakdown)\b/i,
-]
-
-function detectIntent(text) {
-  if (CODE_PATTERNS.some(p => p.test(text))) return 'code'
-  if (CREATE_PATTERNS.some(p => p.test(text))) return 'document'
-  if (EXPLAIN_PATTERNS.some(p => p.test(text))) return 'explain'
-  if (PLAN_PATTERNS.some(p => p.test(text))) return 'plan'
+// ─── Intent detection ─────────────────────────────────────────────────────────
+const detectIntent = (text) => {
+  const t = text.toLowerCase()
+  if (/search|look up|find|latest|recent|news|what.s new|current/i.test(text)) return 'web_search'
+  if (/run|execute|calculate|compute|math|sort|algorithm/i.test(text)) return 'code_execution'
+  if (/refactor|rewrite|fix|debug|error|bug|broken|not work/i.test(text)) return 'code_fix'
+  if (/implement|build|create|write.*function|write.*class|write.*component/i.test(text)) return 'code_new'
+  if (/explain|how does|what is|what are|why does|understand|describe/i.test(text)) return 'explain'
+  if (/write.*readme|write.*doc|write.*spec|write.*proposal|write.*email/i.test(text)) return 'document'
+  if (/plan|roadmap|strategy|steps|approach|outline/i.test(text)) return 'plan'
   return 'general'
 }
 
+// ─── Thinking blocks ──────────────────────────────────────────────────────────
+const THINKING = {
+  web_search: (query) => ({
+    durationSeconds: Math.floor(6 + Math.random() * 6),
+    text: `The user is asking about "${query.slice(0, 60)}..." — this is a factual topic that benefits from current information rather than relying solely on my training data.
+
+Let me search for the most recent and authoritative sources. I'll focus on official documentation, well-known technical blogs, and primary sources rather than aggregators.
+
+Once I have the results, I'll synthesize the key points rather than just summarizing each source individually.`,
+  }),
+
+  code_fix: (input) => ({
+    durationSeconds: Math.floor(10 + Math.random() * 8),
+    text: `Let me carefully analyze this code for issues.
+
+First pass — obvious bugs:
+- Looking at control flow and error handling
+- Checking for common gotchas (off-by-one, null/undefined, async patterns)
+- Examining any security implications
+
+Second pass — the deeper structural issues:
+- Is the abstraction layer correct?
+- Are side effects isolated appropriately?
+- Could this fail in edge cases I haven't considered yet?
+
+I see the core issue now. Let me trace through the execution to confirm before writing the fix.
+
+I'll run the problematic code path first to demonstrate the failure, then provide the corrected version with a clear explanation of what changed and why.`,
+  }),
+
+  code_new: (input) => ({
+    durationSeconds: Math.floor(8 + Math.random() * 6),
+    text: `The user wants me to implement ${input.slice(0, 60)}...
+
+Let me think about the interface before writing any implementation. The key questions:
+1. What are the inputs and outputs?
+2. What are the edge cases?
+3. What's the right level of abstraction?
+
+I should write tests or at minimum document the expected behavior first.
+
+For the implementation, I'll prioritize correctness and clarity over cleverness. The code should be easy to understand and modify later.`,
+  }),
+
+  explain: (input) => ({
+    durationSeconds: Math.floor(8 + Math.random() * 10),
+    text: `The user is asking about ${input.slice(0, 60)}...
+
+I should build up the explanation from first principles rather than jumping straight to the technical details. The most common failure mode in technical explanations is assuming too much prior knowledge.
+
+Structure I'm thinking:
+1. Intuitive framing — what problem does this solve?
+2. Simple concrete example
+3. Mathematical/formal treatment
+4. Edge cases and common misconceptions
+5. Code to make it tangible
+
+I want to make sure I don't just tell them *what* it does but *why* it works.`,
+  }),
+
+  document: () => ({
+    durationSeconds: Math.floor(5 + Math.random() * 4),
+    text: `Writing documentation. Key principle: optimize for the reader's first 30 seconds.
+
+Structure:
+1. What is it + one-line value prop
+2. Quick Start (≤3 steps to working state)
+3. Configuration reference
+4. CLI/API reference
+5. Examples for common use cases
+
+I'll make this a document artifact so it renders properly and can be downloaded directly.`,
+  }),
+
+  general: () => ({
+    durationSeconds: Math.floor(5 + Math.random() * 8),
+    text: `Let me think carefully about what the user is asking and what would be most useful here.
+
+The key insight is that I should answer the underlying question, not just the literal question. What are they actually trying to accomplish?
+
+I'll structure my response to be direct and actionable rather than exhaustive. If they need more depth on any point, they can ask.`,
+  }),
+}
+
+// ─── Tool call generators ─────────────────────────────────────────────────────
+const SEARCH_RESULTS_POOL = [
+  [
+    { title: 'Official Documentation', domain: 'docs.example.com', excerpt: 'The complete reference for this topic, including examples and best practices for modern usage patterns.' },
+    { title: 'Deep Dive: Understanding the Core Concepts', domain: 'blog.example.com', excerpt: 'A thorough explanation of the underlying mechanics and when to apply different approaches in production systems.' },
+    { title: 'Practical Guide with Real Examples', domain: 'guide.example.com', excerpt: 'Working examples and patterns you can adapt for your own projects, with common pitfalls to avoid.' },
+    { title: 'Migration Guide and Breaking Changes', domain: 'changelog.example.com', excerpt: 'What changed in recent versions, how to migrate existing code, and what to watch out for when upgrading.' },
+    { title: 'Community Discussion: Best Practices', domain: 'discuss.example.com', excerpt: 'The community has converged on these patterns after extensive real-world usage. Includes counterexamples and why certain approaches fail.' },
+  ],
+  [
+    { title: 'Getting Started Tutorial', domain: 'learn.example.com', excerpt: 'Step-by-step walkthrough from installation to your first working example, with explanations at each stage.' },
+    { title: 'Performance Benchmarks and Tradeoffs', domain: 'perf.example.com', excerpt: 'Measured performance characteristics under realistic load, with clear guidance on when the tradeoffs matter.' },
+    { title: 'Security Considerations', domain: 'security.example.com', excerpt: 'Common vulnerabilities, how they arise in practice, and the mitigations you should apply in production deployments.' },
+    { title: 'Architecture Patterns', domain: 'arch.example.com', excerpt: 'How to structure your system for maintainability and scalability, with worked examples from real codebases.' },
+    { title: 'Testing Strategies', domain: 'test.example.com', excerpt: 'Unit, integration, and end-to-end testing approaches with example test suites you can adapt.' },
+  ],
+]
+
+const CODE_EXECUTION_OUTPUTS = [
+  { code: `# Demonstrating the issue
+result = process(input_data)
+print(f"Input:  {input_data}")
+print(f"Output: {result}")
+print(f"Expected: {expected}")
+print(f"Match: {result == expected}")`, output: `Input:  {'key': 'value', 'nested': {'a': 1}}
+Output: {'key': 'value', 'nested': {'a': 1}}
+Expected: {'key': 'VALUE', 'nested': {'a': 1}}
+Match: False
+
+⚠ The transformation isn't being applied to the expected key. See fix below.` },
+  { code: `import time
+
+# Benchmarking the algorithm
+sizes = [100, 1000, 10000]
+for n in sizes:
+    data = list(range(n))
+    start = time.perf_counter()
+    result = algorithm(data)
+    elapsed = (time.perf_counter() - start) * 1000
+    print(f"n={n:6d}: {elapsed:.2f}ms")`, output: `n=   100:  0.12ms
+n=  1000:  1.47ms
+n= 10000: 156.34ms
+
+O(n²) growth confirmed. At n=100K this would take ~15s. See optimized version below.` },
+]
+
 // ─── Response bank ────────────────────────────────────────────────────────────
-
 const RESPONSES = {
-  code: [
+  web_search: [
     {
-      content: `I'll take a look at this.
+      content: `Here's what the latest sources are saying:
 
-A few things stand out right away:
+## Key Changes
 
-1. **Error handling is too broad** — catching all exceptions with a single handler makes it hard to differentiate user errors from system errors.
-2. **Missing input validation** — the function assumes the input matches expectations without checking.
-3. **Magic values** — hardcoded strings/numbers should be extracted to named constants.
+The most significant updates in this release center around three themes: **improved developer experience**, **better defaults**, and **performance gains** that don't require any opt-in.
 
-Here's a refactored version that addresses these issues:`,
+### What's Actually Different
+
+The core behavior you relied on previously is unchanged — this is a backwards-compatible update. What's new:
+
+1. **The new API surface** — a cleaner, more composable interface that replaces the verbose configuration pattern from v2. Old patterns still work but are deprecated.
+
+2. **Automatic optimization** — the runtime now handles several cases that previously required manual tuning. Most codebases can remove the manual configuration entirely.
+
+3. **Improved error messages** — failed operations now report actionable diagnostics instead of generic errors. This alone has been worth the upgrade for many teams.
+
+### What to Upgrade
+
+\`\`\`bash
+npm install package@latest
+\`\`\`
+
+No breaking changes in your direct API usage, but check the migration guide if you're using the internal \`_unstable_\` APIs. ^[1]^[3]
+
+### Caveats from the community ^[5]
+
+- The new defaults are better for most cases but may change behavior in edge cases involving concurrent operations
+- The TypeScript types were overhauled — if you're using \`as\` casts heavily, expect some type errors to surface
+- Testing libraries haven't all updated yet; use \`--legacy-peer-deps\` if you hit peer dependency issues`,
+    },
+  ],
+
+  code_fix: [
+    {
+      content: `The bug is confirmed by the execution above. Here's what's happening:
+
+## Root Cause
+
+The issue is in how the function handles the edge case. Tracing through the execution:
+
+1. Input arrives correctly
+2. The transformation is applied to the wrong field — it mutates a reference instead of creating a new object
+3. The result reflects the unmodified state
+
+This is a classic **mutation bug**: the function modifies the original data structure instead of returning a new one, which means the output reflects the state before the transformation.
+
+## The Fix
+
+\`\`\`javascript
+// Before: mutates input
+function process(data) {
+  data.key = transform(data.key)  // ❌ mutates the argument
+  return data
+}
+
+// After: returns new object
+function process(data) {
+  return {
+    ...data,
+    key: transform(data.key)  // ✅ preserves original, returns transformed copy
+  }
+}
+\`\`\`
+
+The refactored version in the attached file applies this fix consistently throughout and also adds:
+- Input validation at the boundary
+- Explicit handling of null/undefined inputs
+- A clear return type annotation`,
       artifact: {
-        type: 'code',
-        title: 'solution.ts',
-        language: 'typescript',
-        content: `// Refactored version
-// Key changes:
-// 1. Explicit error types with specific handling
-// 2. Input validation at the entry point
-// 3. Named constants for magic values
-// 4. Clear separation of concerns
+        type: 'code', title: 'solution.ts', language: 'typescript',
+        versions: [],
+        content: `// Fixed implementation
+// Key change: returns new objects instead of mutating arguments
 
-const MAX_RETRIES = 3
-const REQUEST_TIMEOUT_MS = 5000
-
-export class ValidationError extends Error {
-  constructor(field: string, message: string) {
-    super(\`Validation failed for '\${field}': \${message}\`)
-    this.name = 'ValidationError'
+export function process<T extends Record<string, unknown>>(
+  data: T,
+  transform: (value: unknown) => unknown
+): T {
+  if (data === null || data === undefined) {
+    throw new TypeError('process: data argument cannot be null or undefined')
   }
+
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [key, transform(value)])
+  ) as T
 }
 
-export async function processRequest(input: unknown) {
-  // Validate at the boundary
-  if (!input || typeof input !== 'object') {
-    throw new ValidationError('input', 'must be a non-null object')
+// Usage
+const result = process({ key: 'value', count: 42 }, v => 
+  typeof v === 'string' ? v.toUpperCase() : v
+)
+// → { key: 'VALUE', count: 42 }
+`,
+      },
+    },
+  ],
+
+  code_new: [
+    {
+      content: `Here's the implementation. I've structured it to be readable first, efficient second — it's easier to optimize correct code than to correct optimized code.
+
+**Design decisions:**
+- Pure function — no side effects, same input always gives same output
+- Input validation at the boundary — fails fast with descriptive errors
+- Typed throughout — the TypeScript generics aren't just for show, they prevent a class of bugs at compile time
+
+The attached file includes both the implementation and usage examples.`,
+      artifact: {
+        type: 'code', title: 'implementation.ts', language: 'typescript',
+        versions: [],
+        content: `/**
+ * Clean implementation with:
+ * - Input validation
+ * - TypeScript generics  
+ * - Pure function design
+ * - Comprehensive JSDoc
+ */
+
+/**
+ * Processes the input and returns a transformed result.
+ * 
+ * @param input - The data to transform
+ * @param options - Configuration options
+ * @returns The transformed result
+ * @throws {TypeError} If input is null or undefined
+ */
+export function process<T, R>(
+  input: T,
+  options: ProcessOptions<T, R> = {}
+): R {
+  if (input == null) throw new TypeError('Input cannot be null or undefined')
+
+  const {
+    transform = (x: T) => x as unknown as R,
+    validate = () => true,
+    onError,
+  } = options
+
+  if (!validate(input)) {
+    const error = new Error('Input failed validation')
+    if (onError) { onError(error); return null as R }
+    throw error
   }
-  
-  const { id, data } = input as Record<string, unknown>
-  
-  if (typeof id !== 'string' || id.trim() === '') {
-    throw new ValidationError('id', 'must be a non-empty string')
-  }
-  
-  // Core logic with specific error handling
-  let attempts = 0
-  while (attempts < MAX_RETRIES) {
-    try {
-      const result = await fetchWithTimeout(id, data, REQUEST_TIMEOUT_MS)
-      return result
-    } catch (err) {
-      attempts++
-      if (attempts === MAX_RETRIES) throw err
-      await delay(100 * Math.pow(2, attempts)) // exponential backoff
-    }
-  }
+
+  return transform(input)
 }
 
-async function fetchWithTimeout(id: string, data: unknown, timeout: number) {
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), timeout)
-  
-  try {
-    const response = await fetch(\`/api/process/\${id}\`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-      signal: controller.signal,
-    })
-    
-    if (!response.ok) {
-      throw new Error(\`HTTP \${response.status}: \${response.statusText}\`)
-    }
-    
-    return response.json()
-  } finally {
-    clearTimeout(timer)
-  }
+interface ProcessOptions<T, R> {
+  transform?: (input: T) => R
+  validate?: (input: T) => boolean
+  onError?: (error: Error) => void
 }
 
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms))
+// Example usage:
+// const result = process('hello world', {
+//   transform: s => s.toUpperCase().split(' '),
+//   validate: s => s.length > 0,
+// })
+// → ['HELLO', 'WORLD']
 `,
       },
     },
@@ -118,145 +316,104 @@ const delay = (ms: number) => new Promise(res => setTimeout(res, ms))
 
   explain: [
     {
-      content: `Great question. Let me break this down from first principles.
+      content: `Let me build up the intuition before the formalism.
 
-## The Core Concept
+## The Problem It Solves
 
-At its heart, this is about understanding the trade-off between **correctness** and **performance**. Most systems are forced to choose a point on that spectrum rather than achieve both simultaneously.
+Most complex systems share a fundamental tension: you want things to work correctly *and* to work fast. These goals often conflict. The key insight is that you can usually separate *when* something is computed from *what* is computed — and that separation is where the leverage lives.
 
-## Why This Matters
+## The Core Mechanism
 
-Consider what happens at scale. When you have a single machine, strong consistency is straightforward — you just lock the resource. But when you distribute state across multiple nodes, you face the fundamental challenge of the **CAP theorem**:
+Think of it as a contract between three parties:
 
-- **Consistency**: Every read receives the most recent write
-- **Availability**: Every request receives a non-error response
-- **Partition tolerance**: The system continues despite network failures
+1. **The producer** — commits to providing a value when asked
+2. **The consumer** — commits to only using the value, not modifying it  
+3. **The runtime** — guarantees the value is available when the consumer needs it
 
-You can only guarantee two of these three properties at once. Most modern distributed systems choose AP (availability + partition tolerance) and accept eventual consistency.
+When all three parties honor the contract, the runtime can optimize freely — caching, lazy evaluation, parallel execution — without changing the observable behavior.
 
-## The Practical Implications
+\`\`\`
+Producer → [value] → Runtime → Consumer
+                ↑
+         (cached / lazy / parallel)
+\`\`\`
+
+## Where It Breaks Down
+
+The contract breaks when:
+- The producer creates side effects (writes to shared state)
+- The consumer holds a reference to a mutable object
+- The runtime makes assumptions that don't hold under concurrent access
+
+Most bugs in this space come from violating the "consumer doesn't modify" part of the contract, often accidentally through shared mutable references.
+
+## Practical Implications
 
 In practice, this means:
+1. Prefer immutable data structures at boundaries
+2. Make side effects explicit (return a description of the side effect, don't perform it inline)
+3. When you *must* mutate, scope the mutation to the smallest possible region
 
-1. **Last-write-wins conflicts** are possible — two clients writing simultaneously may have one write silently overwritten
-2. **Read-your-own-writes** isn't guaranteed across regions without additional coordination
-3. **Stale reads** are a feature, not a bug — they allow reads to be served from local replicas without round-tripping to a primary
-
-The key insight is that for most user-facing operations, **the user doesn't need the very latest state** — they need a response within their attention span (~300ms). Eventual consistency often wins in practice because it lets you serve responses from the nearest data center.
-
-## When To Use Each
-
-| Use Case | Approach |
-|----------|----------|
-| Bank transfer | Strong consistency (correctness critical) |
-| Social media feed | Eventual consistency (staleness acceptable) |
-| Inventory system | Depends on business rules for overselling |
-| User profile reads | Eventual consistency |
-| Authentication tokens | Strong consistency |
-
-The right answer depends on your tolerance for inconsistency, which is ultimately a business decision, not a technical one.`,
-      artifact: null,
-    },
-    {
-      content: `This is one of those topics where having a concrete mental model makes everything else click.
-
-## The Simple Explanation
-
-Imagine you have a recipe book that you want 1,000 chefs to read simultaneously. You could:
-
-1. **One physical book** — only one chef can read at a time (serialized, correct but slow)
-2. **1,000 photocopies** — everyone reads simultaneously, but if a page is updated, not everyone gets the new version immediately (concurrent, fast but eventually consistent)
-
-Most modern systems are option 2, with sophisticated mechanisms to propagate updates and handle conflicts.
-
-## How It Works Under the Hood
-
-The key mechanism is **vector clocks** (or their cousin, **CRDTs**). Instead of tracking absolute time (which is unreliable across distributed systems), each node tracks the logical order of operations:
-
-\`\`\`
-Node A sees: [A:1, B:0, C:0] → "A has done 1 operation, B and C haven't done anything yet"
-Node B sees: [A:0, B:1, C:0] → "B has done 1 operation"
-After sync:  [A:1, B:1, C:0] → merged state
-\`\`\`
-
-When two nodes merge, they can compare vector clocks to determine causality — whether operation A happened before operation B, after it, or concurrently (in which case conflict resolution rules apply).
-
-## A Real Example
-
-When you edit a Google Doc offline and reconnect, the operational transformation algorithm reconciles your changes with others' changes made in parallel. It preserves the *intent* of each edit, not just the final bytes.
-
-That's the beauty of modern distributed systems — they've moved from "detect conflict" to "understand intent and resolve intelligently."`,
-      artifact: null,
+Does this framing help? Happy to go deeper on any part.`,
     },
   ],
 
   document: [
     {
-      content: `Here's a comprehensive document based on what you've described. I've structured it to lead with the most important information first — what it does and how to get started — before going into the full reference.
+      content: `Here's the document. Structured around the reader's first 30 seconds — Quick Start immediately, reference material after.
 
-A few decisions I made:
-- Kept the Quick Start section to exactly 3 steps so it's scannable
-- Included an examples section since tools like this often have non-obvious usage patterns  
-- Added a Configuration Reference with comments inline rather than separate prose documentation
-
-Feel free to adjust the examples to match your actual API surface.`,
+A few decisions:
+- Quick Start is exactly 3 steps
+- Configuration uses inline comments rather than a separate reference section — easier to copy and adapt
+- CI/CD example included near the top because tools like this inevitably end up in pipelines`,
       artifact: {
-        type: 'document',
-        title: 'document.md',
-        language: 'markdown',
+        type: 'document', title: 'document.md', language: 'markdown',
+        versions: [],
         content: `# Your Project
 
-A short, specific description of what this does and who it's for.
+A clear, specific description of what this does and for whom.
 
 ## Quick Start
 
 \`\`\`bash
-npm install your-tool
+npm install your-package
 \`\`\`
 
 \`\`\`js
-const tool = require('your-tool')
+const { create } = require('your-package')
 
-// Basic usage
-const result = await tool.process(input)
+const instance = create({ config: 'value' })
+const result = await instance.run()
 console.log(result)
 \`\`\`
 
-## Features
+## Configuration
 
-- **Feature 1** — short description of the benefit
-- **Feature 2** — short description of the benefit
-- **Feature 3** — short description of the benefit
+\`\`\`yaml
+# config.yaml
+option_one: value       # Description of what this controls
+option_two: 10          # Numeric options with sensible defaults
+option_three: true      # Boolean flags
+\`\`\`
 
 ## API Reference
 
-### \`tool.process(input, options?)\`
+### \`create(options)\`
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| input | string | required | The input to process |
-| options.timeout | number | 5000 | Timeout in milliseconds |
-| options.retries | number | 3 | Number of retry attempts |
+| config | string | required | Configuration value |
+| timeout | number | 5000 | Timeout in milliseconds |
 
-**Returns:** \`Promise<Result>\`
+**Returns:** Instance object
 
-\`\`\`typescript
-interface Result {
-  data: string
-  metadata: {
-    processingTime: number
-    source: string
-  }
-}
-\`\`\`
+## CI/CD
 
-## Contributing
-
-\`\`\`bash
-git clone https://github.com/your-org/your-tool
-cd your-tool
-npm install
-npm test
+\`\`\`yaml
+- name: Run
+  run: npx your-package
+  env:
+    API_KEY: \${{ secrets.API_KEY }}
 \`\`\`
 
 ## License
@@ -267,107 +424,98 @@ MIT
     },
   ],
 
+  general: [
+    {
+      content: `That's a great framing for the problem. Here's how I'd think about it:
+
+The key is to separate what you control from what you don't. Most difficult problems have a core that's genuinely hard and a periphery that looks hard but is actually just unfamiliar. The periphery is where most people spend their time — and where they get stuck.
+
+**On the core:** Be honest about what you're actually optimizing for. The stated goal and the real goal are often different, and solving the stated goal while ignoring the real goal leads to solutions that technically work but feel wrong.
+
+**On the periphery:** Pick one thing that seems hard and spend 20 minutes on it before deciding it's hard. Most things that seem hard are just unfamiliar. Most things that are actually hard become tractable once you've eliminated the unfamiliar parts.
+
+**The practical test:** Can you explain the current state and the desired state in one sentence each? If not, you're probably still in "understanding the problem" mode, not "solving the problem" mode — and those require different approaches.
+
+What's the one thing that feels most stuck right now?`,
+    },
+    {
+      content: `The honest answer is: it depends on your constraints, and the most important constraint is usually the one you haven't explicitly stated yet.
+
+Here's a useful framing: most decisions that feel hard are actually a combination of two easier decisions that got tangled together. Try separating them.
+
+For example: "Should we rewrite this in a new language?" looks like one decision but is actually: (1) "Is the current implementation causing problems we can't solve within it?" and (2) "Is the proposed alternative worth the switching cost?" These have different answers and different people who should weigh in on them.
+
+Once you've untangled the component decisions, each one usually becomes more tractable — either obviously yes, obviously no, or "needs more information" with a clear question to answer.
+
+What does the decision look like when you break it apart?`,
+    },
+  ],
+
   plan: [
     {
-      content: `Here's how I'd approach this.
+      content: `Here's how I'd structure this.
 
-## Recommended Approach
+## Phase 1 — Foundation (Week 1-2)
 
-Before diving into implementation, it's worth spending time on the design phase. The most expensive mistakes in software are the ones made during architecture that only reveal themselves 6 months later.
+Before writing a line of application code, get the data model right. The most expensive mistakes are architectural ones that only reveal themselves 6 months later.
 
-### Phase 1: Foundation (Weeks 1-2)
+Deliverable: A schema/ERD that answers: what are the entities, what are the relationships, what are the invariants that must always hold?
 
-Focus on getting the core data model right. Ask yourself:
-- What are the fundamental entities?
-- What are the invariants that must always hold?
-- Where are the consistency boundaries?
+## Phase 2 — Walking Skeleton (Week 3)
 
-**Deliverable:** An ERD or schema that can be reviewed before writing a single line of application code.
+Build the thinnest slice that touches every layer:
+- One API endpoint (even if it returns hardcoded data)
+- One database operation
+- One UI component
 
-### Phase 2: Core Loop (Weeks 3-4)
+This proves the pieces connect before you invest heavily in any one layer.
 
-Build the "walking skeleton" — the thinnest possible slice that exercises every layer of the system:
-- API endpoint (even if it returns hardcoded data)
-- Data layer (even if the model is incomplete)
-- Frontend component (even if it's not styled)
+## Phase 3 — Feature Completion (Week 4-8)
 
-This proves that the pieces connect before you invest heavily in any one layer.
+Iterate horizontally across features rather than completing one feature fully before starting the next. Keeps the system shippable and surfaces integration issues early.
 
-### Phase 3: Feature Completion (Weeks 5-8)
-
-Iterate horizontally across features rather than completing one feature fully before starting the next. This keeps the system in a shippable state and surfaces integration issues early.
-
-### Phase 4: Hardening (Weeks 9-10)
+## Phase 4 — Hardening (Week 9-10)
 
 - Error handling and edge cases
-- Performance profiling on realistic data volumes
+- Performance profiling on realistic data
 - Security review
 - Documentation
 
 ## Key Risks
 
-1. **Scope creep** — the skeleton should define the scope boundary. If a feature isn't needed for the core loop, defer it.
-2. **Premature optimization** — measure first, optimize second. Most performance problems are in unexpected places.
-3. **Integration debt** — the longer you wait to integrate components, the more expensive it becomes.
+1. **Scope creep** — the skeleton defines the scope boundary. If a feature isn't needed for the core loop, defer it.
+2. **Premature optimization** — measure first. Most performance problems are in unexpected places.
 
-Want me to go deeper on any of these phases?`,
-      artifact: null,
-    },
-  ],
-
-  general: [
-    {
-      content: `That's a great question. Let me share my perspective.
-
-The short answer is: it depends on your context and constraints. There's no universally correct answer here, which is why this comes up so often in practice.
-
-The more useful framing is to ask: **what's the actual cost of being wrong?** That often clarifies which approach is appropriate.
-
-If the cost of being wrong is high and hard to reverse (production data loss, security vulnerabilities, customer-facing failures), err on the side of caution — more validation, more testing, slower iteration.
-
-If the cost of being wrong is low and easy to fix (UI experiments, internal tooling, early-stage product), err on the side of speed — ship quickly, learn, iterate.
-
-Most teams get this backwards — they apply excessive process to low-stakes decisions and move too fast on high-stakes ones.
-
-Is there a specific decision you're weighing? I can give more concrete guidance with the context.`,
-      artifact: null,
-    },
-    {
-      content: `I think the most important thing here is to separate the *what* from the *how*.
-
-The *what* — the goal, the outcome, the thing that makes this worth doing — should be stable. The *how* should be flexible and revisable as you learn more.
-
-Teams that conflate these often find themselves defending implementation choices as if they were mission-critical, when actually what matters is whether the underlying goal is being served.
-
-With that said, here's how I'd think about your situation specifically:
-
-**Start with the simplest thing that could possibly work.** Not the simplest thing you can imagine building, but the simplest thing that would actually achieve the goal. These are often different.
-
-**Build in a feedback loop from the start.** Whatever you ship should teach you something about whether you're on the right track. If it doesn't, you've built something but haven't actually learned anything.
-
-**Set a date to reassess.** Pick a point in the future where you'll explicitly ask "is this working?" — not just "is it shipped?" but "is it achieving the goal?"
-
-What's the underlying goal you're trying to achieve here?`,
-      artifact: null,
+Want me to go deeper on any phase?`,
     },
   ],
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
+const THINKING_DELAY_MS = 1600
 
-/**
- * Generate a response for the given user message.
- * Returns { content, artifact } after THINKING_DELAY_MS milliseconds.
- */
 export async function generateResponse(userMessage) {
   await new Promise(r => setTimeout(r, THINKING_DELAY_MS))
 
   const intent = detectIntent(userMessage)
-  const pool = RESPONSES[intent] || RESPONSES.general
+  const thinking = (THINKING[intent] ?? THINKING.general)(userMessage)
+
+  let toolCalls = null
+
+  // Web search conversations
+  if (intent === 'web_search') {
+    const results = SEARCH_RESULTS_POOL[Math.floor(Math.random() * SEARCH_RESULTS_POOL.length)]
+    toolCalls = [{ type: 'web_search', query: userMessage.slice(0, 60), status: 'done', results }]
+  }
+
+  // Code execution for fix/benchmark intents (50% of the time)
+  if ((intent === 'code_fix') && Math.random() > 0.3) {
+    const exec = CODE_EXECUTION_OUTPUTS[Math.floor(Math.random() * CODE_EXECUTION_OUTPUTS.length)]
+    toolCalls = [{ type: 'code_execution', language: 'python', ...exec, status: 'done' }]
+  }
+
+  const pool = RESPONSES[intent] ?? RESPONSES.general
   const response = pool[Math.floor(Math.random() * pool.length)]
 
-  return {
-    content: response.content,
-    artifact: response.artifact ?? null,
-  }
+  return { content: response.content, thinking, toolCalls, artifact: response.artifact ?? null }
 }

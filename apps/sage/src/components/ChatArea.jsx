@@ -7,6 +7,7 @@ import InputBar from './InputBar'
 
 export default function ChatArea({ convoId }) {
   const [isThinking, setIsThinking] = useState(false)
+  const [streamingMsgId, setStreamingMsgId] = useState(null)
   const scrollRef = useRef(null)
   const pendingRef = useRef(null)
 
@@ -24,7 +25,7 @@ export default function ChatArea({ convoId }) {
 
   // Trigger AI response when last message is from user
   useEffect(() => {
-    if (!messages || messages.length === 0) return
+    if (!messages || messages.length === 0 || isThinking) return
     const last = messages[messages.length - 1]
     if (last.role !== 'user') return
     if (pendingRef.current === last.id) return // already triggered
@@ -32,22 +33,26 @@ export default function ChatArea({ convoId }) {
     pendingRef.current = last.id
     setIsThinking(true)
 
-    generateResponse(last.content).then(async ({ content, artifact }) => {
-      await db.messages.add({
+    generateResponse(last.content).then(async ({ content, thinking, toolCalls, artifact }) => {
+      const newId = await db.messages.add({
         conversationId: convoId,
         role: 'assistant',
         content,
-        artifact,
+        thinking: thinking ?? null,
+        toolCalls: toolCalls ?? null,
+        artifact: artifact ?? null,
         timestamp: Date.now(),
       })
       await db.conversations.update(convoId, { updatedAt: Date.now() })
       setIsThinking(false)
-    }).catch((err) => {
+      setStreamingMsgId(newId)
+      // Clear streaming after animation completes (~2s)
+      setTimeout(() => setStreamingMsgId(null), 2000)
+    }).catch(err => {
       console.error('AI response error:', err)
       setIsThinking(false)
-      pendingRef.current = null
     })
-  }, [messages, convoId])
+  }, [messages])
 
   const handleSend = async (text) => {
     if (!text.trim() || isThinking) return
@@ -55,55 +60,53 @@ export default function ChatArea({ convoId }) {
       conversationId: convoId,
       role: 'user',
       content: text.trim(),
+      thinking: null,
+      toolCalls: null,
       artifact: null,
       timestamp: Date.now(),
     })
-    await db.conversations.update(convoId, {
-      updatedAt: Date.now(),
-      title: text.slice(0, 60),
-    })
+    await db.conversations.update(convoId, { updatedAt: Date.now() })
   }
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      {/* Scrollable message area */}
-      <div
-        ref={scrollRef}
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          padding: '24px 0',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        {messages?.map((msg) => (
-          <div key={msg.id} style={{ width: '100%', maxWidth: 680, padding: '0 24px' }}>
-            <MessageBubble message={msg} />
-          </div>
-        ))}
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--bg)' }}>
+      {/* Messages */}
+      <div ref={scrollRef} style={{ flex: 1, overflowY: 'auto', padding: '24px 0' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto', padding: '0 24px' }}>
+          {messages?.map(msg => (
+            <MessageBubble
+              key={msg.id}
+              message={msg}
+              isStreaming={msg.id === streamingMsgId}
+            />
+          ))}
 
-        {/* Thinking indicator */}
-        {isThinking && (
-          <div style={{ width: '100%', maxWidth: 680, padding: '0 24px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0' }}>
-              <img
-                src="./sage-logo.jpg"
-                alt="Sage"
-                style={{ width: 22, height: 22, borderRadius: 4, flexShrink: 0, objectFit: 'cover' }}
-              />
+          {/* Thinking indicator — shown between user message and AI response */}
+          {isThinking && (
+            <div style={{ display: 'flex', gap: 12, marginBottom: 32, alignItems: 'flex-start' }}>
+              <div style={{ flexShrink: 0, paddingTop: 2 }}>
+                <img
+                  src="./sage-logo.jpg"
+                  alt="Sage"
+                  style={{ width: 22, height: 22, borderRadius: 4, objectFit: 'cover' }}
+                />
+              </div>
               <div>
-                <span className="thinking-dot" />
-                <span className="thinking-dot" />
-                <span className="thinking-dot" />
+                <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'var(--text-primary)' }}>
+                  Sage
+                </div>
+                <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                  <span className="thinking-dot" />
+                  <span className="thinking-dot" style={{ animationDelay: '0.16s' }} />
+                  <span className="thinking-dot" style={{ animationDelay: '0.32s' }} />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
-      {/* Input bar */}
+      {/* Input */}
       <InputBar onSend={handleSend} disabled={isThinking} />
     </div>
   )

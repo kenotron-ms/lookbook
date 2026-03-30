@@ -1,18 +1,129 @@
-import { useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import { X, Copy, Check, Code2, FileText } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Code2, FileText, Globe, X, Copy, Check, Download, ChevronLeft, ChevronRight, Eye, Code } from 'lucide-react'
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function DarkIconBtn({ icon: Icon, onClick, disabled, size = 14 }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        width: 28,
+        height: 28,
+        borderRadius: 'var(--radius-sm)',
+        border: 'none',
+        background: 'none',
+        cursor: disabled ? 'default' : 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: disabled ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.5)',
+        transition: 'all 0.1s',
+        flexShrink: 0,
+      }}
+      onMouseEnter={e => {
+        if (!disabled) e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
+        if (!disabled) e.currentTarget.style.color = 'rgba(255,255,255,0.9)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.background = 'none'
+        e.currentTarget.style.color = disabled ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.5)'
+      }}
+    >
+      <Icon size={size} />
+    </button>
+  )
+}
+
+function TabBtn({ label, icon: Icon, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 5,
+        padding: '5px 10px',
+        borderRadius: 'var(--radius-sm)',
+        border: 'none',
+        cursor: 'pointer',
+        fontSize: 13,
+        fontWeight: active ? 600 : 400,
+        background: active ? 'rgba(255,255,255,0.1)' : 'none',
+        color: active ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)',
+        transition: 'all 0.15s',
+      }}
+    >
+      <Icon size={12} />
+      {label}
+    </button>
+  )
+}
+
+function DarkMarkdown({ content }) {
+  return (
+    <div style={{ color: 'rgba(228,228,228,0.9)', lineHeight: 1.7, fontSize: 14 }}>
+      {content.split('\n').map((line, i) => {
+        if (line.startsWith('# '))
+          return <h1 key={i} style={{ fontSize: '1.4em', fontWeight: 700, margin: '1em 0 0.5em', color: 'rgba(255,255,255,0.95)' }}>{line.slice(2)}</h1>
+        if (line.startsWith('## '))
+          return <h2 key={i} style={{ fontSize: '1.2em', fontWeight: 600, margin: '1em 0 0.4em', color: 'rgba(255,255,255,0.9)' }}>{line.slice(3)}</h2>
+        if (line.startsWith('### '))
+          return <h3 key={i} style={{ fontSize: '1.05em', fontWeight: 600, margin: '0.8em 0 0.3em', color: 'rgba(255,255,255,0.85)' }}>{line.slice(4)}</h3>
+        if (line.startsWith('- ') || line.startsWith('* '))
+          return <div key={i} style={{ paddingLeft: 16, marginBottom: 4 }}>• {line.slice(2)}</div>
+        if (line.startsWith('```'))
+          return <div key={i} />
+        if (line === '')
+          return <div key={i} style={{ height: 8 }} />
+        return <p key={i} style={{ margin: '0 0 8px', lineHeight: 1.7 }}>{line}</p>
+      })}
+    </div>
+  )
+}
+
+// ─── Icon per type ─────────────────────────────────────────────────────────────
+
+function typeIcon(type) {
+  if (type === 'html') return Globe
+  if (type === 'document') return FileText
+  return Code2 // code | react
+}
+
+// ─── Main component ────────────────────────────────────────────────────────────
 
 export default function ArtifactsPanel({ artifact, onClose }) {
+  // Version history: older versions array + current content as the last entry
+  const allVersions = [...(artifact.versions ?? []), { label: 'current', content: artifact.content }]
+  const totalVersions = allVersions.length
+  const [versionIdx, setVersionIdx] = useState(totalVersions - 1)
+  const currentContent = allVersions[versionIdx].content
+  const currentLabel = allVersions[versionIdx].label ?? 'current'
+
+  const prevVersion = () => setVersionIdx(i => Math.max(0, i - 1))
+  const nextVersion = () => setVersionIdx(i => Math.min(totalVersions - 1, i + 1))
+
+  // Reset to latest version when artifact changes
+  useEffect(() => {
+    const vers = [...(artifact.versions ?? []), { label: 'current', content: artifact.content }]
+    setVersionIdx(vers.length - 1)
+  }, [artifact.title])
+
+  // Preview / code tab
+  const showPreview = artifact.type === 'html' || artifact.type === 'react'
+  const [tab, setTab] = useState(showPreview ? 'preview' : 'code')
+
+  // Reset tab when artifact type/title changes
+  useEffect(() => {
+    setTab(showPreview ? 'preview' : 'code')
+  }, [artifact.title, showPreview])
+
+  // Copy
   const [copied, setCopied] = useState(false)
-  const [closeBtnHover, setCloseBtnHover] = useState(false)
-  const [copyBtnHover, setCopyBtnHover] = useState(false)
-
-  const Icon = artifact.type === 'code' ? Code2 : FileText
-
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(artifact.content)
+      await navigator.clipboard.writeText(currentContent)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
@@ -20,9 +131,22 @@ export default function ArtifactsPanel({ artifact, onClose }) {
     }
   }
 
+  // Download
+  const handleDownload = () => {
+    const blob = new Blob([currentContent], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = artifact.title
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const Icon = typeIcon(artifact.type)
+
   return (
     <div style={{
-      width: 400,
+      width: 440,
       flexShrink: 0,
       height: '100vh',
       background: 'var(--bg-artifact)',
@@ -31,23 +155,18 @@ export default function ArtifactsPanel({ artifact, onClose }) {
       flexDirection: 'column',
       overflow: 'hidden',
     }}>
-      {/* Header */}
+      {/* ── Header ── */}
       <div style={{
-        padding: '12px 16px',
         background: 'var(--bg-artifact-header)',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
         flexShrink: 0,
       }}>
-        {/* Icon */}
-        <Icon size={15} style={{ color: 'var(--accent)', flexShrink: 0 }} />
-
-        {/* Title + language badge */}
-        <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Row 1: icon + title + language badge + actions */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px 8px' }}>
+          <Icon size={15} style={{ color: 'var(--accent)', flexShrink: 0 }} />
           <span style={{
-            fontSize: 14,
+            flex: 1,
+            fontSize: 13,
             fontWeight: 600,
             color: 'rgba(255,255,255,0.9)',
             overflow: 'hidden',
@@ -60,236 +179,76 @@ export default function ArtifactsPanel({ artifact, onClose }) {
             <span style={{
               fontSize: 11,
               padding: '2px 7px',
-              borderRadius: 99,
+              borderRadius: 'var(--radius-pill)',
               background: 'rgba(255,255,255,0.08)',
-              color: 'rgba(255,255,255,0.5)',
+              color: 'rgba(255,255,255,0.45)',
               flexShrink: 0,
             }}>
               {artifact.language}
             </span>
           )}
+          <DarkIconBtn icon={copied ? Check : Copy} onClick={handleCopy} />
+          <DarkIconBtn icon={Download} onClick={handleDownload} />
+          <DarkIconBtn icon={X} onClick={onClose} />
         </div>
 
-        {/* Copy button */}
-        <button
-          onClick={handleCopy}
-          onMouseEnter={() => setCopyBtnHover(true)}
-          onMouseLeave={() => setCopyBtnHover(false)}
-          title={copied ? 'Copied!' : 'Copy'}
-          style={{
-            width: 28,
-            height: 28,
-            border: 'none',
-            borderRadius: 'var(--radius-sm)',
-            background: copyBtnHover ? 'rgba(255,255,255,0.1)' : 'transparent',
-            color: copied ? '#7ECBA0' : 'rgba(255,255,255,0.5)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.15s',
-            flexShrink: 0,
-          }}
-        >
-          {copied ? <Check size={14} /> : <Copy size={14} />}
-        </button>
+        {/* Row 2: tab bar + version navigator */}
+        <div style={{ display: 'flex', alignItems: 'center', padding: '0 14px 10px', gap: 4 }}>
+          {showPreview && (
+            <TabBtn label="Preview" icon={Eye} active={tab === 'preview'} onClick={() => setTab('preview')} />
+          )}
+          <TabBtn label="Code" icon={Code} active={tab === 'code' || !showPreview} onClick={() => setTab('code')} />
 
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          onMouseEnter={() => setCloseBtnHover(true)}
-          onMouseLeave={() => setCloseBtnHover(false)}
-          title="Close"
-          style={{
-            width: 28,
-            height: 28,
-            border: 'none',
-            borderRadius: 'var(--radius-sm)',
-            background: closeBtnHover ? 'rgba(255,255,255,0.1)' : 'transparent',
-            color: 'rgba(255,255,255,0.5)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.15s',
-            flexShrink: 0,
-          }}
-        >
-          <X size={15} />
-        </button>
+          {totalVersions > 1 && (
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <DarkIconBtn icon={ChevronLeft} onClick={prevVersion} disabled={versionIdx === 0} size={13} />
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap' }}>
+                {versionIdx + 1} / {totalVersions}
+              </span>
+              <DarkIconBtn icon={ChevronRight} onClick={nextVersion} disabled={versionIdx === totalVersions - 1} size={13} />
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Content */}
-      <div style={{ flex: 1, overflow: 'auto', padding: '16px 20px' }}>
-        {artifact.type === 'code' ? (
-          <CodeContent content={artifact.content} language={artifact.language} />
-        ) : (
-          <DocumentContent content={artifact.content} />
-        )}
-      </div>
+      {/* ── Preview tab ── */}
+      {tab === 'preview' && showPreview && (
+        <div style={{ flex: 1, background: '#fff', position: 'relative' }}>
+          <iframe
+            srcDoc={currentContent}
+            style={{ width: '100%', height: '100%', border: 'none' }}
+            sandbox="allow-scripts allow-same-origin"
+            title={artifact.title}
+          />
+        </div>
+      )}
+
+      {/* ── Code tab ── */}
+      {(tab === 'code' || !showPreview) && (
+        <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
+          {versionIdx < totalVersions - 1 && (
+            <div style={{ marginBottom: 8, fontSize: 12, color: 'rgba(255,255,255,0.35)', fontStyle: 'italic' }}>
+              Viewing: {currentLabel} (not latest)
+            </div>
+          )}
+          {artifact.type === 'document' ? (
+            <DarkMarkdown content={currentContent} />
+          ) : (
+            <pre style={{
+              margin: 0,
+              fontFamily: "'SF Mono','Fira Code',Menlo,monospace",
+              fontSize: 13,
+              lineHeight: 1.6,
+              color: 'var(--text-code)',
+              whiteSpace: 'pre',
+              overflowX: 'auto',
+              tabSize: 2,
+            }}>
+              {currentContent}
+            </pre>
+          )}
+        </div>
+      )}
     </div>
   )
-}
-
-function CodeContent({ content, language }) {
-  return (
-    <pre style={{
-      margin: 0,
-      fontFamily: "'SF Mono', 'Fira Code', Menlo, monospace",
-      fontSize: 13,
-      lineHeight: 1.6,
-      color: 'var(--text-code)',
-      background: 'transparent',
-      overflow: 'visible',
-      whiteSpace: 'pre',
-      wordBreak: 'normal',
-    }}>
-      <code style={{
-        fontFamily: 'inherit',
-        fontSize: 'inherit',
-        lineHeight: 'inherit',
-        color: 'inherit',
-        background: 'none',
-        padding: 0,
-      }}>
-        {content}
-      </code>
-    </pre>
-  )
-}
-
-function DocumentContent({ content }) {
-  return (
-    <div style={{
-      color: 'rgba(255,255,255,0.8)',
-      fontSize: 14,
-      lineHeight: 1.7,
-    }}>
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={darkMdComponents}
-      >
-        {content}
-      </ReactMarkdown>
-    </div>
-  )
-}
-
-// Dark-adapted markdown styles for the artifact panel (document type)
-const darkMdComponents = {
-  h1: ({ children }) => (
-    <h1 style={{ fontSize: '1.4em', fontWeight: 700, margin: '0 0 0.8em', color: 'rgba(255,255,255,0.9)' }}>
-      {children}
-    </h1>
-  ),
-  h2: ({ children }) => (
-    <h2 style={{ fontSize: '1.15em', fontWeight: 700, margin: '1.2em 0 0.5em', color: 'rgba(255,255,255,0.9)' }}>
-      {children}
-    </h2>
-  ),
-  h3: ({ children }) => (
-    <h3 style={{ fontSize: '1em', fontWeight: 600, margin: '1em 0 0.4em', color: 'rgba(255,255,255,0.9)' }}>
-      {children}
-    </h3>
-  ),
-  p: ({ children }) => (
-    <p style={{ margin: '0 0 0.85em', color: 'rgba(255,255,255,0.75)' }}>{children}</p>
-  ),
-  ul: ({ children }) => (
-    <ul style={{ margin: '0.6em 0 0.9em 1.4em', color: 'rgba(255,255,255,0.75)' }}>{children}</ul>
-  ),
-  ol: ({ children }) => (
-    <ol style={{ margin: '0.6em 0 0.9em 1.4em', color: 'rgba(255,255,255,0.75)' }}>{children}</ol>
-  ),
-  li: ({ children }) => <li style={{ margin: '0.3em 0' }}>{children}</li>,
-  strong: ({ children }) => (
-    <strong style={{ fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>{children}</strong>
-  ),
-  blockquote: ({ children }) => (
-    <blockquote style={{
-      borderLeft: '3px solid rgba(255,255,255,0.15)',
-      paddingLeft: '1em',
-      color: 'rgba(255,255,255,0.5)',
-      margin: '0.8em 0',
-    }}>
-      {children}
-    </blockquote>
-  ),
-  table: ({ children }) => (
-    <table style={{
-      width: '100%',
-      borderCollapse: 'collapse',
-      margin: '0.8em 0',
-      fontSize: '0.9em',
-      color: 'rgba(255,255,255,0.75)',
-    }}>
-      {children}
-    </table>
-  ),
-  th: ({ children }) => (
-    <th style={{
-      padding: '8px 12px',
-      border: '1px solid rgba(255,255,255,0.12)',
-      textAlign: 'left',
-      fontWeight: 600,
-      background: 'rgba(255,255,255,0.05)',
-      color: 'rgba(255,255,255,0.9)',
-    }}>
-      {children}
-    </th>
-  ),
-  td: ({ children }) => (
-    <td style={{
-      padding: '8px 12px',
-      border: '1px solid rgba(255,255,255,0.12)',
-    }}>
-      {children}
-    </td>
-  ),
-  code: ({ node, className, children, ...props }) => {
-    const isBlock = className?.startsWith('language-')
-    if (isBlock) {
-      return (
-        <code style={{
-          fontFamily: "'SF Mono', 'Fira Code', Menlo, monospace",
-          fontSize: 12,
-          color: 'var(--text-code)',
-          background: 'rgba(0,0,0,0.3)',
-          padding: '12px 16px',
-          display: 'block',
-          borderRadius: 6,
-          lineHeight: 1.6,
-          overflowX: 'auto',
-          whiteSpace: 'pre',
-        }}>
-          {children}
-        </code>
-      )
-    }
-    return (
-      <code style={{
-        fontFamily: "'SF Mono', 'Fira Code', Menlo, monospace",
-        fontSize: '0.87em',
-        background: 'rgba(255,255,255,0.1)',
-        color: 'rgba(255,255,255,0.85)',
-        padding: '2px 5px',
-        borderRadius: 4,
-      }} {...props}>
-        {children}
-      </code>
-    )
-  },
-  pre: ({ children }) => (
-    <div style={{
-      background: 'rgba(0,0,0,0.3)',
-      borderRadius: 6,
-      margin: '0.8em 0',
-      overflow: 'auto',
-    }}>
-      <pre style={{ margin: 0, padding: '12px 16px' }}>{children}</pre>
-    </div>
-  ),
-  hr: () => (
-    <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.1)', margin: '1.2em 0' }} />
-  ),
 }
