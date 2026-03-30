@@ -1,79 +1,63 @@
 import { useState } from 'react'
-import { Brain, ChevronDown, ChevronRight } from 'lucide-react'
 
 export default function ThinkingBlock({ thinking, isLive = false }) {
   const [expanded, setExpanded] = useState(false)
 
+  if (isLive) {
+    // While generating: just the dots
+    return (
+      <div style={{ marginBottom: 8 }}>
+        <span className="thinking-dot" />
+        <span className="thinking-dot" />
+        <span className="thinking-dot" />
+      </div>
+    )
+  }
+
+  // After generating: "Summary text ›" inline gray text
+  // Get first ~80 chars of thinking text as the summary
+  const summary = thinking.text.split('\n')[0].slice(0, 90).trim()
+
   return (
     <div style={{ marginBottom: 16 }}>
-      {/* Header — always visible, click to expand/collapse */}
+      {/* Single line: "summary text ›" */}
       <button
         onClick={() => setExpanded(e => !e)}
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 7,
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          padding: '4px 0',
-          color: 'var(--text-muted)',
-          fontSize: 13,
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: '#808080', fontSize: 14, padding: 0,
+          display: 'flex', alignItems: 'center', gap: 4,
+          textAlign: 'left',
+          fontFamily: "'Inter', sans-serif",
         }}
       >
-        <Brain size={14} style={{ color: 'var(--accent)', opacity: 0.8 }} />
-        <span style={{ fontWeight: 500 }}>
-          {isLive ? 'Thinking…' : `Thought for ${thinking.durationSeconds} seconds`}
-        </span>
-        {isLive ? (
-          /* Animated dots while live */
-          <span style={{ display: 'flex', gap: 3, alignItems: 'center', marginLeft: 2 }}>
-            <ThinkingDot delay={0} />
-            <ThinkingDot delay={0.16} />
-            <ThinkingDot delay={0.32} />
-          </span>
-        ) : (
-          expanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />
-        )}
+        <span>{summary}</span>
+        <span style={{
+          fontSize: 16, lineHeight: 1,
+          transform: expanded ? 'rotate(90deg)' : 'none',
+          display: 'inline-block',
+          transition: 'transform 0.15s',
+        }}>›</span>
       </button>
 
-      {/* Expanded content */}
-      {expanded && !isLive && (
-        <div
-          style={{
-            marginTop: 8,
-            padding: '12px 14px',
-            borderRadius: 'var(--radius-md)',
-            background: 'rgba(0,0,0,0.025)',
-            border: '1px solid var(--border-light)',
-            borderLeft: '2px solid var(--accent)',
-            fontSize: 13,
-            lineHeight: 1.7,
-            color: 'var(--text-secondary)',
-            whiteSpace: 'pre-wrap',
-            fontStyle: 'italic',
-            maxHeight: 280,
-            overflowY: 'auto',
-          }}
-        >
+      {/* Expanded: full thinking text */}
+      {expanded && (
+        <div style={{
+          marginTop: 8,
+          paddingLeft: 12,
+          borderLeft: '2px solid #E0E0E0',
+          color: '#808080',
+          fontSize: 13,
+          lineHeight: 1.7,
+          fontStyle: 'italic',
+          fontFamily: "'Inter', sans-serif",
+          whiteSpace: 'pre-wrap',
+          maxHeight: 260,
+          overflowY: 'auto',
+        }}>
           {thinking.text}
         </div>
       )}
     </div>
-  )
-}
-
-function ThinkingDot({ delay }) {
-  return (
-    <span
-      style={{
-        display: 'inline-block',
-        width: 5,
-        height: 5,
-        borderRadius: '50%',
-        background: 'var(--text-muted)',
-        animation: `thinking-pulse 1.4s ease-in-out ${delay}s infinite`,
-      }}
-    />
   )
 }

@@ -1,25 +1,35 @@
 import { useState, useRef, useEffect } from 'react'
-import { ArrowUp, Sparkles, ChevronDown, Plus, Globe, Terminal, Paperclip, X as XIcon } from 'lucide-react'
-import { MODELS, DEFAULT_MODEL } from '../db/seed.js'
+import {
+  ArrowUp, ChevronDown, Plus, Globe, Paperclip, Mic,
+  Camera, FolderPlus, Github, Zap, PlugZap, Pen,
+  MessageSquare, Search, Check, Square,
+} from 'lucide-react'
 
-const TOOLS = [
-  { id: 'web_search',  icon: Globe,     label: 'Web search',  desc: 'Search the internet for current info' },
-  { id: 'code_exec',  icon: Terminal,  label: 'Run code',    desc: 'Execute Python, JS, or bash' },
-  { id: 'file_upload', icon: Paperclip, label: 'Attach file', desc: 'Upload a PDF, doc, image, or CSV' },
+// ── Tool menu definition ───────────────────────────────────────────────────
+const TOOL_MENU = [
+  { id: 'add_files',   icon: Paperclip,      label: 'Add files or photos', shortcut: '⌘U',  type: 'action' },
+  { id: 'screenshot',  icon: Camera,         label: 'Take a screenshot',                    type: 'action' },
+  { id: 'add_project', icon: FolderPlus,     label: 'Add to project',                       type: 'action' },
+  { id: 'github',      icon: Github,         label: 'Add from GitHub',                      type: 'submenu', separator_after: true },
+  { id: 'skills',      icon: Zap,            label: 'Skills',                               type: 'submenu' },
+  { id: 'connectors',  icon: PlugZap,        label: 'Connectors',                           type: 'submenu', separator_after: true },
+  { id: 'ask_ms',      icon: MessageSquare,  label: 'Ask Microsoft',                        type: 'toggle' },
+  { id: 'research',    icon: Search,         label: 'Research',                             type: 'toggle' },
+  { id: 'web_search',  icon: Globe,          label: 'Web search',                           type: 'toggle', separator_after: true },
+  { id: 'use_style',   icon: Pen,            label: 'Use style',                            type: 'submenu' },
 ]
 
-export default function InputBar({ onSend, disabled = false, placeholder = 'Message Sage...' }) {
+// ── InputBar ───────────────────────────────────────────────────────────────
+export default function InputBar({ onSend, disabled = false, placeholder = 'How can I help you?' }) {
   const [text, setText] = useState('')
   const [focused, setFocused] = useState(false)
-  const [currentModel, setCurrentModel] = useState(
-    MODELS.find((m) => m.id === DEFAULT_MODEL) || MODELS[0]
-  )
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [activeTools, setActiveTools] = useState(new Set(['web_search']))
   const [modelOpen, setModelOpen] = useState(false)
-  const [toolsOpen, setToolsOpen] = useState(false)
-  const [activeTool, setActiveTool] = useState(null)
 
   const textareaRef = useRef(null)
-  const toolsRef = useRef(null)
+  const menuRef = useRef(null)
+  const modelRef = useRef(null)
 
   const hasText = text.trim().length > 0
 
@@ -28,24 +38,31 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
     textareaRef.current?.focus()
   }, [])
 
-  // Close tools popover on outside click
+  // Close + menu on outside click
   useEffect(() => {
-    if (!toolsOpen) return
+    if (!menuOpen) return
     const handler = (e) => {
-      if (toolsRef.current && !toolsRef.current.contains(e.target)) {
-        setToolsOpen(false)
-      }
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false)
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
-  }, [toolsOpen])
+  }, [menuOpen])
+
+  // Close model dropdown on outside click
+  useEffect(() => {
+    if (!modelOpen) return
+    const handler = (e) => {
+      if (modelRef.current && !modelRef.current.contains(e.target)) setModelOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [modelOpen])
 
   const handleChange = (e) => {
     setText(e.target.value)
-    // Auto-resize
     const ta = e.target
     ta.style.height = 'auto'
-    ta.style.height = Math.min(ta.scrollHeight, 200) + 'px'
+    ta.style.height = Math.min(ta.scrollHeight, 160) + 'px'
   }
 
   const handleKeyDown = (e) => {
@@ -65,31 +82,39 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
     }
   }
 
-  const handleToolSelect = (tool) => {
-    setActiveTool(tool)
-    setToolsOpen(false)
+  const toggleTool = (id) => {
+    setActiveTools(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
   }
 
   return (
     <div style={{
       padding: '12px 24px 20px',
-      background: 'linear-gradient(to bottom, transparent, var(--bg) 30%)',
+      background: 'linear-gradient(to bottom, transparent, #F8F8F6 30%)',
       flexShrink: 0,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
     }}>
-      {/* Input box */}
+      {/* ── Input box ── */}
       <div style={{
         width: '100%',
-        maxWidth: 680,
-        background: 'var(--bg-input)',
-        borderRadius: 'var(--radius-xl)',
-        boxShadow: focused ? 'var(--shadow-input-focus)' : 'var(--shadow-input)',
-        border: '1px solid var(--border)',
-        overflow: 'hidden',
+        maxWidth: 800,
+        background: '#FFFFFF',
+        borderRadius: 16,
+        boxShadow: focused
+          ? '0 0 0 2px rgba(200,95,71,0.15), 0 4px 12px rgba(0,0,0,0.05)'
+          : '0 4px 12px rgba(0,0,0,0.05)',
+        border: '1px solid #E0E0E0',
+        overflow: 'visible',
         transition: 'box-shadow 0.15s',
+        position: 'relative',
       }}>
+
         {/* Textarea */}
         <textarea
           ref={textareaRef}
@@ -107,133 +132,135 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
             border: 'none',
             outline: 'none',
             background: 'transparent',
-            padding: '14px 16px 8px',
+            padding: '16px 16px 8px',
             fontSize: 15,
             lineHeight: 1.5,
-            color: 'var(--text-primary)',
+            color: '#1A1A1A',
             minHeight: 52,
-            maxHeight: 200,
+            maxHeight: 160,
             overflow: 'auto',
             display: 'block',
             opacity: disabled ? 0.6 : 1,
+            boxSizing: 'border-box',
+            fontFamily: 'inherit',
+            borderRadius: '16px 16px 0 0',
           }}
         />
 
-        {/* Active tool chip — between textarea and toolbar */}
-        {activeTool && (
-          <ActiveToolChip tool={activeTool} onClear={() => setActiveTool(null)} />
-        )}
-
-        {/* Bottom toolbar */}
+        {/* ── Bottom toolbar ── */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
           padding: '6px 10px 10px',
+          gap: 6,
         }}>
-          {/* Left: "+" tool button + model selector */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
 
-            {/* Tool menu button */}
-            <div ref={toolsRef} style={{ position: 'relative' }}>
-              <button
-                onClick={() => setToolsOpen(o => !o)}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 'var(--radius-sm)',
-                  border: toolsOpen ? '1px solid var(--border)' : '1px solid transparent',
-                  background: toolsOpen ? 'var(--bg-hover)' : 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--text-secondary)',
-                  fontSize: 20,
-                  fontWeight: 300,
-                  lineHeight: 1,
-                  transition: 'all 0.15s',
-                }}
-              >
-                <Plus size={16} />
-              </button>
+          {/* Left: + button */}
+          <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }}>
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              style={{
+                width: 32, height: 32, borderRadius: '50%',
+                border: 'none',
+                background: menuOpen ? '#E0E0E0' : '#F2F2F2',
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#3D3D3D',
+                transition: 'background 0.1s',
+                flexShrink: 0,
+              }}
+              onMouseEnter={e => { if (!menuOpen) e.currentTarget.style.background = '#E8E8E8' }}
+              onMouseLeave={e => { if (!menuOpen) e.currentTarget.style.background = '#F2F2F2' }}
+            >
+              <Plus size={18} strokeWidth={2.5} />
+            </button>
 
-              {/* Tool popover */}
-              {toolsOpen && (
-                <div style={{
-                  position: 'absolute',
-                  bottom: 'calc(100% + 8px)',
-                  left: 0,
-                  background: 'var(--bg-input)',
-                  border: '1px solid var(--border)',
-                  borderRadius: 'var(--radius-md)',
-                  boxShadow: 'var(--shadow-md)',
-                  minWidth: 220,
-                  zIndex: 200,
-                  overflow: 'hidden',
-                }}>
-                  {TOOLS.map(tool => (
-                    <ToolMenuItem key={tool.id} tool={tool} onSelect={handleToolSelect} />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Model selector */}
-            <div style={{ position: 'relative' }}>
-              <button
-                onClick={() => setModelOpen((o) => !o)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 5,
-                  padding: '4px 8px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: 'none',
-                  background: 'none',
-                  fontSize: 13,
-                  color: 'var(--text-secondary)',
-                  cursor: 'pointer',
-                }}
-              >
-                <Sparkles size={13} />
-                {currentModel.label}
-                <ChevronDown size={11} />
-              </button>
-
-              {/* Model dropdown */}
-              {modelOpen && (
-                <ModelDropdown
-                  models={MODELS}
-                  current={currentModel}
-                  onSelect={(m) => { setCurrentModel(m); setModelOpen(false) }}
-                  onClose={() => setModelOpen(false)}
-                />
-              )}
-            </div>
+            {/* + Menu popover */}
+            {menuOpen && (
+              <div style={{
+                position: 'absolute',
+                bottom: 'calc(100% + 8px)',
+                left: 0,
+                background: '#FFFFFF',
+                border: '1px solid #E8E8E8',
+                borderRadius: 12,
+                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                minWidth: 280,
+                zIndex: 300,
+                overflow: 'hidden',
+                padding: '4px 0',
+              }}>
+                {TOOL_MENU.map((item, i) => (
+                  <ToolMenuItem
+                    key={item.id}
+                    item={item}
+                    isActive={activeTools.has(item.id)}
+                    onToggle={() => item.type === 'toggle' && toggleTool(item.id)}
+                    onAction={() => item.type !== 'toggle' && setMenuOpen(false)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Right: send button */}
+          {/* Center: Model selector */}
+          <div ref={modelRef} style={{ flex: 1, display: 'flex', justifyContent: 'center', position: 'relative' }}>
+            <button
+              onClick={() => setModelOpen(o => !o)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 4,
+                padding: '4px 8px',
+                borderRadius: 8,
+                border: 'none',
+                background: 'none',
+                fontSize: 14,
+                color: '#1A1A1A',
+                cursor: 'pointer',
+                fontWeight: 400,
+                transition: 'background 0.1s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#F2F2F2' }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'none' }}
+            >
+              Sonnet 4.6 Extended
+              <ChevronDown size={13} style={{ color: '#707070' }} />
+            </button>
+          </div>
+
+          {/* Right: Voice button */}
+          <button
+            style={{
+              width: 32, height: 32, borderRadius: '50%',
+              border: 'none', background: '#F2F2F2',
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#707070',
+              transition: 'background 0.1s',
+              flexShrink: 0,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#E8E8E8' }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#F2F2F2' }}
+          >
+            <Mic size={15} />
+          </button>
+
+          {/* Far right: Send button */}
           <button
             onClick={submit}
             disabled={!hasText || disabled}
             style={{
-              width: 32,
-              height: 32,
-              borderRadius: '50%',
-              background: hasText && !disabled ? 'var(--text-primary)' : 'var(--border)',
+              width: 32, height: 32, borderRadius: '50%',
+              background: hasText && !disabled ? '#1A1A1A' : '#E0E0E0',
               border: 'none',
               cursor: hasText && !disabled ? 'pointer' : 'default',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'background 0.15s',
               flexShrink: 0,
             }}
           >
             <ArrowUp
               size={16}
-              color={hasText && !disabled ? 'var(--bg)' : 'var(--text-muted)'}
+              color={hasText && !disabled ? '#FFFFFF' : '#9CA3AF'}
             />
           </button>
         </div>
@@ -242,138 +269,73 @@ export default function InputBar({ onSend, disabled = false, placeholder = 'Mess
   )
 }
 
-function ActiveToolChip({ tool, onClear }) {
-  const Icon = tool.icon
+// ── ToolMenuItem ───────────────────────────────────────────────────────────
+function ToolMenuItem({ item, isActive, onToggle, onAction }) {
+  const [hover, setHover] = useState(false)
+  const Icon = item.icon
+  const isBlue = item.type === 'toggle' && isActive
+
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 6,
-      padding: '3px 8px 3px 6px',
-      margin: '0 16px 8px',
-      borderRadius: '100px',
-      background: 'var(--accent-subtle)',
-      border: '1px solid var(--accent-dim)',
-      fontSize: 12,
-      color: 'var(--accent)',
-      width: 'fit-content',
-    }}>
-      <Icon size={11} />
-      {tool.label}
+    <>
       <button
-        onClick={onClear}
+        onClick={() => {
+          if (item.type === 'toggle') onToggle()
+          else onAction()
+        }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
         style={{
-          background: 'none',
+          width: '100%',
+          padding: '10px 16px',
           border: 'none',
+          background: hover ? '#F5F5F5' : 'transparent',
           cursor: 'pointer',
-          color: 'var(--accent)',
+          textAlign: 'left',
           display: 'flex',
-          padding: 0,
+          alignItems: 'center',
+          gap: 10,
+          transition: 'background 0.1s',
         }}
       >
-        <XIcon size={11} />
+        {/* Icon */}
+        <Icon size={16} style={{ color: isBlue ? '#2563EB' : '#5F5F63', flexShrink: 0 }} />
+
+        {/* Label */}
+        <span style={{
+          flex: 1,
+          fontSize: 14,
+          color: isBlue ? '#2563EB' : '#1A1A1A',
+          fontWeight: 400,
+        }}>
+          {item.label}
+        </span>
+
+        {/* Right decoration */}
+        {item.shortcut && (
+          <span style={{ fontSize: 12, color: '#9CA3AF' }}>{item.shortcut}</span>
+        )}
+        {item.type === 'submenu' && (
+          <ChevronDown
+            size={13}
+            style={{ color: '#9CA3AF', transform: 'rotate(-90deg)' }}
+          />
+        )}
+        {item.type === 'toggle' && isActive && (
+          <Check size={15} style={{ color: '#2563EB' }} />
+        )}
+        {item.type === 'toggle' && !isActive && (
+          <Square size={14} style={{ color: '#D1D5DB' }} />
+        )}
       </button>
-    </div>
-  )
-}
 
-function ToolMenuItem({ tool, onSelect }) {
-  const Icon = tool.icon
-  return (
-    <button
-      onClick={() => onSelect(tool)}
-      style={{
-        width: '100%',
-        padding: '10px 14px',
-        border: 'none',
-        background: 'none',
-        cursor: 'pointer',
-        textAlign: 'left',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
-      }}
-      onMouseEnter={e => { e.currentTarget.style.background = 'var(--bg-hover)' }}
-      onMouseLeave={e => { e.currentTarget.style.background = 'none' }}
-    >
-      <Icon size={15} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
-      <div>
-        <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--text-primary)' }}>{tool.label}</div>
-        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{tool.desc}</div>
-      </div>
-    </button>
-  )
-}
-
-function ModelDropdown({ models, current, onSelect, onClose }) {
-  // Close on outside click
-  useEffect(() => {
-    const handler = (e) => {
-      if (!e.target.closest('[data-model-dropdown]')) onClose()
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [onClose])
-
-  return (
-    <div
-      data-model-dropdown=""
-      style={{
-        position: 'absolute',
-        bottom: 'calc(100% + 6px)',
-        left: 0,
-        background: 'var(--bg-input)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-md)',
-        boxShadow: 'var(--shadow-md)',
-        minWidth: 200,
-        zIndex: 100,
-        overflow: 'hidden',
-      }}
-    >
-      {models.map((m) => (
-        <ModelOption
-          key={m.id}
-          model={m}
-          isSelected={m.id === current.id}
-          onSelect={onSelect}
-        />
-      ))}
-    </div>
-  )
-}
-
-function ModelOption({ model, isSelected, onSelect }) {
-  const [hover, setHover] = useState(false)
-
-  return (
-    <button
-      onClick={() => onSelect(model)}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        width: '100%',
-        padding: '8px 12px',
-        border: 'none',
-        background: hover ? 'var(--bg-hover)' : 'transparent',
-        cursor: 'pointer',
-        textAlign: 'left',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 1,
-        transition: 'background 0.1s',
-      }}
-    >
-      <span style={{
-        fontSize: 13,
-        fontWeight: isSelected ? 600 : 400,
-        color: 'var(--text-primary)',
-      }}>
-        {model.label}
-      </span>
-      <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
-        {model.description}
-      </span>
-    </button>
+      {/* Separator */}
+      {item.separator_after && (
+        <div style={{
+          height: 1,
+          background: '#F0F0F0',
+          margin: '4px 0',
+        }} />
+      )}
+    </>
   )
 }

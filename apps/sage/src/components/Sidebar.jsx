@@ -1,400 +1,358 @@
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { NavLink, useNavigate, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { SquarePen, MessageSquare, Plus, ChevronDown, ChevronRight } from 'lucide-react'
+import {
+  MessageSquare, Search, Sliders, History, FolderOpen,
+  Bookmark, Code2, SquarePen, ChevronRight, ChevronLeft,
+  Building2,
+} from 'lucide-react'
 import db from '../db/index.js'
-import { USER } from '../db/seed.js'
 
-function groupByDate(convos) {
-  const groups = { Today: [], Yesterday: [], 'Previous 7 days': [], 'Previous 30 days': [] }
-  const now = new Date()
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
-  const yesterdayStart = todayStart - 86400000
-  const sevenDaysStart = todayStart - 86400000 * 7
-  const thirtyDaysStart = todayStart - 86400000 * 30
+const USER_DISPLAY = {
+  name: 'Ken Chau',
+  initials: 'KC',
+  org: 'Microsoft - MADE Explorations',
+}
 
-  for (const c of convos) {
-    const t = c.updatedAt
-    if (t >= todayStart) groups['Today'].push(c)
-    else if (t >= yesterdayStart) groups['Yesterday'].push(c)
-    else if (t >= sevenDaysStart) groups['Previous 7 days'].push(c)
-    else if (t >= thirtyDaysStart) groups['Previous 30 days'].push(c)
+// ── NavItem ────────────────────────────────────────────────────────────────
+// Full-width highlight (no border-radius), supports both routed + button modes
+function NavItem({ to, icon: Icon, label, shortcut, collapsed, onClick }) {
+  const [hover, setHover] = useState(false)
+
+  const baseStyle = (isActive) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: 12,
+    padding: collapsed ? '10px 0' : '10px 20px',
+    justifyContent: collapsed ? 'center' : 'flex-start',
+    fontSize: 15,
+    color: '#1A1A1A',
+    textDecoration: 'none',
+    background: isActive || hover ? '#EFEFED' : 'transparent',
+    fontWeight: isActive ? 500 : 400,
+    transition: 'background 0.1s',
+    cursor: 'pointer',
+    border: 'none',
+    width: '100%',
+    textAlign: 'left',
+    boxSizing: 'border-box',
+  })
+
+  if (onClick) {
+    return (
+      <button
+        onClick={onClick}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        style={baseStyle(false)}
+      >
+        <Icon size={20} style={{ color: '#5F5F63', flexShrink: 0 }} />
+        {!collapsed && <span style={{ flex: 1 }}>{label}</span>}
+        {!collapsed && shortcut && (
+          <span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 400 }}>{shortcut}</span>
+        )}
+      </button>
+    )
   }
-  return groups
+
+  return (
+    <NavLink
+      to={to}
+      style={({ isActive }) => baseStyle(isActive)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <Icon size={20} style={{ color: '#5F5F63', flexShrink: 0 }} />
+      {!collapsed && <span style={{ flex: 1 }}>{label}</span>}
+      {!collapsed && shortcut && (
+        <span style={{ fontSize: 12, color: '#9CA3AF', fontWeight: 400 }}>{shortcut}</span>
+      )}
+    </NavLink>
+  )
 }
 
-const sectionLabelStyle = {
-  padding: '8px 12px 3px',
-  fontSize: 11,
-  fontWeight: 600,
-  color: 'var(--text-muted)',
-  textTransform: 'uppercase',
-  letterSpacing: '0.07em',
+// ── ConvoRow ───────────────────────────────────────────────────────────────
+function ConvoRow({ convo, isActive, onClick }) {
+  const [hover, setHover] = useState(false)
+
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        padding: '6px 20px',
+        cursor: 'pointer',
+        fontSize: 14,
+        color: '#1A1A1A',
+        background: isActive ? '#EFEFED' : hover ? '#EFEFED' : 'transparent',
+        fontWeight: isActive ? 500 : 400,
+        transition: 'background 0.1s',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+      }}
+    >
+      {convo.title}
+    </div>
+  )
 }
 
-export default function Sidebar() {
+// ── Sidebar ────────────────────────────────────────────────────────────────
+export default function Sidebar({ collapsed = false, onToggleCollapse }) {
   const navigate = useNavigate()
   const { convoId } = useParams()
   const activeId = convoId ? Number(convoId) : null
-  const [avatarError, setAvatarError] = useState(false)
-  const [newChatHover, setNewChatHover] = useState(false)
-  const [iconHover, setIconHover] = useState(false)
-  const [projectsOpen, setProjectsOpen] = useState(true)
+  const [recentsHidden, setRecentsHidden] = useState(false)
+  const [inviteHover, setInviteHover] = useState(false)
+  const [profileHover, setProfileHover] = useState(false)
 
   const convos = useLiveQuery(
-    () => db.conversations.orderBy('updatedAt').reverse().toArray(),
+    () => db.conversations.orderBy('updatedAt').reverse().limit(20).toArray(),
     []
   )
 
-  const projects = useLiveQuery(() => db.projects.orderBy('updatedAt').reverse().toArray())
-  const starredProjects = projects?.filter(p => p.starred) ?? []
-  const otherProjects = projects?.filter(p => !p.starred) ?? []
-
-  // Quick color lookup for conversation project dots
-  const projectColorMap = {}
-  if (projects) {
-    for (const p of projects) projectColorMap[p.id] = p.color
-  }
-
-  const handleNewChat = () => navigate('/')
-
-  const handleProjectClick = async (project) => {
-    const projectConvos = await db.conversations
-      .where('projectId').equals(project.id)
-      .toArray()
-    if (projectConvos.length > 0) {
-      const latest = projectConvos.sort((a, b) => b.updatedAt - a.updatedAt)[0]
-      navigate(`/c/${latest.id}`)
-    } else {
-      navigate('/')
-    }
-  }
-
-  const grouped = groupByDate(convos || [])
-  const sections = ['Today', 'Yesterday', 'Previous 7 days', 'Previous 30 days']
-
   return (
     <div style={{
-      width: 260,
+      width: collapsed ? 60 : 260,
       flexShrink: 0,
       height: '100vh',
-      background: 'var(--bg-sidebar)',
+      background: '#F8F8F6',
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
+      transition: 'width 0.2s ease',
+      // NO right border — same bg as main content
     }}>
-      {/* Header */}
-      <div style={{ padding: '12px 16px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+
+      {/* ── Header ── */}
+      <div style={{
+        padding: collapsed ? '12px 0' : '12px 16px 8px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: collapsed ? 'center' : 'space-between',
+        flexShrink: 0,
+      }}>
+        {!collapsed && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <img
+              src="./sage-logo.jpg"
+              width={24}
+              height={24}
+              alt="Sage"
+              style={{ borderRadius: 6, objectFit: 'cover' }}
+            />
+            <span style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-0.02em', color: '#1A1A1A' }}>
+              sage
+            </span>
+          </div>
+        )}
+
+        {collapsed && (
           <img
             src="./sage-logo.jpg"
             width={24}
             height={24}
             alt="Sage"
-            style={{ borderRadius: 'var(--radius-sm)', objectFit: 'cover' }}
+            style={{ borderRadius: 6, objectFit: 'cover' }}
           />
-          <span style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
-            sage
-          </span>
-        </div>
-        <button
-          onClick={handleNewChat}
-          onMouseEnter={() => setIconHover(true)}
-          onMouseLeave={() => setIconHover(false)}
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: '50%',
-            border: 'none',
-            background: iconHover ? 'var(--bg-sidebar-hover)' : 'transparent',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: 'var(--text-secondary)',
-            transition: 'background 0.15s',
-          }}
-          title="New chat"
-        >
-          <SquarePen size={17} />
-        </button>
-      </div>
-
-      {/* New chat wide button */}
-      <button
-        onClick={handleNewChat}
-        onMouseEnter={() => setNewChatHover(true)}
-        onMouseLeave={() => setNewChatHover(false)}
-        style={{
-          margin: '4px 8px 8px',
-          padding: '9px 12px',
-          borderRadius: 'var(--radius-md)',
-          background: newChatHover ? 'var(--bg-sidebar-hover)' : 'transparent',
-          border: 'none',
-          textAlign: 'left',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 10,
-          fontSize: 14,
-          color: 'var(--text-secondary)',
-          transition: 'background 0.15s',
-        }}
-      >
-        <MessageSquare size={16} />
-        New chat
-      </button>
-
-      {/* Scrollable content */}
-      <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 8 }}>
-
-        {/* ── Starred ─────────────────────────────── */}
-        {starredProjects.length > 0 && (
-          <div>
-            <div style={sectionLabelStyle}>Starred</div>
-            {starredProjects.map(project => (
-              <ProjectRow
-                key={project.id}
-                project={project}
-                onClick={() => handleProjectClick(project)}
-              />
-            ))}
-          </div>
         )}
 
-        {/* ── Projects (collapsible) ──────────────── */}
-        <div>
+        {/* Toggle collapse button */}
+        {!collapsed && onToggleCollapse && (
           <button
-            onClick={() => setProjectsOpen(o => !o)}
+            onClick={onToggleCollapse}
             style={{
-              ...sectionLabelStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 4,
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              width: '100%',
+              width: 32, height: 32, borderRadius: '50%',
+              border: 'none', background: 'transparent',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', color: '#5F5F63',
+              transition: 'background 0.1s',
             }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#EFEFED' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+            title="Collapse sidebar"
           >
-            {projectsOpen
-              ? <ChevronDown size={11} style={{ color: 'var(--text-muted)' }} />
-              : <ChevronRight size={11} style={{ color: 'var(--text-muted)' }} />
-            }
-            Projects
+            <ChevronLeft size={17} />
           </button>
+        )}
+      </div>
 
-          {projectsOpen && (
-            <>
-              {otherProjects.map(project => (
-                <ProjectRow
-                  key={project.id}
-                  project={project}
-                  onClick={() => handleProjectClick(project)}
-                />
-              ))}
-              <button
-                onMouseEnter={e => {
-                  e.currentTarget.style.color = 'var(--text-secondary)'
-                  e.currentTarget.style.background = 'var(--bg-sidebar-hover)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.color = 'var(--text-muted)'
-                  e.currentTarget.style.background = 'none'
-                }}
-                style={{
-                  padding: '5px 12px',
-                  margin: '2px 4px',
-                  borderRadius: 'var(--radius-md)',
-                  cursor: 'pointer',
-                  fontSize: 13,
-                  color: 'var(--text-muted)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  background: 'none',
-                  border: 'none',
-                }}
-              >
-                <Plus size={13} />
-                New project
-              </button>
-            </>
-          )}
-        </div>
+      {/* ── Collapsed: expand button ── */}
+      {collapsed && onToggleCollapse && (
+        <button
+          onClick={onToggleCollapse}
+          style={{
+            width: '100%', padding: '10px 0',
+            border: 'none', background: 'transparent',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', color: '#5F5F63',
+            transition: 'background 0.1s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#EFEFED' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
+        >
+          <ChevronRight size={17} />
+        </button>
+      )}
 
-        {/* ── Date-grouped conversations ──────────── */}
-        {sections.map((section) => {
-          const items = grouped[section]
-          if (!items || items.length === 0) return null
-          return (
-            <div key={section}>
-              <div style={{
-                padding: '8px 12px 4px',
-                fontSize: 12,
-                fontWeight: 600,
-                color: 'var(--text-muted)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-              }}>
-                {section}
-              </div>
-              {items.map((convo) => (
+      {/* ── Top nav items ── */}
+      <div style={{ flexShrink: 0 }}>
+        <NavItem
+          icon={SquarePen}
+          label="New chat"
+          collapsed={collapsed}
+          onClick={() => navigate('/')}
+        />
+        <NavItem
+          icon={Search}
+          label="Search"
+          shortcut="⌘K"
+          collapsed={collapsed}
+          onClick={() => {}}
+        />
+        <NavItem
+          icon={Sliders}
+          label="Customize"
+          collapsed={collapsed}
+          onClick={() => {}}
+        />
+      </div>
+
+      {/* ── Gap ── */}
+      <div style={{ height: 8, flexShrink: 0 }} />
+
+      {/* ── Section nav ── */}
+      <div style={{ flexShrink: 0 }}>
+        <NavItem to="/recents"   icon={History}    label="Chats"     collapsed={collapsed} />
+        <NavItem to="/projects"  icon={FolderOpen} label="Projects"  collapsed={collapsed} />
+        <NavItem to="/artifacts" icon={Bookmark}   label="Artifacts" collapsed={collapsed} />
+        <NavItem to="/code"      icon={Code2}      label="Code"      collapsed={collapsed} />
+      </div>
+
+      {/* ── Recents list (expanded only) ── */}
+      {!collapsed && (
+        <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
+          {/* Recents header */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '12px 20px 4px',
+          }}>
+            <span style={{ fontSize: 13, fontWeight: 500, color: '#9CA3AF' }}>Recents</span>
+            <button
+              onClick={() => setRecentsHidden(h => !h)}
+              style={{
+                fontSize: 13, color: '#9CA3AF', background: 'none',
+                border: 'none', cursor: 'pointer', padding: 0,
+                fontWeight: 400,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#707070' }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#9CA3AF' }}
+            >
+              {recentsHidden ? 'Show' : 'Hide'}
+            </button>
+          </div>
+
+          {/* Conversations list */}
+          {!recentsHidden && (
+            <div style={{ paddingBottom: 8 }}>
+              {(convos || []).map(convo => (
                 <ConvoRow
                   key={convo.id}
                   convo={convo}
                   isActive={convo.id === activeId}
                   onClick={() => navigate(`/c/${convo.id}`)}
-                  projectColor={convo.projectId ? (projectColorMap[convo.projectId] ?? null) : null}
                 />
               ))}
             </div>
-          )
-        })}
-      </div>
-
-      {/* User account */}
-      <div style={{ marginTop: 'auto', padding: '8px', borderTop: '1px solid var(--border-light)' }}>
-        <UserRow avatarError={avatarError} setAvatarError={setAvatarError} />
-      </div>
-    </div>
-  )
-}
-
-function ProjectRow({ project, onClick }) {
-  const [hover, setHover] = useState(false)
-
-  return (
-    <div
-      onClick={onClick}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        padding: '6px 12px',
-        margin: '1px 4px',
-        borderRadius: 'var(--radius-md)',
-        cursor: 'pointer',
-        fontSize: 14,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        color: 'var(--text-secondary)',
-        background: hover ? 'var(--bg-sidebar-hover)' : 'transparent',
-        transition: 'background 0.1s',
-      }}
-    >
-      <div style={{
-        width: 8,
-        height: 8,
-        borderRadius: '50%',
-        background: project.color,
-        flexShrink: 0,
-      }} />
-      <span style={{
-        flex: 1,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      }}>
-        {project.name}
-      </span>
-    </div>
-  )
-}
-
-function ConvoRow({ convo, isActive, onClick, projectColor }) {
-  const [hover, setHover] = useState(false)
-  const bg = isActive ? 'var(--bg-hover)' : hover ? 'var(--bg-sidebar-hover)' : 'transparent'
-
-  return (
-    <div
-      onClick={onClick}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        padding: '7px 12px',
-        margin: '1px 4px',
-        borderRadius: 'var(--radius-md)',
-        cursor: 'pointer',
-        fontSize: 14,
-        color: 'var(--text-secondary)',
-        background: bg,
-        fontWeight: isActive ? 500 : 400,
-        transition: 'background 0.1s',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 7,
-        overflow: 'hidden',
-      }}
-    >
-      {projectColor && (
-        <div style={{
-          width: 5,
-          height: 5,
-          borderRadius: '50%',
-          background: projectColor,
-          flexShrink: 0,
-        }} />
+          )}
+        </div>
       )}
-      <span style={{
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        flex: 1,
-      }}>
-        {convo.title}
-      </span>
-    </div>
-  )
-}
 
-function UserRow({ avatarError, setAvatarError }) {
-  const [hover, setHover] = useState(false)
+      {/* Spacer for collapsed mode */}
+      {collapsed && <div style={{ flex: 1 }} />}
 
-  return (
-    <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{
-        padding: 8,
-        borderRadius: 'var(--radius-md)',
-        cursor: 'pointer',
-        display: 'flex',
-        gap: 10,
-        alignItems: 'center',
-        background: hover ? 'var(--bg-sidebar-hover)' : 'transparent',
-        transition: 'background 0.15s',
-      }}
-    >
-      {avatarError ? (
+      {/* ── Bottom section ── */}
+      {!collapsed && (
+        <>
+          {/* Invite team members */}
+          <button
+            onMouseEnter={() => setInviteHover(true)}
+            onMouseLeave={() => setInviteHover(false)}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              width: 'calc(100% - 16px)', margin: '0 8px 8px',
+              padding: '12px 16px', borderRadius: 10,
+              background: inviteHover ? '#E5E5E3' : '#EFEFED',
+              border: 'none', fontSize: 14, fontWeight: 500,
+              color: '#1A1A1A', cursor: 'pointer',
+              transition: 'background 0.1s',
+              flexShrink: 0,
+            }}
+          >
+            <span>Invite team members</span>
+            <ChevronRight size={15} style={{ color: '#9CA3AF' }} />
+          </button>
+
+          {/* User profile */}
+          <div
+            onMouseEnter={() => setProfileHover(true)}
+            onMouseLeave={() => setProfileHover(false)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '10px 16px',
+              cursor: 'pointer',
+              borderTop: '1px solid #EEEEEE',
+              background: profileHover ? '#EFEFED' : 'transparent',
+              transition: 'background 0.1s',
+              flexShrink: 0,
+            }}
+          >
+            {/* Avatar */}
+            <div style={{
+              width: 36, height: 36, borderRadius: '50%',
+              background: '#3D3D3D',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: '#fff', fontSize: 14, fontWeight: 600,
+              flexShrink: 0,
+            }}>
+              {USER_DISPLAY.initials}
+            </div>
+
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 15, fontWeight: 600, color: '#1A1A1A' }}>
+                {USER_DISPLAY.name}
+              </div>
+              <div style={{
+                fontSize: 12, color: '#707070',
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>
+                {USER_DISPLAY.org}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Collapsed: show avatar only */}
+      {collapsed && (
         <div style={{
-          width: 28,
-          height: 28,
-          borderRadius: '50%',
-          background: 'var(--accent)',
-          color: 'white',
-          fontSize: 12,
-          fontWeight: 600,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: 'flex', justifyContent: 'center',
+          padding: '12px 0 16px',
+          borderTop: '1px solid #EEEEEE',
           flexShrink: 0,
         }}>
-          {USER.name.charAt(0)}
+          <div style={{
+            width: 36, height: 36, borderRadius: '50%',
+            background: '#3D3D3D',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#fff', fontSize: 14, fontWeight: 600,
+            cursor: 'pointer',
+          }}>
+            {USER_DISPLAY.initials}
+          </div>
         </div>
-      ) : (
-        <img
-          src={USER.avatar}
-          alt={USER.name}
-          width={28}
-          height={28}
-          onError={() => setAvatarError(true)}
-          style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
-        />
       )}
-      <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-primary)' }}>
-        {USER.name} Blake
-      </span>
     </div>
   )
 }

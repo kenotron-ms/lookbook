@@ -6,7 +6,7 @@ export const MODELS = [
   { id: 'sage-1-5',      label: 'Sage 1.5 Haiku', description: 'Fastest' },
 ]
 export const DEFAULT_MODEL = 'sage-2-sonnet'
-export const USER = { name: 'Jordan', handle: 'jordanblake', avatar: './user-avatar.jpg' }
+export const USER = { name: 'Ken', handle: 'kenchau', avatar: './user-avatar.jpg' }
 
 // ─── Projects ─────────────────────────────────────────────────────────────────
 const PROJECTS = [
