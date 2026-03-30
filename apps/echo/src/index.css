@@ -1,5 +1,51 @@
 @import "tailwindcss";
 
+/* ── Color tokens ── applied by Display settings via data-theme attr ── */
+:root {
+  --bg:            #000000;
+  --bg-secondary:  #16181c;
+  --bg-hover:      rgba(255,255,255,0.03);
+  --bg-input:      #202327;
+  --surface:       #16181c;
+  --border:        #2f3336;
+  --text-primary:  #e7e9ea;
+  --text-secondary:#71767b;
+  --text-muted:    #536471;
+  --accent:        #6366f1;
+  --accent-hover:  #5254cc;
+  --accent-subtle: rgba(99,102,241,0.1);
+  --like:          #f91880;
+  --echo-color:    #00ba7c;
+  --danger:        #f4212e;
+  --warning:       #ffd400;
+  --verified:      #6366f1;
+  --font-size:     15px;
+}
+
+[data-theme="dim"] {
+  --bg:           #15202b;
+  --bg-secondary: #1e2732;
+  --bg-hover:     rgba(255,255,255,0.04);
+  --bg-input:     #253341;
+  --surface:      #1e2732;
+  --border:       #38444d;
+  --text-primary: #f7f9f9;
+  --text-secondary:#8b98a5;
+  --text-muted:   #6e8090;
+}
+
+[data-theme="light"] {
+  --bg:           #ffffff;
+  --bg-secondary: #f7f9f9;
+  --bg-hover:     rgba(0,0,0,0.03);
+  --bg-input:     #eff3f4;
+  --surface:      #f7f9f9;
+  --border:       #eff3f4;
+  --text-primary: #0f1419;
+  --text-secondary:#536471;
+  --text-muted:   #8899a6;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,22 +53,16 @@
 }
 
 body {
-  background-color: #000;
-  color: #e7e9ea;
+  background-color: var(--bg);
+  color: var(--text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: var(--font-size);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-::-webkit-scrollbar {
-  width: 0px;
-}
-
-button {
-  font-family: inherit;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
+::-webkit-scrollbar { width: 0px; }
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+textarea { font-family: inherit; resize: none; }
+input { font-family: inherit; }

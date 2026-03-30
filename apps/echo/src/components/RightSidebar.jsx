@@ -1,165 +1,80 @@
-import { useState } from 'react'
-import { Search } from 'lucide-react'
-import { Avatar } from './LeftSidebar'
+import { useState, useRef } from 'react'
+import { Search, RefreshCw } from 'lucide-react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useLiveQuery } from 'dexie-react-hooks'
+import db from '../db/index.js'
+import { CURRENT_USER_ID } from '../db/seed.js'
+import { useFollow } from '../hooks/useFollow.js'
+import { useToast } from '../context/ToastContext.jsx'
 
+// ── helpers ───────────────────────────────────────────────────────────────────
+const fmtCount = n =>
+  n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M'
+  : n >= 1e3 ? (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K'
+  : String(n)
+
+// ── Trending data ─────────────────────────────────────────────────────────────
 const TRENDING = [
-  { category: 'Technology · Trending', topic: '#AIFirst', posts: '142K' },
-  { category: 'Design · Trending', topic: 'Design Systems', posts: '28.4K' },
-  { category: 'Developer Tools · Trending', topic: '#ViteJS', posts: '18.1K' },
-  { category: 'Startup · Trending', topic: 'Indie Hacker', posts: '12.9K' },
-  { category: 'Trending in US', topic: '#BuildInPublic', posts: '9.7K' },
+  { category: 'Developer · Trending', topic: '#BuildInPublic', posts: '12.4K' },
+  { category: 'Technology · Trending', topic: '#AIFirst',       posts: '89K'   },
+  { category: 'Startup · Trending',   topic: '#ParaNet',        posts: '234K'  },
+  { category: 'Developer Tools',      topic: '#TypeScript',     posts: '156K'  },
+  { category: 'Design · Trending',    topic: '#DesignMatters',  posts: '41K'   },
 ]
 
-const SUGGESTED = [
-  { name: 'Vercel', handle: 'vercel', initials: 'V', bg: '#000', border: true },
-  { name: 'Evan You', handle: 'youyuxi', initials: 'EY', bg: '#42b883' },
-  { name: 'Kent C. Dodds', handle: 'kentcdodds', initials: 'KD', bg: '#e44d26' },
-]
-
-export default function RightSidebar() {
-  const [searchVal, setSearchVal] = useState('')
-  const [following, setFollowing] = useState({})
-
-  const toggleFollow = (handle) =>
-    setFollowing((f) => ({ ...f, [handle]: !f[handle] }))
-
+// ── Verified badge (small) ────────────────────────────────────────────────────
+function VerifiedBadge() {
   return (
-    <aside
-      style={{
-        width: '350px',
-        flexShrink: 0,
-        padding: '0 0 0 24px',
-        position: 'sticky',
-        top: 0,
-        height: '100vh',
-        overflowY: 'auto',
-        paddingTop: '8px',
-      }}
-    >
-      {/* Search bar */}
-      <div style={{ position: 'relative', marginBottom: '16px' }}>
-        <Search
-          size={18}
-          color="#71767b"
-          style={{
-            position: 'absolute',
-            left: '14px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            pointerEvents: 'none',
-          }}
-        />
-        <input
-          value={searchVal}
-          onChange={(e) => setSearchVal(e.target.value)}
-          placeholder="Search Echo"
-          style={{
-            width: '100%',
-            background: '#16181c',
-            border: '1px solid transparent',
-            borderRadius: '9999px',
-            padding: '10px 16px 10px 42px',
-            fontSize: '15px',
-            color: '#e7e9ea',
-            outline: 'none',
-            fontFamily: 'inherit',
-            transition: 'border-color 0.2s, background 0.2s',
-          }}
-          onFocus={(e) => {
-            e.target.style.background = '#000'
-            e.target.style.borderColor = '#6366f1'
-          }}
-          onBlur={(e) => {
-            e.target.style.background = '#16181c'
-            e.target.style.borderColor = 'transparent'
-          }}
-        />
-      </div>
-
-      {/* Trending */}
-      <Section title="What's happening">
-        {TRENDING.map((t, i) => (
-          <TrendingItem key={i} {...t} />
-        ))}
-        <ShowMoreBtn />
-      </Section>
-
-      {/* Who to follow */}
-      <Section title="Who to follow">
-        {SUGGESTED.map((u) => (
-          <SuggestedUser
-            key={u.handle}
-            user={u}
-            isFollowing={following[u.handle]}
-            onFollow={() => toggleFollow(u.handle)}
-          />
-        ))}
-        <ShowMoreBtn />
-      </Section>
-
-      {/* Footer links */}
-      <div
-        style={{
-          padding: '16px 0',
-          fontSize: '13px',
-          color: '#71767b',
-          lineHeight: '20px',
-        }}
-      >
-        {[
-          'Terms of Service',
-          'Privacy Policy',
-          'Cookie Policy',
-          'Accessibility',
-          'Ads info',
-          'More',
-        ].map((l) => (
-          <a
-            key={l}
-            href="#"
-            style={{
-              marginRight: '8px',
-              color: '#71767b',
-              textDecoration: 'none',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
-            onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
-          >
-            {l}
-          </a>
-        ))}
-        <div style={{ marginTop: '4px' }}>© 2025 Echo Corp.</div>
-      </div>
-    </aside>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--accent)" style={{ flexShrink: 0 }}>
+      <path
+        d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        fill="none"
+        stroke="var(--accent)"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   )
 }
 
-function Section({ title, children }) {
+// ── Section wrapper ───────────────────────────────────────────────────────────
+function Section({ title, titleExtra, children }) {
   return (
-    <div
-      style={{
-        background: '#16181c',
-        borderRadius: '16px',
-        marginBottom: '16px',
-        overflow: 'hidden',
-      }}
-    >
-      <div
-        style={{
-          padding: '16px',
-          fontSize: '20px',
-          fontWeight: '800',
-          color: '#e7e9ea',
-          letterSpacing: '-0.02em',
-        }}
-      >
-        {title}
+    <div style={{
+      background: 'var(--bg-secondary)', borderRadius: 16,
+      marginBottom: 16, overflow: 'hidden',
+    }}>
+      <div style={{
+        padding: '16px 16px 4px', fontSize: 19, fontWeight: 800,
+        color: 'var(--text-primary)', letterSpacing: '-0.02em',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <span>{title}</span>
+        {titleExtra}
       </div>
       {children}
     </div>
   )
 }
 
+// ── Show more link ────────────────────────────────────────────────────────────
+function ShowMore({ to = '#' }) {
+  return (
+    <div style={{ padding: '12px 16px' }}>
+      <Link
+        to={to}
+        style={{ color: 'var(--accent)', fontSize: 15, textDecoration: 'none' }}
+        onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+        onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+      >
+        Show more
+      </Link>
+    </div>
+  )
+}
+
+// ── Trending item ─────────────────────────────────────────────────────────────
 function TrendingItem({ category, topic, posts }) {
   const [hovered, setHovered] = useState(false)
   return (
@@ -167,125 +82,230 @@ function TrendingItem({ category, topic, posts }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        padding: '12px 16px',
-        cursor: 'pointer',
-        background: hovered ? 'rgba(255,255,255,0.03)' : 'transparent',
+        padding: '10px 16px', cursor: 'pointer',
+        background: hovered ? 'var(--bg-hover)' : 'transparent',
         transition: 'background 0.15s',
       }}
     >
-      <div style={{ fontSize: '13px', color: '#71767b', marginBottom: '2px' }}>
-        {category}
-      </div>
-      <div style={{ fontWeight: '700', fontSize: '15px', color: '#e7e9ea', marginBottom: '2px' }}>
-        {topic}
-      </div>
-      <div style={{ fontSize: '13px', color: '#71767b' }}>{posts} posts</div>
+      <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 1 }}>{category}</div>
+      <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text-primary)', marginBottom: 1 }}>{topic}</div>
+      <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{posts} posts</div>
     </div>
   )
 }
 
-function SuggestedUser({ user, isFollowing, onFollow }) {
+// ── Suggestion row — each one isolated so useFollow works per-user ─────────────
+function SuggestionRow({ user }) {
+  const navigate = useNavigate()
+  const { following, toggleFollow } = useFollow(user.id)
+  const { addToast } = useToast()
   const [hovered, setHovered] = useState(false)
+  const [btnHovered, setBtnHovered] = useState(false)
+
+  const isFollowing = !!following
+
+  async function handleFollow(e) {
+    e.stopPropagation()
+    await toggleFollow()
+    addToast(isFollowing ? `Unfollowed @${user.handle}` : `Following @${user.handle}`, isFollowing ? 'info' : 'success')
+  }
+
+  function goToProfile(e) {
+    e.stopPropagation()
+    navigate(`/profile/${user.handle}`)
+  }
+
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '12px 16px',
-        cursor: 'pointer',
-        background: hovered ? 'rgba(255,255,255,0.03)' : 'transparent',
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '10px 16px', cursor: 'pointer',
+        background: hovered ? 'var(--bg-hover)' : 'transparent',
         transition: 'background 0.15s',
       }}
+      onClick={goToProfile}
     >
-      <div
-        style={{
-          width: '44px',
-          height: '44px',
-          borderRadius: '50%',
-          background: user.bg,
-          border: user.border ? '1px solid #2f3336' : 'none',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '14px',
-          fontWeight: '700',
-          color: 'white',
-          flexShrink: 0,
-        }}
-      >
-        {user.initials}
+      {/* Avatar */}
+      <div onClick={goToProfile} style={{ flexShrink: 0 }}>
+        {user.avatar
+          ? <img src={user.avatar} alt={user.name} style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', display: 'block' }} />
+          : (
+            <div style={{
+              width: 40, height: 40, borderRadius: '50%', background: 'var(--accent)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 15, fontWeight: 700, color: '#fff',
+            }}>
+              {user.name?.[0]}
+            </div>
+          )
+        }
       </div>
+
+      {/* Name + handle */}
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div
-          style={{
-            fontWeight: '700',
-            fontSize: '15px',
-            color: '#e7e9ea',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {user.name}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+          <span style={{
+            fontWeight: 700, fontSize: 14, color: 'var(--text-primary)',
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>
+            {user.name}
+          </span>
+          {user.verified && <VerifiedBadge />}
         </div>
-        <div style={{ fontSize: '15px', color: '#71767b' }}>@{user.handle}</div>
+        <div style={{ fontSize: 13, color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          @{user.handle}
+        </div>
       </div>
+
+      {/* Follow button */}
       <button
-        onClick={(e) => {
-          e.stopPropagation()
-          onFollow()
-        }}
+        onClick={handleFollow}
+        onMouseEnter={() => setBtnHovered(true)}
+        onMouseLeave={() => setBtnHovered(false)}
         style={{
-          background: isFollowing ? 'transparent' : '#e7e9ea',
-          color: isFollowing ? '#e7e9ea' : '#000',
-          border: isFollowing ? '1px solid #536471' : '1px solid transparent',
-          borderRadius: '9999px',
-          padding: '6px 16px',
-          fontSize: '15px',
-          fontWeight: '700',
-          cursor: 'pointer',
-          transition: 'all 0.2s',
-          whiteSpace: 'nowrap',
-          flexShrink: 0,
-        }}
-        onMouseEnter={(e) => {
-          if (isFollowing) {
-            e.currentTarget.textContent = 'Unfollow'
-            e.currentTarget.style.borderColor = '#f4212e'
-            e.currentTarget.style.color = '#f4212e'
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (isFollowing) {
-            e.currentTarget.textContent = 'Following'
-            e.currentTarget.style.borderColor = '#536471'
-            e.currentTarget.style.color = '#e7e9ea'
-          }
+          background: isFollowing ? 'transparent' : 'var(--text-primary)',
+          color: isFollowing ? (btnHovered ? '#f4212e' : 'var(--text-primary)') : 'var(--bg)',
+          border: isFollowing ? `1px solid ${btnHovered ? '#f4212e' : 'var(--border)'}` : '1px solid transparent',
+          borderRadius: 9999, padding: '5px 14px',
+          fontSize: 13, fontWeight: 700, cursor: 'pointer',
+          flexShrink: 0, transition: 'all 0.2s', whiteSpace: 'nowrap',
         }}
       >
-        {isFollowing ? 'Following' : 'Follow'}
+        {isFollowing ? (btnHovered ? 'Unfollow' : 'Following') : 'Follow'}
       </button>
     </div>
   )
 }
 
-function ShowMoreBtn() {
+// ── Main component ────────────────────────────────────────────────────────────
+export default function RightSidebar() {
+  const navigate = useNavigate()
+  const [searchVal, setSearchVal] = useState('')
+  const inputRef = useRef(null)
+
+  // Fetch suggestions: users current user doesn't follow yet
+  const suggestions = useLiveQuery(async () => {
+    const follows = await db.follows.where('followerId').equals(CURRENT_USER_ID).toArray()
+    const followingIds = new Set(follows.map(f => f.followingId))
+    followingIds.add(CURRENT_USER_ID)
+    const allUsers = await db.users.toArray()
+    return allUsers.filter(u => !followingIds.has(u.id)).slice(0, 4)
+  })
+
+  function handleSearchKeyDown(e) {
+    if (e.key === 'Enter' && searchVal.trim()) {
+      navigate(`/explore?q=${encodeURIComponent(searchVal.trim())}`)
+    }
+  }
+
+  function handleSearchClick() {
+    navigate('/explore')
+  }
+
   return (
-    <div
-      style={{
-        padding: '16px',
-        cursor: 'pointer',
-        color: '#6366f1',
-        fontSize: '15px',
-        transition: 'background 0.15s',
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
-      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-    >
-      Show more
-    </div>
+    <aside style={{
+      width: 350, paddingLeft: 24, position: 'sticky',
+      top: 0, height: '100vh', overflowY: 'auto', paddingTop: 12,
+      scrollbarWidth: 'none',
+    }}>
+      {/* ── Search bar ── */}
+      <div style={{ position: 'relative', marginBottom: 16 }}>
+        <Search
+          size={18}
+          color="var(--text-muted)"
+          style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+        />
+        <input
+          ref={inputRef}
+          value={searchVal}
+          onChange={e => setSearchVal(e.target.value)}
+          onKeyDown={handleSearchKeyDown}
+          onClick={handleSearchClick}
+          placeholder="Search Echo"
+          style={{
+            width: '100%', boxSizing: 'border-box',
+            background: 'var(--bg-input)', border: '1px solid transparent',
+            borderRadius: 9999, padding: '10px 16px 10px 44px',
+            fontSize: 15, color: 'var(--text-primary)',
+            outline: 'none', fontFamily: 'inherit',
+            transition: 'border-color 0.2s, background 0.2s', cursor: 'text',
+          }}
+          onFocus={e => { e.target.style.background = 'var(--bg)'; e.target.style.borderColor = 'var(--accent)' }}
+          onBlur={e => { e.target.style.background = 'var(--bg-input)'; e.target.style.borderColor = 'transparent' }}
+        />
+      </div>
+
+      {/* ── Subscribe to Premium card ── */}
+      <div style={{
+        background: 'linear-gradient(135deg, #312e81 0%, #6366f1 60%, #818cf8 100%)',
+        borderRadius: 16, padding: '20px 16px', marginBottom: 16,
+      }}>
+        <div style={{ fontWeight: 800, fontSize: 18, color: '#fff', marginBottom: 6, letterSpacing: '-0.01em' }}>
+          Get the full Echo experience
+        </div>
+        <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', marginBottom: 14, lineHeight: '1.4' }}>
+          Unlock longer posts, edit history, priority replies, and more.
+        </div>
+        <button
+          style={{
+            background: '#fff', color: '#6366f1',
+            border: 'none', borderRadius: 9999,
+            padding: '8px 20px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
+            transition: 'opacity 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+        >
+          Subscribe to Premium
+        </button>
+      </div>
+
+      {/* ── Trends for you ── */}
+      <Section
+        title="Trends for you"
+        titleExtra={
+          <button
+            style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 4, borderRadius: '50%' }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.background = 'var(--accent-subtle)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'none' }}
+          >
+            <RefreshCw size={16} />
+          </button>
+        }
+      >
+        {TRENDING.map((t, i) => <TrendingItem key={i} {...t} />)}
+        <ShowMore to="/explore" />
+      </Section>
+
+      {/* ── Who to follow ── */}
+      <Section title="Who to follow">
+        {!suggestions && (
+          <div style={{ padding: '16px', color: 'var(--text-muted)', fontSize: 14 }}>Loading…</div>
+        )}
+        {suggestions && suggestions.length === 0 && (
+          <div style={{ padding: '16px', color: 'var(--text-muted)', fontSize: 14 }}>You're following everyone!</div>
+        )}
+        {suggestions && suggestions.map(u => <SuggestionRow key={u.id} user={u} />)}
+        <ShowMore to="/explore" />
+      </Section>
+
+      {/* ── Footer ── */}
+      <div style={{ padding: '8px 4px 32px', fontSize: 13, color: 'var(--text-muted)', lineHeight: '22px' }}>
+        {['Terms', 'Privacy', 'Cookie', 'Accessibility', 'More'].map(l => (
+          <a
+            key={l}
+            href="#"
+            style={{ marginRight: 10, color: 'var(--text-muted)', textDecoration: 'none' }}
+            onMouseEnter={e => e.currentTarget.style.textDecoration = 'underline'}
+            onMouseLeave={e => e.currentTarget.style.textDecoration = 'none'}
+          >
+            {l}
+          </a>
+        ))}
+        <div style={{ marginTop: 2 }}>© 2026 Echo Corp</div>
+      </div>
+    </aside>
   )
 }

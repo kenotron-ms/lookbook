@@ -1,14 +1,18 @@
 import { Outlet } from 'react-router-dom'
 import LeftSidebar from './LeftSidebar'
 import RightSidebar from './RightSidebar'
+import { ComposeProvider, useCompose } from '../context/ComposeContext.jsx'
+import ComposeModal from './ComposeModal.jsx'
 
-export default function Layout() {
+function LayoutInner() {
+  const { open, replyTo, closeCompose } = useCompose()
+
   return (
-    <div style={{ background: '#000', minHeight: '100vh', color: '#e7e9ea' }}>
+    <>
       <div
         style={{
           display: 'flex',
-          maxWidth: '1265px',
+          maxWidth: 1265,
           margin: '0 auto',
           minHeight: '100vh',
         }}
@@ -17,9 +21,9 @@ export default function Layout() {
         <main
           style={{
             flex: 1,
-            maxWidth: '600px',
-            borderLeft: '1px solid #2f3336',
-            borderRight: '1px solid #2f3336',
+            maxWidth: 600,
+            borderLeft: '1px solid var(--border)',
+            borderRight: '1px solid var(--border)',
             minHeight: '100vh',
           }}
         >
@@ -27,6 +31,15 @@ export default function Layout() {
         </main>
         <RightSidebar />
       </div>
-    </div>
+      <ComposeModal open={open} onClose={closeCompose} replyTo={replyTo} />
+    </>
+  )
+}
+
+export default function Layout() {
+  return (
+    <ComposeProvider>
+      <LayoutInner />
+    </ComposeProvider>
   )
 }

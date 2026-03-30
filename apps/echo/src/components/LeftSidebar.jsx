@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
   Home,
@@ -8,8 +9,10 @@ import {
   User,
   MoreHorizontal,
   AudioWaveform,
+  Settings,
 } from 'lucide-react'
 import { useCurrentUser } from '../hooks/useUser.js'
+import { useCompose } from '../context/ComposeContext.jsx'
 
 const NAV_ITEMS = [
   { icon: Home, label: 'Home', to: '/', end: true },
@@ -18,9 +21,12 @@ const NAV_ITEMS = [
   { icon: Mail, label: 'Messages', to: '/messages', badge: 1 },
   { icon: Bookmark, label: 'Bookmarks', to: '/bookmarks' },
   { icon: User, label: 'Profile', to: '/profile' },
+  { icon: Settings, label: 'Settings', to: '/settings' },
 ]
 
 export default function LeftSidebar() {
+  const { openCompose } = useCompose()
+
   return (
     <aside
       style={{
@@ -51,10 +57,11 @@ export default function LeftSidebar() {
       {/* Post Button */}
       <div style={{ padding: '16px 4px' }}>
         <button
+          onClick={() => openCompose()}
           style={{
             width: '100%',
             padding: '14px 24px',
-            background: '#6366f1',
+            background: 'var(--accent)',
             color: 'white',
             border: 'none',
             borderRadius: '9999px',
@@ -62,9 +69,10 @@ export default function LeftSidebar() {
             fontWeight: '700',
             cursor: 'pointer',
             letterSpacing: '-0.01em',
+            transition: 'background 0.2s',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = '#5254cc')}
-          onMouseLeave={(e) => (e.currentTarget.style.background = '#6366f1')}
+          onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent-hover)')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'var(--accent)')}
         >
           Post
         </button>
@@ -93,7 +101,7 @@ function LogoButton() {
       onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(99,102,241,0.12)')}
       onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
     >
-      <AudioWaveform size={30} color="#6366f1" strokeWidth={2.5} />
+      <AudioWaveform size={30} color="var(--accent)" strokeWidth={2.5} />
     </div>
   )
 }
@@ -107,7 +115,7 @@ function NavItem({ icon: Icon, label, to, end, badge }) {
     borderRadius: '9999px',
     cursor: 'pointer',
     textDecoration: 'none',
-    color: '#e7e9ea',
+    color: 'var(--text-primary)',
     fontSize: '20px',
     margin: '2px 0',
     transition: 'background 0.2s',
@@ -122,7 +130,7 @@ function NavItem({ icon: Icon, label, to, end, badge }) {
         ...baseStyle,
         fontWeight: isActive ? '700' : '400',
       })}
-      onMouseEnter={(e) => (e.currentTarget.style.background = '#16181c')}
+      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-secondary)')}
       onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
     >
       {({ isActive }) => (
@@ -135,7 +143,7 @@ function NavItem({ icon: Icon, label, to, end, badge }) {
                   position: 'absolute',
                   top: '-5px',
                   right: '-5px',
-                  background: '#6366f1',
+                  background: 'var(--accent)',
                   color: 'white',
                   borderRadius: '9999px',
                   fontSize: '11px',
@@ -161,26 +169,72 @@ function NavItem({ icon: Icon, label, to, end, badge }) {
 }
 
 function MoreButton() {
+  const [showDropdown, setShowDropdown] = useState(false)
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '20px',
-        padding: '12px 16px',
-        borderRadius: '9999px',
-        cursor: 'pointer',
-        fontSize: '20px',
-        fontWeight: '400',
-        color: '#e7e9ea',
-        margin: '2px 0',
-        transition: 'background 0.2s',
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = '#16181c')}
-      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-    >
-      <MoreHorizontal size={27} strokeWidth={1.75} />
-      <span>More</span>
+    <div style={{ position: 'relative' }}>
+      <div
+        onClick={() => setShowDropdown(v => !v)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px',
+          padding: '12px 16px',
+          borderRadius: '9999px',
+          cursor: 'pointer',
+          fontSize: '20px',
+          fontWeight: '400',
+          color: 'var(--text-primary)',
+          margin: '2px 0',
+          transition: 'background 0.2s',
+          userSelect: 'none',
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-secondary)')}
+        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+      >
+        <MoreHorizontal size={27} strokeWidth={1.75} />
+        <span>More</span>
+      </div>
+
+      {showDropdown && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '110%',
+            left: 0,
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: 16,
+            padding: '4px 0',
+            zIndex: 200,
+            minWidth: 200,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+          }}
+          onClick={() => setShowDropdown(false)}
+        >
+          {['Topics', 'Lists', 'Spaces'].map(label => (
+            <button
+              key={label}
+              style={{
+                display: 'block',
+                width: '100%',
+                padding: '12px 16px',
+                background: 'none',
+                border: 'none',
+                textAlign: 'left',
+                color: 'var(--text-primary)',
+                cursor: 'pointer',
+                fontSize: 15,
+                fontWeight: 400,
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-hover)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'none'}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -201,7 +255,7 @@ function UserAccount() {
         marginBottom: '16px',
         transition: 'background 0.2s',
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = '#16181c')}
+      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--bg-secondary)')}
       onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
     >
       {user.avatar ? (
@@ -211,14 +265,14 @@ function UserAccount() {
           style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
         />
       ) : (
-        <Avatar initials={user.name?.[0] || 'J'} bg="#6366f1" size={40} />
+        <Avatar initials={user.name?.[0] || 'J'} bg="var(--accent)" size={40} />
       )}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div
           style={{
             fontWeight: '700',
             fontSize: '15px',
-            color: '#e7e9ea',
+            color: 'var(--text-primary)',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -229,7 +283,7 @@ function UserAccount() {
         <div
           style={{
             fontSize: '15px',
-            color: '#71767b',
+            color: 'var(--text-secondary)',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -238,7 +292,7 @@ function UserAccount() {
           @{user.handle}
         </div>
       </div>
-      <MoreHorizontal size={18} color="#71767b" />
+      <MoreHorizontal size={18} color="var(--text-secondary)" />
     </div>
   )
 }
