@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+/* ── Sage color system — warm cream inspired by Claude.ai ─────────────── */
+:root {
+  /* Backgrounds */
+  --bg:                 #F7F7F5;   /* Main page — warm parchment */
+  --bg-sidebar:         #EDECE8;   /* Left sidebar */
+  --bg-sidebar-hover:   #E4E3DF;   /* Sidebar hover */
+  --bg-hover:           #F0EDE9;   /* General hover */
+  --bg-input:           #FFFFFF;   /* Input container */
+  --bg-user-msg:        #FFFFFF;   /* User message card */
+  --bg-code:            #1C1C1C;   /* Code blocks */
+  --bg-artifact:        #171717;   /* Artifacts panel */
+  --bg-artifact-header: #1F1F1F;
+  --bg-inline-code:     #F0EDE9;   /* Inline code */
+  --bg-tooltip:         #2D2B27;
+
+  /* Borders */
+  --border:             #E3E2DF;   /* Standard border */
+  --border-light:       #EEEDE9;   /* Lighter dividers */
+  --border-message:     #E9E8E4;   /* User message card border */
+
+  /* Typography */
+  --text-primary:       #1A1917;   /* Near-black warm */
+  --text-secondary:     #6B6963;   /* Medium warm gray */
+  --text-muted:         #9B9489;   /* Light warm gray */
+  --text-code:          #E4E4E4;   /* Code in dark blocks */
+  --text-inline-code:   #B5472B;   /* Inline code accent */
+
+  /* Brand accent — warm terracotta / amber */
+  --accent:             #D97757;   /* Sage brand amber */
+  --accent-hover:       #C86843;
+  --accent-subtle:      #FDF0EA;
+  --accent-dim:         rgba(217,119,87,0.12);
+
+  /* Functional */
+  --shadow-sm:          0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:          0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-input:       0 0 0 1px var(--border), var(--shadow-sm);
+  --shadow-input-focus: 0 0 0 2px var(--accent-dim), var(--shadow-sm);
+
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --radius-pill: 9999px;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+textarea, input { font-family: inherit; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+/* ── Markdown prose styles (applied inside .sage-prose) ─────────────── */
+.sage-prose {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-primary);
+}
+.sage-prose h1 { font-size: 1.5em; font-weight: 700; margin: 1.4em 0 0.6em; }
+.sage-prose h2 { font-size: 1.25em; font-weight: 700; margin: 1.2em 0 0.5em; }
+.sage-prose h3 { font-size: 1.1em; font-weight: 600; margin: 1em 0 0.4em; }
+.sage-prose h4 { font-size: 1em; font-weight: 600; margin: 0.8em 0 0.3em; }
+.sage-prose p  { margin: 0 0 0.85em; }
+.sage-prose p:last-child { margin-bottom: 0; }
+.sage-prose ul, .sage-prose ol { margin: 0.6em 0 0.9em 1.5em; }
+.sage-prose li { margin: 0.3em 0; }
+.sage-prose li > p { margin: 0; }
+.sage-prose strong { font-weight: 600; }
+.sage-prose em { font-style: italic; }
+.sage-prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.sage-prose a:hover { opacity: 0.8; }
+.sage-prose blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1em;
+  color: var(--text-secondary);
+  margin: 0.8em 0;
+}
+.sage-prose hr {
+  border: none; border-top: 1px solid var(--border);
+  margin: 1.2em 0;
+}
+.sage-prose table { width: 100%; border-collapse: collapse; margin: 0.8em 0; font-size: 0.9em; }
+.sage-prose th, .sage-prose td { padding: 8px 12px; border: 1px solid var(--border); text-align: left; }
+.sage-prose th { background: var(--bg-hover); font-weight: 600; }
+
+/* Inline code */
+.sage-prose code:not(pre code) {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace;
+  font-size: 0.88em;
+  background: var(--bg-inline-code);
+  color: var(--text-inline-code);
+  padding: 2px 5px;
+  border-radius: var(--radius-sm);
+}
+
+/* Code blocks — dark theme */
+.sage-prose pre {
+  background: var(--bg-code);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 0.9em 0;
+  position: relative;
+}
+.sage-prose pre code {
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #E4E4E4;
+  background: none;
+  padding: 0;
+  display: block;
+  padding: 16px 20px;
+}
+
+/* highlight.js overrides — muted dark theme */
+.hljs { background: var(--bg-code) !important; color: #E4E4E4 !important; }
+.hljs-keyword { color: #C792EA; }
+.hljs-string  { color: #C3E88D; }
+.hljs-number  { color: #F78C6C; }
+.hljs-comment { color: #546E7A; font-style: italic; }
+.hljs-function, .hljs-title { color: #82AAFF; }
+.hljs-variable, .hljs-params { color: #EEFFFF; }
+.hljs-type, .hljs-built_in   { color: #FFCB6B; }
+.hljs-attr, .hljs-attribute  { color: #80CBC4; }
+.hljs-operator { color: #89DDFF; }
+.hljs-punctuation { color: #89DDFF; }
+.hljs-tag { color: #F07178; }
+.hljs-meta { color: #546E7A; }
+.hljs-name { color: #82AAFF; }
+.hljs-selector-class { color: #FFCB6B; }
+
+/* ── Typing animation ────────────────────────────────────────────────── */
+@keyframes thinking-pulse {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1); }
+}
+.thinking-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--text-muted); display: inline-block; margin: 0 2px;
+  animation: thinking-pulse 1.4s ease-in-out infinite;
+}
+.thinking-dot:nth-child(2) { animation-delay: 0.16s; }
+.thinking-dot:nth-child(3) { animation-delay: 0.32s; }
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.message-appear { animation: fade-in-up 0.3s ease forwards; }
